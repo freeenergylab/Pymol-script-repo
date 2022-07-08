@@ -32,9 +32,9 @@ try:
     Read_Molecule_0 = ReadMolecule(constrkw = {}, name='Read Molecule', library=molkitlib)
     masterNet.addNode(Read_Molecule_0,16,22)
     Read_Molecule_0.inputPortByName['filename'].widget.set("cv.pdb", run=False)
-    apply(Read_Molecule_0.configure, (), {'expanded': True})
+    Read_Molecule_0.configure(*(), **{'expanded': True})
 except:
-    print "WARNING: failed to restore ReadMolecule named Read Molecule in network masterNet"
+    print("WARNING: failed to restore ReadMolecule named Read Molecule in network masterNet")
     print_exc()
     Read_Molecule_0=None
 
@@ -60,7 +60,7 @@ try:
     output_Ports_3.inputPorts[1].configure(singleConnection=True)
     CPK_Macro_1.shrink()
 except:
-    print "WARNING: failed to restore CPKMacro named CPK Macro in network masterNet"
+    print("WARNING: failed to restore CPKMacro named CPK Macro in network masterNet")
     print_exc()
     CPK_Macro_1=None
 
@@ -83,10 +83,10 @@ try:
     ## Cameras
     ## Camera Number 0
     state = {'color': (0.0, 0.0, 0.0, 1.0), 'd2off': 1, 'height': 400, 'lookAt': [0.0, 0.0, 0.0], 'rootx': 18, 'pivot': [0.0, 0.0, 0.0], 'translation': [0.0, 0.0, 0.0], 'sideBySideTranslation': 0.0, 'fov': 40.0, 'scale': [1.0, 1.0, 1.0], 'stereoMode': 'MONO', 'width': 400, 'sideBySideRotAngle': 3.0, 'boundingbox': 0, 'projectionType': 0, 'contours': False, 'd2cutL': 150, 'direction': [0.0, 0.0, -30.0], 'd2cutH': 255, 'far': 50.0, 'd1off': 4, 'lookFrom': [0.0, 0.0, 30.0], 'd1cutH': 60, 'antialiased': 0, 'rotation': [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0], 'd1ramp': [0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 4.0, 4.0, 4.0, 4.0, 7.0, 9.0, 12.0, 14.0, 17.0, 19.0, 22.0, 24.0, 27.0, 29.0, 32.0, 34.0, 37.0, 44.0, 51.0, 57.0, 64.0, 71.0, 78.0, 84.0, 91.0, 98.0, 105.0, 111.0, 118.0, 125.0, 126.0, 128.0, 129.0, 130.0, 132.0, 133.0, 135.0, 136.0, 137.0, 139.0, 140.0, 141.0, 143.0, 144.0, 145.0, 147.0, 148.0, 149.0, 151.0, 152.0, 154.0, 155.0, 156.0, 158.0, 159.0, 160.0, 162.0, 163.0, 164.0, 166.0, 167.0, 168.0, 170.0, 171.0, 173.0, 174.0, 175.0, 177.0, 178.0, 179.0, 181.0, 182.0, 183.0, 185.0, 186.0, 187.0, 189.0, 190.0, 192.0, 193.0, 194.0, 196.0, 197.0, 197.0, 198.0, 198.0, 199.0, 199.0, 199.0, 200.0, 200.0, 200.0, 201.0, 201.0, 202.0, 202.0, 202.0, 203.0, 203.0, 204.0, 204.0, 204.0, 205.0, 205.0, 205.0, 206.0, 206.0, 207.0, 207.0, 207.0, 208.0, 208.0, 209.0, 209.0, 209.0, 210.0, 210.0, 210.0, 211.0, 211.0, 212.0, 212.0, 212.0, 213.0, 213.0, 214.0, 214.0, 214.0, 215.0, 215.0, 215.0, 216.0, 216.0, 217.0, 217.0, 217.0, 218.0, 218.0, 219.0, 219.0, 219.0, 220.0, 220.0, 220.0, 221.0, 221.0, 222.0, 222.0, 222.0, 223.0, 223.0, 224.0, 224.0, 224.0, 225.0, 225.0, 225.0, 226.0, 226.0, 227.0, 227.0, 227.0, 228.0, 228.0, 228.0, 229.0, 229.0, 230.0, 230.0, 230.0, 231.0, 231.0, 232.0, 232.0, 232.0, 233.0, 233.0, 233.0, 234.0, 234.0, 235.0, 235.0, 235.0, 236.0, 236.0, 237.0, 237.0, 237.0, 238.0, 238.0, 238.0, 239.0, 239.0, 240.0, 240.0, 240.0, 241.0, 241.0, 242.0, 242.0, 242.0, 243.0, 243.0, 243.0, 244.0, 244.0, 245.0, 245.0, 245.0, 246.0, 246.0, 247.0, 247.0, 247.0, 248.0, 248.0, 248.0, 249.0, 249.0, 250.0, 250.0, 250.0, 251.0, 251.0, 252.0, 252.0, 252.0, 253.0, 253.0, 253.0, 254.0, 254.0, 255.0, 255.0], 'suspendRedraw': False, 'd1cutL': 0, 'd2scale': 0.0, 'near': 0.10000000000000001, 'drawThumbnail': False, 'rooty': 69, 'd1scale': 0.012999999999999999}
-    apply(Viewer_8.vi.cameras[0].Set, (), state)
+    Viewer_8.vi.cameras[0].Set(*(), **state)
 
     state = {'end': 40, 'density': 0.10000000000000001, 'color': (0.0, 0.0, 0.0, 1.0), 'enabled': False, 'start': 25, 'mode': 'GL_LINEAR'}
-    apply(Viewer_8.vi.cameras[0].fog.Set, (), state)
+    Viewer_8.vi.cameras[0].fog.Set(*(), **state)
 
     ## End Cameras
 
@@ -109,7 +109,7 @@ try:
     ## End Clipping Planes for root
 
 except:
-    print "WARNING: failed to restore Viewer named Viewer in network masterNet"
+    print("WARNING: failed to restore Viewer named Viewer in network masterNet")
     print_exc()
     Viewer_8=None
 
@@ -122,13 +122,13 @@ if Read_Molecule_0 is not None and CPK_Macro_1 is not None:
         masterNet.connectNodes(
             Read_Molecule_0, CPK_Macro_1, "MolSets", "Assign Radii_molecules", blocking=True)
     except:
-        print "WARNING: failed to restore connection between Read_Molecule_0 and CPK_Macro_1 in network masterNet"
+        print("WARNING: failed to restore connection between Read_Molecule_0 and CPK_Macro_1 in network masterNet")
 if CPK_Macro_1 is not None and Viewer_8 is not None:
     try:
         masterNet.connectNodes(
             CPK_Macro_1, Viewer_8, "spheres_spheres", "geometries", blocking=True)
     except:
-        print "WARNING: failed to restore connection between CPK_Macro_1 and Viewer_8 in network masterNet"
+        print("WARNING: failed to restore connection between CPK_Macro_1 and Viewer_8 in network masterNet")
 masterNet.unfreeze()
 
 
@@ -153,10 +153,10 @@ def loadSavedStates_Viewer_8(self=Viewer_8, event=None):
     ## Cameras
     ## Camera Number 0
     state = {'color': (0.0, 0.0, 0.0, 1.0), 'd2off': 1, 'height': 400, 'lookAt': [0.0, 0.0, 0.0], 'pivot': [0.0, 0.0, 0.0], 'translation': [0.0, 0.0, 0.0], 'sideBySideTranslation': 0.0, 'fov': 40.0, 'scale': [1.0, 1.0, 1.0], 'stereoMode': 'MONO', 'width': 400, 'sideBySideRotAngle': 3.0, 'boundingbox': 0, 'projectionType': 0, 'contours': False, 'd2cutL': 150, 'direction': [0.0, 0.0, -30.0], 'd2cutH': 255, 'far': 50.0, 'd1off': 4, 'lookFrom': [0.0, 0.0, 30.0], 'd1cutH': 60, 'antialiased': 0, 'rotation': [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0], 'd1ramp': [0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 4.0, 4.0, 4.0, 4.0, 7.0, 9.0, 12.0, 14.0, 17.0, 19.0, 22.0, 24.0, 27.0, 29.0, 32.0, 34.0, 37.0, 44.0, 51.0, 57.0, 64.0, 71.0, 78.0, 84.0, 91.0, 98.0, 105.0, 111.0, 118.0, 125.0, 126.0, 128.0, 129.0, 130.0, 132.0, 133.0, 135.0, 136.0, 137.0, 139.0, 140.0, 141.0, 143.0, 144.0, 145.0, 147.0, 148.0, 149.0, 151.0, 152.0, 154.0, 155.0, 156.0, 158.0, 159.0, 160.0, 162.0, 163.0, 164.0, 166.0, 167.0, 168.0, 170.0, 171.0, 173.0, 174.0, 175.0, 177.0, 178.0, 179.0, 181.0, 182.0, 183.0, 185.0, 186.0, 187.0, 189.0, 190.0, 192.0, 193.0, 194.0, 196.0, 197.0, 197.0, 198.0, 198.0, 199.0, 199.0, 199.0, 200.0, 200.0, 200.0, 201.0, 201.0, 202.0, 202.0, 202.0, 203.0, 203.0, 204.0, 204.0, 204.0, 205.0, 205.0, 205.0, 206.0, 206.0, 207.0, 207.0, 207.0, 208.0, 208.0, 209.0, 209.0, 209.0, 210.0, 210.0, 210.0, 211.0, 211.0, 212.0, 212.0, 212.0, 213.0, 213.0, 214.0, 214.0, 214.0, 215.0, 215.0, 215.0, 216.0, 216.0, 217.0, 217.0, 217.0, 218.0, 218.0, 219.0, 219.0, 219.0, 220.0, 220.0, 220.0, 221.0, 221.0, 222.0, 222.0, 222.0, 223.0, 223.0, 224.0, 224.0, 224.0, 225.0, 225.0, 225.0, 226.0, 226.0, 227.0, 227.0, 227.0, 228.0, 228.0, 228.0, 229.0, 229.0, 230.0, 230.0, 230.0, 231.0, 231.0, 232.0, 232.0, 232.0, 233.0, 233.0, 233.0, 234.0, 234.0, 235.0, 235.0, 235.0, 236.0, 236.0, 237.0, 237.0, 237.0, 238.0, 238.0, 238.0, 239.0, 239.0, 240.0, 240.0, 240.0, 241.0, 241.0, 242.0, 242.0, 242.0, 243.0, 243.0, 243.0, 244.0, 244.0, 245.0, 245.0, 245.0, 246.0, 246.0, 247.0, 247.0, 247.0, 248.0, 248.0, 248.0, 249.0, 249.0, 250.0, 250.0, 250.0, 251.0, 251.0, 252.0, 252.0, 252.0, 253.0, 253.0, 253.0, 254.0, 254.0, 255.0, 255.0], 'suspendRedraw': False, 'd1cutL': 0, 'd2scale': 0.0, 'near': 0.10000000000000001, 'drawThumbnail': False, 'd1scale': 0.012999999999999999}
-    apply(self.vi.cameras[0].Set, (), state)
+    self.vi.cameras[0].Set(*(), **state)
 
     state = {'end': 40, 'density': 0.10000000000000001, 'color': (0.0, 0.0, 0.0, 1.0), 'enabled': False, 'start': 25, 'mode': 'GL_LINEAR'}
-    apply(self.vi.cameras[0].fog.Set, (), state)
+    self.vi.cameras[0].fog.Set(*(), **state)
 
     ## End Cameras
 

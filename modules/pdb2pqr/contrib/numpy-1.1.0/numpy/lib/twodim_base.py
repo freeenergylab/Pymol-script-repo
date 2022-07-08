@@ -14,7 +14,7 @@ def fliplr(m):
     """
     m = asanyarray(m)
     if m.ndim < 2:
-        raise ValueError, "Input must be >= 2-d."
+        raise ValueError("Input must be >= 2-d.")
     return m[:, ::-1]
 
 def flipud(m):
@@ -23,7 +23,7 @@ def flipud(m):
     """
     m = asanyarray(m)
     if m.ndim < 1:
-        raise ValueError, "Input must be >= 1-d."
+        raise ValueError("Input must be >= 1-d.")
     return m[::-1,...]
 
 def rot90(m, k=1):
@@ -33,7 +33,7 @@ def rot90(m, k=1):
     """
     m = asanyarray(m)
     if m.ndim < 2:
-        raise ValueError, "Input must >= 2-d."
+        raise ValueError("Input must >= 2-d.")
     k = k % 4
     if k == 0: return m
     elif k == 1: return fliplr(m).swapaxes(0,1)
@@ -80,7 +80,7 @@ def diag(v, k=0):
             fi = i + (i-k)*N2
         return v.flat[fi]
     else:
-        raise ValueError, "Input must be 1- or 2-d."
+        raise ValueError("Input must be 1- or 2-d.")
 
 def diagflat(v,k=0):
     """Return a 2D array whose k'th diagonal is a flattened v and all other

@@ -38,28 +38,28 @@ class StringReprBaseTests(unittest.TestCase):
         """
          check moleculeSet stringRepr is correct
         """
-        self.assertEquals(self.mols.stringRepr, "stringSel")
+        self.assertEqual(self.mols.stringRepr, "stringSel")
 
 
     def test_correct_ChainSet_stringRepr(self):
         """
          check ChainSet stringRepr is correct
         """
-        self.assertEquals(self.mols.chains.stringRepr, "stringSel:")
+        self.assertEqual(self.mols.chains.stringRepr, "stringSel:")
 
 
     def test_correct_ResidueSet_stringRepr(self):
         """
          check ResidueSet stringRepr is correct
         """
-        self.assertEquals(self.mols.chains.residues.stringRepr, "stringSel::")
+        self.assertEqual(self.mols.chains.residues.stringRepr, "stringSel::")
 
 
     def test_correct_AtomSet_stringRepr(self):
         """
          check AtomSet stringRepr is correct
         """
-        self.assertEquals(self.mols.chains.residues.atoms.stringRepr, "stringSel:::")
+        self.assertEqual(self.mols.chains.residues.atoms.stringRepr, "stringSel:::")
 
 
     #tests for correction stringRepr initialization below individual
@@ -67,56 +67,56 @@ class StringReprBaseTests(unittest.TestCase):
         """
          check single Molecule's chainSet stringRepr is correct
         """
-        self.assertEquals(self.mols[0].chains.stringRepr, "stringSel:")
+        self.assertEqual(self.mols[0].chains.stringRepr, "stringSel:")
 
 
     def test_correct_Chain1_ResidueSet_stringRepr(self):
         """
          check Chain1's residues stringRepr is correct
         """
-        self.assertEquals(self.mols.chains[0].residues.stringRepr, "stringSel:A:")
+        self.assertEqual(self.mols.chains[0].residues.stringRepr, "stringSel:A:")
 
 
     def test_correct_Chain2_ResidueSet_stringRepr(self):
         """
          check two chain's residues stringRepr is correct
         """
-        self.assertEquals(self.mols.chains[1].residues.stringRepr, "stringSel:W:")
+        self.assertEqual(self.mols.chains[1].residues.stringRepr, "stringSel:W:")
 
 
     def Xtest_correct_2Chain_ResidueSet_stringRepr(self):
         """
          check two Chains residues stringRepr is correct
         """
-        self.assertEquals(self.mols.chains[0:].residues.stringRepr, "stringSel::")
+        self.assertEqual(self.mols.chains[0:].residues.stringRepr, "stringSel::")
 
 
     def test_correct_last_Chain_ResidueSet_stringRepr(self):
         """
          check last Chain's residues stringRepr is correct
         """
-        self.assertEquals(self.mols.chains[-1].residues.stringRepr, "stringSel:W:")
+        self.assertEqual(self.mols.chains[-1].residues.stringRepr, "stringSel:W:")
 
 
     def test_correct_Mol0_Chain0_ResidueSet_stringRepr(self):
         """
          check single Mol's single Chain's residues stringRepr 
         """
-        self.assertEquals(self.mols[0].chains[0].residues.stringRepr, "stringSel:A:")
+        self.assertEqual(self.mols[0].chains[0].residues.stringRepr, "stringSel:A:")
 
 
     def Xtest_correct_Mol0_Chains1_2_ResidueSet_stringRepr(self):
         """
          check single Mol's two Chain's residues stringRepr 
         """
-        self.assertEquals(self.mols[0].chains[0:].residues.stringRepr, "stringSel::")
+        self.assertEqual(self.mols[0].chains[0:].residues.stringRepr, "stringSel::")
 
 
     def test_correct_Mols_Chains1_residues_atoms_stringRepr(self):
         """
          check single Chain's residues's atoms stringRepr 
         """
-        self.assertEquals(self.mols.chains[0].residues.atoms.stringRepr, "stringSel:A::")
+        self.assertEqual(self.mols.chains[0].residues.atoms.stringRepr, "stringSel:A::")
 
 
     def test_select_with_empty_string(self):
@@ -124,7 +124,7 @@ class StringReprBaseTests(unittest.TestCase):
          test result with empty string returns all mols
         """
         result, msg = self.stringSel.select(self.mols, "")
-        self.assertEquals(result.stringRepr, "stringSel")
+        self.assertEqual(result.stringRepr, "stringSel")
 
 
 
@@ -243,28 +243,28 @@ class TwoMoleculeStringReprTests(StringReprBaseTests):
         """
          check moleculeSet stringRepr is correct
         """
-        self.assertEquals(self.mols.stringRepr, "stringSel/+/protease")
+        self.assertEqual(self.mols.stringRepr, "stringSel/+/protease")
 
 
     def test_correct_ChainSet_stringRepr(self):
         """
          check ChainSet stringRepr is correct
         """
-        self.assertEquals(self.mols.chains.stringRepr, "stringSel:/+/protease:")
+        self.assertEqual(self.mols.chains.stringRepr, "stringSel:/+/protease:")
 
 
     def test_correct_ResidueSet_stringRepr(self):
         """
          check ResidueSet stringRepr is correct
         """
-        self.assertEquals(self.mols.chains.residues.stringRepr, "stringSel::/+/protease::")
+        self.assertEqual(self.mols.chains.residues.stringRepr, "stringSel::/+/protease::")
 
 
     def test_correct_AtomSet_stringRepr(self):
         """
          check AtomSet stringRepr is correct
         """
-        self.assertEquals(self.mols.chains.residues.atoms.stringRepr, "stringSel:::/+/protease:::")
+        self.assertEqual(self.mols.chains.residues.atoms.stringRepr, "stringSel:::/+/protease:::")
 
 
     #tests for correction stringRepr initialization below individual
@@ -272,56 +272,56 @@ class TwoMoleculeStringReprTests(StringReprBaseTests):
         """
          check single Molecule's chainSet stringRepr is correct
         """
-        self.assertEquals(self.mol1.chains.stringRepr, "stringSel:")
+        self.assertEqual(self.mol1.chains.stringRepr, "stringSel:")
 
 
     def test_correct_Chain1_ResidueSet_stringRepr(self):
         """
          check Chain1's residues stringRepr is correct
         """
-        self.assertEquals(self.mols.chains[0].residues.stringRepr, "stringSel:A:")
+        self.assertEqual(self.mols.chains[0].residues.stringRepr, "stringSel:A:")
 
 
     def test_correct_Chain2_ResidueSet_stringRepr(self):
         """
          check two chain's residues stringRepr is correct
         """
-        self.assertEquals(self.mols.chains[1].residues.stringRepr, "stringSel:W:")
+        self.assertEqual(self.mols.chains[1].residues.stringRepr, "stringSel:W:")
 
 
     def Qtest_correct_2Chain_ResidueSet_stringRepr(self):
         """
          check two Chains residues stringRepr is correct
         """
-        self.assertEquals(self.mols.chains[0-2].residues.stringRepr, "stringSel::")
+        self.assertEqual(self.mols.chains[0-2].residues.stringRepr, "stringSel::")
 
 
     def test_correct_last_Chain_ResidueSet_stringRepr(self):
         """
          check last Chain's residues stringRepr is correct
         """
-        self.assertEquals(self.mols.chains[-1].residues.stringRepr, "protease:B:")
+        self.assertEqual(self.mols.chains[-1].residues.stringRepr, "protease:B:")
 
 
     def test_correct_Mol0_Chain0_ResidueSet_stringRepr(self):
         """
          check single Mol's single Chain's residues stringRepr 
         """
-        self.assertEquals(self.mols[0].chains[0].residues.stringRepr, "stringSel:A:")
+        self.assertEqual(self.mols[0].chains[0].residues.stringRepr, "stringSel:A:")
 
 
     def Xtest_correct_Mol0_Chains1_2_ResidueSet_stringRepr(self):
         """
          check single Mol's two Chain's residues stringRepr 
         """
-        self.assertEquals(self.mols[0].chains[0:].residues.stringRepr, "stringSel::")
+        self.assertEqual(self.mols[0].chains[0:].residues.stringRepr, "stringSel::")
 
 
     def test_correct_Mols_Chains1_residues_atoms_stringRepr(self):
         """
          check single Chain's residues's atoms stringRepr 
         """
-        self.assertEquals(self.mols.chains[0].residues.atoms.stringRepr, "stringSel:A::")
+        self.assertEqual(self.mols.chains[0].residues.atoms.stringRepr, "stringSel:A::")
 
 
     def test_select_with_empty_string(self):

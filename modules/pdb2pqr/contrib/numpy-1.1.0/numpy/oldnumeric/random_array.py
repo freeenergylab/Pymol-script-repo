@@ -19,10 +19,9 @@ def seed(x=0, y=0):
         mt.seed((x,y))
 
 def get_seed():
-    raise NotImplementedError, \
-          "If you want to save the state of the random number generator.\n"\
+    raise NotImplementedError("If you want to save the state of the random number generator.\n"\
           "Then you should use obj = numpy.random.get_state() followed by.\n"\
-          "numpy.random.set_state(obj)."
+          "numpy.random.set_state(obj).")
 
 def random(shape=[]):
     "random(n) or random([n, m, ...]) returns array of random numbers"
@@ -41,12 +40,12 @@ def randint(minimum, maximum=None, shape=[]):
     """randint(min, max, shape=[]) = random integers >=min, < max
     If max not given, random integers >= 0, <min"""
     if not isinstance(minimum, int):
-        raise ArgumentError, "randint requires first argument integer"
+        raise ArgumentError("randint requires first argument integer")
     if maximum is None:
         maximum = minimum
         minimum = 0
     if not isinstance(maximum, int):
-        raise ArgumentError, "randint requires second argument integer"
+        raise ArgumentError("randint requires second argument integer")
     a = ((maximum-minimum)* random(shape))
     if isinstance(a, Numeric.ndarray):
         return minimum + a.astype(Numeric.int)
@@ -189,60 +188,60 @@ def mean_var_test(x, type, mean, var, skew=[]):
     x_mean = Numeric.sum(x,axis=0)/n
     x_minus_mean = x - x_mean
     x_var = Numeric.sum(x_minus_mean*x_minus_mean,axis=0)/(n-1.0)
-    print "\nAverage of ", len(x), type
-    print "(should be about ", mean, "):", x_mean
-    print "Variance of those random numbers (should be about ", var, "):", x_var
+    print("\nAverage of ", len(x), type)
+    print("(should be about ", mean, "):", x_mean)
+    print("Variance of those random numbers (should be about ", var, "):", x_var)
     if skew != []:
         x_skew = (Numeric.sum(x_minus_mean*x_minus_mean*x_minus_mean,axis=0)/9998.)/x_var**(3./2.)
-        print "Skewness of those random numbers (should be about ", skew, "):", x_skew
+        print("Skewness of those random numbers (should be about ", skew, "):", x_skew)
 
 def test():
     obj = mt.get_state()
     mt.set_state(obj)
     obj2 = mt.get_state()
     if (obj2[1] - obj[1]).any():
-        raise SystemExit, "Failed seed test."
-    print "First random number is", random()
-    print "Average of 10000 random numbers is", Numeric.sum(random(10000),axis=0)/10000.
+        raise SystemExit("Failed seed test.")
+    print("First random number is", random())
+    print("Average of 10000 random numbers is", Numeric.sum(random(10000),axis=0)/10000.)
     x = random([10,1000])
     if len(x.shape) != 2 or x.shape[0] != 10 or x.shape[1] != 1000:
-        raise SystemExit, "random returned wrong shape"
+        raise SystemExit("random returned wrong shape")
     x.shape = (10000,)
-    print "Average of 100 by 100 random numbers is", Numeric.sum(x,axis=0)/10000.
+    print("Average of 100 by 100 random numbers is", Numeric.sum(x,axis=0)/10000.)
     y = uniform(0.5,0.6, (1000,10))
     if len(y.shape) !=2 or y.shape[0] != 1000 or y.shape[1] != 10:
-        raise SystemExit, "uniform returned wrong shape"
+        raise SystemExit("uniform returned wrong shape")
     y.shape = (10000,)
     if Numeric.minimum.reduce(y) <= 0.5 or Numeric.maximum.reduce(y) >= 0.6:
-        raise SystemExit, "uniform returned out of desired range"
-    print "randint(1, 10, shape=[50])"
-    print randint(1, 10, shape=[50])
-    print "permutation(10)", permutation(10)
-    print "randint(3,9)", randint(3,9)
-    print "random_integers(10, shape=[20])"
-    print random_integers(10, shape=[20])
+        raise SystemExit("uniform returned out of desired range")
+    print("randint(1, 10, shape=[50])")
+    print(randint(1, 10, shape=[50]))
+    print("permutation(10)", permutation(10))
+    print("randint(3,9)", randint(3,9))
+    print("random_integers(10, shape=[20])")
+    print(random_integers(10, shape=[20]))
     s = 3.0
     x = normal(2.0, s, [10, 1000])
     if len(x.shape) != 2 or x.shape[0] != 10 or x.shape[1] != 1000:
-        raise SystemExit, "standard_normal returned wrong shape"
+        raise SystemExit("standard_normal returned wrong shape")
     x.shape = (10000,)
     mean_var_test(x, "normally distributed numbers with mean 2 and variance %f"%(s**2,), 2, s**2, 0)
     x = exponential(3, 10000)
     mean_var_test(x, "random numbers exponentially distributed with mean %f"%(s,), s, s**2, 2)
     x = multivariate_normal(Numeric.array([10,20]), Numeric.array(([1,2],[2,4])))
-    print "\nA multivariate normal", x
-    if x.shape != (2,): raise SystemExit, "multivariate_normal returned wrong shape"
+    print("\nA multivariate normal", x)
+    if x.shape != (2,): raise SystemExit("multivariate_normal returned wrong shape")
     x = multivariate_normal(Numeric.array([10,20]), Numeric.array([[1,2],[2,4]]), [4,3])
-    print "A 4x3x2 array containing multivariate normals"
-    print x
-    if x.shape != (4,3,2): raise SystemExit, "multivariate_normal returned wrong shape"
+    print("A 4x3x2 array containing multivariate normals")
+    print(x)
+    if x.shape != (4,3,2): raise SystemExit("multivariate_normal returned wrong shape")
     x = multivariate_normal(Numeric.array([-100,0,100]), Numeric.array([[3,2,1],[2,2,1],[1,1,1]]), 10000)
     x_mean = Numeric.sum(x,axis=0)/10000.
-    print "Average of 10000 multivariate normals with mean [-100,0,100]"
-    print x_mean
+    print("Average of 10000 multivariate normals with mean [-100,0,100]")
+    print(x_mean)
     x_minus_mean = x - x_mean
-    print "Estimated covariance of 10000 multivariate normals with covariance [[3,2,1],[2,2,1],[1,1,1]]"
-    print Numeric.dot(Numeric.transpose(x_minus_mean),x_minus_mean)/9999.
+    print("Estimated covariance of 10000 multivariate normals with covariance [[3,2,1],[2,2,1],[1,1,1]]")
+    print(Numeric.dot(Numeric.transpose(x_minus_mean),x_minus_mean)/9999.)
     x = beta(5.0, 10.0, 10000)
     mean_var_test(x, "beta(5.,10.) random numbers", 0.333, 0.014)
     x = gamma(.01, 2., 10000)
@@ -253,14 +252,14 @@ def test():
     mean_var_test(x, "F random numbers with 5 and 10 degrees of freedom", 1.25, 1.35)
     x = poisson(50., 10000)
     mean_var_test(x, "poisson random numbers with mean 50", 50, 50, 0.14)
-    print "\nEach element is the result of 16 binomial trials with probability 0.5:"
-    print binomial(16, 0.5, 16)
-    print "\nEach element is the result of 16 negative binomial trials with probability 0.5:"
-    print negative_binomial(16, 0.5, [16,])
-    print "\nEach row is the result of 16 multinomial trials with probabilities [0.1, 0.5, 0.1 0.3]:"
+    print("\nEach element is the result of 16 binomial trials with probability 0.5:")
+    print(binomial(16, 0.5, 16))
+    print("\nEach element is the result of 16 negative binomial trials with probability 0.5:")
+    print(negative_binomial(16, 0.5, [16,]))
+    print("\nEach row is the result of 16 multinomial trials with probabilities [0.1, 0.5, 0.1 0.3]:")
     x = multinomial(16, [0.1, 0.5, 0.1], 8)
-    print x
-    print "Mean = ", Numeric.sum(x,axis=0)/8.
+    print(x)
+    print("Mean = ", Numeric.sum(x,axis=0)/8.)
 
 if __name__ == '__main__':
     test()

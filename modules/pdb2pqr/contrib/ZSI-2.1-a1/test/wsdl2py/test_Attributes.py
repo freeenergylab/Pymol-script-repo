@@ -102,54 +102,54 @@ class AttributeTestCase(ServiceTestCase):
         pyobj2 = ps.Parse(pyobj.typecode)
 
         test = pyobj2.get_attribute_myInt()
-        self.failUnlessEqual(myInt, test)
+        self.assertEqual(myInt, test)
 
         test = pyobj2.get_attribute_myDouble()
-        self.failUnlessEqual(myDouble, test)
+        self.assertEqual(myDouble, test)
 
         test = pyobj2.get_attribute_myFloat()
-        self.failUnlessEqual(myFloat, test)
+        self.assertEqual(myFloat, test)
 
         test = pyobj2.get_attribute_myDecimal()
-        self.failUnlessEqual(myDecimal, test)
+        self.assertEqual(myDecimal, test)
 
         test = pyobj2.get_attribute_myAnyURI()
-        self.failUnlessEqual(myAnyURI, test)
+        self.assertEqual(myAnyURI, test)
 
         test = pyobj2.get_attribute_myQName()
-        self.failUnlessEqual(myQName, test)
+        self.assertEqual(myQName, test)
 
         test = pyobj2.get_attribute_myString()
-        self.failUnlessEqual(myString, test)
+        self.assertEqual(myString, test)
 
         test = pyobj2.get_attribute_myHexBinary()
-        self.failUnlessEqual(myHexBinary, test)
+        self.assertEqual(myHexBinary, test)
 
         # DateTime stuff
         test = pyobj2.get_attribute_myDateTime()
-        self.failUnlessEqual(myGDateTime[:-3], test[:-3])
+        self.assertEqual(myGDateTime[:-3], test[:-3])
 
         test = pyobj2.get_attribute_myDate()
-        self.failUnlessEqual(myGDateTime[:3], test[:3])
+        self.assertEqual(myGDateTime[:3], test[:3])
 
         test = pyobj2.get_attribute_myTime()
-        self.failUnlessEqual(myGDateTime[4:5], test[4:5])
+        self.assertEqual(myGDateTime[4:5], test[4:5])
 
         test = pyobj.get_attribute_myDuration()
-        self.failUnlessEqual(myGDateTime, test)
+        self.assertEqual(myGDateTime, test)
 
         # Bug [ 1453421 ] Incorrect format for type gDay
         test = pyobj2.get_attribute_myGDay()
-        self.failUnlessEqual(myGDateTime[2], test[2])
+        self.assertEqual(myGDateTime[2], test[2])
 
         test = pyobj2.get_attribute_myGMonth()
-        self.failUnlessEqual(myGDateTime[1], test[1])
+        self.assertEqual(myGDateTime[1], test[1])
 
         test = pyobj2.get_attribute_myGYear()
-        self.failUnlessEqual(myGDateTime[0], test[0])
+        self.assertEqual(myGDateTime[0], test[0])
 
         test = pyobj2.get_attribute_myGYearMonth()
-        self.failUnlessEqual(myGDateTime[:2], test[:2])
+        self.assertEqual(myGDateTime[:2], test[:2])
 
         # hmm? negated?
         #test = pyobj2.get_attribute_myGMonthDay()
@@ -165,12 +165,12 @@ class AttributeTestCase(ServiceTestCase):
         sw.serialize(pyobj)
         soap = str(sw)
  
-        print soap
+        print(soap)
         ps = ParsedSoap(soap)
         pyobj2 = ps.Parse(pyobj.typecode)
 
         test = pyobj2.get_attribute_myString() 
-        self.failUnlessEqual(myString, str(test))
+        self.assertEqual(myString, str(test))
 
 
 if __name__ == "__main__" :

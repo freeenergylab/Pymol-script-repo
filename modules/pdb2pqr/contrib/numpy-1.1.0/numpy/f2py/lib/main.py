@@ -99,8 +99,8 @@ Extra options effective only with -c
 
 import re
 import shutil
-import parser.api
-from parser.api import parse, PythonModule, EndStatement, Module, Subroutine, Function,\
+from . import parser.api
+from .parser.api import parse, PythonModule, EndStatement, Module, Subroutine, Function,\
      get_reader
 
 def get_values(sys_argv, prefix='', suffix='', strip_prefix=False, strip_suffix=False):
@@ -181,7 +181,7 @@ def parse_files(sys_argv):
             continue
         sys.stderr.write('Parsing %r..\n' % (filename))
         reader = parser.api.get_reader(filename)
-        print parser.api.Fortran2003.Program(reader)
+        print(parser.api.Fortran2003.Program(reader))
     return
 
 def dump_signature(sys_argv):
@@ -201,8 +201,8 @@ def dump_signature(sys_argv):
         if os.path.isfile(signature_output):
             overwrite = get_option(sys_argv, '--overwrite-signature', False)
             if not overwrite:
-                print >> sys.stderr, 'Signature file %r exists. '\
-                      'Use --overwrite-signature to overwrite.' % (signature_output)
+                print('Signature file %r exists. '\
+                      'Use --overwrite-signature to overwrite.' % (signature_output), file=sys.stderr)
                 sys.exit()
         modulename = get_option_value(sys_argv,'-m',os.path.basename(name),
                                       os.path.basename(name))
@@ -258,7 +258,7 @@ def construct_extension_sources(modulename, parse_files, include_dirs, build_dir
     """
     Construct wrapper sources.
     """
-    from py_wrap import PythonWrapperModule
+    from .py_wrap import PythonWrapperModule
 
     f90_modules = []
     external_subprograms = []
@@ -353,7 +353,7 @@ def build_extension(sys_argv, sources_only = False):
         if len(name_value)==2:
             define_macros.append(tuple(name_value))
         else:
-            print 'Invalid use of -D:',name_value
+            print('Invalid use of -D:',name_value)
 
     pyf_files = get_values(sys_argv,'','[.]pyf')
     fortran_files = get_values(sys_argv,'','[.](f|f90|F90|F)')
@@ -459,7 +459,7 @@ def main(sys_argv = None):
         dump_signature(sys_argv)
         return
     if not sys_argv or '--help' in sys_argv:
-        print >> sys.stdout, __usage__
+        print(__usage__, file=sys.stdout)
 
     build_extension(sys_argv, sources_only = True)
     return
@@ -485,7 +485,7 @@ def compile(source,
     Returns a list of module objects according to modulenames
     input.
     """
-    from nary import encode
+    from .nary import encode
     tempdir = tempfile.gettempdir()
     s = 'f2pyjob_%s_%s' % (jobname, encode(source))
     tmpdir = os.path.join(tempdir, s)

@@ -24,7 +24,7 @@ class SetsConstructorTests(unittest.TestCase):
         test creating an empty sets instance
         """
         sets = Sets()
-        self.assertEquals(sets.__class__, Sets)
+        self.assertEqual(sets.__class__, Sets)
 
 
 
@@ -53,9 +53,9 @@ class SetsTests(SetsConstructorTests):
         atSet = self.mol.allAtoms
         sets = self.sets
         sets.add(k, atSet)
-        self.assertEquals(len(sets.keys()), 1)
-        self.assertEquals(sets.keys()[0], k)
-        self.assertEquals(sets.values()[0], atSet)
+        self.assertEqual(len(list(sets.keys())), 1)
+        self.assertEqual(list(sets.keys())[0], k)
+        self.assertEqual(list(sets.values())[0], atSet)
 
 
     def test_add_residues(self):
@@ -66,9 +66,9 @@ class SetsTests(SetsConstructorTests):
         k = 'myfirst set'
         resSet = self.mol.chains.residues
         sets.add(k, resSet)
-        self.assertEquals(len(sets.keys()), 1)
-        self.assertEquals(sets.keys()[0], k)
-        self.assertEquals(sets.values()[0], resSet)
+        self.assertEqual(len(list(sets.keys())), 1)
+        self.assertEqual(list(sets.keys())[0], k)
+        self.assertEqual(list(sets.values())[0], resSet)
 
 
     def test_remove(self):
@@ -80,7 +80,7 @@ class SetsTests(SetsConstructorTests):
         atSet = self.mol.allAtoms
         sets.add(k, atSet)
         sets.remove(k)
-        self.assertEquals(sets, {})
+        self.assertEqual(sets, {})
 
 
     def test_remove_by_instance(self):
@@ -92,7 +92,7 @@ class SetsTests(SetsConstructorTests):
         atSet = self.mol.allAtoms
         sets.add(k, atSet)
         sets.removeByInstance(atSet)
-        self.assertEquals(sets, {})
+        self.assertEqual(sets, {})
 
 
     def test_add_twice_overwrites(self):
@@ -105,8 +105,8 @@ class SetsTests(SetsConstructorTests):
         sets.add(k, atSet)
         atSet10 = self.mol.allAtoms[:10]
         sets.add(k, atSet10)
-        self.assertEquals(len(sets), 1)
-        self.assertEquals(sets.values()[0],  atSet10)
+        self.assertEqual(len(sets), 1)
+        self.assertEqual(list(sets.values())[0],  atSet10)
 
 
     def test_add_twice_overwrite_False(self):
@@ -136,12 +136,12 @@ class SetsTests(SetsConstructorTests):
         resSet10 = self.mol.chains.residues[:10]
         sets.add(kr2, resSet10)
         #check get returns 1 item
-        self.assertEquals(sets.get(AtomSet), {k:atSet})
+        self.assertEqual(sets.get(AtomSet), {k:atSet})
         #check get returns >1 item
-        self.assertEquals(len(sets.get(ResidueSet)), 2)
+        self.assertEqual(len(sets.get(ResidueSet)), 2)
         #check what get returns 
         #when there are no items of specified TreeNodeSet type
-        self.assertEquals(sets.get(ChainSet), {})
+        self.assertEqual(sets.get(ChainSet), {})
 
 
 

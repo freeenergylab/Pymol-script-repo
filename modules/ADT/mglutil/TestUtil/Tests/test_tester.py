@@ -31,9 +31,9 @@ class TestLoaderTest(unittest.TestCase):
         self.tl = None
 
     def test_loadTestsFromTestCase1(self):
-        from Data.test_displayCommands import DisplayLinesTest
+        from .Data.test_displayCommands import DisplayLinesTest
         suite = self.tl.loadTestsFromTestCase(DisplayLinesTest)
-        self.failUnless(isinstance(suite, self.tl.suiteClass))
+        self.assertTrue(isinstance(suite, self.tl.suiteClass))
         self.assertEqual(len(suite._tests), 5)
 
     
@@ -60,34 +60,34 @@ class TestLoaderTest(unittest.TestCase):
 ##         self.assertEqual(len(testSuite._tests),1)
 
     def test_loadTestsFromModule_1(self):
-        from Data import test_secondarystructure
+        from .Data import test_secondarystructure
         mod = test_secondarystructure
         path,testSuite = self.tl.loadTestsFromModule(mod)
-        self.failUnless(isinstance(testSuite, self.tl.suiteClass))
+        self.assertTrue(isinstance(testSuite, self.tl.suiteClass))
         self.assertEqual(len(testSuite._tests), 19)
 
     def test_loadTestsFromModule_2(self):
-        from Data import test_displayCommands
+        from .Data import test_displayCommands
         mod = test_displayCommands
         path,testSuite = self.tl.loadTestsFromModule(mod)
         
     def test_loadTestsFromName_1(self):
         name = 'mglutil.TestUtil.Tests.test_tester'
         path,ts = self.tl.loadTestsFromName(name)
-        self.failUnless(isinstance(ts, self.tl.suiteClass))
-        self.failUnless(len(ts._tests)!=0)
+        self.assertTrue(isinstance(ts, self.tl.suiteClass))
+        self.assertTrue(len(ts._tests)!=0)
         
     def test_loadTestsFromName_2(self):
         name = 'mglutil.TestUtil'
         path,ts = self.tl.loadTestsFromName(name)
-        self.failUnless(isinstance(ts, self.tl.suiteClass))
-        self.failUnless(len(ts._tests)!=0)
+        self.assertTrue(isinstance(ts, self.tl.suiteClass))
+        self.assertTrue(len(ts._tests)!=0)
 
     def test_loadTestsFromPackage_1(self):
         from mglutil import TestUtil
-        print os.path.abspath(TestUtil.__path__[0])
+        print(os.path.abspath(TestUtil.__path__[0]))
         r = self.tl.loadTestsFromPackage(TestUtil)
-        print r
+        print(r)
         #self.failUnless(isinstance(ts, self.tl.suiteClass))
         #self.failUnless(len(ts._tests)!=0)
 

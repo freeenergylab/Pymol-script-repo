@@ -22,10 +22,10 @@ from pymol import cmd
 import sys
 
 if sys.version_info[0] < 3:
-    from Tkinter import *
-    import tkSimpleDialog
-    import tkMessageBox
-    import tkFileDialog
+    from tkinter import *
+    import tkinter.simpledialog
+    import tkinter.messagebox
+    import tkinter.filedialog
 else:
     from tkinter import *
     import tkinter as Tkinter
@@ -216,7 +216,7 @@ def open_eMovie(parent=None):
 #
 
 
-class InsertScene(tkSimpleDialog.Dialog):
+class InsertScene(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -248,7 +248,7 @@ class InsertScene(tkSimpleDialog.Dialog):
         cmd.do("mstop")
 
 
-class Scenes(tkSimpleDialog.Dialog):
+class Scenes(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -339,10 +339,10 @@ class Scenes(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Scenes Help", "Create new Scene:  Here you create a new PyMOL scene.  The current PyMOL view, colors, and/or representations, depending on your choices, are/is saved as a scene with the name of your choice.  This new scene will appear on the scene list, and can then be inserted to the movie at a specific frame.\n\nRecall Selected Scene: The selected scene is immediately recalled.  You can then edit it and save your changes to the scene by using the 'Create new scene/Save scene...' button.\n\nDelete Scene:  The selected scene is cleared.  Any instance of the scene inserted into the movie is not removed.  To do so, you must remove instances of the scene from the storyboard.\n\nInsert Scene into Movie: The scene of the given name is recalled at the given frame.")
+        tkinter.messagebox.showinfo("Scenes Help", "Create new Scene:  Here you create a new PyMOL scene.  The current PyMOL view, colors, and/or representations, depending on your choices, are/is saved as a scene with the name of your choice.  This new scene will appear on the scene list, and can then be inserted to the movie at a specific frame.\n\nRecall Selected Scene: The selected scene is immediately recalled.  You can then edit it and save your changes to the scene by using the 'Create new scene/Save scene...' button.\n\nDelete Scene:  The selected scene is cleared.  Any instance of the scene inserted into the movie is not removed.  To do so, you must remove instances of the scene from the storyboard.\n\nInsert Scene into Movie: The scene of the given name is recalled at the given frame.")
 
 
-class CreateScene(tkSimpleDialog.Dialog):
+class CreateScene(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -397,7 +397,7 @@ class CreateScene(tkSimpleDialog.Dialog):
         emovie.scenes()
 
 
-class Zoom(tkSimpleDialog.Dialog):
+class Zoom(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -461,11 +461,11 @@ class Zoom(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Zoom Help", "Moves the camera a given number of angstroms along the z-axis.  The action length is the amount of frames it takes for the completion of the zoom.  Positive angstroms will zoom-in, while negative angstroms constitute zooming-out.")
+        tkinter.messagebox.showinfo("Zoom Help", "Moves the camera a given number of angstroms along the z-axis.  The action length is the amount of frames it takes for the completion of the zoom.  Positive angstroms will zoom-in, while negative angstroms constitute zooming-out.")
         self.lift()
 
 
-class Command(tkSimpleDialog.Dialog):
+class Command(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -523,11 +523,11 @@ class Command(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Command Help", "Enter any PyMOL command to be executed at a particular frame.  The PyMOL command can include commas.  For the execution of many commands at once, try inserting a PyMOL command to execute an external script ('@script.py' or 'run script.py').")
+        tkinter.messagebox.showinfo("Command Help", "Enter any PyMOL command to be executed at a particular frame.  The PyMOL command can include commas.  For the execution of many commands at once, try inserting a PyMOL command to execute an external script ('@script.py' or 'run script.py').")
         self.lift()
 
 
-class Rotation(tkSimpleDialog.Dialog):
+class Rotation(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -595,11 +595,11 @@ class Rotation(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Rotation Help", "Inserts a rotation of a given degree about a given axis at a given frame.  The action length is the amount of frames it takes for the completion of the rotation.  Rotations along an axis other than x, y, or z can be created by stacking combinations of rotations.  To set the origin of rotation, use the PyMOL command 'origin selection', where selection is the object or selection at which you wish to place the origin of rotation.")
+        tkinter.messagebox.showinfo("Rotation Help", "Inserts a rotation of a given degree about a given axis at a given frame.  The action length is the amount of frames it takes for the completion of the rotation.  Rotations along an axis other than x, y, or z can be created by stacking combinations of rotations.  To set the origin of rotation, use the PyMOL command 'origin selection', where selection is the object or selection at which you wish to place the origin of rotation.")
         self.lift()
 
 
-class Fading(tkSimpleDialog.Dialog):
+class Fading(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -701,10 +701,10 @@ class Fading(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Fading Help", "The representation of the molecule/selection will be faded from one visibility level to the other visibility level over the action length.  Make sure this representation is being shown; otherwise the fading will not be visible.  You may fade one or more representations of a molecule/selection while simultaneously showing other representations.")
+        tkinter.messagebox.showinfo("Fading Help", "The representation of the molecule/selection will be faded from one visibility level to the other visibility level over the action length.  Make sure this representation is being shown; otherwise the fading will not be visible.  You may fade one or more representations of a molecule/selection while simultaneously showing other representations.")
 
 
-class Worm(tkSimpleDialog.Dialog):
+class Worm(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -743,7 +743,7 @@ class Worm(tkSimpleDialog.Dialog):
 
         emovie.storyBoard.append(("%i-%i" % (startFrame, lastFrame), "Worm", "Molecule: %s; Residues: %i-%i" % (molecule, startAA, endAA), ['eMovie.wormFunction("%s",%i,%i,%i,%i)' % (molecule, startAA, endAA, startFrame, startFrameState), blankCmd]))
 
-        tkMessageBox.showinfo("Backbone Trace Feature", "Backbone trace inserted at frames %i to %i.\n" % (startFrame, lastFrame))
+        tkinter.messagebox.showinfo("Backbone Trace Feature", "Backbone trace inserted at frames %i to %i.\n" % (startFrame, lastFrame))
 
     def buttonbox(self):  # overide tkSimpleDialog button box in order to insert a help button
         '''add standard button box.
@@ -770,11 +770,11 @@ class Worm(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Backbone Trace Help", "This function first draws the first 30 residues between the given starting amino acid and the given ending amino acid in stick representation.  Then a cartoon of the carbon backbone (default setting = cartoon tube) begins to appear starting at the given start amino acid and ending at the given end amino acid.  The cartoon adds one amino acid to its structure with each passing frame.  Meanwhile, the 30 residues shown as sticks fade out entirely.  The cartoon is colored as a rainbow spectrum.  While this trace occurs, the molecule/selection rotates about the y axis.  The user cannot specify an action length with this feature because the action length depends on the amount of residues in the backbone trace.")
+        tkinter.messagebox.showinfo("Backbone Trace Help", "This function first draws the first 30 residues between the given starting amino acid and the given ending amino acid in stick representation.  Then a cartoon of the carbon backbone (default setting = cartoon tube) begins to appear starting at the given start amino acid and ending at the given end amino acid.  The cartoon adds one amino acid to its structure with each passing frame.  Meanwhile, the 30 residues shown as sticks fade out entirely.  The cartoon is colored as a rainbow spectrum.  While this trace occurs, the molecule/selection rotates about the y axis.  The user cannot specify an action length with this feature because the action length depends on the amount of residues in the backbone trace.")
         self.lift()
 
 
-class Pause(tkSimpleDialog.Dialog):
+class Pause(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -831,11 +831,11 @@ class Pause(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Pause Help", "A pause is added to the movie for the specified action length, at the specified frame.  This is not a hard-fast pause, as actions can be inserted into the pause.  Also, it is pointless to insert a pause in the middle of a movie, because simply by lack of inserted actions over a given frame range, a pause will occur.  The purpose of this button is to insert pauses to the end of movies.")
+        tkinter.messagebox.showinfo("Pause Help", "A pause is added to the movie for the specified action length, at the specified frame.  This is not a hard-fast pause, as actions can be inserted into the pause.  Also, it is pointless to insert a pause in the middle of a movie, because simply by lack of inserted actions over a given frame range, a pause will occur.  The purpose of this button is to insert pauses to the end of movies.")
         self.lift()
 
 
-class Stop(tkSimpleDialog.Dialog):
+class Stop(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -886,11 +886,11 @@ class Stop(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Stop Help", "A stop is inserted into the movie at the specified frame.  When the movie plays, and reaches the frame with the stop, the movie will stop until the user presses the play button again.  Stops are useful for automatically stopping the movie at specific points during a presentation so that the presenter can explain, and then continue the movie at his or her leisure.  Warning: Remove all stop actions from the storyboard before exporting a movie.")
+        tkinter.messagebox.showinfo("Stop Help", "A stop is inserted into the movie at the specified frame.  When the movie plays, and reaches the frame with the stop, the movie will stop until the user presses the play button again.  Stops are useful for automatically stopping the movie at specific points during a presentation so that the presenter can explain, and then continue the movie at his or her leisure.  Warning: Remove all stop actions from the storyboard before exporting a movie.")
         self.lift()
 
 
-class Story(tkSimpleDialog.Dialog):
+class Story(tkinter.simpledialog.Dialog):
 
     # override simpleDialog initialization to disable self.grab_set()
 
@@ -1111,7 +1111,7 @@ class Story(tkSimpleDialog.Dialog):
         if (deleteActionFlag == True) and (actionNumber != -1):
             # delete the actionNumber-th tuple in emovie.storyBoard
             deletedAction = emovie.storyBoard.pop(actionNumber)
-            tkMessageBox.showinfo("Deleted Action", "Action number %s deleted.  \nAction frames: %s . \nAction: %s. \nInformation: %s. \n" % (actionNumber + 1, deletedAction[0], deletedAction[1], deletedAction[2]))
+            tkinter.messagebox.showinfo("Deleted Action", "Action number %s deleted.  \nAction frames: %s . \nAction: %s. \nInformation: %s. \n" % (actionNumber + 1, deletedAction[0], deletedAction[1], deletedAction[2]))
 
             # now need to reload movie:
             # clear movie and add storyBoard commands to movie:
@@ -1152,11 +1152,11 @@ class Story(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Storyboard Help", "A list of the actions that comprise the movie, organized according to the frame numbers in which they take place.  By selecting an action and clicking 'Delete selected action', the selected action is removed from the movie, and the movie is reloaded and the storyboard refreshed. 'Edit action' allows changing of a selected action's parameters. 'Move a group of actions' allows movement of a group of consecutive actions up or down by a specified number of frames.")
+        tkinter.messagebox.showinfo("Storyboard Help", "A list of the actions that comprise the movie, organized according to the frame numbers in which they take place.  By selecting an action and clicking 'Delete selected action', the selected action is removed from the movie, and the movie is reloaded and the storyboard refreshed. 'Edit action' allows changing of a selected action's parameters. 'Move a group of actions' allows movement of a group of consecutive actions up or down by a specified number of frames.")
         self.lift()
 
 
-class MoveActions(tkSimpleDialog.Dialog):
+class MoveActions(tkinter.simpledialog.Dialog):
         # take every action between and including firstAction and lastAction and remove them from our emovie.storyboard
         # store each of the actions we removed in an array
         # clear and recompile our movie without the removed actions
@@ -1221,7 +1221,7 @@ class MoveActions(tkSimpleDialog.Dialog):
             insertActionByValues(newValues)
 
 
-class EditAction(tkSimpleDialog.Dialog):
+class EditAction(tkinter.simpledialog.Dialog):
         # the user selected some action in the storyboard
         # from that selected action, we get the values using getActionValues function
         # depending on the type of action, we display the relevant values in input boxes for editing
@@ -1462,7 +1462,7 @@ class Save:
         #
         # KR: added this method to produce a dialog right away
         #
-        filename = tkFileDialog.asksaveasfile(title=title, defaultextension=".emov", filetypes=[("eMovie files", ".emov"), ("All files", "*")])
+        filename = tkinter.filedialog.asksaveasfile(title=title, defaultextension=".emov", filetypes=[("eMovie files", ".emov"), ("All files", "*")])
         # added file type menu.
         if not filename:
             return
@@ -1532,7 +1532,7 @@ class Save:
 
     def openFileDialog(self):
 
-        filename = tkFileDialog.asksaveasfile(title="Browse...", defaultextension=".emov")
+        filename = tkinter.filedialog.asksaveasfile(title="Browse...", defaultextension=".emov")
 
         if filename:
             self.e1.delete(0, END)  # clear the entrybox
@@ -1625,7 +1625,7 @@ class Save:
 
     def help(self):
 
-        tkMessageBox.showinfo("Save eMovie Help", "Saves the eMovie.  Two files are created: filename.emov and filename.pse.  Both files are crucial for later loading of the eMovie.  In giving a file name for saving, one can leave out the extension, or alternatively use either .emov or .pse.  First the session file is saved, and then the eMovie actions are saved.")
+        tkinter.messagebox.showinfo("Save eMovie Help", "Saves the eMovie.  Two files are created: filename.emov and filename.pse.  Both files are crucial for later loading of the eMovie.  In giving a file name for saving, one can leave out the extension, or alternatively use either .emov or .pse.  First the session file is saved, and then the eMovie actions are saved.")
         self.lift()
 
 # class Load(tkSimpleDialog.Dialog):
@@ -1638,7 +1638,7 @@ class Load:
         #
         # KR: added this method to produce a dialog right away
         #
-        filename = tkFileDialog.askopenfile(title=title, defaultextension=".emov", filetypes=[("eMovie files", ".emov"), ("All files", "*")])
+        filename = tkinter.filedialog.askopenfile(title=title, defaultextension=".emov", filetypes=[("eMovie files", ".emov"), ("All files", "*")])
         # added file type menu.
         if not filename:
             return
@@ -1724,7 +1724,7 @@ class Load:
         return self.e1  # initial focus
 
     def openFileDialog(self):
-        filename = tkFileDialog.askopenfile(title="Browse...", defaultextension=".emov")
+        filename = tkinter.filedialog.askopenfile(title="Browse...", defaultextension=".emov")
 
         if filename:
             self.e1.delete(0, END)  # clear the entrybox
@@ -1829,7 +1829,7 @@ class Load:
 
     def help(self):
 
-        tkMessageBox.showinfo("Load eMovie Help", "Loads an eMovie.  Two files must be present to load from: filename.emov and filename.pse.  You can specify either file, and the loading will occur successfully.  Alternatively, you can specify the filename without the extension.  First the session file is loaded, and then the eMovie actions are loaded.")
+        tkinter.messagebox.showinfo("Load eMovie Help", "Loads an eMovie.  Two files must be present to load from: filename.emov and filename.pse.  You can specify either file, and the loading will occur successfully.  Alternatively, you can specify the filename without the extension.  First the session file is loaded, and then the eMovie actions are loaded.")
         self.lift()
 
     #
@@ -1837,7 +1837,7 @@ class Load:
     #
 
 
-class MakeMorph(tkSimpleDialog.Dialog):
+class MakeMorph(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -1896,7 +1896,7 @@ class MakeMorph(tkSimpleDialog.Dialog):
             cmd.do("rigimol eMovie_rigimol.inp")
 
             # time.sleep(120)  #change to pymol API command sync?
-            tkMessageBox.showinfo("Making Morph", "Morph is in the process of being made.\n Wait for the PyMOL Tcl/Tk GUI window to read: \n 'RigiMOL: normal program termination.' \n Before pressing 'OK'")
+            tkinter.messagebox.showinfo("Making Morph", "Morph is in the process of being made.\n Wait for the PyMOL Tcl/Tk GUI window to read: \n 'RigiMOL: normal program termination.' \n Before pressing 'OK'")
 
             # delete morphFrom.pdb and morphTo.pdb
             os.remove("morphFrom.pdb")
@@ -1994,11 +1994,11 @@ class MakeMorph(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Make Morph Help", "This feature only works with iPyMOL (incentive PyMOL), because iPyMOL is the only version to include the morphing tool RigiMOL.  A morph of 30 steps is created, the first and last steps being the structures the user specifies to morph from and to, and the 28 intermediate steps being RigiMOL's interpolations between the 2 specified structures.  The file 'eMovie_rigimol.inp' must be located in the current working directory.  The morph is generated and added to the eMovie session, but is also saved under the name 'morphname_eMorph.pdb' in the current working directory.  Refinement is important in creating real-looking motions/morphs, however it takes a lot of time.  If you specify a refinement value of 20, RigiMOL will cycle through your prepared morph 20 times, each time implementing its refinement algorithm.  A refinement value of 1 is pretty much no refinement, 20 is a medium amount, and 100 is a lot.  The entry entitled 'Place resulting morph on top of:' functions to align the molecules invovled in the morph; in this entry, specify the molecule (of the 2 being morphed) whose space you wish the resulting morph to occupy. If you have already performed alignment of the start and end states of the morph, leave this entry blank.  If you performing serial morphing of more than 2 morphs, it is suggested you do your own alignment using PyMOL and leave the 'Place resulting morph on top of:' entry blank.")
+        tkinter.messagebox.showinfo("Make Morph Help", "This feature only works with iPyMOL (incentive PyMOL), because iPyMOL is the only version to include the morphing tool RigiMOL.  A morph of 30 steps is created, the first and last steps being the structures the user specifies to morph from and to, and the 28 intermediate steps being RigiMOL's interpolations between the 2 specified structures.  The file 'eMovie_rigimol.inp' must be located in the current working directory.  The morph is generated and added to the eMovie session, but is also saved under the name 'morphname_eMorph.pdb' in the current working directory.  Refinement is important in creating real-looking motions/morphs, however it takes a lot of time.  If you specify a refinement value of 20, RigiMOL will cycle through your prepared morph 20 times, each time implementing its refinement algorithm.  A refinement value of 1 is pretty much no refinement, 20 is a medium amount, and 100 is a lot.  The entry entitled 'Place resulting morph on top of:' functions to align the molecules invovled in the morph; in this entry, specify the molecule (of the 2 being morphed) whose space you wish the resulting morph to occupy. If you have already performed alignment of the start and end states of the morph, leave this entry blank.  If you performing serial morphing of more than 2 morphs, it is suggested you do your own alignment using PyMOL and leave the 'Place resulting morph on top of:' entry blank.")
         self.lift()
 
 
-class AddMorph(tkSimpleDialog.Dialog):
+class AddMorph(tkinter.simpledialog.Dialog):
 
     # override simpleDialog initialization to disable self.grab_set()
 
@@ -2097,11 +2097,11 @@ class AddMorph(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Add Morph to eMovie Help", "Click on 'Click to add morph to movie' and then a new window pops up.  Enter the name of a morph from the list and play it forwards, backwards, or in a loop (with an optional pause in the middle) at a specified frame.")
+        tkinter.messagebox.showinfo("Add Morph to eMovie Help", "Click on 'Click to add morph to movie' and then a new window pops up.  Enter the name of a morph from the list and play it forwards, backwards, or in a loop (with an optional pause in the middle) at a specified frame.")
         self.lift()
 
 
-class AddMorphParam(tkSimpleDialog.Dialog):
+class AddMorphParam(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -2178,7 +2178,7 @@ class AddMorphParam(tkSimpleDialog.Dialog):
         cmd.do("mstop")
 
 
-class LoadMorph(tkSimpleDialog.Dialog):
+class LoadMorph(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -2197,7 +2197,7 @@ class LoadMorph(tkSimpleDialog.Dialog):
         return self.e1
 
     def openFileDialog(self):
-        filename = tkFileDialog.askopenfile(title="Browse...", defaultextension=".pdb")
+        filename = tkinter.filedialog.askopenfile(title="Browse...", defaultextension=".pdb")
 
         if filename:
             self.e1.delete(0, END)  # clear the entrybox
@@ -2265,11 +2265,11 @@ class LoadMorph(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Load Previously Made Morph Help", "Load a morph from a file into the eMovie session and into the list of available morphs for insertion to the movie.  The morphs must have 30 steps/states.  If you give a morph name that is already taken, the old morph will be replaced with the new morph.")
+        tkinter.messagebox.showinfo("Load Previously Made Morph Help", "Load a morph from a file into the eMovie session and into the list of available morphs for insertion to the movie.  The morphs must have 30 steps/states.  If you give a morph name that is already taken, the old morph will be replaced with the new morph.")
         self.lift()
 
 
-class Export(tkSimpleDialog.Dialog):
+class Export(tkinter.simpledialog.Dialog):
 
     def body(self, master):
 
@@ -2289,7 +2289,7 @@ class Export(tkSimpleDialog.Dialog):
 
     def openFileDialog(self):
 
-        filename = tkFileDialog.asksaveasfile(title="Browse...")
+        filename = tkinter.filedialog.asksaveasfile(title="Browse...")
 
         if filename:
             self.e1.delete(0, END)  # clear the entrybox
@@ -2341,7 +2341,7 @@ class Export(tkSimpleDialog.Dialog):
 
     def help(self):
 
-        tkMessageBox.showinfo("Export eMovie Help", "Exports the current eMovie as a .png image sequence of the given name.  Each frame is exported to one image in the sequence.  The exported image size is determined by the size of the PyMOL viewport or GUI window; make sure to set this before you export the eMovie.  Ray-tracing can be used to enhance the images, but this takes a lot of time.  Warning: Remove all stop actions from the storyboard before exporting a movie.")
+        tkinter.messagebox.showinfo("Export eMovie Help", "Exports the current eMovie as a .png image sequence of the given name.  Each frame is exported to one image in the sequence.  The exported image size is determined by the size of the PyMOL viewport or GUI window; make sure to set this before you export the eMovie.  Ray-tracing can be used to enhance the images, but this takes a lot of time.  Warning: Remove all stop actions from the storyboard before exporting a movie.")
         self.lift()
 
 # a function to figure out what state the movie is on during frame
@@ -2934,7 +2934,7 @@ def get_values(number, start, end, mode):
     elif mode == 'trigon':
         values = get_trigon_values(number, start, end)
     else:
-        print('movie.py: INVALID MODE %s' % mode)
+        print(('movie.py: INVALID MODE %s' % mode))
         return []
 
     return values

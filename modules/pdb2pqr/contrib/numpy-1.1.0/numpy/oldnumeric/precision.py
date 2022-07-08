@@ -7,7 +7,7 @@ __all__ = ['Character', 'Complex', 'Float',
            'PrecisionError', 'PyObject', 'Int', 'UInt',
            'UnsignedInteger', 'string', 'typecodes', 'zeros']
 
-from functions import zeros
+from .functions import zeros
 import string   # for backwards compatibility
 
 typecodes = {'Character':'c', 'Integer':'bhil', 'UnsignedInteger':'BHI', 'Float':'fd', 'Complex':'FD'}
@@ -19,7 +19,7 @@ def _get_precisions(typecodes):
     return lst
 
 def _fill_table(typecodes, table={}):
-    for key, value in typecodes.items():
+    for key, value in list(typecodes.items()):
         table[key] = _get_precisions(value)
     return table
 
@@ -33,7 +33,7 @@ def _lookup(table, key, required_bits):
     for bits, typecode in lst:
         if bits >= required_bits:
             return typecode
-    raise PrecisionError, key+" of "+str(required_bits)+" bits not available on this system"
+    raise PrecisionError(key+" of "+str(required_bits)+" bits not available on this system")
 
 Character = 'c'
 

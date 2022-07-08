@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from pymol import cmd
 from tempfile import mkdtemp
 from shutil import rmtree

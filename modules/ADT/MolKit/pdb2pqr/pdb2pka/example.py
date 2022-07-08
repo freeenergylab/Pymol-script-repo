@@ -46,7 +46,7 @@ class APBSError(Exception):
         """
             Return the error message
         """
-        return `self.value`
+        return repr(self.value)
 
 def getUnitConversion():
     """
@@ -97,7 +97,7 @@ def runAPBS(PQR, INPUT):
 
     if not parseInputFromString(nosh, INPUT):
         stderr.write("main:  Error while parsing input file.\n")
-        raise APBSError, "Error occurred!"
+        raise APBSError("Error occurred!")
 
     # Load the molecules using Valist_load routine
 
@@ -145,14 +145,14 @@ def runAPBS(PQR, INPUT):
  
     sys.stdout.write("Preparing to run %d PBE calculations. \n" % nosh.ncalc)
    
-    for icalc in xrange(nosh.ncalc):
+    for icalc in range(nosh.ncalc):
         sys.stdout.write("---------------------------------------------\n")
         calc = NOsh_getCalc(nosh, icalc)
         mgparm = calc.mgparm
         pbeparm = calc.pbeparm
         if calc.calctype != 0:
             sys.stderr.write("main:  Only multigrid calculations supported!\n")
-            raise APBSError, "Only multigrid calculations supported!"
+            raise APBSError("Only multigrid calculations supported!")
 
         for k in range(0, nosh.nelec):
             if NOsh_elec2calc(nosh,k) >= icalc:
@@ -171,7 +171,7 @@ def runAPBS(PQR, INPUT):
               alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
               pmgp, pmg) != 1:
             sys.stderr.write("Error setting up MG calculation!\n")
-            raise APBSError, "Error setting up MG calculation!"
+            raise APBSError("Error setting up MG calculation!")
 	
         # Print problem parameters 
 
@@ -183,13 +183,13 @@ def runAPBS(PQR, INPUT):
 
         if solveMG(nosh, thispmg, mgparm.type) != 1:
             stderr.write("Error solving PDE! \n")
-            raise APBSError, "Error Solving PDE!"
+            raise APBSError("Error Solving PDE!")
 
         # Set partition information : Routine setPartMG
 
         if setPartMG(nosh, mgparm, thispmg) != 1:
             sys.stderr.write("Error setting partition info!\n")
-            raise APBSError, "Error setting partition info!"
+            raise APBSError("Error setting partition info!")
 	
         ret, totEnergy[icalc] = energyMG(nosh, icalc, thispmg, 0,
                                          totEnergy[icalc], 0.0, 0.0, 0.0)
@@ -212,7 +212,7 @@ def runAPBS(PQR, INPUT):
     if nosh.nprint > 0:
         sys.stdout.write("---------------------------------------------\n")
         sys.stdout.write("PRINT STATEMENTS\n")
-    for iprint in xrange(nosh.nprint):
+    for iprint in range(nosh.nprint):
         if NOsh_printWhat(nosh, iprint) == NPT_ENERGY:
             printEnergy(com, nosh, totEnergy, iprint)
         elif NOsh_printWhat(nosh, iprint) == NPT_FORCE:
@@ -283,7 +283,7 @@ if __name__ == "__main__":
 
     # Print out the number of elec statements
 
-    print "Number of elecs: ", len(input.elecs)
+    print(("Number of elecs: ", len(input.elecs)))
 
     # Let's set the dielectric in the second elec statement
 
@@ -295,4 +295,4 @@ if __name__ == "__main__":
 
     # And print the results!
 
-    print "Now we have: ", potentials
+    print(("Now we have: ", potentials))

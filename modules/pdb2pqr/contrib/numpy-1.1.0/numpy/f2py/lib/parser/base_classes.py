@@ -15,9 +15,10 @@ __all__ = ['Statement','BeginStatement','EndStatement', 'Variable',
 import re
 import sys
 import copy
-from readfortran import Line
+from .readfortran import Line
 from numpy.distutils.misc_util import yellow_text, red_text
-from utils import split_comma, specs_split_comma, is_int_literal_constant
+from .utils import split_comma, specs_split_comma, is_int_literal_constant
+from functools import reduce
 
 class AttributeHolder:
     # copied from symbolic.base module
@@ -30,7 +31,7 @@ class AttributeHolder:
     def __init__(self, **kws):
         self._attributes = {}
         self._readonly = []
-        for k,v in kws.items():
+        for k,v in list(kws.items()):
             self._attributes[k] = v
             if callable(v):
                 self._readonly.append(k)
@@ -38,10 +39,10 @@ class AttributeHolder:
 
     def __getattr__(self, name):
         if name not in self._attributes:
-            raise AttributeError,'%s instance has no attribute %r, '\
+            raise AttributeError('%s instance has no attribute %r, '\
                   'expected attributes: %s' \
                   % (self.__class__.__name__,name,
-                     ','.join(self._attributes.keys()))
+                     ','.join(list(self._attributes.keys()))))
         value = self._attributes[name]
         if callable(value):
             value = value()
@@ -53,16 +54,16 @@ class AttributeHolder:
             self.__dict__[name] = value
             return
         if name in self._readonly:
-            raise AttributeError,'%s instance attribute %r is readonly' \
-                  % (self.__class__.__name__, name)
+            raise AttributeError('%s instance attribute %r is readonly' \
+                  % (self.__class__.__name__, name))
         if name not in self._attributes:
-            raise AttributeError,'%s instance has no attribute %r, '\
+            raise AttributeError('%s instance has no attribute %r, '\
                   'expected attributes: %s' \
-                  % (self.__class__.__name__,name,','.join(self._attributes.keys()))
+                  % (self.__class__.__name__,name,','.join(list(self._attributes.keys()))))
         self._attributes[name] = value
 
     def isempty(self):
-        for k in self._attributes.keys():
+        for k in list(self._attributes.keys()):
             v = getattr(self,k)
             if v: return False
         return True
@@ -73,20 +74,20 @@ class AttributeHolder:
         if depth==0: return tab + self.__class__.__name__
         l = [self.__class__.__name__+':']
         ttab = tab + '    '
-        for k in self._attributes.keys():
+        for k in list(self._attributes.keys()):
             v = getattr(self,k)
             if v:
                 if isinstance(v,list):
                     l.append(ttab + '%s=<%s-list>' % (k,len(v)))
                 elif isinstance(v,dict):
-                    l.append(ttab + '%s=<dict with keys %s>' % (k,v.keys()))
+                    l.append(ttab + '%s=<dict with keys %s>' % (k,list(v.keys())))
                 else:
                     l.append(ttab + '%s=<%s>' % (k,type(v)))
         return '\n'.join(l)
 
     def todict(self):
         d = {}
-        for k in self._attributes.keys():
+        for k in list(self._attributes.keys()):
             v = getattr(self, k)
             d[k] = v
         return d
@@ -163,7 +164,7 @@ class Variable:
         return self.typedecl
 
     def add_parent(self, parent):
-        if id(parent) not in map(id, self.parents):
+        if id(parent) not in list(map(id, self.parents)):
             self.parents.append(parent)
         self.parent = parent
         return
@@ -298,26 +299,26 @@ class Variable:
             lattr = attr.lower()
             uattr = attr.upper()
             if lattr.startswith('dimension'):
-                assert self.dimension is None, `self.dimension,attr`
+                assert self.dimension is None, repr((self.dimension,attr))
                 l = attr[9:].lstrip()
-                assert l[0]+l[-1]=='()',`l`
+                assert l[0]+l[-1]=='()',repr(l)
                 self.set_dimension(split_comma(l[1:-1].strip(), self.parent.item))
                 continue
             if lattr.startswith('intent'):
                 l = attr[6:].lstrip()
-                assert l[0]+l[-1]=='()',`l`
+                assert l[0]+l[-1]=='()',repr(l)
                 self.set_intent(specs_split_comma(l[1:-1].strip(),
                                                   self.parent.item, upper=True))
                 continue
             if lattr.startswith('bind'):
                 l = attr[4:].lstrip()
-                assert l[0]+l[-1]=='()',`l`
+                assert l[0]+l[-1]=='()',repr(l)
                 self.bind = specs_split_comma(l[1:-1].strip(), self.parent.item,
                                               upper = True)
                 continue
             if lattr.startswith('check'):
                 l = attr[5:].lstrip()
-                assert l[0]+l[-1]=='()',`l`
+                assert l[0]+l[-1]=='()',repr(l)
                 self.check.extend(split_comma(l[1:-1].strip()), self.parent.item)
                 continue
             if uattr not in attributes:
@@ -538,7 +539,7 @@ class Statement:
         return message
 
     def show_message(self, message, stream=sys.stderr):
-        print >> stream, message
+        print(message, file=stream)
         stream.flush()
         return
 

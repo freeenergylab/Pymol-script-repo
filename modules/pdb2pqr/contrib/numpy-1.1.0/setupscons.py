@@ -15,7 +15,7 @@ basic linear algebra and random number generation.
 
 DOCLINES = __doc__.split("\n")
 
-import __builtin__
+import builtins
 import os
 import sys
 
@@ -42,7 +42,7 @@ if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 # numpy __init__ can detect if it is being loaded by the setup routine, to
 # avoid attempting to load components that aren't built yet.  While ugly, it's
 # a lot more robust than what was previously being used.
-__builtin__.__NUMPY_SETUP__ = True
+builtins.__NUMPY_SETUP__ = True
 
 # DO NOT REMOVE numpy.distutils IMPORT ! This is necessary for numpy.distutils'
 # monkey patching to work.
@@ -50,7 +50,7 @@ import numpy.distutils
 from distutils.errors import DistutilsError
 try:
     import numscons
-except ImportError, e:
+except ImportError as e:
     msg = ["You cannot build numpy with scons without the numscons package "]
     msg.append("(Failure was: %s)" % e)
     raise DistutilsError('\n'.join(msg))
@@ -94,7 +94,7 @@ def setup_package():
             url = "http://numeric.scipy.org",
             download_url = "http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103",
             license = 'BSD',
-            classifiers=filter(None, CLASSIFIERS.split('\n')),
+            classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
             author = "Travis E. Oliphant, et.al.",
             author_email = "oliphant@ee.byu.edu",
             platforms = ["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],

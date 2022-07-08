@@ -121,12 +121,12 @@ class mtsslTrilaterate(wx.Frame):
         self.table.SetCellSize(0, 0, 2, 1)
         self.table.SetCellValue(0, 0, 'Label name')
         self.table.SetCellSize(0, 1, 1, 3)
-        self.table.SetCellValue(0, 1, 'Label coordinates ' + u'(\u00c5)')
+        self.table.SetCellValue(0, 1, 'Label coordinates ' + '(\u00c5)')
         self.table.SetCellValue(1, 1, 'x')
         self.table.SetCellValue(1, 2, 'y')
         self.table.SetCellValue(1, 3, 'z')
         self.table.SetCellSize(0, 4, 1, 2)
-        self.table.SetCellValue(0, 4, 'Distance ' + u'(\u00c5)')
+        self.table.SetCellValue(0, 4, 'Distance ' + '(\u00c5)')
         self.table.SetCellValue(1, 4, 'mean')
         self.table.SetCellValue(1, 5, 'std')
         # Do not edit column labels and row labels
@@ -220,7 +220,7 @@ class mtsslTrilaterate(wx.Frame):
         # Create new column labels and row labels
         self.table1.SetCellSize(0, 0, 2, 1)
         self.table1.SetCellSize(0, 1, 1, 3)
-        self.table1.SetCellValue(0, 1, 'Target coordinates ' + u'(\u00c5)')
+        self.table1.SetCellValue(0, 1, 'Target coordinates ' + '(\u00c5)')
         self.table1.SetCellValue(1, 1, 'x')
         self.table1.SetCellValue(1, 2, 'y')
         self.table1.SetCellValue(1, 3, 'z')

@@ -6,10 +6,10 @@
 # ============================
 #
 
-from __future__ import division
-from __future__ import generators
-from __future__ import print_function
-from __future__ import absolute_import
+
+
+
+
 
 import os
 import math
@@ -26,8 +26,8 @@ from chempy.models import Indexed
 from chempy import Bond, Atom
 
 if sys.version_info[0] < 3:
-    import Tkinter
-    from Tkinter import *
+    import tkinter
+    from tkinter import *
 else:
     import tkinter as Tkinter
     from tkinter import *
@@ -138,14 +138,14 @@ class FileDialogButtonClassFactory:
         """This returns a FileDialogButton class that will
         call the specified function with the resulting file.
         """
-        class FileDialogButton(Tkinter.Button):
+        class FileDialogButton(tkinter.Button):
             # This is just an ordinary button with special colors.
 
             def __init__(self, master=None, cnf={}, **kw):
                 '''when we get a file, we call fn(filename)'''
                 self.fn = fn
                 self.__toggle = 0
-                Tkinter.Button.__init__(self, master, cnf, **kw)
+                tkinter.Button.__init__(self, master, cnf, **kw)
                 self.configure(command=self.set)
 
             def set(self):
@@ -175,7 +175,7 @@ class MOLETools:
         self.dialog.withdraw()
         Pmw.setbusycursorattributes(self.dialog.component('hull'))
 
-        w = Tkinter.Label(self.dialog.interior(),
+        w = tkinter.Label(self.dialog.interior(),
                           text='PyMOL MOLE Tools\nMartin Petrek, 2007, http://mole.chemi.muni.cz',
                           background='navy',
                           foreground='white',
@@ -223,24 +223,24 @@ class MOLETools:
         for entry in (self.selection, self.binlocation, self.numbertunnels):
             entry.pack(fill='x', padx=4, pady=1)  # vertical
 
-        labframe = Tkinter.Frame(group.interior())
+        labframe = tkinter.Frame(group.interior())
         labframe.pack(fill='x', padx=4, pady=2)
 
-        label1 = Tkinter.Label(labframe, justify=LEFT, text="Starting point specification:",)
+        label1 = tkinter.Label(labframe, justify=LEFT, text="Starting point specification:",)
         label1.pack(side='left')
 
         radiogroups = []
-        self.var = Tkinter.IntVar()
+        self.var = tkinter.IntVar()
         self.var.set(1)
-        radioframe = Tkinter.Frame(group.interior())
+        radioframe = tkinter.Frame(group.interior())
 
         w = Pmw.Group(radioframe,
-                      tag_pyclass=Tkinter.Radiobutton,
+                      tag_pyclass=tkinter.Radiobutton,
                       tag_text='Use average point from centers of given selections \n(e.g. /Molecule///GLY`37/N  /Molecule///PHE`151)',
                       tag_value=0,
                       tag_variable=self.var)
         w.pack(fill='x', expand=1, side='top')
-        cw = Tkinter.Frame(w.interior())
+        cw = tkinter.Frame(w.interior())
         cw.pack(padx=2, pady=2, expand='yes', fill='both')
         radiogroups.append(w)
         self.selectionlist = Pmw.EntryField(w.interior(),
@@ -253,12 +253,12 @@ class MOLETools:
         self.selectionlist.pack(fill='x', padx=4, pady=1)  # vertical
 
         w = Pmw.Group(radioframe,
-                      tag_pyclass=Tkinter.Radiobutton,
+                      tag_pyclass=tkinter.Radiobutton,
                       tag_text='Use X, Y, Z coordinates to specify starting point',
                       tag_value=1,
                       tag_variable=self.var)
         w.pack(fill='x', expand=1, side='top')
-        cw = Tkinter.Frame(w.interior())
+        cw = tkinter.Frame(w.interior())
         cw.pack(padx=2, pady=2, expand='yes', fill='both')
         radiogroups.append(w)
 
@@ -274,17 +274,17 @@ class MOLETools:
         self.zlocvar.set(float("%.2f" % (startpoint[2])))
         self.var.set(1)
 
-        self.xlocfr = Tkinter.Frame(w.interior())
+        self.xlocfr = tkinter.Frame(w.interior())
         labX = Label(self.xlocfr, text="X:")
         self.xlocation = Entry(self.xlocfr, textvariable=self.xlocvar)
         self.scrX = Scrollbar(self.xlocfr, orient="horizontal", command=self.changeValueX)
 
-        self.ylocfr = Tkinter.Frame(w.interior())
+        self.ylocfr = tkinter.Frame(w.interior())
         labY = Label(self.ylocfr, text="Y:")
         self.ylocation = Entry(self.ylocfr, textvariable=self.ylocvar)
         self.scrY = Scrollbar(self.ylocfr, orient="horizontal", command=self.changeValueY)
 
-        self.zlocfr = Tkinter.Frame(w.interior())
+        self.zlocfr = tkinter.Frame(w.interior())
         labZ = Label(self.zlocfr, text="Z:")
         self.zlocation = Entry(self.zlocfr, textvariable=self.zlocvar)
         self.scrZ = Scrollbar(self.zlocfr, orient="horizontal", command=self.changeValueZ)
@@ -877,7 +877,7 @@ class PmwFileDialog(Pmw.Dialog):
         return self.createcomponent(
             'infobox',
             (), None,
-            Tkinter.Label, (self.interior(),),
+            tkinter.Label, (self.interior(),),
             width=51,
             relief='groove',
             foreground='darkblue',
@@ -1140,11 +1140,11 @@ if __name__ == '__main__':
             pass
 
     app = App()
-    app.root = Tkinter.Tk()
+    app.root = tkinter.Tk()
     Pmw.initialise(app.root)
     app.root.title('Some Title')
 
     widget = MOLETools(app)
-    exitButton = Tkinter.Button(app.root, text='Exit', command=app.root.destroy)
+    exitButton = tkinter.Button(app.root, text='Exit', command=app.root.destroy)
     exitButton.pack()
     app.root.mainloop()

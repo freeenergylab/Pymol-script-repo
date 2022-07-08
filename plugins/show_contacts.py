@@ -5,7 +5,7 @@ for highlighting good and bad polar contacts. Factored out of
 clustermols by Matthew Baumgartner.
 The advantage of this package is it requires many fewer dependencies.
 '''
-from __future__ import print_function
+
 
 import sys,os
 from pymol import cmd

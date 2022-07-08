@@ -107,14 +107,14 @@ class PdbWriter(MoleculeWriter):
         # Get the from file records this is possible only if the file
         # comes from a PDB parser.
         if isinstance(parser, PdbParser):
-            fileRec = filter(lambda x: not x in self.FROMDATASTRUCT, records)
+            fileRec = [x for x in records if not x in self.FROMDATASTRUCT]
             for rec in fileRec:
                 self.recordsToWrite[rec] = parser.getRecords(parser.allLines,rec)
 
         # Create the records from the data structure:
         # secondary structure 'HELIX', 'SHEET', 'TURN', 'REMARK 650 HELIX',
         # 'REMARK 700 SHEET', 'REMARK 750 TURN'
-        ssRec = filter(lambda x: x in ['HELIX', 'SHEET', 'TURN'], records)
+        ssRec = [x for x in records if x in ['HELIX', 'SHEET', 'TURN']]
         if len(ssRec):
             self.defineSecondaryStructureSection(mol, origin=ssOrigin)
 
@@ -141,9 +141,9 @@ class PdbWriter(MoleculeWriter):
             file.write('REMARK   4 XXXX COMPLIES WITH FORMAT V. 2.0\n')       
 
         for rec in self.PDBRECORDS:
-            if self.recordsToWrite.has_key(rec):
+            if rec in self.recordsToWrite:
                 recLine = self.recordsToWrite[rec]
-                if type(recLine) is types.ListType:
+                if type(recLine) is list:
                     for line in recLine:
                         file.write(line)
                 else:
@@ -693,15 +693,15 @@ class PdbWriter(MoleculeWriter):
         #selAtoms = nodes.findType(Atom)
         self.recordsToWrite['ATOM']=[]
         for c in chains:
-            allAtoms = filter(lambda x: x.parent.parent == c, nodes)
+            allAtoms = [x for x in nodes if x.parent.parent == c]
             if atmRec:
-                atoms = filter(lambda x: x.hetatm==0, allAtoms)
+                atoms = [x for x in allAtoms if x.hetatm==0]
                 for atm in atoms:
                     self.recordsToWrite['ATOM'].append(self.defineATOM_HETATMRecord(atm))
                 if len(atoms):
                     self.recordsToWrite['ATOM'].append(self.defineTERRecord(atoms[-1]))
             if hetRec:
-                hetatm = filter(lambda x: x.hetatm==1, allAtoms)
+                hetatm = [x for x in allAtoms if x.hetatm==1]
                 for atm in hetatm:
                     self.recordsToWrite['ATOM'].append(self.defineATOM_HETATMRecord(atm))
 
@@ -720,10 +720,10 @@ class PdbWriter(MoleculeWriter):
         # the Hbond are defined by the HYBND section
         if bondOrigin == 'all':
             bondOrigin = ('File', 'BuiltByDistance', 'UserDefined')
-        elif type(bondOrigin) is types.StringType and \
+        elif type(bondOrigin) is bytes and \
              bondOrigin in ['File', 'BuiltByDistance', 'UserDefined']:
             bondOrigin = (bondOrigin,)
-        elif type(bondOrigin) is types.ListType:
+        elif type(bondOrigin) is list:
             bondOrigin = tuple(bondOrigin)
         self.recordsToWrite['CONECT'] = []
 
@@ -791,12 +791,12 @@ class PdbqWriter(PdbWriter):
         required = []
         # required: write only if it is specified by user or in old file
         for key in tags:
-            if self.userRecords.has_key(key) and \
+            if key in self.userRecords and \
                     len(self.userRecords[key])!=0:
                 RecordList = self.userRecords[key]
             elif isPdbParser and len(Parser.getRecords(Parser.allLines, '%s' % key))!=0 \
                     and ((key in mandatory) or (key in required) or \
-                    self.userRecords.has_key(key)):
+                    key in self.userRecords):
                 RecordList = Parser.getRecords(Parser.allLines, '%s' % key)
             else:
                 RecordList = []
@@ -896,7 +896,7 @@ class PdbqWriter(PdbWriter):
         # [54:59] occupancy
         if hasattr(atm, 'occupancy'):
             occupancy = atm.occupancy
-        elif hasattr(atm, '_charges') and atm._charges.has_key('pqr'):
+        elif hasattr(atm, '_charges') and 'pqr' in atm._charges:
             occupancy = atm._charges['pqr']
         else:
             occupancy = 0.0
@@ -1126,7 +1126,7 @@ class PdbqtWriter(PdbqWriter):
         # [54:59] occupancy
         if hasattr(atm, 'occupancy'):
             occupancy = atm.occupancy
-        elif hasattr(atm, '_charges') and atm._charges.has_key('pqr'):
+        elif hasattr(atm, '_charges') and 'pqr' in atm._charges:
             occupancy = atm._charges['pqr']
         else:
             occupancy = 0.0

@@ -3,17 +3,17 @@ import linecache
 import time
 import socket
 import traceback
-import thread
+import _thread
 import threading
-import Queue
+import queue
 
-import CallTips
-import AutoComplete
+from . import CallTips
+from . import AutoComplete
 
-import RemoteDebugger
-import RemoteObjectBrowser
-import StackViewer
-import rpc
+from . import RemoteDebugger
+from . import RemoteObjectBrowser
+from . import StackViewer
+from . import rpc
 
 import __main__
 
@@ -87,7 +87,7 @@ def main(del_exitfunc=False):
                     continue
             try:
                 seq, request = rpc.request_queue.get(block=True, timeout=0.05)
-            except Queue.Empty:
+            except queue.Empty:
                 continue
             method, args, kwargs = request
             ret = method(*args, **kwargs)
@@ -116,12 +116,12 @@ def manage_socket(address):
         try:
             server = MyRPCServer(address, MyHandler)
             break
-        except socket.error, err:
-            print>>sys.__stderr__,"IDLE Subprocess: socket error: "\
-                                        + err[1] + ", retrying...."
+        except socket.error as err:
+            print("IDLE Subprocess: socket error: "\
+                                        + err[1] + ", retrying....", file=sys.__stderr__)
     else:
-        print>>sys.__stderr__, "IDLE Subprocess: Connection to "\
-                               "IDLE GUI failed, exiting."
+        print("IDLE Subprocess: Connection to "\
+                               "IDLE GUI failed, exiting.", file=sys.__stderr__)
         show_socket_error(err, address)
         global exit_now
         exit_now = True
@@ -129,18 +129,18 @@ def manage_socket(address):
     server.handle_request() # A single request only
 
 def show_socket_error(err, address):
-    import Tkinter
-    import tkMessageBox
-    root = Tkinter.Tk()
+    import tkinter
+    import tkinter.messagebox
+    root = tkinter.Tk()
     root.withdraw()
     if err[0] == 61: # connection refused
         msg = "IDLE's subprocess can't connect to %s:%d.  This may be due "\
               "to your personal firewall configuration.  It is safe to "\
               "allow this internal connection because no data is visible on "\
               "external ports." % address
-        tkMessageBox.showerror("IDLE Subprocess Error", msg, parent=root)
+        tkinter.messagebox.showerror("IDLE Subprocess Error", msg, parent=root)
     else:
-        tkMessageBox.showerror("IDLE Subprocess Error", "Socket Error: %s" % err[1])
+        tkinter.messagebox.showerror("IDLE Subprocess Error", "Socket Error: %s" % err[1])
     root.destroy()
 
 def print_exception():
@@ -151,14 +151,14 @@ def print_exception():
     typ, val, tb = excinfo = sys.exc_info()
     sys.last_type, sys.last_value, sys.last_traceback = excinfo
     tbe = traceback.extract_tb(tb)
-    print>>efile, '\nTraceback (most recent call last):'
+    print('\nTraceback (most recent call last):', file=efile)
     exclude = ("run.py", "rpc.py", "threading.py", "Queue.py",
                "RemoteDebugger.py", "bdb.py")
     cleanup_traceback(tbe, exclude)
     traceback.print_list(tbe, file=efile)
     lines = traceback.format_exception_only(typ, val)
     for line in lines:
-        print>>efile, line,
+        print(line, end=' ', file=efile)
 
 def cleanup_traceback(tb, exclude):
     "Remove excluded traces from beginning/end of tb; get cached lines"
@@ -180,7 +180,7 @@ def cleanup_traceback(tb, exclude):
     if len(tb) == 0:
         # exception was in IDLE internals, don't prune!
         tb[:] = orig_tb[:]
-        print>>sys.stderr, "** IDLE Internal Exception: "
+        print("** IDLE Internal Exception: ", file=sys.stderr)
     rpchandler = rpc.objecttable['exec'].rpchandler
     for i in range(len(tb)):
         fn, ln, nm, line = tb[i]
@@ -229,19 +229,19 @@ class MyRPCServer(rpc.RPCServer):
         except EOFError:
             global exit_now
             exit_now = True
-            thread.interrupt_main()
+            _thread.interrupt_main()
         except:
             erf = sys.__stderr__
-            print>>erf, '\n' + '-'*40
-            print>>erf, 'Unhandled server exception!'
-            print>>erf, 'Thread: %s' % threading.currentThread().getName()
-            print>>erf, 'Client Address: ', client_address
-            print>>erf, 'Request: ', repr(request)
+            print('\n' + '-'*40, file=erf)
+            print('Unhandled server exception!', file=erf)
+            print('Thread: %s' % threading.currentThread().getName(), file=erf)
+            print('Client Address: ', client_address, file=erf)
+            print('Request: ', repr(request), file=erf)
             traceback.print_exc(file=erf)
-            print>>erf, '\n*** Unrecoverable, server exiting!'
-            print>>erf, '-'*40
+            print('\n*** Unrecoverable, server exiting!', file=erf)
+            print('-'*40, file=erf)
             quitting = True
-            thread.interrupt_main()
+            _thread.interrupt_main()
 
 
 class MyHandler(rpc.RPCHandler):
@@ -253,7 +253,7 @@ class MyHandler(rpc.RPCHandler):
         sys.stdin = self.console = self.get_remote_proxy("stdin")
         sys.stdout = self.get_remote_proxy("stdout")
         sys.stderr = self.get_remote_proxy("stderr")
-        import IOBinding
+        from . import IOBinding
         sys.stdin.encoding = sys.stdout.encoding = \
                              sys.stderr.encoding = IOBinding.encoding
         self.interp = self.get_remote_proxy("interp")
@@ -267,13 +267,13 @@ class MyHandler(rpc.RPCHandler):
         "Override SocketIO method - terminate wait on callback and exit thread"
         global quitting
         quitting = True
-        thread.interrupt_main()
+        _thread.interrupt_main()
 
     def decode_interrupthook(self):
         "interrupt awakened thread"
         global quitting
         quitting = True
-        thread.interrupt_main()
+        _thread.interrupt_main()
 
 
 class Executive(object):
@@ -290,7 +290,7 @@ class Executive(object):
             self.usr_exc_info = None
             interruptable = True
             try:
-                exec code in self.locals
+                exec(code, self.locals)
             finally:
                 interruptable = False
         except:
@@ -307,7 +307,7 @@ class Executive(object):
 
     def interrupt_the_server(self):
         if interruptable:
-            thread.interrupt_main()
+            _thread.interrupt_main()
 
     def start_the_debugger(self, gui_adap_oid):
         return RemoteDebugger.start_debugger(self.rpchandler, gui_adap_oid)

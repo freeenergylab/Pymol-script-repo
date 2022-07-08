@@ -67,7 +67,7 @@ class Test(ServiceTestCase):
         msg.X = 4.0
         rsp = port.getSquare(msg)
         
-        self.failUnless(rsp.Return == msg.X**2,
+        self.assertTrue(rsp.Return == msg.X**2,
                         "Square Failed:  got %d, expecting %d" %(rsp.Return,msg.X**2))
         
 

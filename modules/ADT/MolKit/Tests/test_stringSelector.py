@@ -44,7 +44,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         instantiate a StringSelector
         """
         stringSel = StringSelector()
-        self.assertEquals(stringSel.__class__, StringSelector)
+        self.assertEqual(stringSel.__class__, StringSelector)
 
 
     def test_select_with_empty_string(self):
@@ -53,8 +53,8 @@ class StringSelectorBaseTests(unittest.TestCase):
         """
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, "")
-        self.assertEquals(result, self.molecules)
-        self.assertEquals(result.stringRepr, self.molecules[0].name)
+        self.assertEqual(result, self.molecules)
+        self.assertEqual(result.stringRepr, self.molecules[0].name)
 
     def test_select_with_lambda_atoms_expr(self):
         """
@@ -64,8 +64,8 @@ class StringSelectorBaseTests(unittest.TestCase):
         #sanity check
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 3)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_lambda_residue_expr(self):
@@ -76,8 +76,8 @@ class StringSelectorBaseTests(unittest.TestCase):
         #sanity check
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 9)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(len(result), 9)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_lambda_chain_expr(self):
@@ -88,8 +88,8 @@ class StringSelectorBaseTests(unittest.TestCase):
         #sanity check
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 5)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(len(result), 5)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_lambda_molecule_expr(self):
@@ -100,8 +100,8 @@ class StringSelectorBaseTests(unittest.TestCase):
         #sanity check
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 29)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(len(result), 29)
+        self.assertEqual(result.stringRepr, selString)
 
     def test_select_with_CA_returns_3atoms(self):
         """
@@ -111,8 +111,8 @@ class StringSelectorBaseTests(unittest.TestCase):
         #sanity check
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 3)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_backbone_returns_12atoms(self):
@@ -123,8 +123,8 @@ class StringSelectorBaseTests(unittest.TestCase):
         #sanity check
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 12)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(len(result), 12)
+        self.assertEqual(result.stringRepr, selString)
 
 
 
@@ -136,8 +136,8 @@ class StringSelectorBaseTests(unittest.TestCase):
         #sanity check
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 5)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(len(result), 5)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_backbone_returns_no_waters(self):
@@ -147,9 +147,9 @@ class StringSelectorBaseTests(unittest.TestCase):
         selString = ":::backbone"
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 12)
+        self.assertEqual(len(result), 12)
         self.assertEqual('HOH' not in result.parent.type, True)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_bad_key_returns_EmptySet(self):
@@ -159,7 +159,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         selString = ":::'backbone'"
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
-        self.assertEquals(len(result), 0)
+        self.assertEqual(len(result), 0)
         #previously
         #self.assertEquals(result, None)
 
@@ -173,7 +173,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_simple_Residue_full_name(self):
@@ -185,7 +185,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_compound_Atom_full_name(self):
@@ -197,7 +197,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_5_Atom_full_names(self):
@@ -212,7 +212,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_compound_Residue_full_name(self):
@@ -224,7 +224,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_with_5_Residue_full_names(self):
@@ -239,7 +239,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
 
 
     def test_select_all_atoms_from_compound_string(self):
@@ -254,7 +254,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
         
 
     def test_select_set_from_string(self):
@@ -269,7 +269,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         stringSel = StringSelector()
         result, msg = stringSel.select(self.molecules, selString, sets=sets)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
         
 
 
@@ -305,7 +305,7 @@ class CompoundStringSelectorBaseTests(unittest.TestCase):
         instantiate a StringSelector
         """
         stringSel = CompoundStringSelector()
-        self.assertEquals(stringSel.__class__, CompoundStringSelector)
+        self.assertEqual(stringSel.__class__, CompoundStringSelector)
 
 
 class AddStringSelectorTests(CompoundStringSelectorBaseTests):
@@ -317,8 +317,8 @@ class AddStringSelectorTests(CompoundStringSelectorBaseTests):
         stringSel = CompoundStringSelector()
         selString = self.mols.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, self.mols)
-        self.assertEquals(selString, "stringSel/+/protease")
+        self.assertEqual(selected, self.mols)
+        self.assertEqual(selString, "stringSel/+/protease")
 
 
     def test_select_add_mols_chains(self):
@@ -328,8 +328,8 @@ class AddStringSelectorTests(CompoundStringSelectorBaseTests):
         stringSel = CompoundStringSelector()
         selString = self.mols.chains.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, self.mols.chains)
-        self.assertEquals(selString, "stringSel:/+/protease:")
+        self.assertEqual(selected, self.mols.chains)
+        self.assertEqual(selString, "stringSel:/+/protease:")
 
 
     def test_select_add_mols_residues(self):
@@ -339,8 +339,8 @@ class AddStringSelectorTests(CompoundStringSelectorBaseTests):
         stringSel = CompoundStringSelector()
         selString = self.mols.chains.residues.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, self.mols.chains.residues)
-        self.assertEquals(selString, "stringSel::/+/protease::")
+        self.assertEqual(selected, self.mols.chains.residues)
+        self.assertEqual(selString, "stringSel::/+/protease::")
 
 
 
@@ -351,9 +351,9 @@ class AddStringSelectorTests(CompoundStringSelectorBaseTests):
         stringSel = CompoundStringSelector()
         selString = self.mols.chains.residues.atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, self.mols.chains.residues.atoms)
+        self.assertEqual(selected, self.mols.chains.residues.atoms)
         #print "selString=", selString
-        self.assertEquals(selString, "stringSel:::/+/protease:::")
+        self.assertEqual(selString, "stringSel:::/+/protease:::")
 
 
     def test_select_add_mols_allAtoms(self):
@@ -363,8 +363,8 @@ class AddStringSelectorTests(CompoundStringSelectorBaseTests):
         stringSel = CompoundStringSelector()
         selString = self.mols.allAtoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, self.mols.allAtoms)
-        self.assertEquals(selString, "stringSel:::/+/protease:::")
+        self.assertEqual(selected, self.mols.allAtoms)
+        self.assertEqual(selString, "stringSel:::/+/protease:::")
 
 
 
@@ -378,9 +378,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_mols = self.mols | self.mols1
         selString = diff_mols.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_mols)
-        self.assertEquals(selected, self.mols)
-        self.assertEquals(selString, "stringSel/+/protease/|/stringSel")
+        self.assertEqual(selected, diff_mols)
+        self.assertEqual(selected, self.mols)
+        self.assertEqual(selString, "stringSel/+/protease/|/stringSel")
 
 
     def test_select_union_chains(self):
@@ -391,9 +391,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_chains = self.mols.chains | self.mols1.chains
         selString = diff_chains.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_chains)
-        self.assertEquals(selected, self.mols.chains)
-        self.assertEquals(selString, "stringSel:/+/protease:/|/stringSel:")
+        self.assertEqual(selected, diff_chains)
+        self.assertEqual(selected, self.mols.chains)
+        self.assertEqual(selString, "stringSel:/+/protease:/|/stringSel:")
 
 
     def test_select_union_residues(self):
@@ -404,9 +404,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_residues = self.mols.chains.residues | self.mols1.chains.residues
         selString = diff_residues.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_residues)
-        self.assertEquals(selected, self.mols.chains.residues)
-        self.assertEquals(selString, "stringSel::/+/protease::/|/stringSel::")
+        self.assertEqual(selected, diff_residues)
+        self.assertEqual(selected, self.mols.chains.residues)
+        self.assertEqual(selString, "stringSel::/+/protease::/|/stringSel::")
 
 
     def test_select_union_atoms(self):
@@ -417,9 +417,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols.chains.residues.atoms | self.mols1.chains.residues.atoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols.chains.residues.atoms)
-        self.assertEquals(selString, "stringSel:::/+/protease:::/|/stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols.chains.residues.atoms)
+        self.assertEqual(selString, "stringSel:::/+/protease:::/|/stringSel:::")
 
 
     def test_select_union_allAtoms(self):
@@ -430,9 +430,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols1.allAtoms | self.mols2.allAtoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols.allAtoms)
-        self.assertEquals(selString, "stringSel:::/|/protease:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols.allAtoms)
+        self.assertEqual(selString, "stringSel:::/|/protease:::")
 
 
     #union: '|' returning single copy
@@ -444,9 +444,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_mols = self.mols1 | self.mols1
         selString = diff_mols.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_mols)
-        self.assertEquals(selected, self.mols1)
-        self.assertEquals(selString, "stringSel")
+        self.assertEqual(selected, diff_mols)
+        self.assertEqual(selected, self.mols1)
+        self.assertEqual(selString, "stringSel")
 
 
     def test_select_union_chains_single(self):
@@ -458,9 +458,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_chains = self.mols1.chains | self.mols1.chains
         selString = diff_chains.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_chains)
-        self.assertEquals(selected, self.mols1.chains)
-        self.assertEquals(selString, "stringSel:")
+        self.assertEqual(selected, diff_chains)
+        self.assertEqual(selected, self.mols1.chains)
+        self.assertEqual(selString, "stringSel:")
 
 
     def test_select_union_residues_all(self):
@@ -472,9 +472,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_residues = self.mols1.chains.residues | self.mols1.chains.residues
         selString = diff_residues.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_residues)
-        self.assertEquals(selected, self.mols1.chains.residues)
-        self.assertEquals(selString, "stringSel::")
+        self.assertEqual(selected, diff_residues)
+        self.assertEqual(selected, self.mols1.chains.residues)
+        self.assertEqual(selString, "stringSel::")
 
 
     def test_select_union_atoms_all(self):
@@ -485,9 +485,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols1.chains.residues.atoms | self.mols1.chains.residues.atoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols1.chains.residues.atoms)
-        self.assertEquals(selString, "stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols1.chains.residues.atoms)
+        self.assertEqual(selString, "stringSel:::")
 
 
     def test_select_union_allAtoms_all(self):
@@ -499,9 +499,9 @@ class UnionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols1.allAtoms | self.mols1.allAtoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols1.allAtoms)
-        self.assertEquals(selString, "stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols1.allAtoms)
+        self.assertEqual(selString, "stringSel:::")
 
 
 
@@ -515,8 +515,8 @@ class SubtractStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_mols = self.mols - self.mols1
         selString = diff_mols.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_mols)
-        self.assertEquals(selString, "stringSel/+/protease/-/stringSel")
+        self.assertEqual(selected, diff_mols)
+        self.assertEqual(selString, "stringSel/+/protease/-/stringSel")
 
 
     def test_select_subtract_chains(self):
@@ -527,8 +527,8 @@ class SubtractStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_chains = self.mols.chains - self.mols1.chains
         selString = diff_chains.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_chains)
-        self.assertEquals(selString, "stringSel:/+/protease:/-/stringSel:")
+        self.assertEqual(selected, diff_chains)
+        self.assertEqual(selString, "stringSel:/+/protease:/-/stringSel:")
 
 
     def test_select_subtract_residues(self):
@@ -539,8 +539,8 @@ class SubtractStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_residues = self.mols.chains.residues - self.mols1.chains.residues
         selString = diff_residues.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_residues)
-        self.assertEquals(selString, "stringSel::/+/protease::/-/stringSel::")
+        self.assertEqual(selected, diff_residues)
+        self.assertEqual(selString, "stringSel::/+/protease::/-/stringSel::")
 
 
     def test_select_subtract_atoms(self):
@@ -551,8 +551,8 @@ class SubtractStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols.chains.residues.atoms - self.mols1.chains.residues.atoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selString, "stringSel:::/+/protease:::/-/stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selString, "stringSel:::/+/protease:::/-/stringSel:::")
 
 
     def test_select_subtract_allAtoms(self):
@@ -563,8 +563,8 @@ class SubtractStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols.allAtoms - self.mols1.allAtoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selString, "stringSel:::/+/protease:::/-/stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selString, "stringSel:::/+/protease:::/-/stringSel:::")
 
 
 class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
@@ -577,9 +577,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_mols = self.mols & self.mols1
         selString = diff_mols.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_mols)
-        self.assertEquals(selString, "stringSel/+/protease/&/stringSel")
-        self.assertEquals(selected, self.mols1)
+        self.assertEqual(selected, diff_mols)
+        self.assertEqual(selString, "stringSel/+/protease/&/stringSel")
+        self.assertEqual(selected, self.mols1)
 
 
     def test_select_intersect_chains(self):
@@ -590,9 +590,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_chains = self.mols.chains & self.mols1.chains
         selString = diff_chains.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_chains)
-        self.assertEquals(selString, "stringSel:/+/protease:/&/stringSel:")
-        self.assertEquals(selected, self.mols1.chains)
+        self.assertEqual(selected, diff_chains)
+        self.assertEqual(selString, "stringSel:/+/protease:/&/stringSel:")
+        self.assertEqual(selected, self.mols1.chains)
 
 
     def test_select_intersect_residues(self):
@@ -603,9 +603,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_residues = self.mols.chains.residues & self.mols1.chains.residues
         selString = diff_residues.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_residues)
-        self.assertEquals(selected, self.mols1.chains.residues)
-        self.assertEquals(selString, "stringSel::/+/protease::/&/stringSel::")
+        self.assertEqual(selected, diff_residues)
+        self.assertEqual(selected, self.mols1.chains.residues)
+        self.assertEqual(selString, "stringSel::/+/protease::/&/stringSel::")
 
 
     def test_select_intersect_atoms(self):
@@ -616,9 +616,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols.chains.residues.atoms & self.mols1.chains.residues.atoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols1.chains.residues.atoms)
-        self.assertEquals(selString, "stringSel:::/+/protease:::/&/stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols1.chains.residues.atoms)
+        self.assertEqual(selString, "stringSel:::/+/protease:::/&/stringSel:::")
 
 
     def test_select_intersect_allAtoms(self):
@@ -629,9 +629,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols.allAtoms & self.mols1.allAtoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols1.allAtoms)
-        self.assertEquals(selString, "stringSel:::/+/protease:::/&/stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols1.allAtoms)
+        self.assertEqual(selString, "stringSel:::/+/protease:::/&/stringSel:::")
 
 
     #intersection: '&' returning []
@@ -643,9 +643,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_mols = self.mols1 & self.mols2
         selString = diff_mols.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_mols)
-        self.assertEquals(selString, "stringSel/&/protease")
-        self.assertEquals(selected, ProteinSet())
+        self.assertEqual(selected, diff_mols)
+        self.assertEqual(selString, "stringSel/&/protease")
+        self.assertEqual(selected, ProteinSet())
 
 
     def test_select_intersect_chains_empty(self):
@@ -656,9 +656,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_chains = self.mols1.chains & self.mols2.chains
         selString = diff_chains.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_chains)
-        self.assertEquals(selected, ChainSet())
-        self.assertEquals(selString, "stringSel:/&/protease:")
+        self.assertEqual(selected, diff_chains)
+        self.assertEqual(selected, ChainSet())
+        self.assertEqual(selString, "stringSel:/&/protease:")
 
 
     def test_select_intersect_residues_empty(self):
@@ -669,9 +669,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_residues = self.mols1.chains.residues & self.mols2.chains.residues
         selString = diff_residues.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_residues)
-        self.assertEquals(selected, ResidueSet())
-        self.assertEquals(selString, "stringSel::/&/protease::")
+        self.assertEqual(selected, diff_residues)
+        self.assertEqual(selected, ResidueSet())
+        self.assertEqual(selString, "stringSel::/&/protease::")
 
 
     def test_select_intersect_atoms_empty(self):
@@ -682,9 +682,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols1.chains.residues.atoms & self.mols2.chains.residues.atoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, AtomSet())
-        self.assertEquals(selString, "stringSel:::/&/protease:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, AtomSet())
+        self.assertEqual(selString, "stringSel:::/&/protease:::")
 
 
     def test_select_intersect_allAtoms(self):
@@ -695,9 +695,9 @@ class IntersectionStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols1.allAtoms & self.mols2.allAtoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, AtomSet())
-        self.assertEquals(selString, "stringSel:::/&/protease:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, AtomSet())
+        self.assertEqual(selString, "stringSel:::/&/protease:::")
 
 
 
@@ -711,9 +711,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_mols = self.mols ^ self.mols1
         selString = diff_mols.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_mols)
-        self.assertEquals(selected, self.mols2)
-        self.assertEquals(selString, "stringSel/+/protease/^/stringSel")
+        self.assertEqual(selected, diff_mols)
+        self.assertEqual(selected, self.mols2)
+        self.assertEqual(selString, "stringSel/+/protease/^/stringSel")
 
 
     def test_select_xor_chains(self):
@@ -724,9 +724,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_chains = self.mols.chains ^ self.mols1.chains
         selString = diff_chains.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_chains)
-        self.assertEquals(selected, self.mols2.chains)
-        self.assertEquals(selString, "stringSel:/+/protease:/^/stringSel:")
+        self.assertEqual(selected, diff_chains)
+        self.assertEqual(selected, self.mols2.chains)
+        self.assertEqual(selString, "stringSel:/+/protease:/^/stringSel:")
 
 
     def test_select_xor_residues(self):
@@ -737,9 +737,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_residues = self.mols.chains.residues ^ self.mols1.chains.residues
         selString = diff_residues.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_residues)
-        self.assertEquals(selected, self.mols2.chains.residues)
-        self.assertEquals(selString, "stringSel::/+/protease::/^/stringSel::")
+        self.assertEqual(selected, diff_residues)
+        self.assertEqual(selected, self.mols2.chains.residues)
+        self.assertEqual(selString, "stringSel::/+/protease::/^/stringSel::")
 
 
     def test_select_xor_atoms(self):
@@ -750,9 +750,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols.chains.residues.atoms ^ self.mols1.chains.residues.atoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols2.chains.residues.atoms)
-        self.assertEquals(selString, "stringSel:::/+/protease:::/^/stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols2.chains.residues.atoms)
+        self.assertEqual(selString, "stringSel:::/+/protease:::/^/stringSel:::")
 
 
     def test_select_xor_allAtoms(self):
@@ -763,9 +763,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols.allAtoms ^ self.mols1.allAtoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols2.allAtoms)
-        self.assertEquals(selString, "stringSel:::/+/protease:::/^/stringSel:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols2.allAtoms)
+        self.assertEqual(selString, "stringSel:::/+/protease:::/^/stringSel:::")
 
 
     #xor: '^' returning all
@@ -777,9 +777,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_mols = self.mols1 ^ self.mols2
         selString = diff_mols.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_mols)
-        self.assertEquals(selected, self.mols)
-        self.assertEquals(selString, "stringSel/^/protease")
+        self.assertEqual(selected, diff_mols)
+        self.assertEqual(selected, self.mols)
+        self.assertEqual(selString, "stringSel/^/protease")
 
 
     def test_select_xor_chains_all(self):
@@ -790,9 +790,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_chains = self.mols1.chains ^ self.mols2.chains
         selString = diff_chains.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_chains)
-        self.assertEquals(selected, self.mols.chains)
-        self.assertEquals(selString, "stringSel:/^/protease:")
+        self.assertEqual(selected, diff_chains)
+        self.assertEqual(selected, self.mols.chains)
+        self.assertEqual(selString, "stringSel:/^/protease:")
 
 
     def test_select_xor_residues_all(self):
@@ -803,9 +803,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_residues = self.mols1.chains.residues ^ self.mols2.chains.residues
         selString = diff_residues.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_residues)
-        self.assertEquals(selected, self.mols.chains.residues)
-        self.assertEquals(selString, "stringSel::/^/protease::")
+        self.assertEqual(selected, diff_residues)
+        self.assertEqual(selected, self.mols.chains.residues)
+        self.assertEqual(selString, "stringSel::/^/protease::")
 
 
     def test_select_xor_atoms_all(self):
@@ -816,9 +816,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols1.chains.residues.atoms ^ self.mols2.chains.residues.atoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols.chains.residues.atoms)
-        self.assertEquals(selString, "stringSel:::/^/protease:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols.chains.residues.atoms)
+        self.assertEqual(selString, "stringSel:::/^/protease:::")
 
 
     def test_select_xor_allAtoms_all(self):
@@ -829,9 +829,9 @@ class XorStringSelectorTests(CompoundStringSelectorBaseTests):
         diff_atoms = self.mols1.allAtoms ^ self.mols2.allAtoms
         selString = diff_atoms.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols.allAtoms)
-        self.assertEquals(selString, "stringSel:::/^/protease:::")
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols.allAtoms)
+        self.assertEqual(selString, "stringSel:::/^/protease:::")
 
 
 class SubsetStringSelectorTests(CompoundStringSelectorBaseTests):
@@ -846,9 +846,9 @@ class SubsetStringSelectorTests(CompoundStringSelectorBaseTests):
         selString = "(stringSel/+/protease\\s\\protease)"
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
         #selected, msg = stringSel.select(self.mols, selString)
-        self.assertEquals(selected, diff_mols)
-        self.assertEquals(selected, self.mols[-1:])
-        self.assertEquals(selected.stringRepr, selString)
+        self.assertEqual(selected, diff_mols)
+        self.assertEqual(selected, self.mols[-1:])
+        self.assertEqual(selected.stringRepr, selString)
 
 
     def test_select_subset_chains(self):
@@ -860,9 +860,9 @@ class SubsetStringSelectorTests(CompoundStringSelectorBaseTests):
         selString = "(stringSel:/+/protease:\\s\\B)"
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
         #selected, msg = stringSel.select(self.mols, selString)
-        self.assertEquals(selected, diff_chains)
-        self.assertEquals(selected, self.mols.chains[-1:])
-        self.assertEquals(selected.stringRepr, selString)
+        self.assertEqual(selected, diff_chains)
+        self.assertEqual(selected, self.mols.chains[-1:])
+        self.assertEqual(selected.stringRepr, selString)
 
 
     def test_select_subset_residues(self):
@@ -875,9 +875,9 @@ class SubsetStringSelectorTests(CompoundStringSelectorBaseTests):
         selString = "(stringSel::/+/protease::\\s\\HOH617)"
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
         #selected, msg = stringSel.select(self.mols, selString)
-        self.assertEquals(selected, diff_residues)
-        self.assertEquals(selected, self.mols.chains.residues[7:8])
-        self.assertEquals(selected.stringRepr, selString)
+        self.assertEqual(selected, diff_residues)
+        self.assertEqual(selected, self.mols.chains.residues[7:8])
+        self.assertEqual(selected.stringRepr, selString)
 
 
     def test_select_subset_atoms(self):
@@ -890,9 +890,9 @@ class SubsetStringSelectorTests(CompoundStringSelectorBaseTests):
         selString = "(stringSel:::/+/protease:::\\s\\0)"
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
         #selected, msg = stringSel.select(self.mols, selString)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols.chains.residues.atoms[0:1])
-        self.assertEquals(selected.stringRepr,  selString)
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols.chains.residues.atoms[0:1])
+        self.assertEqual(selected.stringRepr,  selString)
 
 
     def test_select_subset_allAtoms(self):
@@ -905,9 +905,9 @@ class SubsetStringSelectorTests(CompoundStringSelectorBaseTests):
         selString = "(stringSel:::/+/protease:::\\s\\0)"
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
         #selected, msg = stringSel.select(self.mols, selString)
-        self.assertEquals(selected, diff_atoms)
-        self.assertEquals(selected, self.mols.allAtoms[0:1])
-        self.assertEquals(selected.stringRepr,  selString)
+        self.assertEqual(selected, diff_atoms)
+        self.assertEqual(selected, self.mols.allAtoms[0:1])
+        self.assertEqual(selected.stringRepr,  selString)
 
 
 class MixedSelectorTests(CompoundStringSelectorBaseTests):
@@ -925,10 +925,10 @@ class MixedSelectorTests(CompoundStringSelectorBaseTests):
         #diff_atoms = self.mols1.allAtoms | self.mols1.allAtoms
         selString = sidechain.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, sidechain)
-        self.assertEquals(selected, self.mols2.allAtoms[67:73])
-        self.assertEquals(selString, 'protease:A:ARG8:/-/(protease:A:ARG8:\\s\\backbone)/-/(protease:A:ARG8:\\s\\CB)')
-        self.assertEquals(selString, selected.stringRepr)
+        self.assertEqual(selected, sidechain)
+        self.assertEqual(selected, self.mols2.allAtoms[67:73])
+        self.assertEqual(selString, 'protease:A:ARG8:/-/(protease:A:ARG8:\\s\\backbone)/-/(protease:A:ARG8:\\s\\CB)')
+        self.assertEqual(selString, selected.stringRepr)
 
 
     def test_select_complicated_sidechain_atoms2(self):
@@ -943,9 +943,9 @@ class MixedSelectorTests(CompoundStringSelectorBaseTests):
         #diff_atoms = self.mols1.allAtoms | self.mols1.allAtoms
         selString = sidechain.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
-        self.assertEquals(selected, sidechain)
-        self.assertEquals(selected, self.mols2.allAtoms[67:73])
-        self.assertEquals(selString, selected.stringRepr)
+        self.assertEqual(selected, sidechain)
+        self.assertEqual(selected, self.mols2.allAtoms[67:73])
+        self.assertEqual(selString, selected.stringRepr)
 
 
     def test_select_get_from_get_result(self):
@@ -961,9 +961,9 @@ class MixedSelectorTests(CompoundStringSelectorBaseTests):
         selString = cbats.stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
         #selected, msg = stringSel.select(self.mols, selString)
-        self.assertEquals(selected, cbats)
-        self.assertEquals(selString, expectedString)
-        self.assertEquals(selected.stringRepr, expectedString)
+        self.assertEqual(selected, cbats)
+        self.assertEqual(selString, expectedString)
+        self.assertEqual(selected.stringRepr, expectedString)
 
 
     def test_select_set_from_string(self):
@@ -978,7 +978,7 @@ class MixedSelectorTests(CompoundStringSelectorBaseTests):
         css = CompoundStringSelector()
         result, msg = css.select(self.mols, selString, sets=sets)
         self.assertEqual(result, subset)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(result.stringRepr, selString)
         
     
     def test_select_complicated_sidechain_atoms3(self):
@@ -996,15 +996,15 @@ class MixedSelectorTests(CompoundStringSelectorBaseTests):
         selString = target.stringRepr
         #check that built set has expected stringRepr
         targetStr = '(((protease::\\s\\ARG*):\\s\\sidechain)\\s\\C*)/-/((protease::\\s\\ARG*):\\s\\CB)'
-        self.assertEquals(selString, targetStr)
+        self.assertEqual(selString, targetStr)
         # try to get same atoms by selecting using built set's stringRepr
         selected, msg = stringSel.select(self.mols, selString, returnMsg=True)
         #sanity check that 24 atoms are found
-        self.assertEquals(len(selected), 24)
+        self.assertEqual(len(selected), 24)
         #check that the same atoms are found
-        self.assertEquals(selected, target)
+        self.assertEqual(selected, target)
         #check that selected set has expected stringRepr
-        self.assertEquals(targetStr, selected.stringRepr)
+        self.assertEqual(targetStr, selected.stringRepr)
 
 
     def test_select_with_lambda_atoms_expr_with_parentheses(self):
@@ -1017,8 +1017,8 @@ class MixedSelectorTests(CompoundStringSelectorBaseTests):
         mol = Read("Data/hsg1.pdb")
         mol[0].buildBondsByDistance()
         result, msg = stringSel.select(mol, selString)
-        self.assertEquals(len(result), 468)
-        self.assertEquals(result.stringRepr, selString)
+        self.assertEqual(len(result), 468)
+        self.assertEqual(result.stringRepr, selString)
 
 
 

@@ -1,17 +1,17 @@
 """About Dialog for IDLE"""
 import os
 import sys
-from Tkinter import Toplevel, Frame, Button, Label, TkVersion
-from Tkconstants import LEFT, NSEW, SUNKEN, EW, W, BOTH, TOP, BOTTOM
+from tkinter import Toplevel, Frame, Button, Label, TkVersion
+from tkinter.constants import LEFT, NSEW, SUNKEN, EW, W, BOTH, TOP, BOTTOM
 
-import idlever
-import textView
-from stylist import PoorManStyle
-from configHandler import idleConf
+from . import idlever
+from . import textView
+from .stylist import PoorManStyle
+from .configHandler import idleConf
 
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import Frame, Button, Label, Style
+    from tkinter.ttk import Frame, Button, Label, Style
 
 class AboutDialog(Toplevel):
     """Modal about dialog for idle
@@ -160,7 +160,7 @@ class AboutDialog(Toplevel):
 
 if __name__ == '__main__':
     # test the dialog
-    from Tkinter import Tk
+    from tkinter import Tk
     root = Tk()
     def run():
         AboutDialog(root, 'About')

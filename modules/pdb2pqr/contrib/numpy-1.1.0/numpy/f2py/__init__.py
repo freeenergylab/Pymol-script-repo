@@ -4,14 +4,14 @@ __all__ = ['run_main','compile','f2py_testing']
 
 import os
 import sys
-import commands
+import subprocess
 
-from info import __doc__
+from .info import __doc__
 
-import f2py2e
+from . import f2py2e
 run_main = f2py2e.run_main
 main = f2py2e.main
-import f2py_testing
+from . import f2py_testing
 
 def compile(source,
             modulename = 'untitled',

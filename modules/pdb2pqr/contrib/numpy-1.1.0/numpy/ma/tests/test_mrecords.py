@@ -22,7 +22,8 @@ import numpy.ma as ma
 from numpy.ma import masked, nomask, getdata, getmaskarray
 
 import numpy.ma.mrecords
-reload(numpy.ma.mrecords)
+import importlib
+importlib.reload(numpy.ma.mrecords)
 from numpy.ma.mrecords import MaskedRecords, mrecarray,\
     fromarrays, fromtextfile, fromrecords, addfield
 
@@ -40,7 +41,7 @@ class TestMRecords(NumpyTestCase):
         slist = ['one','two','three','four','five']
         ddtype = [('a',int),('b',float),('c','|S8')]
         mask = [0,1,0,0,1]
-        self.base = ma.array(zip(ilist,flist,slist), mask=mask, dtype=ddtype)
+        self.base = ma.array(list(zip(ilist,flist,slist)), mask=mask, dtype=ddtype)
 
     def test_byview(self):
         "Test creation by view"
@@ -236,11 +237,11 @@ class TestMRecords(NumpyTestCase):
     #
     def test_pickling(self):
         "Test pickling"
-        import cPickle
+        import pickle
         base = self.base.copy()
         mrec = base.view(mrecarray)
-        _ = cPickle.dumps(mrec)
-        mrec_ = cPickle.loads(_)
+        _ = pickle.dumps(mrec)
+        mrec_ = pickle.loads(_)
         assert_equal(mrec_.dtype, mrec.dtype)
         assert_equal_records(mrec_._data, mrec._data)
         assert_equal(mrec_._mask, mrec._mask)

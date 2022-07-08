@@ -3,31 +3,31 @@ import re
 import sys
 import traceback
 import webbrowser
-import tkMessageBox
-import tkSimpleDialog
-from Tkinter import Menu, Scrollbar, TclError, BooleanVar
-from Tkconstants import INSERT, END, RIGHT, BOTTOM, TOP, X, Y, BOTH
+import tkinter.messagebox
+import tkinter.simpledialog
+from tkinter import Menu, Scrollbar, TclError, BooleanVar
+from tkinter.constants import INSERT, END, RIGHT, BOTTOM, TOP, X, Y, BOTH
 
-import macosxSupport
-import Bindings
-import WindowList
-from editorpage import EditorPage, classifyws, filename_to_unicode
-from tabbedpages import get_tabbedpage
-from configHandler import idleConf
-from MultiStatusBar import MultiStatusBar
+from . import macosxSupport
+from . import Bindings
+from . import WindowList
+from .editorpage import EditorPage, classifyws, filename_to_unicode
+from .tabbedpages import get_tabbedpage
+from .configHandler import idleConf
+from .MultiStatusBar import MultiStatusBar
 
 TabbedPageSet = get_tabbedpage()
 
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import Style, Scrollbar
+    from tkinter.ttk import Style, Scrollbar
 
 # The default tab setting for a Text widget, in average-width characters.
 TK_TABWIDTH_DEFAULT = 8
 
 class EditorWindow(object):
-    from ColorDelegator import ColorDelegator # overridden by PyShell
-    from UndoDelegator import UndoDelegator   # overridden by PyShell
+    from .ColorDelegator import ColorDelegator # overridden by PyShell
+    from .UndoDelegator import UndoDelegator   # overridden by PyShell
 
     help_url = None
     menu_specs = [
@@ -182,9 +182,9 @@ class EditorWindow(object):
             WindowList.register_callback(self.postwindowsmenu)
 
         # Some abstractions so IDLE extensions are cross-IDE
-        self.askyesno = tkMessageBox.askyesno
-        self.askinteger = tkSimpleDialog.askinteger
-        self.showerror = tkMessageBox.showerror
+        self.askyesno = tkinter.messagebox.askyesno
+        self.askinteger = tkinter.simpledialog.askinteger
+        self.showerror = tkinter.messagebox.showerror
 
     @property
     def current_page(self):
@@ -366,7 +366,7 @@ class EditorWindow(object):
     def ResetColorizer(self):
         "Update the colour theme"
         # Called from self.filename_change_hook and from configDialog.py
-        for page in self.text_notebook.pages.itervalues():
+        for page in self.text_notebook.pages.values():
             page.editpage.reset_colorizer()
 
     def ResetFont(self):
@@ -376,7 +376,7 @@ class EditorWindow(object):
         if idleConf.GetOption('main', 'EditorPage', 'font-bold', type='bool'):
             fontWeight = 'bold'
 
-        for page in self.text_notebook.pages.itervalues():
+        for page in self.text_notebook.pages.values():
             text = page.editpage.text
             text.config(font=(idleConf.GetOption('main', 'EditorPage', 'font'),
                 idleConf.GetOption('main', 'EditorPage', 'font-size'),
@@ -387,17 +387,17 @@ class EditorWindow(object):
         # Called from configDialog.py
         Bindings.default_keydefs = keydefs = idleConf.GetCurrentKeySet()
 
-        for page in self.text_notebook.pages.itervalues():
+        for page in self.text_notebook.pages.values():
             text = page.editpage.text
-            for event, keylist in keydefs.items():
+            for event, keylist in list(keydefs.items()):
                 text.event_delete(event, *keylist)
 
         for extensionName in self._get_standard_extension_names():
             xkeydefs = idleConf.GetExtensionBindings(extensionName)
             if xkeydefs:
-                for page in self.text_notebook.pages.itervalues():
+                for page in self.text_notebook.pages.values():
                     text = page.editpage.text
-                    for event, keylist in xkeydefs.items():
+                    for event, keylist in list(xkeydefs.items()):
                         text.event_delete(event, *keylist)
 
     def ApplyKeybindings(self):
@@ -416,7 +416,7 @@ class EditorWindow(object):
             for item in menu[1]:
                 if item:
                     menuEventDict[menu[0]][prepstr(item[0])[1]] = item[1]
-        for menubarItem in self.menudict.keys():
+        for menubarItem in list(self.menudict.keys()):
             menu = self.menudict[menubarItem]
             end = menu.index(END) + 1
             for index in range(0, end):
@@ -425,8 +425,8 @@ class EditorWindow(object):
                     if accel:
                         itemName = menu.entrycget(index, 'label')
                         event = ''
-                        if menuEventDict.has_key(menubarItem):
-                            if menuEventDict[menubarItem].has_key(itemName):
+                        if menubarItem in menuEventDict:
+                            if itemName in menuEventDict[menubarItem]:
                                 event = menuEventDict[menubarItem][itemName]
                         if event:
                             accel = get_accelerator(keydefs, event)
@@ -485,7 +485,7 @@ class EditorWindow(object):
         finally:
             rf_file.close()
         # for each edit window instance, construct the recent files menu
-        for instance in self.top.instance_dict.keys():
+        for instance in list(self.top.instance_dict.keys()):
             menu = instance.recent_files_menu
             menu.delete(1, END)  # clear, and rebuild:
             for i, file in enumerate(rf_list):
@@ -501,7 +501,7 @@ class EditorWindow(object):
         "Return (width, height, x, y)"
         geom = self.top.wm_geometry()
         m = re.match(r"(\d+)x(\d+)\+(-?\d+)\+(-?\d+)", geom)
-        tuple = (map(int, m.groups()))
+        tuple = (list(map(int, m.groups())))
         return tuple
 
     def close_event(self, event):
@@ -527,7 +527,7 @@ class EditorWindow(object):
         self._unload_extensions()
         self.tkinter_vars = None
 
-        for page in self.text_notebook.pages.itervalues():
+        for page in self.text_notebook.pages.values():
             page.editpage.close()
 
         self.top.destroy()
@@ -542,12 +542,12 @@ class EditorWindow(object):
         if tab:
             iter_over = [tab]
         else:
-            iter_over = self.text_notebook.pages.itervalues()
+            iter_over = iter(self.text_notebook.pages.values())
 
         for page in iter_over:
             text = page.editpage.text
             text.keydefs = keydefs
-            for event, keylist in keydefs.items():
+            for event, keylist in list(keydefs.items()):
                 if keylist:
                     text.event_add(event, *keylist)
 
@@ -557,14 +557,14 @@ class EditorWindow(object):
             value = var.get()
             return value
         else:
-            raise NameError, name
+            raise NameError(name)
 
     def setvar(self, name, value, vartype=None):
         var = self.get_var_obj(name, vartype)
         if var:
             var.set(value)
         else:
-            raise NameError, name
+            raise NameError(name)
 
     def get_var_obj(self, name, vartype=None, text=None):
         var = self.tkinter_vars.get(name)
@@ -625,7 +625,7 @@ class EditorWindow(object):
     _unique_extensions = ['CodeContext', 'ScriptBinding', 'FormatParagraph']
 
     def _unload_extensions(self):
-        for ins in self.extensions.values():
+        for ins in list(self.extensions.values()):
             if hasattr(ins, "close"):
                 ins.close()
         self.extensions = {}
@@ -636,7 +636,7 @@ class EditorWindow(object):
         try:
             mod = __import__(name, globals(), locals(), [])
         except ImportError:
-            print "\nFailed to import extension: ", name
+            print("\nFailed to import extension: ", name)
             return
 
         keydefs = idleConf.GetExtensionBindings(name)
@@ -657,7 +657,7 @@ class EditorWindow(object):
 
         if keydefs:
             self.apply_bindings(keydefs, tab)
-            for vevent in keydefs.keys():
+            for vevent in list(keydefs.keys()):
                 methodname = vevent.replace("-", "_")
                 while methodname[:1] == '<':
                     methodname = methodname[1:]
@@ -675,7 +675,7 @@ class EditorWindow(object):
             try:
                 self._load_extension(name, tab)
             except:
-                print "Failed to load extension", repr(name)
+                print("Failed to load extension", repr(name))
                 traceback.print_exc()
 
     def _get_standard_extension_names(self):
@@ -883,7 +883,7 @@ def fixwordbreaks(root):
 
 
 def test():
-    from Tkinter import Tk
+    from tkinter import Tk
     root = Tk()
     fixwordbreaks(root)
     root.withdraw()

@@ -87,7 +87,7 @@ class Pattern:
         if '' in t[1:-1]: return
         rhs = t[-1].strip()
         pattern_match = t[-2].strip()
-        assert abs(self).match(pattern_match),`self,string,t,pattern_match`
+        assert abs(self).match(pattern_match),repr((self,string,t,pattern_match))
         lhs = (''.join(t[:-2])).strip()
         return lhs, pattern_match, rhs
 
@@ -104,7 +104,7 @@ class Pattern:
         lhs = t[0].strip()
         pattern_match = t[1].strip()
         rhs = (''.join(t[2:])).strip()
-        assert abs(self).match(pattern_match),`pattern_match`
+        assert abs(self).match(pattern_match),repr(pattern_match)
         return lhs, pattern_match, rhs
 
     def __abs__(self):
@@ -129,14 +129,14 @@ class Pattern:
             pattern = self.pattern + other.pattern
             flags = self._flags | other._flags
         else:
-            assert isinstance(other,str),`other`
+            assert isinstance(other,str),repr(other)
             label = '%s%s' % (self.label, other)
             pattern = self.pattern + other
             flags = self._flags
         return Pattern(label, pattern, flags=flags)
 
     def __rand__(self, other):
-        assert isinstance(other,str),`other`
+        assert isinstance(other,str),repr(other)
         label = '%s%s' % (other, self.label)
         pattern = other + self.pattern
         return Pattern(label, pattern, flags=self._flags)
@@ -159,7 +159,7 @@ class Pattern:
             pattern = self.pattern + r'\s*' + other.pattern
             flags = self._flags | other._flags
         else:
-            assert isinstance(other,str),`other`
+            assert isinstance(other,str),repr(other)
             label = '%s %s' % (self.label, other)
             other = self._special_symbol_map.get(other, other)
             pattern = self.pattern + r'\s*' + other
@@ -167,7 +167,7 @@ class Pattern:
         return Pattern(label, pattern, flags = flags)
 
     def __radd__(self, other):
-        assert isinstance(other,str),`other`
+        assert isinstance(other,str),repr(other)
         label = '%s %s' % (other, self.label)
         other = self._special_symbol_map.get(other, other)
         pattern = other + r'\s*' + self.pattern
@@ -176,7 +176,7 @@ class Pattern:
     def named(self, name = None):
         if name is None:
             label = self.label
-            assert label[0]+label[-1]=='<>' and ' ' not in label,`label`
+            assert label[0]+label[-1]=='<>' and ' ' not in label,repr(label)
         else:
             label = '<%s>' % (name)
         pattern = '(?P%s%s)' % (label.replace('-','_'), self.pattern)
@@ -376,9 +376,9 @@ def _test():
     def assert_equal(result, expect):
         try:
             assert result==expect
-        except AssertionError, msg:
-            raise AssertionError,"Expected %r but got %r: %s" \
-                  % (expect, result, msg)
+        except AssertionError as msg:
+            raise AssertionError("Expected %r but got %r: %s" \
+                  % (expect, result, msg))
 
     m = mult_op.named()
     assert m.rsplit('a *  b')
@@ -395,7 +395,7 @@ def _test():
     assert_equal(m.rsplit('a * b ** c'),('a * b','**','c'))
     assert_equal(m.lsplit('a ** b ** c'),('a','**','b ** c'))
     assert_equal(m.rsplit('a ** b ** c'),('a ** b','**','c'))
-    print 'ok'
+    print('ok')
 
 if __name__ == '__main__':
     _test()

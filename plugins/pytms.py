@@ -93,8 +93,8 @@ DISCLAIMER
 ################################################################################
 '''
 
-from __future__ import print_function
-from __future__ import absolute_import
+
+
 
 Author = 'Andreas Warnecke'
 email = '4ndreas.warneck3@gmail.com'
@@ -118,7 +118,7 @@ import copy
 import random
 import sys
 if sys.version_info[0] < 3:
-    from Tkinter import *
+    from tkinter import *
 else:
     from tkinter import *
 import Pmw
@@ -2676,7 +2676,7 @@ ARGUMENTS
         (''+selection+' and ((name OC1) or '+
         '((name NC1) extend 1) or (name CC1))'))
         position=abs(int(position))
-        if (position not in range(0,3)):
+        if (position not in list(range(0,3))):
             raise Exception("position out of range!")
         # transform boolean to reduce checking loops
         show_clashes=bool(int(show_clashes))
@@ -3071,9 +3071,9 @@ ARGUMENTS
         raise Exception("Input error!\n Please check the input parameters!")
 
     # range check
-    if (mode not in range(0,3)):
+    if (mode not in list(range(0,3))):
         raise Exception("mode out of range!")
-    if (position_tyr not in range(0,3)):
+    if (position_tyr not in list(range(0,3))):
         raise Exception("position_tyr out of range!")
     if (position_trp not in [0,4,5,6,7,1]):
         raise Exception("position_trp out of range!")
@@ -3805,17 +3805,17 @@ ARGUMENTS
         raise Exception("Input error!\n Please check the input parameters!")
 
     # range check
-    if (group not in range(0,5)):
+    if (group not in list(range(0,5))):
         raise Exception("group out of range!")
-    if (confomer not in range(0,6)):
+    if (confomer not in list(range(0,6))):
         raise Exception("confomer out of range!")
-    if (type not in range(0,8)):
+    if (type not in list(range(0,8))):
         raise Exception("type out of range!")
-    if (position not in range(0,3)):
+    if (position not in list(range(0,3))):
         raise Exception("position out of range!")
     if (protonate not in [-1,0,1]):
         raise Exception("optimize out of range!")
-    if (optimize not in range(0,6)):
+    if (optimize not in list(range(0,6))):
         raise Exception("optimize out of range!")
     if (len(intervals)!=5):
         raise Exception("too many or too few intervals provided!")
@@ -6802,10 +6802,10 @@ ARGUMENTS
             '((neighbor ((name CM*) or (name CH*))) and (elem H)))' %selection))
         mode=abs(int(mode))
         if mode==0: mode=random.choice([1,2,3])
-        if (mode not in range(1,4)):
+        if (mode not in list(range(1,4))):
             raise Exception("mode out of range!")
         position=abs(int(position))
-        if (position not in range(0,3)):
+        if (position not in list(range(0,3))):
             raise Exception("position out of range!")
         # transform boolean to reduce checking loops
         show_clashes=bool(int(show_clashes))
@@ -7154,7 +7154,7 @@ ARGUMENTS
             ('%s and (resn ACE+ALY) and ((name CH3) extend 2) '
             'and not (elem N)' %selection))
         position=abs(int(position))
-        if (position not in range(0,3)):
+        if (position not in list(range(0,3))):
             raise Exception("position out of range!")
         # transform boolean to reduce checking loops
         show_clashes=bool(int(show_clashes))

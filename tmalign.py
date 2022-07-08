@@ -2,7 +2,7 @@
 (c) 2011-2012 Thomas Holder, MPI for Developmental Biology
 '''
 
-from __future__ import print_function
+
 
 __author__ = 'Thomas Holder'
 __version__ = '1.1'

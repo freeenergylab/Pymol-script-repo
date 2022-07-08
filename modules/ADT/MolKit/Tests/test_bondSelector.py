@@ -43,7 +43,7 @@ class BondSelectorBaseTests(unittest.TestCase):
         instantiate an BondSelector
         """
         bndSel = BondSelector()
-        self.assertEquals(bndSel.__class__, BondSelector)
+        self.assertEqual(bndSel.__class__, BondSelector)
 
 
     def test_constructorOptions(self):
@@ -53,7 +53,7 @@ class BondSelectorBaseTests(unittest.TestCase):
         """
     
         bndSel = BondSelector([lambda x: x])
-        self.assertEquals(bndSel.__class__, BondSelector)
+        self.assertEqual(bndSel.__class__, BondSelector)
 
 
     def test_select_with_no_bonds(self):

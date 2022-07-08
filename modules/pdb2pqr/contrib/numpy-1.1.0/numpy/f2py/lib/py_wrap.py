@@ -4,10 +4,10 @@ import re
 import os
 import sys
 
-from parser.api import *
-from wrapper_base import *
-from py_wrap_type import *
-from py_wrap_subprogram import *
+from .parser.api import *
+from .wrapper_base import *
+from .py_wrap_type import *
+from .py_wrap_subprogram import *
 
 class PythonWrapperModule(WrapperBase):
 
@@ -97,7 +97,7 @@ capi_err:
 
     def add(self, block):
         if isinstance(block, BeginSource):
-            for name, moduleblock in block.a.module.items():
+            for name, moduleblock in list(block.a.module.items()):
                 self.add(moduleblock)
             #for name, subblock in block.a.external_subprogram.items():
             #    self.add(subblock)
@@ -110,16 +110,16 @@ capi_err:
             PythonCAPISubProgram(self, wrapper_block)
         elif isinstance(block, Module):
             self.isf90 = True
-            for name,declblock in block.a.type_decls.items():
+            for name,declblock in list(block.a.type_decls.items()):
                 self.add(declblock)
-            for name,subblock in block.a.module_subprogram.items():
+            for name,subblock in list(block.a.module_subprogram.items()):
                 self.add(subblock)
         elif isinstance(block, tuple([TypeDecl]+declaration_type_spec)):
             if isinstance(block, (TypeDecl, TypeStmt)):
                 self.isf90 = True
             PythonCAPIType(self, block)
         else:
-            raise NotImplementedError,`block.__class__.__name__`
+            raise NotImplementedError(repr(block.__class__.__name__))
         return
 
     def c_code(self):

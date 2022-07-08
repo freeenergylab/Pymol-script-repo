@@ -11,7 +11,7 @@ from ZSI.auth import AUTH
 from ZSI.TC import AnyElement, AnyType, String, TypeCode, _get_global_element_declaration,\
     _get_type_definition
 from ZSI.TCcompound import Struct
-import base64, httplib, Cookie, types, time, urlparse
+import base64, http.client, http.cookies, types, time, urllib.parse
 from ZSI.address import Address
 from ZSI.wstools.logging import getLogger as _GetLogger
 _b64_encode = base64.encodestring
@@ -65,7 +65,7 @@ class _NamedParamCaller:
         # Pull out arguments that Send() uses
         kw = {}
         for key in [ 'auth_header', 'nsdict', 'requesttypecode', 'soapaction' ]:
-            if params.has_key(key):
+            if key in params:
                 kw[key] = params[key]
                 del params[key]
         
@@ -89,8 +89,8 @@ class _Binding:
     Once the binding is created, various ways of sending and
     receiving SOAP messages are available.
     '''
-    defaultHttpTransport = httplib.HTTPConnection
-    defaultHttpsTransport = httplib.HTTPSConnection
+    defaultHttpTransport = http.client.HTTPConnection
+    defaultHttpsTransport = http.client.HTTPSConnection
     logger = _GetLogger('ZSI.client.Binding')
 
     def __init__(self, nsdict=None, transport=None, url=None, tracefile=None,
@@ -128,10 +128,10 @@ class _Binding:
         self.sig_handler = sig_handler
         self.address = None
         self.endPointReference = kw.get('endPointReference', None)
-        self.cookies = Cookie.SimpleCookie()
+        self.cookies = http.cookies.SimpleCookie()
         self.http_callbacks = {}
 
-        if kw.has_key('auth'):
+        if 'auth' in kw:
             self.SetAuth(*kw['auth'])
         else:
             self.SetAuth(AUTH.none)
@@ -158,7 +158,7 @@ class _Binding:
     def ResetCookies(self):
         '''Empty the list of cookies.
         '''
-        self.cookies = Cookie.SimpleCookie()
+        self.cookies = http.cookies.SimpleCookie()
 
     def AddHeader(self, header, value):
         '''Add a header to send.
@@ -169,7 +169,7 @@ class _Binding:
     def __addcookies(self):
         '''Add cookies from self.cookies to request in self.h
         '''
-        for cname, morsel in self.cookies.items():
+        for cname, morsel in list(self.cookies.items()):
             attrs = []
             value = morsel.get('version', '')
             if value != '' and value != '0':
@@ -229,14 +229,14 @@ class _Binding:
                  encodingStyle=kw.get('encodingStyle'),)
         
         requesttypecode = kw.get('requesttypecode')
-        if kw.has_key('_args'): #NamedParamBinding
+        if '_args' in kw: #NamedParamBinding
             tc = requesttypecode or TC.Any(pname=opname, aslist=False)
             sw.serialize(kw['_args'], tc)
         elif not requesttypecode:
             tc = getattr(obj, 'typecode', None) or TC.Any(pname=opname, aslist=False)
             try:
                 if type(obj) in _seqtypes:
-                    obj = dict(map(lambda i: (i.typecode.pname,i), obj))
+                    obj = dict([(i.typecode.pname,i) for i in obj])
             except AttributeError:
                 # can't do anything but serialize this in a SOAP:Array
                 tc = TC.Any(pname=opname, aslist=True)
@@ -260,8 +260,8 @@ class _Binding:
         # Serialize WS-Address
         if self.wsAddressURI is not None:
             if self.soapaction and wsaction.strip('\'"') != self.soapaction:
-                raise WSActionException, 'soapAction(%s) and WS-Action(%s) must match'\
-                    %(self.soapaction,wsaction)
+                raise WSActionException('soapAction(%s) and WS-Action(%s) must match'\
+                    %(self.soapaction,wsaction))
 
             self.address = Address(url, self.wsAddressURI)
             self.address.setRequest(endPointReference, wsaction)
@@ -272,7 +272,7 @@ class _Binding:
         if self.sig_handler is not None:
             self.sig_handler.sign(sw)
 
-        scheme,netloc,path,nil,nil,nil = urlparse.urlparse(url)
+        scheme,netloc,path,nil,nil,nil = urllib.parse.urlparse(url)
         transport = self.transport
         if transport is None and url is not None:
             if scheme == 'https':
@@ -280,11 +280,11 @@ class _Binding:
             elif scheme == 'http':
                 transport = self.defaultHttpTransport
             else:
-                raise RuntimeError, 'must specify transport or url startswith https/http'
+                raise RuntimeError('must specify transport or url startswith https/http')
 
         # Send the request.
-        if issubclass(transport, httplib.HTTPConnection) is False:
-            raise TypeError, 'transport must be a HTTPConnection'
+        if issubclass(transport, http.client.HTTPConnection) is False:
+            raise TypeError('transport must be a HTTPConnection')
 
         soapdata = str(sw)
         self.h = transport(netloc, None, **self.transdict)
@@ -294,8 +294,8 @@ class _Binding:
     def SendSOAPData(self, soapdata, url, soapaction, headers={}, **kw):
         # Tracing?
         if self.trace:
-            print >>self.trace, "_" * 33, time.ctime(time.time()), "REQUEST:"
-            print >>self.trace, soapdata
+            print("_" * 33, time.ctime(time.time()), "REQUEST:", file=self.trace)
+            print(soapdata, file=self.trace)
 
         url = url or self.url
         request_uri = _get_postvalue_from_absoluteURI(url)
@@ -304,7 +304,7 @@ class _Binding:
         self.h.putheader("Content-Type", 'text/xml; charset="%s"' %UNICODE_ENCODING)
         self.__addcookies()
 
-        for header,value in headers.items():
+        for header,value in list(headers.items()):
             self.h.putheader(header, value)
 
         SOAPActionValue = '"%s"' % (soapaction or self.soapaction)
@@ -313,8 +313,8 @@ class _Binding:
             val = _b64_encode(self.auth_user + ':' + self.auth_pass) \
                         .replace("\012", "")
             self.h.putheader('Authorization', 'Basic ' + val)
-        elif self.auth_style == AUTH.httpdigest and not headers.has_key('Authorization') \
-            and not headers.has_key('Expect'):
+        elif self.auth_style == AUTH.httpdigest and 'Authorization' not in headers \
+            and 'Expect' not in headers:
             def digest_auth_cb(response):
                 self.SendSOAPDataHTTPDigestAuth(response, soapdata, url, request_uri, soapaction, **kw)
                 self.http_callbacks[401] = None
@@ -334,13 +334,12 @@ class _Binding:
         generate the authdict for building a response.
         '''
         if self.trace:
-            print >>self.trace, "------ Digest Auth Header"
+            print("------ Digest Auth Header", file=self.trace)
         url = url or self.url
         if response.status != 401:
-            raise RuntimeError, 'Expecting HTTP 401 response.'
+            raise RuntimeError('Expecting HTTP 401 response.')
         if self.auth_style != AUTH.httpdigest:
-            raise RuntimeError,\
-                'Auth style(%d) does not support requested digest authorization.' %self.auth_style
+            raise RuntimeError('Auth style(%d) does not support requested digest authorization.' %self.auth_style)
 
         from ZSI.digest_auth import fetch_challenge,\
             generate_response,\
@@ -361,8 +360,7 @@ class _Binding:
             self.SendSOAPData(soapdata, url, soapaction, headers, **kw)
             return
 
-        raise RuntimeError,\
-            'Client expecting digest authorization challenge.'
+        raise RuntimeError('Client expecting digest authorization challenge.')
 
     def ReceiveRaw(self, **kw):
         '''Read a server reply, unconverted to any format and return it.
@@ -374,12 +372,12 @@ class _Binding:
             self.reply_code, self.reply_msg, self.reply_headers, self.data = \
                 response.status, response.reason, response.msg, response.read()
             if trace:
-                print >>trace, "_" * 33, time.ctime(time.time()), "RESPONSE:"
+                print("_" * 33, time.ctime(time.time()), "RESPONSE:", file=trace)
                 for i in (self.reply_code, self.reply_msg,):
-                    print >>trace, str(i)
-                print >>trace, "-------"
-                print >>trace, str(self.reply_headers)
-                print >>trace, self.data
+                    print(str(i), file=trace)
+                print("-------", file=trace)
+                print(str(self.reply_headers), file=trace)
+                print(self.data, file=trace)
             saved = None
             for d in response.msg.getallmatchingheaders('set-cookie'):
                 if d[0] in [ ' ', '\t' ]:
@@ -390,14 +388,14 @@ class _Binding:
             if saved: self.cookies.load(saved)
             if response.status == 401:
                 if not callable(self.http_callbacks.get(response.status,None)):
-                    raise RuntimeError, 'HTTP Digest Authorization Failed'
+                    raise RuntimeError('HTTP Digest Authorization Failed')
                 self.http_callbacks[response.status](response)
                 continue
             if response.status != 100: break
 
             # The httplib doesn't understand the HTTP continuation header.
             # Horrible internals hack to patch things up.
-            self.h._HTTPConnection__state = httplib._CS_REQ_SENT
+            self.h._HTTPConnection__state = http.client._CS_REQ_SENT
             self.h._HTTPConnection__response = None
         return self.data
 
@@ -571,4 +569,4 @@ class NamedParamBinding(Binding):
         return _NamedParamCaller(self, name, self.namespace)
 
 
-if __name__ == '__main__': print _copyright
+if __name__ == '__main__': print(_copyright)

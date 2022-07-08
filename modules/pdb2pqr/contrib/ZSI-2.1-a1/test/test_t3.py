@@ -11,20 +11,20 @@ class t3TestCase(unittest.TestCase):
         a = None
         try: 
             3 / 0
-        except Exception, e:
+        except Exception as e:
             a = e
         f = FaultFromException(a, 0)
         text = f.AsSOAP()
         i = 0
         for l in text.split('\n'):
-            print i, l
+            print(i, l)
             i += 1
         ps = ParsedSoap(text)
         if ps.IsAFault():
             f = FaultFromFaultMessage(ps)
-            print f.AsSOAP()
-            self.failUnless(f.AsSOAP().find(str(a)) > 0)
-        print '--'*20
+            print(f.AsSOAP())
+            self.assertTrue(f.AsSOAP().find(str(a)) > 0)
+        print('--'*20)
 
 
 def makeTestSuite():

@@ -3,7 +3,7 @@
 import numpy as np
 import numpy.core.multiarray as mu
 import numpy.core.numeric as nn
-from typeconv import convtypecode, convtypecode2
+from .typeconv import convtypecode, convtypecode2
 
 __all__ = ['take', 'repeat', 'sum', 'product', 'sometrue', 'alltrue',
            'cumsum', 'cumproduct', 'compress', 'fromfunction',
@@ -91,7 +91,7 @@ def nonzero(a):
     if len(res) == 1:
         return res[0]
     else:
-        raise ValueError, "Input argument must be 1d"
+        raise ValueError("Input argument must be 1d")
 
 def reshape(a, shape):
     return np.reshape(a, shape)

@@ -12,9 +12,9 @@ def main():
                           tracefile=sys.stdout)
     
     user = server.GetUser('john_doe')
-    print '   Age: %d' % user.Age
-    print '  Name: %s' % user.Name
-    print 'UserId: %s' % user.UserId
+    print('   Age: %d' % user.Age)
+    print('  Name: %s' % user.Name)
+    print('UserId: %s' % user.UserId)
         
 if __name__ == '__main__':
     main()

@@ -47,11 +47,11 @@ import os
 import string
 import math
 
-from definitions import *
-from utilities import *
-from quatfit import *
-from routines import *
-import topology
+from .definitions import *
+from .utilities import *
+from .quatfit import *
+from .routines import *
+from . import topology
 
 __date__ = "22 April 2009"
 __author__ = "Todd Dolinsky, Jens Erik Nielsen, Yong Huang"
@@ -102,7 +102,7 @@ class HydrogenHandler(sax.ContentHandler):
         if name == "class": # Complete Residue object
             obj = self.curholder
             if not isinstance(obj, OptimizationHolder):
-                raise ValueError, "Internal error parsing XML!"
+                raise ValueError("Internal error parsing XML!")
           
             self.map[obj.name] = obj
             self.curholder = None
@@ -112,10 +112,10 @@ class HydrogenHandler(sax.ContentHandler):
         elif name == "atom": # Complete atom object
             atom = self.curatom
             if not isinstance(atom, DefinitionAtom):
-                raise ValueError, "Internal error parsing XML!"
+                raise ValueError("Internal error parsing XML!")
             atomname = atom.name
             if atomname == "":
-                raise ValueError, "Atom name not set in XML!"
+                raise ValueError("Atom name not set in XML!")
             else:
                 self.curholder.map[atomname] = atom
                 self.curatom = None
@@ -219,7 +219,7 @@ class Optimize:
         """
             Easy way to turn on/off debugging
         """
-        if HDEBUG: print txt
+        if HDEBUG: print(txt)
 
     def getHbondangle(self, atom1, atom2, atom3):
         """
@@ -822,7 +822,7 @@ class Flip(Optimize):
 
         anglenum = residue.reference.dihedrals.index(dihedral)
         if anglenum == -1:
-            raise ValueError, "Unable to find dihedral angle!"
+            raise ValueError("Unable to find dihedral angle!")
 
         newangle = 180.0 + residue.dihedrals[anglenum]
         self.routines.setDihedralAngle(residue, anglenum, newangle) 
@@ -1037,7 +1037,7 @@ class Alcoholic(Optimize):
         self.atomlist = []
         self.hbonds = []
 
-        name = optinstance.map.keys()[0]
+        name = list(optinstance.map.keys())[0]
         self.hname = name
         
         bondname = residue.reference.getAtom(name).bonds[0]
@@ -1284,7 +1284,7 @@ class Water(Optimize):
 
         oxatom = residue.getAtom("O")
         if oxatom == None:
-            raise ValueError, "Unable to find oxygen atom in %s!" % residue
+            raise ValueError("Unable to find oxygen atom in %s!" % residue)
 
         oxatom.hdonor = 1
         oxatom.hacceptor = 1
@@ -1600,7 +1600,7 @@ class Carboxylic(Optimize):
 
         hname2 = ""
         hname1 = ""
-        for name in optinstance.map.keys():
+        for name in list(optinstance.map.keys()):
             if name.endswith("2"): hname2 = name
             else: hname1 = name
 
@@ -1638,7 +1638,7 @@ class Carboxylic(Optimize):
 
             anglenum = residue.reference.dihedrals.index(di)
             if anglenum == -1:
-                raise ValueError, "Unable to find dihedral angle!"
+                raise ValueError("Unable to find dihedral angle!")
 
             if residue.dihedrals[anglenum] == None: 
                 self.atomlist.append(bondatom)
@@ -1907,7 +1907,7 @@ class Carboxylic(Optimize):
         optinstance = self.optinstance        
 
         # No need to rename if hydatom is not in residue.map
-        if hydatom.name not in residue.map.keys():
+        if hydatom.name not in list(residue.map.keys()):
             return
         # Take off the extension
         if len(hydatom.name) == 4:
@@ -1946,7 +1946,7 @@ class Carboxylic(Optimize):
                   pass
 
             if hydatom.name.endswith("1"):
-                if (hydatom.name[:-1] + "2") in residue.map.keys():
+                if (hydatom.name[:-1] + "2") in list(residue.map.keys()):
                     residue.removeAtom("%s2" % hydatom.name[:-1])
                 residue.renameAtom(hydatom.name, "%s2" % hydatom.name[:-1])
                 bondname0 = self.atomlist[0].name
@@ -2023,7 +2023,7 @@ class hydrogenRoutines:
 
         defpath = getDatFile(HYDPATH)
         if defpath == "":
-            raise ValueError, "Could not find %s!" % HYDPATH 
+            raise ValueError("Could not find %s!" % HYDPATH) 
      
         file = open(defpath)
         sax.parseString(file.read(), handler)
@@ -2038,7 +2038,7 @@ class hydrogenRoutines:
             Parameters
                 text:  The text to output (string)
         """
-        if HDEBUG: print text  
+        if HDEBUG: print(text)  
 
     def switchstate(self, states, amb, id):
         """
@@ -2063,7 +2063,7 @@ class hydrogenRoutines:
         # JENS: From here on only for Hbond optimisation - is it's used at all?
         #
         if id > len(states):
-            raise ValueError, "Invalid State ID!"
+            raise ValueError("Invalid State ID!")
         
         # First Remove all Hs
         residue = getattr(amb,"residue")
@@ -2073,7 +2073,7 @@ class hydrogenRoutines:
             hname = conf.hname
             boundname = conf.boundatom
             if residue.getAtom(hname) != None:
-                print 'Removing',residue.name,residue.resSeq,hname
+                print('Removing',residue.name,residue.resSeq,hname)
                 residue.removeAtom(hname)
             residue.getAtom(boundname).hacceptor = 1
             residue.getAtom(boundname).hdonor = 0
@@ -2092,7 +2092,7 @@ class hydrogenRoutines:
         # Now build appropriate atoms
         state = states[id]
         for conf in state:
-            print conf
+            print(conf)
             refcoords = []
             defcoords = []
             defatomcoords = []
@@ -2110,7 +2110,7 @@ class hydrogenRoutines:
                     refcoords.append(resatom.getCoords())
                     defcoords.append(atom.getCoords())
                 else:
-                    raise ValueError, "Could not find necessary atom!"
+                    raise ValueError("Could not find necessary atom!")
 
             newcoords = findCoordinates(3, refcoords, defcoords, defatomcoords)
             boundname = conf.boundatom
@@ -2204,7 +2204,7 @@ class hydrogenRoutines:
                     refcoords.append(resatom.getCoords())
                     defcoords.append(atom.getCoords())
                 else:
-                    raise ValueError, "Could not find necessary atom!"
+                    raise ValueError("Could not find necessary atom!")
 
             newcoords = findCoordinates(3, refcoords, defcoords, defatomcoords)
             boundname = conf.boundatom
@@ -2274,7 +2274,7 @@ class hydrogenRoutines:
 
         if optinstance != None:
             if optinstance.opttype == "Alcoholic":
-                atomname = optinstance.map.keys()[0]
+                atomname = list(optinstance.map.keys())[0]
                 if not residue.reference.hasAtom(atomname):
                     optinstance = None
                    
@@ -2320,7 +2320,7 @@ class hydrogenRoutines:
         for residue in self.protein.getResidues():
             optinstance = self.isOptimizeable(residue)
             if isinstance(residue, Amino):
-                if False in residue.stateboolean.values():
+                if False in list(residue.stateboolean.values()):
                     residue.fixed = 1
                 else:
                     residue.fixed = 0 
@@ -2597,7 +2597,7 @@ class hydrogenRoutines:
 
         toppath = getDatFile(TOPOLOGYPATH)
         if toppath == "":
-            raise ValueError, "Could not find %s!" % TOPOLOGYPATH 
+            raise ValueError("Could not find %s!" % TOPOLOGYPATH) 
      
         topfile = open(toppath)
         top = topology.Topology(topfile)
@@ -2731,7 +2731,7 @@ class hydrogenRoutines:
             refatoms = ['OE1', 'CD', 'OE2']
         else:
             patchmap = self.routines.protein.patchmap[name]
-            atoms = patchmap.map.keys()
+            atoms = list(patchmap.map.keys())
             atoms.sort()
 
         if name in ['NTR']:

@@ -3,9 +3,9 @@ __all__ = ['PySource', 'PyCFunction', 'PyCModule', 'PyCTypeSpec', 'PyCArgument',
 
 import os
 import sys
-from base import Component
-from utils import *
-from c_support import *
+from .base import Component
+from .utils import *
+from .c_support import *
 
 class PySource(FileSource):
 
@@ -83,7 +83,7 @@ extern \"C\" {
 
         self.main = PyCModuleInitFunction(pyname)
         self += self.main
-        map(self.add, components)
+        list(map(self.add, components))
         return self
 
     def update_parent(self, parent):
@@ -317,7 +317,7 @@ class FunctionSignature(Component):
         )
     def initialize(self, name, *components, **options):
         self.name = name
-        map(self.add, components)
+        list(map(self.add, components))
         return self
     def update_containers(self):
         self.container_OptExtArg += self.container_OptArg + self.container_ExtArg
@@ -469,7 +469,7 @@ PyObject*
             self.add(self.title, 'Title')
         if self.description:
             self.add(self.description, 'Description')
-        map(self.add, components)
+        list(map(self.add, components))
         return self
 
     def __repr__(self):
@@ -506,7 +506,7 @@ PyObject*
 
         while dep_map:
             dep_map_copy = dep_map.copy()
-            for name, deps in dep_map.items():
+            for name, deps in list(dep_map.items()):
                 d = [n for n in deps if n in dep_map]
                 if not d:
                     sorted_arguments.append(comp_map[name])
@@ -516,7 +516,7 @@ PyObject*
             if dep_map_copy==dep_map:
                 self.warnign('%s: detected cyclic dependencies in %r, incorrect behavior is expected.\n'\
                              % (self.provides, dep_map))
-                sorted_arguments += dep_map.values()
+                sorted_arguments += list(dep_map.values())
                 break
 
         for c, l in sorted_arguments:
@@ -614,7 +614,7 @@ class PyCArgument(Component):
 
         ctype.set_titles(self)
 
-        map(self.add, components)
+        list(map(self.add, components))
         return self
 
     def __repr__(self):
@@ -837,11 +837,11 @@ class PyCTypeSpec(CTypeSpec):
 
     typeinfo_map = dict(
         int = ('PyInt_Type', 'PyIntObject*', 'O!', 'N', 'NULL'),
-        long = ('PyLong_Type', 'PyLongObject*', 'O!', 'N', 'NULL'),
+        int = ('PyLong_Type', 'PyLongObject*', 'O!', 'N', 'NULL'),
         float = ('PyFloat_Type', 'PyFloatObject*', 'O!', 'N', 'NULL'),
         complex = ('PyComplex_Type', 'PyComplexObject*', 'O!', 'N', 'NULL'),
         str = ('PyString_Type', 'PyStringObject*', 'S', 'N', 'NULL'),
-        unicode = ('PyUnicode_Type', 'PyUnicodeObject*', 'U', 'N', 'NULL'),
+        str = ('PyUnicode_Type', 'PyUnicodeObject*', 'U', 'N', 'NULL'),
         buffer = ('PyBuffer_Type', 'PyBufferObject*', 'O!', 'N', 'NULL'),
         tuple = ('PyTuple_Type', 'PyTupleObject*', 'O!', 'N', 'NULL'),
         list = ('PyList_Type', 'PyListObject*', 'O!', 'N', 'NULL'),

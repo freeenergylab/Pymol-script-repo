@@ -1,15 +1,15 @@
 """Simple text browser for IDLE"""
 
-import tkMessageBox
-from Tkinter import Toplevel, Frame, Button, Scrollbar, Text
-from Tkconstants import DISABLED, SUNKEN, VERTICAL, WORD, RIGHT, Y, TOP, \
+import tkinter.messagebox
+from tkinter import Toplevel, Frame, Button, Scrollbar, Text
+from tkinter.constants import DISABLED, SUNKEN, VERTICAL, WORD, RIGHT, Y, TOP, \
                         LEFT, BOTH, BOTTOM
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import Frame, Button, Scrollbar
+    from tkinter.ttk import Frame, Button, Scrollbar
 
 class TextViewer(Toplevel):
     """A simple text viewer dialog for IDLE
@@ -77,7 +77,7 @@ def view_file(parent, title, filename, encoding=None):
         else:
             textFile = open(filename, 'r')
     except IOError:
-        tkMessageBox.showerror(title='File Load Error',
+        tkinter.messagebox.showerror(title='File Load Error',
                                message='Unable to load file %r .' % filename,
                                parent=parent)
     else:
@@ -85,7 +85,7 @@ def view_file(parent, title, filename, encoding=None):
 
 
 if __name__ == '__main__':
-    from Tkinter import Tk
+    from tkinter import Tk
     #test the dialog
     root=Tk()
     root.title('textView test')

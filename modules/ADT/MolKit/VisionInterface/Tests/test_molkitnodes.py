@@ -229,16 +229,16 @@ def test_07_MSMSWithAtomSubset():
     node4 = NodeSelector(library=molkitlib)
     masterNet.addNode(node4,14,153)
     node4.inputPorts[2].widget.set("C,CA,N")
-    apply(node4.configure, (), {'expanded': True})
+    node4.configure(*(), **{'expanded': True})
     ## saving node Assign Radii ##
     node5 = AssignRadii(library=molkitlib)
     masterNet.addNode(node5,275,62)
-    apply(node5.configure, (), {'expanded': True})
+    node5.configure(*(), **{'expanded': True})
     ## saving node Extract Atom Property ##
     node7 = AtomsProperty(library=molkitlib)
     masterNet.addNode(node7,302,169)
     node7.inputPorts[1].widget.set("radius")
-    apply(node7.configure, (), {'expanded': True})
+    node7.configure(*(), **{'expanded': True})
     ## saving connections for network Network 0 ##
     masterNet.connectNodes(node0, node5, "MolSets", "molecules")
     masterNet.connectNodes(node5, node4, "molecules", "nodes")

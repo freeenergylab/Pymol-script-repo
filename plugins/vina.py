@@ -289,7 +289,7 @@ def load_vina_results(project_file, group, max_load, max_rank, interactions_chec
     # Parse results
     results_dir = project_data["results_dir"]
     results = itertools.chain.from_iterable(
-        map(parse_vina_log, glob(f"{results_dir}/poses/*.pdbqt"))
+        list(map(parse_vina_log, glob(f"{results_dir}/poses/*.pdbqt")))
     )
     results = sorted(results, key=itemgetter("affinity"))
 

@@ -116,7 +116,7 @@ import re
 import copy
 import warnings
 from glob import glob
-import ConfigParser
+import configparser
 
 from distutils.errors import DistutilsError
 from distutils.dist import Distribution
@@ -127,6 +127,7 @@ from numpy.distutils.exec_command import \
     find_executable, exec_command, get_pythonexe
 from numpy.distutils.misc_util import is_sequence, is_string
 from numpy.distutils.command.config import config as cmd_config
+from functools import reduce
 
 if sys.platform == 'win32':
     default_lib_dirs = ['C:\\',
@@ -163,9 +164,9 @@ if os.path.join(sys.prefix, 'lib') not in default_lib_dirs:
     default_include_dirs.append(os.path.join(sys.prefix, 'include'))
     default_src_dirs.append(os.path.join(sys.prefix, 'src'))
 
-default_lib_dirs = filter(os.path.isdir, default_lib_dirs)
-default_include_dirs = filter(os.path.isdir, default_include_dirs)
-default_src_dirs = filter(os.path.isdir, default_src_dirs)
+default_lib_dirs = list(filter(os.path.isdir, default_lib_dirs))
+default_include_dirs = list(filter(os.path.isdir, default_include_dirs))
+default_src_dirs = list(filter(os.path.isdir, default_src_dirs))
 
 so_ext = distutils.sysconfig.get_config_vars('SO')[0] or ''
 
@@ -359,7 +360,7 @@ class system_info:
         defaults['include_dirs'] = os.pathsep.join(default_include_dirs)
         defaults['src_dirs'] = os.pathsep.join(default_src_dirs)
         defaults['search_static_first'] = str(self.search_static_first)
-        self.cp = ConfigParser.ConfigParser(defaults)
+        self.cp = configparser.ConfigParser(defaults)
         self.files = []
         self.files.extend(get_standard_file('.numpy-site.cfg'))
         self.files.extend(get_standard_file('site.cfg'))
@@ -413,7 +414,7 @@ class system_info:
                     if notfound_action==1:
                         warnings.warn(self.notfounderror.__doc__)
                     elif notfound_action==2:
-                        raise self.notfounderror,self.notfounderror.__doc__
+                        raise self.notfounderror(self.notfounderror.__doc__)
                     else:
                         raise ValueError(repr(notfound_action))
 
@@ -425,7 +426,7 @@ class system_info:
 
         res = self.saved_results.get(self.__class__.__name__)
         if self.verbosity>0 and flag:
-            for k,v in res.items():
+            for k,v in list(res.items()):
                 v = str(v)
                 if k in ['sources','libraries'] and len(v)>270:
                     v = v[:120]+'...\n...\n...'+v[-120:]
@@ -495,7 +496,7 @@ class system_info:
     def get_libs(self, key, default):
         try:
             libs = self.cp.get(self.section, key)
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             if not default:
                 return []
             if is_string(default):
@@ -792,7 +793,7 @@ class mkl_info(system_info):
         if mklroot is None:
             system_info.__init__(self)
         else:
-            from cpuinfo import cpu
+            from .cpuinfo import cpu
             l = 'mkl' # use shared library
             if cpu.is_Itanium():
                 plt = '64'
@@ -1548,15 +1549,15 @@ class numerix_info(system_info):
             try:
                 import numpy
                 which = "numpy", "defaulted"
-            except ImportError,msg1:
+            except ImportError as msg1:
                 try:
                     import Numeric
                     which = "numeric", "defaulted"
-                except ImportError,msg2:
+                except ImportError as msg2:
                     try:
                         import numarray
                         which = "numarray", "defaulted"
-                    except ImportError,msg3:
+                    except ImportError as msg3:
                         log.info(msg1)
                         log.info(msg2)
                         log.info(msg3)
@@ -1870,7 +1871,7 @@ def combine_paths(*args,**kws):
     args = r
     if not args: return []
     if len(args)==1:
-        result = reduce(lambda a,b:a+b,map(glob,args[0]),[])
+        result = reduce(lambda a,b:a+b,list(map(glob,args[0])),[])
     elif len (args)==2:
         result = []
         for a0 in args[0]:
@@ -1886,7 +1887,7 @@ language_map = {'c':0,'c++':1,'f77':2,'f90':3}
 inv_language_map = {0:'c',1:'c++',2:'f77',3:'f90'}
 def dict_append(d,**kws):
     languages = []
-    for k,v in kws.items():
+    for k,v in list(kws.items()):
         if k=='language':
             languages.append(v)
             continue
@@ -1928,7 +1929,7 @@ def show_all(argv=None):
         show_only.append(n)
     show_all = not show_only
     _gdict_ = globals().copy()
-    for name, c in _gdict_.iteritems():
+    for name, c in _gdict_.items():
         if not inspect.isclass(c):
             continue
         if not issubclass(c, system_info) or c is system_info:

@@ -14,7 +14,7 @@ def main():
                                 nsdict=nsdict,
                                 tracefile=sys.stdout)
     response = registration.RegisterUser(user)
-    print response
+    print(response)
     
 
 if __name__ == '__main__':

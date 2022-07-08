@@ -13,11 +13,11 @@ CHANGELOG
 from pymol import cmd
 import sys
 if sys.version_info[0] < 3:
-    from Tkinter import *
-    from tkFileDialog import *
-    import tkSimpleDialog
-    import tkMessageBox
-    import urllib
+    from tkinter import *
+    from tkinter.filedialog import *
+    import tkinter.simpledialog
+    import tkinter.messagebox
+    import urllib.request, urllib.parse, urllib.error
 else:
     from tkinter import *
     from tkinter.filedialog import *
@@ -85,7 +85,7 @@ class RemotePDB:
 
     def __init__(self, app):
         import os
-        remote_file = tkSimpleDialog.askstring('PDB Loader', 'Enter the PDB or Job ID\n\nFor PDB id\'s, you may also enter the chain.\ni.e. 1a2zA for PDB 1a2z Chain A ', parent=app.root)
+        remote_file = tkinter.simpledialog.askstring('PDB Loader', 'Enter the PDB or Job ID\n\nFor PDB id\'s, you may also enter the chain.\ni.e. 1a2zA for PDB 1a2z Chain A ', parent=app.root)
         sizeof = len(remote_file)
         noerror = 1
         pdbcode = ''
@@ -97,7 +97,7 @@ class RemotePDB:
 
         # Gave a bad PDB code!  PDB codes must be [a-z0-9A-Z]{4}
         if sizeof != 4 and sizeof != 5:
-            tkMessageBox.showerror('Oops', remote_file + ' does not appear to be a PDB code', parent=app.root)
+            tkinter.messagebox.showerror('Oops', remote_file + ' does not appear to be a PDB code', parent=app.root)
             noerror = 0
 
         # Get Pocket information from CASTp web server!  Size 4 : full structure file
@@ -124,16 +124,16 @@ class RemotePDB:
 
         # Try to retrieve the files if there are no previous errors.
         if noerror:
-            pdbfile = urllib.urlretrieve(path)[0]
-            pocfile = urllib.urlretrieve(pocpath)[0]
-            infofile = urllib.urlretrieve(infopath)[0]
+            pdbfile = urllib.request.urlretrieve(path)[0]
+            pocfile = urllib.request.urlretrieve(pocpath)[0]
+            infofile = urllib.request.urlretrieve(infopath)[0]
 #            tkMessageBox.showerror('Gotit', pdbfile, parent=app.root)
             if(os.path.getsize(pdbfile) < 400 or os.path.getsize(pocfile) < 400 or os.path.getsize(infofile) < 400):
                 emessage = pdbcode + ' is not in the CASTp database'
                 noerror = 0
 
         if noerror == 0:
-            tkMessageBox.showerror('Sorry', emessage, parent=app.root)
+            tkinter.messagebox.showerror('Sorry', emessage, parent=app.root)
 
         if noerror:
 
@@ -285,24 +285,24 @@ class RemoteJob:
 
     def __init__(self, app):
         import os
-        jobid = tkSimpleDialog.askstring('PDB Loader', 'Enter the Job ID given to you by the CASTp web server\nThe Job ID is case sensitive!', parent=app.root)
-        pdbfile = urllib.urlretrieve(CASTP_URL_BASE + '/working/' + jobid + '.pdb')[0]
+        jobid = tkinter.simpledialog.askstring('PDB Loader', 'Enter the Job ID given to you by the CASTp web server\nThe Job ID is case sensitive!', parent=app.root)
+        pdbfile = urllib.request.urlretrieve(CASTP_URL_BASE + '/working/' + jobid + '.pdb')[0]
         if(os.path.getsize(pdbfile) > 400):
-            pocfile = urllib.urlretrieve(CASTP_URL_BASE + '/working/' + jobid + '.poc')[0]
-            pocInfofile = urllib.urlretrieve(CASTP_URL_BASE + '/working/' + jobid + '.pocInfo')[0]
+            pocfile = urllib.request.urlretrieve(CASTP_URL_BASE + '/working/' + jobid + '.poc')[0]
+            pocInfofile = urllib.request.urlretrieve(CASTP_URL_BASE + '/working/' + jobid + '.pocInfo')[0]
            # mouthfile = urllib.urlretrieve(CASTP_URL_BASE + '/working/' + jobid + '.mouth')[0]
            # mouthInfofile = urllib.urlretrieve(CASTP_URL_BASE + '/working/' + jobid + '.mouthInfo')[0]
 
         else:
             os.remove(pdbfile)
-            pdbfile = urllib.urlretrieve(CASTP_URL_BASE + '/uploads/' + jobid + '.pdb')[0]
-            pocfile = urllib.urlretrieve(CASTP_URL_BASE + '/uploads/' + jobid + '.poc')[0]
-            pocInfofile = urllib.urlretrieve(CASTP_URL_BASE + '/uploads/' + jobid + '.pocInfo')[0]
+            pdbfile = urllib.request.urlretrieve(CASTP_URL_BASE + '/uploads/' + jobid + '.pdb')[0]
+            pocfile = urllib.request.urlretrieve(CASTP_URL_BASE + '/uploads/' + jobid + '.poc')[0]
+            pocInfofile = urllib.request.urlretrieve(CASTP_URL_BASE + '/uploads/' + jobid + '.pocInfo')[0]
            # mouthfile = urllib.urlretrieve(CASTP_URL_BASE + '/uploads/' + jobid + '.mouth')[0]
            # mouthInfofile = urllib.urlretrieve(CASTP_URL_BASE + '/uploads/' + jobid + '.mouthInfo')[0]
 
         if(os.path.getsize(pdbfile) < 400):
-            tkMessageBox.showerror('Oops!', 'Could not retrieve ' + jobid + '\nMake sure you entered it in correctly, the Job ID is case sensitive', parent=app.root)
+            tkinter.messagebox.showerror('Oops!', 'Could not retrieve ' + jobid + '\nMake sure you entered it in correctly, the Job ID is case sensitive', parent=app.root)
 
         pdbin = open(pdbfile, 'r')
         pdbout = os.path.dirname(pdbfile) + os.sep + jobid + '.pdb'

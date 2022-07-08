@@ -5,11 +5,11 @@ from ZSI.writer import SoapWriter
 from ZSI import _get_element_nsuri_name
 from ZSI.schema import GED, TypeDefinition, ElementDeclaration
 from ZSI.parse import ParsedSoap
-from cStringIO import StringIO
+from io import StringIO
 
 
 class TestList1_Def(ZSI.TC.List, TypeDefinition):
-    itemType = (u'http://www.w3.org/2001/XMLSchema', u'dateTime')
+    itemType = ('http://www.w3.org/2001/XMLSchema', 'dateTime')
     schema = "urn:test"
     type = (schema, "tUsage")
     def __init__(self, pname, **kw):
@@ -35,8 +35,8 @@ class ListTestCase(unittest.TestCase):
 
     def check_list_defs(self):
         gl = globals()
-        for klass in map(lambda h: gl[h], filter(lambda g: (g.startswith('TestList') and 
-            issubclass(gl[g],ZSI.TC.List)), gl)):
+        for klass in [gl[h] for h in [g for g in gl if (g.startswith('TestList') and 
+            issubclass(gl[g],ZSI.TC.List))]]:
 
             typecode = klass('whatever', nillable=True)
             data = None
@@ -44,7 +44,7 @@ class ListTestCase(unittest.TestCase):
                 sw = SoapWriter()
                 sw.serialize(data, typecode)
                 s = str(sw)
-                print s
+                print(s)
                 ps = ParsedSoap(s); pyobj = ps.Parse(typecode)
                 assert pyobj == data, 'Data corruption expected "%s", got "%s"' %(str(data),str(pyobj))
                 if data is None: 

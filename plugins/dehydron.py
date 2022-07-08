@@ -15,8 +15,8 @@ script from Robert L. Campbell http://pldserver1.biochem.queensu.ca/~rlc/work/py
 import sys
 
 if sys.version_info[0] < 3:
-    import Tkinter
-    from Tkinter import *
+    import tkinter
+    from tkinter import *
 else:
     import tkinter as Tkinter
     from tkinter import *
@@ -47,12 +47,12 @@ def mainDialog(root=None):
         if len(cmd.get_names()) > 0:
             dehydron(selection, angle_range, max_distance, desolv, min_wrappers, max_wrappers)
         else:
-            print('#' * 40)
+            print(('#' * 40))
             print('Please load a protein structure')
-            print('#' * 40)
-    master = Tkinter.Toplevel(root)
+            print(('#' * 40))
+    master = tkinter.Toplevel(root)
     master.title(' Wrappy ')
-    w = Tkinter.Label(master, text='dehydron calculator\nOsvaldo Martin - omarti@unsl.edu.ar',
+    w = tkinter.Label(master, text='dehydron calculator\nOsvaldo Martin - omarti@unsl.edu.ar',
                       background='#000000',
                       foreground='#cecece',
                       #pady = 20,
@@ -121,7 +121,7 @@ def mainDialog(root=None):
 ############################ About TAB #################################
     group = Pmw.Group(p2, tag_text='About wrappy')
     group.pack(fill='both', expand=1, padx=5, pady=5)
-    text = u"""For a brief introduction to the dehydron concept, you could
+    text = """For a brief introduction to the dehydron concept, you could
 read http://en.wikipedia.org/wiki/dehydron
 
 Citation for this plugin:
@@ -252,16 +252,16 @@ USAGE
         print("           Donor             |            Aceptor           |")
         print("    Object   Chain Residue   |     Object   Chain Residue   | # wrappers  wrapping")
         for line in low_sel:
-            print(line[1])
+            print((line[1]))
         for line in mean_sel:
-            print(line[1])
+            print((line[1]))
         for line in high_sel:
-            print(line[1])
+            print((line[1]))
         print('\nProtein global statistics:')
-        print('\nz-score wrappers = %6.2f\nz-score hydrogen bonds = %6.2f\n' % (z_score_wrappers, z_score_hb))
+        print(('\nz-score wrappers = %6.2f\nz-score hydrogen bonds = %6.2f\n' % (z_score_wrappers, z_score_hb)))
     elif not quiet and len(hb) != 0:
         print('\n - no dehydrons were found - ')
-        print('\nz-score hydrogen bonds = %6.2f\n' % (z_score_hb))
+        print(('\nz-score hydrogen bonds = %6.2f\n' % (z_score_hb)))
     else:
         print('\n - no hydrogen bonds were found - ')
 

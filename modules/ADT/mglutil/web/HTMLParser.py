@@ -8,7 +8,7 @@
 #########################################################################
 
 
-import string, re, urllib, types
+import string, re, urllib.request, urllib.parse, urllib.error, types
 
 
 class CGIForm:
@@ -73,29 +73,29 @@ class CGIForm:
     def run(self):
         args = self.arguments.copy()
         args.update(self.hiddenInput)
-        args = urllib.urlencode(args)
+        args = urllib.parse.urlencode(args)
 
         if self.method == 'post':
-            f = urllib.urlopen(self.url+self.action, args)
+            f = urllib.request.urlopen(self.url+self.action, args)
         else: # method is 'get'
             if self.action is not None:
                 link = self.url+self.action+'?'+args
             else:
                 link = self.url
-            f=urllib.urlopen(link)
+            f=urllib.request.urlopen(link)
         return f.read()
 
 
     def setArguments(self, **kw):
-        for k,v in kw.items():
-            if type(v) in (types.FloatType, types.IntType,
-                           types.LongType, types.StringType):
+        for k,v in list(kw.items()):
+            if type(v) in (float, int,
+                           int, bytes):
                 self.arguments[k] = v
             else:
                 pat = re.compile("[\[,\]\012]")
                 arrayStr = re.sub(pat, '', str(Numeric.array(v).ravel()) )
                 c = string.split(arrayStr)
-                c = map( float, c )
+                c = list(map( float, c ))
                 c = re.sub(pat, '', str(c) )
                 self.arguments[k] = c
 
@@ -108,10 +108,10 @@ class CGIForm:
                     self.action = '/' + self.action
 
     def dump(self):
-        print '............'+repr(self)+'............'
-        for k,v in self.__dict__.items():
-            print '%s\t:'%(k,), v
-        print '...............................................................'
+        print('............'+repr(self)+'............')
+        for k,v in list(self.__dict__.items()):
+            print('%s\t:'%(k,), v)
+        print('...............................................................')
 
 
     def getCreationSourceCode(self):
@@ -145,14 +145,14 @@ class CGIForm:
         txt = 'CGIForm(url="'+url+'", name="'+name+'",\n'+\
               'method="'+method+'", enctype="'+enctype+'", action="'+\
               action+'",\n'+\
-              'input='+`input`+',\n'+\
-              'radiobutton='+`radiobutton`+',\n'+\
-              'checkbutton='+`checkbutton`+',\n'+\
-              'select='+`select`+',\n'+\
-              'textarea='+`textarea`+',\n'+\
-              'arguments='+`arguments`+',\n'+\
-              'hiddenInput='+`hiddenInput`+',\n'+\
-              'fieldOrder='+`fieldOrder`+')\n'
+              'input='+repr(input)+',\n'+\
+              'radiobutton='+repr(radiobutton)+',\n'+\
+              'checkbutton='+repr(checkbutton)+',\n'+\
+              'select='+repr(select)+',\n'+\
+              'textarea='+repr(textarea)+',\n'+\
+              'arguments='+repr(arguments)+',\n'+\
+              'hiddenInput='+repr(hiddenInput)+',\n'+\
+              'fieldOrder='+repr(fieldOrder)+')\n'
 
         return txt
 
@@ -390,7 +390,7 @@ class ParseForCGIForms:
 
             formname = self.get_Attr(formtag, namePat)
             if formname is None:
-                formname = 'form_' + `formnameindex`
+                formname = 'form_' + repr(formnameindex)
                 formnameindex = formnameindex + 1
             formObject.name = formname
 
@@ -402,7 +402,7 @@ class ParseForCGIForms:
                 for ipt in inputsdata:
                     inputname = self.get_Attr(ipt, namePat)
                     if inputname is None:
-                        inputname = 'input_'+`inputnameindex`
+                        inputname = 'input_'+repr(inputnameindex)
                         inputnameindex = inputnameindex + 1
 
                     value = self.get_Attr(ipt, valuePat)
@@ -424,7 +424,7 @@ class ParseForCGIForms:
                         else:
                             entry = (value,'off')
                         
-                        if not radiobuttonDict.has_key(inputname):
+                        if inputname not in radiobuttonDict:
                             radiobuttonDict[inputname] = []
                             formObject.fieldOrder.append((inputname,
                                                       'radiobutton'))
@@ -438,7 +438,7 @@ class ParseForCGIForms:
                         else:
                             entry = (value, 'off')
                         
-                        if not checkbuttonDict.has_key(inputname):
+                        if inputname not in checkbuttonDict:
                             checkbuttonDict[inputname] = []
                             formObject.fieldOrder.append((inputname,
                                                           'checkbutton'))
@@ -487,7 +487,7 @@ class ParseForCGIForms:
                     options = []
                     selname = self.get_Attr(select[0], namePat)
                     if selname is None:
-                        selname = 'selection_'+`selectnameindex`
+                        selname = 'selection_'+repr(selectnameindex)
                         selectnameindex = selectnameindex + 1
 
                     for sel in select:
@@ -513,7 +513,7 @@ class ParseForCGIForms:
                     areatext = []
                     textname = self.get_Attr(textarea[0], namePat)
                     if textname is None:
-                        textname = 'textarea_' + `textnameindex`
+                        textname = 'textarea_' + repr(textnameindex)
                         textnameindex = textnameindex + 1
 
                     for area in textarea:
@@ -554,7 +554,7 @@ class ParseHTML:
         if html is None or html == [] or html == '':
             return
 
-        if self.parsers.has_key(self.mode):
+        if self.mode in self.parsers:
             self.currentParser = self.parsers[self.mode]
         else:
             return
@@ -566,7 +566,7 @@ class ParseHTML:
 
     def doit(self, url):
         """ call this with url to parse html."""
-        f = urllib.urlopen(url)
+        f = urllib.request.urlopen(url)
         data = f.read()
         f.close()
         parsedData = self.parse(url, [data])

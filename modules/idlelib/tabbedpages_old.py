@@ -7,10 +7,10 @@ TabbedPageSet -- A Tkinter implementation of a tabbed-page widget.
 TabSet -- A widget containing tabs (buttons) in one or more rows.
 
 """
-from Tkinter import Frame, Radiobutton
-from Tkconstants import BOTH, TOP, X, RAISED, NSEW, FLAT, LEFT
+from tkinter import Frame, Radiobutton
+from tkinter.constants import BOTH, TOP, X, RAISED, NSEW, FLAT, LEFT
 
-from tabbedpages import InvalidNameError, AlreadyExistsError
+from .tabbedpages import InvalidNameError, AlreadyExistsError
 
 
 class TabSet(Frame):
@@ -524,7 +524,7 @@ class TabbedPageSet(Frame):
         return self._pages_order
 
 if __name__ == '__main__':
-    from Tkinter import Tk, Label, Entry, Button
+    from tkinter import Tk, Label, Entry, Button
     # test dialog
     root=Tk()
     tabPage=TabbedPageSet(root, page_names=['Foobar','Baz'], n_rows=0,

@@ -13,8 +13,8 @@ See more at: http://www.pymolwiki.org/index.php/annocryst
 ######################################################
 '''
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 
 import Pmw
 import sys
@@ -28,10 +28,10 @@ import os
 home = os.path.expanduser('~')
 
 if sys.version_info[0] < 3:
-    import urllib2
-    from urllib2 import URLError, HTTPError
+    import urllib.request, urllib.error, urllib.parse
+    from urllib.error import URLError, HTTPError
     from idlelib.TreeWidget import TreeItem, TreeNode
-    from Tkinter import PhotoImage
+    from tkinter import PhotoImage
 else:
     import urllib.request as urllib2
     from urllib.error import URLError, HTTPError
@@ -273,7 +273,7 @@ class AnnotationService:
             try:
 
                 settingsStr = "<annocryst>\n"
-                for k in self.settings.keys():
+                for k in list(self.settings.keys()):
                     newvalue = getattr(self, k).getvalue()
                     self.settings[k] = newvalue
                     settingsStr += "<%s>%s</%s>\n" % (k, newvalue, k)
@@ -285,7 +285,7 @@ class AnnotationService:
             except:
                 print("Unable to save settings")
         else:
-            for k in self.settings.keys():
+            for k in list(self.settings.keys()):
                 entryfield = getattr(self, k)
                 entryfield.setvalue(self.settings[k])
         self.settingsDialog.withdraw()
@@ -303,7 +303,7 @@ class AnnotationService:
         try:
             settings = open(self.settingsFile, "r")
             dom = parseString(settings.read())
-            for k in self.settings.keys():
+            for k in list(self.settings.keys()):
                 elems = dom.getElementsByTagName(k)
                 if len(elems) > 0 and len(elems[0].childNodes) > 0:
                     self.settings[k] = elems[0].childNodes[0].nodeValue
@@ -330,8 +330,8 @@ class AnnotationService:
                 pdbURL = self.remoteURL.getvalue()
             else:
                 self.remoteURL.setvalue(pdbURL)
-            httpRequest = urllib2.Request(url=pdbURL)
-            pdbHttpHandle = urllib2.urlopen(httpRequest)
+            httpRequest = urllib.request.Request(url=pdbURL)
+            pdbHttpHandle = urllib.request.urlopen(httpRequest)
             pdbStr = pdbHttpHandle.read()
             modelName = str(pdbURL).split("/")[-1].split(".")[0]
             cmd.read_pdbstr(pdbStr, modelName)
@@ -354,7 +354,7 @@ class AnnotationService:
         if anno != None and anno != '':
             try:
                 req = RequestWithMethod(anno, method="DELETE")
-                response = urllib2.urlopen(req)
+                response = urllib.request.urlopen(req)
                 self.showAllAnnotations()
                 self.status.setvalue("Annotation deleted")
             except:
@@ -396,7 +396,7 @@ class AnnotationService:
         # if the URL in the open page UI has been loaded, it is the most recent model, so annotate that
         uiURL = self.remoteURL.getvalue()
         annoURI = ''
-        if uiURL in self.loadedModels.values():
+        if uiURL in list(self.loadedModels.values()):
             annoURI = uiURL
         if (annoURI == '' or annoURI == None) and contextModel != '':
             annoURI = self.loadedModels[contextModel]
@@ -430,8 +430,8 @@ class AnnotationService:
                                                 context=contextStr, body=annoDesc, view=viewStr)
 
             try:
-                req = urllib2.Request(self.annotationServerURL.getvalue(), anno)
-                response = urllib2.urlopen(req)
+                req = urllib.request.Request(self.annotationServerURL.getvalue(), anno)
+                response = urllib.request.urlopen(req)
             except HTTPError as e:
                 if e.code == 201:
                     self.showAllAnnotations()
@@ -535,7 +535,7 @@ class AnnotationService:
         self.clearAnnotations()
         if url == '' or url == None:
             uiURL = self.remoteURL.getvalue()
-            if uiURL in self.loadedModels.values():
+            if uiURL in list(self.loadedModels.values()):
                 url = uiURL
         if url == '' and len(annoIDs) > 0:
             contextModel = annoIDs[0][0]
@@ -546,8 +546,8 @@ class AnnotationService:
         self.current.setvalue("Showing annotations for: %s" % url)
         annotea = "%s?w3c_annotates=%s" % (self.annotationServerURL.getvalue(), url)
         try:
-            httpRequest = urllib2.Request(url=annotea)
-            httpHandle = urllib2.urlopen(httpRequest)
+            httpRequest = urllib.request.Request(url=annotea)
+            httpHandle = urllib.request.urlopen(httpRequest)
             #self.printData = 0
             #self.tmpAnnotation = {}
             annoteaRdfXml = httpHandle.read()
@@ -596,8 +596,8 @@ class AnnotationService:
             return
         if ontURL != '' and ontURL != None:
             try:
-                ontReq = urllib2.Request(url=ontURL)
-                ontHandle = urllib2.urlopen(ontReq)
+                ontReq = urllib.request.Request(url=ontURL)
+                ontHandle = urllib.request.urlopen(ontReq)
                 ontContent = ontHandle.read()
                 ontDom = parseString(ontContent)
                 self.ontology_tree_item = OntologyTreeItem(ontDom.documentElement)
@@ -739,7 +739,7 @@ class OntologyTreeItem(TreeItem):
                 self.keywords = list(tmpchildren.keys())
                 # iterate over all classes that have super classes,
                 # remove them from the children of the top element
-                for childList in self.class_dict.values():
+                for childList in list(self.class_dict.values()):
                     for child in childList:
                         childId = child.getAttributeNS(\
                             'http://www.w3.org/1999/02/22-rdf-syntax-ns#', 'ID')
@@ -1044,9 +1044,9 @@ class AnnotationTreeItem(TreeItem):
     def getAnnotationBody(self, node):
         bodyContentStr = ""
         try:
-            bodyReq = urllib2.Request(url=node.getAttributeNS(\
+            bodyReq = urllib.request.Request(url=node.getAttributeNS(\
                 'http://www.w3.org/1999/02/22-rdf-syntax-ns#', 'resource'))
-            bodyHandle = urllib2.urlopen(bodyReq)
+            bodyHandle = urllib.request.urlopen(bodyReq)
             bodyContent = bodyHandle.read()
             bodyDom = parseString(bodyContent)
             bodyElem = bodyDom.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "body")
@@ -1061,11 +1061,11 @@ class AnnotationTreeItem(TreeItem):
 # override urllib2 Request to support HTTP DELETE request
 
 
-class RequestWithMethod(urllib2.Request):
+class RequestWithMethod(urllib.request.Request):
 
     def __init__(self, url, data=None, headers={}, origin_req_host=None,
                  unverifiable=False, method=None):
-        urllib2.Request.__init__(self, url, data, headers, origin_req_host, unverifiable)
+        urllib.request.Request.__init__(self, url, data, headers, origin_req_host, unverifiable)
         self.method = method
 
     def get_method(self):

@@ -22,7 +22,7 @@ def fftshift(x,axes=None):
     tmp = asarray(x)
     ndim = len(tmp.shape)
     if axes is None:
-        axes = range(ndim)
+        axes = list(range(ndim))
     y = tmp
     for k in axes:
         n = tmp.shape[k]
@@ -40,7 +40,7 @@ def ifftshift(x,axes=None):
     tmp = asarray(x)
     ndim = len(tmp.shape)
     if axes is None:
-        axes = range(ndim)
+        axes = list(range(ndim))
     y = tmp
     for k in axes:
         n = tmp.shape[k]
@@ -61,7 +61,7 @@ def fftfreq(n,d=1.0):
       f = [0,1,...,n/2-1,-n/2,...,-1]/(d*n)         if n is even
       f = [0,1,...,(n-1)/2,-(n-1)/2,...,-1]/(d*n)   if n is odd
     """
-    assert isinstance(n,types.IntType) or isinstance(n, integer)
+    assert isinstance(n,int) or isinstance(n, integer)
     val = 1.0/(n*d)
     results = empty(n, int)
     N = (n-1)//2 + 1

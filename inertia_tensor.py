@@ -83,7 +83,7 @@ NOTES
         print()
         print("Center of mass: ")
         print()
-        print(x_com, y_com, z_com)
+        print((x_com, y_com, z_com))
 
     I = []
 

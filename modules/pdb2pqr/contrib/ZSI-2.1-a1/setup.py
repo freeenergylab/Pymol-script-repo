@@ -10,8 +10,8 @@ except ImportError:
 
 _url = "http://pywebsvcs.sf.net/"
 
-import ConfigParser
-cf = ConfigParser.ConfigParser()
+import configparser
+cf = configparser.ConfigParser()
 cf.read('setup.cfg')
 major = cf.getint('version', 'major')
 minor = cf.getint('version', 'minor')
@@ -33,7 +33,7 @@ elif beta:
 try:
     open('ZSI/version.py', 'r').close()
 except:
-    print 'ZSI/version.py not found; run "make"'
+    print('ZSI/version.py not found; run "make"')
     sys.exit(1)
 
 _packages = [ "ZSI", "ZSI.generate", "ZSI.wstools"]

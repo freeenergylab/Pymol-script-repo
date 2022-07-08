@@ -14,9 +14,9 @@ See more here: http://www.pymolwiki.org/index.php/dynoplot
 ###############################################
 '''
 
-from __future__ import division
-from __future__ import generators
-from __future__ import print_function
+
+
+
 
 import sys
 from pymol import cmd
@@ -24,19 +24,19 @@ from pymol import cmd
 if sys.version_info[0] > 2:
     import tkinter as Tkinter
 else:
-    import Tkinter
+    import tkinter
 
 # workaround: Set to True if nothing gets drawn on canvas, for example on linux with "pymol -x"
 with_mainloop = False
 
 
-class SimplePlot(Tkinter.Canvas):
+class SimplePlot(tkinter.Canvas):
 
     # Class variables
     mark_size = 4
 
     def __init__(self, *args, **kwargs):
-        Tkinter.Canvas.__init__(self, *args, **kwargs)
+        tkinter.Canvas.__init__(self, *args, **kwargs)
         self.xlabels = []   # axis labels
         self.ylabels = []
         self.spacingx = 0   # spacing in x direction
@@ -281,10 +281,10 @@ class DynoRamaObject:
             pmgapp = None
 
         if pmgapp is not None:
-            rootframe = Tkinter.Toplevel(pmgapp.root)
+            rootframe = tkinter.Toplevel(pmgapp.root)
             parent = rootframe
         else:
-            rootframe = Tkinter.Tk()
+            rootframe = tkinter.Tk()
             parent = rootframe
 
         rootframe.title(' Dynamic Angle Plotting ')
@@ -293,7 +293,7 @@ class DynoRamaObject:
         canvas = SimplePlot(parent, width=320, height=320)
         canvas.bind("<Button-2>", canvas.pickWhich)
         canvas.bind("<Button-3>", canvas.pickWhich)
-        canvas.pack(side=Tkinter.LEFT, fill="both", expand=1)
+        canvas.pack(side=tkinter.LEFT, fill="both", expand=1)
         canvas.axis(xint=150,
                     xlabels=[-180, -120, -60, 0, 60, 120, 180],
                     ylabels=[-180, -150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150, 180])
@@ -336,7 +336,7 @@ class DynoRamaObject:
         self.lock = 1
         cmd.iterate('(%s) and name CA' % sel, 'idx2resn[model,index] = (resn, color, ss)',
                     space={'idx2resn': self.canvas.idx2resn})
-        for model_index, (phi, psi) in cmd.get_phipsi(sel, self.state).items():
+        for model_index, (phi, psi) in list(cmd.get_phipsi(sel, self.state).items()):
             print(" Plotting Phi,Psi: %8.2f,%8.2f" % (phi, psi))
             self.canvas.plot(phi, psi, model_index)
         self.lock = 0
@@ -346,7 +346,7 @@ class DynoRamaObject:
             return
 
         # Loop through each item on plot to see if updated
-        for value in self.canvas.shapes.values():
+        for value in list(self.canvas.shapes.values()):
             # Look for update flag...
             if value[2]:
                 # Set residue's phi,psi to new values

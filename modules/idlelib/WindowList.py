@@ -1,4 +1,4 @@
-from Tkinter import Toplevel, TclError
+from tkinter import Toplevel, TclError
 
 class WindowList:
 
@@ -20,7 +20,7 @@ class WindowList:
 
     def add_windows_to_menu(self,  menu):
         list = []
-        for key in self.dict.keys():
+        for key in list(self.dict.keys()):
             window = self.dict[key]
             try:
                 title = window.get_title()
@@ -45,8 +45,8 @@ class WindowList:
             try:
                 callback()
             except:
-                print ("warning: callback failed in WindowList",
-                    sys.exc_type, ":", sys.exc_value)
+                print(("warning: callback failed in WindowList",
+                    sys.exc_info()[0], ":", sys.exc_info()[1]))
 
 registry = WindowList()
 

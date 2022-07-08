@@ -27,7 +27,7 @@ from numpy.lib.shape_base import atleast_1d, atleast_2d
 from numpy.lib.twodim_base import diag
 from _compiled_base import _insert, add_docstring
 from _compiled_base import digitize, bincount, interp as compiled_interp
-from arraysetops import setdiff1d
+from .arraysetops import setdiff1d
 import numpy as np
 
 #end Fernando's utilities
@@ -169,8 +169,7 @@ def histogram(a, bins=10, range=None, normed=False, weights=None, new=False):
         if (range is not None):
             mn, mx = range
             if (mn > mx):
-                raise AttributeError, \
-                    'max must be larger than min in range parameter.'
+                raise AttributeError('max must be larger than min in range parameter.')
 
         if not iterable(bins):
             if range is None:
@@ -186,23 +185,23 @@ def histogram(a, bins=10, range=None, normed=False, weights=None, new=False):
             bins = linspace(mn, mx, bins, endpoint=False)
         else:
             if normed:
-                raise ValueError, 'Use new=True to pass bin edges explicitly.'
+                raise ValueError('Use new=True to pass bin edges explicitly.')
             warnings.warn("""
             The semantic for bins will change in version 1.2.
             The bins will become the bin edges, instead of the left bin edges.
             """, FutureWarning)
             bins = asarray(bins)
             if (np.diff(bins) < 0).any():
-                raise AttributeError, 'bins must increase monotonically.'
+                raise AttributeError('bins must increase monotonically.')
 
 
         if weights is not None:
-            raise ValueError, 'weights are only available with new=True.'
+            raise ValueError('weights are only available with new=True.')
 
         # best block size probably depends on processor cache size
         block = 65536
         n = sort(a[:block]).searchsorted(bins)
-        for i in xrange(block, a.size, block):
+        for i in range(block, a.size, block):
             n += sort(a[i:i+block]).searchsorted(bins)
         n = concatenate([n, [len(a)]])
         n = n[1:]-n[:-1]
@@ -221,15 +220,14 @@ def histogram(a, bins=10, range=None, normed=False, weights=None, new=False):
         if weights is not None:
             weights = asarray(weights)
             if np.any(weights.shape != a.shape):
-                raise ValueError, 'weights should have the same shape as a.'
+                raise ValueError('weights should have the same shape as a.')
             weights = weights.ravel()
         a =  a.ravel()
 
         if (range is not None):
             mn, mx = range
             if (mn > mx):
-                raise AttributeError, \
-                    'max must be larger than min in range parameter.'
+                raise AttributeError('max must be larger than min in range parameter.')
 
         if not iterable(bins):
             if range is None:
@@ -242,7 +240,7 @@ def histogram(a, bins=10, range=None, normed=False, weights=None, new=False):
         else:
             bins = asarray(bins)
             if (np.diff(bins) < 0).any():
-                raise AttributeError, 'bins must increase monotonically.'
+                raise AttributeError('bins must increase monotonically.')
 
         # Histogram is an integer or a float array depending on the weights.
         if weights is None:
@@ -341,8 +339,8 @@ def histogramdd(sample, bins=10, range=None, normed=False, weights=None):
     try:
         M = len(bins)
         if M != D:
-            raise AttributeError, 'The dimension of bins must be equal ' \
-                                  'to the dimension of the sample x.'
+            raise AttributeError('The dimension of bins must be equal ' \
+                                  'to the dimension of the sample x.')
     except TypeError:
         bins = D*[bins]
 
@@ -497,18 +495,18 @@ def average(a, axis=None, weights=None, returned=False):
         # Sanity checks
         if a.shape != wgt.shape :
             if axis is None :
-                raise TypeError, "Axis must be specified when shapes of a and weights differ."
+                raise TypeError("Axis must be specified when shapes of a and weights differ.")
             if wgt.ndim != 1 :
-                raise TypeError, "1D weights expected when shapes of a and weights differ."
+                raise TypeError("1D weights expected when shapes of a and weights differ.")
             if wgt.shape[0] != a.shape[axis] :
-                raise ValueError, "Length of weights not compatible with specified axis."
+                raise ValueError("Length of weights not compatible with specified axis.")
 
             # setup wgt to broadcast along axis
             wgt = np.array(wgt, copy=0, ndmin=a.ndim).swapaxes(-1,axis)
 
         scl = wgt.sum(axis=axis)
         if (scl == 0.0).any():
-            raise ZeroDivisionError, "Weights sum to zero, can't be normalized"
+            raise ZeroDivisionError("Weights sum to zero, can't be normalized")
 
         avg = np.multiply(a,wgt).sum(axis)/scl
 
@@ -524,7 +522,7 @@ def asarray_chkfinite(a):
     a = asarray(a)
     if (a.dtype.char in typecodes['AllFloat']) \
            and (_nx.isnan(a).any() or _nx.isinf(a).any()):
-        raise ValueError, "array must not contain infs or NaNs"
+        raise ValueError("array must not contain infs or NaNs")
     return a
 
 def piecewise(x, condlist, funclist, *args, **kw):
@@ -573,7 +571,7 @@ def piecewise(x, condlist, funclist, *args, **kw):
         condlist.append(~totlist)
         n += 1
     if (n != n2):
-        raise ValueError, "function list and condition list must be the same"
+        raise ValueError("function list and condition list must be the same")
     y = empty(x.shape, x.dtype)
     for k in range(n):
         item = funclist[k]
@@ -613,7 +611,7 @@ def select(condlist, choicelist, default=0):
     n = len(condlist)
     n2 = len(choicelist)
     if n2 != n:
-        raise ValueError, "list of cases must be same length as list of conditions"
+        raise ValueError("list of cases must be same length as list of conditions")
     choicelist = [default] + choicelist
     S = 0
     pfac = 1
@@ -675,7 +673,7 @@ def gradient(f, *varargs):
     elif n == N:
         dx = list(varargs)
     else:
-        raise SyntaxError, "invalid number of arguments"
+        raise SyntaxError("invalid number of arguments")
 
     # use central differences on interior and first differences on endpoints
 
@@ -729,7 +727,7 @@ def diff(a, n=1, axis=-1):
     if n == 0:
         return a
     if n < 0:
-        raise ValueError, 'order must be non-negative but got ' + repr(n)
+        raise ValueError('order must be non-negative but got ' + repr(n))
     a = asanyarray(a)
     nd = len(a.shape)
     slice1 = [slice(None)]*nd
@@ -994,12 +992,12 @@ def disp(mesg, device=None, linefeed=True):
 import re
 def _get_nargs(obj):
     if not callable(obj):
-        raise TypeError, "Object is not callable."
+        raise TypeError("Object is not callable.")
     if hasattr(obj,'func_code'):
-        fcode = obj.func_code
+        fcode = obj.__code__
         nargs = fcode.co_argcount
-        if obj.func_defaults is not None:
-            ndefaults = len(obj.func_defaults)
+        if obj.__defaults__ is not None:
+            ndefaults = len(obj.__defaults__)
         else:
             ndefaults = 0
         if isinstance(obj, types.MethodType):
@@ -1009,7 +1007,7 @@ def _get_nargs(obj):
     try:
         obj()
         return 0, 0
-    except TypeError, msg:
+    except TypeError as msg:
         m = terr.match(str(msg))
         if m:
             nargs = int(m.group('exargs'))
@@ -1017,7 +1015,7 @@ def _get_nargs(obj):
             if isinstance(obj, types.MethodType):
                 nargs -= 1
             return nargs, ndefaults
-    raise ValueError, 'failed to determine the number of arguments for %s' % (obj)
+    raise ValueError('failed to determine the number of arguments for %s' % (obj))
 
 
 class vectorize(object):
@@ -1072,15 +1070,15 @@ class vectorize(object):
             self.__doc__ = pyfunc.__doc__
         else:
             self.__doc__ = doc
-        if isinstance(otypes, types.StringType):
+        if isinstance(otypes, bytes):
             self.otypes = otypes
             for char in self.otypes:
                 if char not in typecodes['All']:
-                    raise ValueError, "invalid otype specified"
+                    raise ValueError("invalid otype specified")
         elif iterable(otypes):
             self.otypes = ''.join([_nx.dtype(x).char for x in otypes])
         else:
-            raise ValueError, "output types must be a string of typecode characters or a list of data-types"
+            raise ValueError("output types must be a string of typecode characters or a list of data-types")
         self.lastcallargs = 0
 
     def __call__(self, *args):
@@ -1089,8 +1087,8 @@ class vectorize(object):
         nargs = len(args)
         if self.nin:
             if (nargs > self.nin) or (nargs < self.nin_wo_defaults):
-                raise ValueError, "mismatch between python function inputs"\
-                      " and received arguments"
+                raise ValueError("mismatch between python function inputs"\
+                      " and received arguments")
 
         # we need a new ufunc if this is being called with more arguments.
         if (self.lastcallargs != nargs):
@@ -1103,7 +1101,7 @@ class vectorize(object):
             for arg in args:
                 newargs.append(asarray(arg).flat[0])
             theout = self.thefunc(*newargs)
-            if isinstance(theout, types.TupleType):
+            if isinstance(theout, tuple):
                 self.nout = len(theout)
             else:
                 self.nout = 1
@@ -1374,7 +1372,7 @@ def _chbevl(x, vals):
     b0 = vals[0]
     b1 = 0.0
 
-    for i in xrange(1,len(vals)):
+    for i in range(1,len(vals)):
         b2 = b1
         b1 = b0
         b0 = x*b1 - b2 + vals[i]
@@ -1553,7 +1551,7 @@ def add_newdoc(place, obj, doc):
        """
     try:
         new = {}
-        exec 'from %s import %s' % (place, obj) in new
+        exec('from %s import %s' % (place, obj), new)
         if isinstance(doc, str):
             add_docstring(new[obj], doc.strip())
         elif isinstance(doc, tuple):
@@ -1648,10 +1646,10 @@ def delete(arr, obj, axis=None):
     slobj = [slice(None)]*ndim
     N = arr.shape[axis]
     newshape = list(arr.shape)
-    if isinstance(obj, (int, long, integer)):
+    if isinstance(obj, (int, integer)):
         if (obj < 0): obj += N
         if (obj < 0 or obj >=N):
-            raise ValueError, "invalid entry"
+            raise ValueError("invalid entry")
         newshape[axis]-=1;
         new = empty(newshape, arr.dtype, arr.flags.fnc)
         slobj[axis] = slice(None, obj)
@@ -1662,7 +1660,7 @@ def delete(arr, obj, axis=None):
         new[slobj] = arr[slobj2]
     elif isinstance(obj, slice):
         start, stop, step = obj.indices(N)
-        numtodel = len(xrange(start, stop, step))
+        numtodel = len(range(start, stop, step))
         if numtodel <= 0:
             if wrap:
                 return wrap(new)
@@ -1752,11 +1750,11 @@ def insert(arr, obj, values, axis=None):
     slobj = [slice(None)]*ndim
     N = arr.shape[axis]
     newshape = list(arr.shape)
-    if isinstance(obj, (int, long, integer)):
+    if isinstance(obj, (int, integer)):
         if (obj < 0): obj += N
         if obj < 0 or obj > N:
-            raise ValueError, "index (%d) out of range (0<=index<=%d) "\
-                  "in dimension %d" % (obj, N, axis)
+            raise ValueError("index (%d) out of range (0<=index<=%d) "\
+                  "in dimension %d" % (obj, N, axis))
         newshape[axis] += 1;
         new = empty(newshape, arr.dtype, arr.flags.fnc)
         slobj[axis] = slice(None, obj)

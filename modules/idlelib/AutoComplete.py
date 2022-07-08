@@ -7,10 +7,10 @@ import os
 import sys
 import string
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
-import AutoCompleteWindow
-from HyperParser import HyperParser
+from . import AutoCompleteWindow
+from .HyperParser import HyperParser
 
 import __main__
 
@@ -21,7 +21,7 @@ FILENAME_CHARS = string.ascii_letters + string.digits + os.curdir + "._~#$:-"
 ID_CHARS = string.ascii_letters + string.digits + "_"
 
 # These constants represent the two different types of completions
-COMPLETE_ATTRIBUTES, COMPLETE_FILES = range(1, 2+1)
+COMPLETE_ATTRIBUTES, COMPLETE_FILES = list(range(1, 2+1))
 
 SEPS = os.sep
 if os.altsep:  # e.g. '/' on Windows...
@@ -193,7 +193,7 @@ class AutoComplete:
                         smalll = eval("__all__", namespace)
                         smalll.sort()
                     else:
-                        smalll = filter(lambda s: s[:1] != '_', bigl)
+                        smalll = [s for s in bigl if s[:1] != '_']
                 else:
                     try:
                         entity = self.get_entity(what)
@@ -203,7 +203,7 @@ class AutoComplete:
                             smalll = entity.__all__
                             smalll.sort()
                         else:
-                            smalll = filter(lambda s: s[:1] != '_', bigl)
+                            smalll = [s for s in bigl if s[:1] != '_']
                     except:
                         return [], []
 
@@ -214,7 +214,7 @@ class AutoComplete:
                     expandedpath = os.path.expanduser(what)
                     bigl = os.listdir(expandedpath)
                     bigl.sort()
-                    smalll = filter(lambda s: s[:1] != '.', bigl)
+                    smalll = [s for s in bigl if s[:1] != '.']
                 except OSError:
                     return [], []
 

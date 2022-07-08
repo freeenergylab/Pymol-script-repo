@@ -1,7 +1,7 @@
 '''
 See more here: http://www.pymolwiki.org/index.php/Modevectors
 '''
-from __future__ import print_function
+
 from pymol.cgo import *    # get constants
 from math import *
 from pymol import cmd

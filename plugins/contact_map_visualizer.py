@@ -38,8 +38,8 @@ Author: Thomas Holder (Version 2.0)
 # PERFORMANCE OF THIS SOFTWARE.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 
 import os
 from pymol import cmd, CmdException
@@ -58,8 +58,8 @@ def __init__(self):
 def CMVDialog(self):
     import sys
     if sys.version_info[0] < 3:
-        import tkFileDialog
-        import tkMessageBox
+        import tkinter.filedialog
+        import tkinter.messagebox
     else:
         import tkinter.filedialog as tkFileDialog
         import tkinter.messagebox as tkMessageBox
@@ -67,27 +67,27 @@ def CMVDialog(self):
     try:
         import pygame as pg
     except ImportError:
-        tkMessageBox.showerror('Error', 'This plugin requires the "pygame" module')
+        tkinter.messagebox.showerror('Error', 'This plugin requires the "pygame" module')
         return
 
     myFormats = [('Portable Network Graphics', '*.png'), ('JPEG / JFIF', '*.jpg')]
     try:
-        image_file = tkFileDialog.askopenfilename(parent=self.root,
+        image_file = tkinter.filedialog.askopenfilename(parent=self.root,
                                                   filetypes=myFormats, title='Choose the contact map image file')
         if not image_file:
             raise
     except:
-        tkMessageBox.showerror('Error', 'No Contact Map!')
+        tkinter.messagebox.showerror('Error', 'No Contact Map!')
         return
 
     myFormatsPDB = [('Protein Data Bank', '*.pdb'), ('MDL mol', '*.mol'), ('PyMol Session File', '*.pse')]
     try:
-        pdb_file = tkFileDialog.askopenfilename(parent=self.root,
+        pdb_file = tkinter.filedialog.askopenfilename(parent=self.root,
                                                 filetypes=myFormatsPDB, title='Choose the corresponding PDB file')
         if not pdb_file:
             raise
     except:
-        tkMessageBox.showerror('Error', 'No PDB file!')
+        tkinter.messagebox.showerror('Error', 'No PDB file!')
         return
 
     name = cmd.get_unused_name('protein')
@@ -325,7 +325,7 @@ def xpm_convert(infile, outfile):
     xpm = re.sub(r'/\*.*?\*/', '', xpm)  # strip comments
     xpm = re.sub(r'  +', ' ', xpm)      # strip multi-spaces
     xpm = re.sub(r'\n\s+', '\n', xpm)   # strip empty lines
-    xpm = u'/* XPM */' + xpm
+    xpm = '/* XPM */' + xpm
 
     image = Image.open(StringIO(xpm))
     image.save(outfile)

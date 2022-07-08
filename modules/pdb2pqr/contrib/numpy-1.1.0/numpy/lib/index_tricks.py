@@ -11,7 +11,7 @@ from numpy.core.numeric import asarray, ScalarType, array, dtype
 from numpy.core.numerictypes import find_common_type
 import math
 
-import function_base
+from . import function_base
 import numpy.core.defmatrix as matrix
 makemat = matrix.matrix
 
@@ -73,7 +73,7 @@ def ix_(*args):
     for k in range(nd):
         new = _nx.asarray(args[k])
         if (new.ndim != 1):
-            raise ValueError, "Cross index must be 1 dimensional"
+            raise ValueError("Cross index must be 1 dimensional")
         if issubclass(new.dtype.type, _nx.bool_):
             new = new.nonzero()[0]
         baseshape[k] = len(new)
@@ -147,8 +147,8 @@ class nd_grid(object):
                     isinstance(key[k].stop, float):
                     typ = float
             if self.sparse:
-                nn = map(lambda x,t: _nx.arange(x, dtype=t), size, \
-                                     (typ,)*len(size))
+                nn = list(map(lambda x,t: _nx.arange(x, dtype=t), size, \
+                                     (typ,)*len(size)))
             else:
                 nn = _nx.indices(size, typ)
             for k in range(len(size)):
@@ -248,8 +248,8 @@ class AxisConcatenator(object):
                         newobj = newobj.swapaxes(-1,trans1d)
             elif isinstance(key[k],str):
                 if k != 0:
-                    raise ValueError, "special directives must be the"\
-                          "first entry."
+                    raise ValueError("special directives must be the"\
+                          "first entry.")
                 key0 = key[0]
                 if key0 in 'rc':
                     self.matrix = True
@@ -264,12 +264,12 @@ class AxisConcatenator(object):
                             trans1d = int(vec[2])
                         continue
                     except:
-                        raise ValueError, "unknown special directive"
+                        raise ValueError("unknown special directive")
                 try:
                     self.axis = int(key[k])
                     continue
                 except (ValueError, TypeError):
-                    raise ValueError, "unknown special directive"
+                    raise ValueError("unknown special directive")
             elif type(key[k]) in ScalarType:
                 newobj = array(key[k],ndmin=ndmin)
                 scalars.append(k)
@@ -285,7 +285,7 @@ class AxisConcatenator(object):
                         k2 = ndmin-tempobj.ndim
                         if (trans1d < 0):
                             trans1d += k2 + 1
-                        defaxes = range(ndmin)
+                        defaxes = list(range(ndmin))
                         k1 = trans1d
                         axes = defaxes[:k1] + defaxes[k2:] + \
                                defaxes[k1:k2]
@@ -356,8 +356,8 @@ class ndenumerate(object):
     def __init__(self, arr):
         self.iter = asarray(arr).flat
 
-    def next(self):
-        return self.iter.coords, self.iter.next()
+    def __next__(self):
+        return self.iter.coords, next(self.iter)
 
     def __iter__(self):
         return self
@@ -404,7 +404,7 @@ class ndindex(object):
     def ndincr(self):
         self._incrementone(self.nd-1)
 
-    def next(self):
+    def __next__(self):
         if (self.index >= self.total):
             raise StopIteration
         val = tuple(self.ind)
@@ -439,7 +439,7 @@ class IndexExpression(object):
     in Python code and returns a tuple of slice objects that can be
     used in the construction of complex index expressions.
     """
-    maxint = sys.maxint
+    maxint = sys.maxsize
     def __init__(self, maketuple):
         self.maketuple = maketuple
 

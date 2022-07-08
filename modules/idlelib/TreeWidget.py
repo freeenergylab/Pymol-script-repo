@@ -15,15 +15,15 @@
 # - optimize tree redraw after expand of subnode
 
 import os
-from Tkinter import Tk, Label, Entry, Frame, Canvas, Scrollbar, PhotoImage
-from Tkconstants import ALL, END
+from tkinter import Tk, Label, Entry, Frame, Canvas, Scrollbar, PhotoImage
+from tkinter.constants import ALL, END
 
-import ZoomHeight
-from configHandler import idleConf
+from . import ZoomHeight
+from .configHandler import idleConf
 
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import Label, Entry, Frame, Scrollbar
+    from tkinter.ttk import Label, Entry, Frame, Scrollbar
 
 ICONDIR = "Icons"
 
@@ -415,7 +415,7 @@ class FileTreeItem(TreeItem):
 
 class ScrolledCanvas:
     def __init__(self, master, **opts):
-        if not opts.has_key('yscrollincrement'):
+        if 'yscrollincrement' not in opts:
             opts['yscrollincrement'] = 17
         self.master = master
         self.frame = Frame(master)
@@ -460,8 +460,8 @@ class ScrolledCanvas:
 # XXX Can't run these tests
 
 def test():
-    from Tkinter import Toplevel
-    import PyShell
+    from tkinter import Toplevel
+    from . import PyShell
     root = Toplevel(PyShell.root)
     root.configure(bd=0, bg="yellow")
     root.focus_set()

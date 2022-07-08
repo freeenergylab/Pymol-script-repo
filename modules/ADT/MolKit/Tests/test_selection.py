@@ -57,8 +57,8 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test regexp used in Mols.get(regexp)
         """
         result = self.molecules.get("*g*")
-        self.assertEquals(result, self.molecules1+self.molecules3)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\*g*)")
+        self.assertEqual(result, self.molecules1+self.molecules3)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\*g*)")
 
 
     #   relative: 
@@ -67,8 +67,8 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test relative index used in Mols.get(relative_index)
         """
         result = self.molecules.get("#1")
-        self.assertEquals(result, self.molecules2)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1)")
+        self.assertEqual(result, self.molecules2)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1)")
 
 
     #   index: 
@@ -77,8 +77,8 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test index used in Mols.get(index)
         """
         result = self.molecules.get("1")
-        self.assertEquals(result, self.molecules2)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1)")
+        self.assertEqual(result, self.molecules2)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1)")
 
 
     #   NamedChainSet:  n/a
@@ -87,7 +87,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test NamedResSet used in Mols.get(NamedChainSet)
         """
         result = self.molecules.get("proteic")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #   NamedResSet:  n/a
     def test_MoleculeSet_NamedResSet(self):
@@ -95,7 +95,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test NamedResSet used in Mols.get(NamedResSet)
         """
         result = self.molecules.get("acidic")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
 
     #   NamedAtomSet: n/a
@@ -104,7 +104,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test NamedAtomSet used in Mols.get(NamedAtomSet)
         """
         result = self.molecules.get("backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
 
     #compound
@@ -117,23 +117,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp used in Mols.get(regexp-regexp)
         """
         result = self.molecules.get("*1-1*")
-        self.assertEquals(result, self.molecules)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\*1-1*)")
+        self.assertEqual(result, self.molecules)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\*1-1*)")
 
     def test_MoleculeSet_range_regexp_regexp_w_spaces(self):
         """
          test range regexp-regexp_w_spaces used in Mols.get(regexp-regexp)
         """
         result = self.molecules.get("*1 - 1*")
-        self.assertEquals(result, self.molecules)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\*1 - 1*)")
+        self.assertEqual(result, self.molecules)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\*1 - 1*)")
 
     def test_MoleculeSet_range_regexp_regexp_fail_second(self):
         """
          test range regexp-regexp_fail_second used in Mols.get(regexp-regexp)
         """
         result = self.molecules.get("*1-6*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  regexp
     def test_MoleculeSet_range_regexp_fail_first_regexp(self):
@@ -141,7 +141,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-regexp used in Mols.get(regexp-regexp)
         """
         result = self.molecules.get("*6-1*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  regexp(fail)
     def test_MoleculeSet_range_regexp_regexp_fail_both(self):
@@ -149,7 +149,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp_fail_both used in Mols.get(regexp-regexp)
         """
         result = self.molecules.get("*6-8*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: REGEXP-RELATIVE
     #       regexp -  relative
@@ -159,23 +159,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-relative used in Mols.get(regexp-relative)
         """
         result = self.molecules.get("hs*-#2")
-        self.assertEquals(result, self.molecules)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\hs*-#2)")
+        self.assertEqual(result, self.molecules)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\hs*-#2)")
 
     def test_MoleculeSet_range_regexp_relative_w_spaces(self):
         """
          test range regexp-relative_w_spaces used in Mols.get(regexp-relative)
         """
         result = self.molecules.get("hs* - #2")
-        self.assertEquals(result, self.molecules)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\hs* - #2)")
+        self.assertEqual(result, self.molecules)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\hs* - #2)")
 
     def test_MoleculeSet_range_regexp_relative_fail_second(self):
         """
          test range regexp-relative_fail_second used in Mols.get(regexp-relative)
         """
         result = self.molecules.get("*1-#1*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  relative
     def test_MoleculeSet_range_regexp_fail_first_relative(self):
@@ -183,7 +183,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-relative used in Mols.get(regexp-relative)
         """
         result = self.molecules.get("*6-#1")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  relative(fail)
     def test_MoleculeSet_range_regexp_relative_fail_both(self):
@@ -191,7 +191,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-relative_fail_both used in Mols.get(regexp-relative)
         """
         result = self.molecules.get("*6-#8")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: REGEXP-INDEX
     #       regexp -  index
@@ -201,23 +201,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-index used in Mols.get(regexp-index)
         """
         result = self.molecules.get("hs*-2")
-        self.assertEquals(result, self.molecules)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\hs*-2)")
+        self.assertEqual(result, self.molecules)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\hs*-2)")
 
     def test_MoleculeSet_range_regexp_index_w_spaces(self):
         """
          test range regexp-index_w_spaces used in Mols.get(regexp-index)
         """
         result = self.molecules.get("hs* - 2")
-        self.assertEquals(result, self.molecules)
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\hs* - 2)")
+        self.assertEqual(result, self.molecules)
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\hs* - 2)")
 
     def test_MoleculeSet_range_regexp_index_fail_second(self):
         """
          test range regexp-index_fail_second used in Mols.get(regexp-index)
         """
         result = self.molecules.get("*1-3")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  index
     def test_MoleculeSet_range_regexp_fail_first_index(self):
@@ -225,7 +225,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-index used in Mols.get(regexp-index)
         """
         result = self.molecules.get("*6-1")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  index(fail)
     def test_MoleculeSet_range_regexp_index_fail_both(self):
@@ -233,7 +233,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-index_fail_both used in Mols.get(regexp-index)
         """
         result = self.molecules.get("*6-8")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: REGEXP-NamedChainSet
     #       regexp -  NamedChainSet
@@ -243,21 +243,21 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedChainSet used in Mols.get(regexp-NamedChainSet)
         """
         result = self.molecules.get("hs*-dna")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_regexp_NamedChainSet_w_spaces(self):
         """
          test range regexp-NamedChainSet_w_spaces used in Mols.get(regexp-NamedChainSet)
         """
         result = self.molecules.get("hs* - dna")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_regexp_NamedChainSet_fail_second(self):
         """
          test range regexp-NamedChainSet_fail_second used in Mols.get(regexp-NamedChainSet)
         """
         result = self.molecules.get("*1-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  NamedChainSet
     def test_MoleculeSet_range_regexp_fail_first_NamedChainSet(self):
@@ -265,7 +265,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedChainSet used in Mols.get(regexp-NamedChainSet)
         """
         result = self.molecules.get("*6-dna")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  NamedChainSet(fail)
     def test_MoleculeSet_range_regexp_NamedChainSet_fail_both(self):
@@ -273,7 +273,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedChainSet_fail_both used in Mols.get(regexp-NamedChainSet)
         """
         result = self.molecules.get("*6-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
 
     # RANGE: REGEXP-NamedResSet
@@ -284,21 +284,21 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet used in Mols.get(regexp-NamedResSet)
         """
         result = self.molecules.get("hs*-buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_regexp_NamedResSet_w_spaces(self):
         """
          test range regexp-NamedResSet_w_spaces used in Mols.get(regexp-NamedResSet)
         """
         result = self.molecules.get("hs* - buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_regexp_NamedResSet_fail_second(self):
         """
          test range regexp-NamedResSet_fail_second used in Mols.get(regexp-NamedResSet)
         """
         result = self.molecules.get("*1-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  NamedResSet
     def test_MoleculeSet_range_regexp_fail_first_NamedResSet(self):
@@ -306,7 +306,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedResSet used in Mols.get(regexp-NamedResSet)
         """
         result = self.molecules.get("*6-buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  NamedResSet(fail)
     def test_MoleculeSet_range_regexp_NamedResSet_fail_both(self):
@@ -314,7 +314,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet_fail_both used in Mols.get(regexp-NamedResSet)
         """
         result = self.molecules.get("*6-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
 
     # RANGE: REGEXP-NamedAtomSet
@@ -325,21 +325,21 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet used in Mols.get(regexp-NamedAtomSet)
         """
         result = self.molecules.get("hs*-backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_regexp_NamedAtomSet_w_spaces(self):
         """
          test range regexp-NamedAtomSet_w_spaces used in Mols.get(regexp-NamedAtomSet)
         """
         result = self.molecules.get("hs* - backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_regexp_NamedAtomSet_fail_second(self):
         """
          test range regexp-NamedAtomSet_fail_second used in Mols.get(regexp-NamedAtomSet)
         """
         result = self.molecules.get("*1-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  NamedAtomSet
     def test_MoleculeSet_range_regexp_fail_first_NamedAtomSet(self):
@@ -347,7 +347,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedAtomSet used in Mols.get(regexp-NamedAtomSet)
         """
         result = self.molecules.get("*6-backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       regexp(fail) -  NamedAtomSet(fail)
     def test_MoleculeSet_range_regexp_NamedAtomSet_fail_both(self):
@@ -355,7 +355,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet_fail_both used in Mols.get(regexp-NamedAtomSet)
         """
         result = self.molecules.get("*6-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #
     # RANGE: RELATIVE-REGEXP
@@ -366,23 +366,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-regexp used in Mols.get(relative-regexp)
         """
         result = self.molecules.get("#1-1*")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1-1*)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1-1*)")
 
     def test_MoleculeSet_range_relative_regexp_w_spaces(self):
         """
          test range relative-regexp_w_spaces used in Mols.get(relative-regexp)
         """
         result = self.molecules.get("#1 - 1*")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1 - 1*)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1 - 1*)")
 
     def test_MoleculeSet_range_relative_regexp_fail_second(self):
         """
          test range relative-regexp_fail_second used in Mols.get(relative-regexp)
         """
         result = self.molecules.get("#1-6*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  regexp
     def test_MoleculeSet_range_relative_fail_first_regexp(self):
@@ -390,7 +390,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-regexp used in Mols.get(relative-regexp)
         """
         result = self.molecules.get("#6-1*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  regexp(fail)
     def test_MoleculeSet_range_relative_regexp_fail_both(self):
@@ -398,7 +398,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-regexp_fail_both used in Mols.get(relative-regexp)
         """
         result = self.molecules.get("#6-8*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: RELATIVE-RELATIVE
     #       relative -  relative
@@ -408,23 +408,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-relative used in Mols.get(relative-relative)
         """
         result = self.molecules.get("#1-#2")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1-#2)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1-#2)")
 
     def test_MoleculeSet_range_relative_relative_w_spaces(self):
         """
          test range relative-relative_w_spaces used in Mols.get(relative-relative)
         """
         result = self.molecules.get("#1 - #2")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1 - #2)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1 - #2)")
 
     def test_MoleculeSet_range_relative_relative_fail_second(self):
         """
          test range relative-relative_fail_second used in Mols.get(relative-relative)
         """
         result = self.molecules.get("#1-#5")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  relative
     def test_MoleculeSet_range_relative_fail_first_relative(self):
@@ -432,7 +432,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-relative used in Mols.get(relative-relative)
         """
         result = self.molecules.get("#6-#1")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  relative(fail)
     def test_MoleculeSet_range_relative_relative_fail_both(self):
@@ -440,7 +440,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-relative_fail_both used in Mols.get(relative-relative)
         """
         result = self.molecules.get("#6-#8")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: RELATIVE-INDEX
     #       relative -  index
@@ -450,23 +450,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-index used in Mols.get(relative-index)
         """
         result = self.molecules.get("#1-2")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1-2)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1-2)")
 
     def test_MoleculeSet_range_relative_index_w_spaces(self):
         """
          test range relative-index_w_spaces used in Mols.get(relative-index)
         """
         result = self.molecules.get("#1 - 2")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1 - 2)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\#1 - 2)")
 
     def test_MoleculeSet_range_relative_index_fail_second(self):
         """
          test range relative-index_fail_second used in Mols.get(relative-index)
         """
         result = self.molecules.get("#1-3")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  index
     def test_MoleculeSet_range_relative_fail_first_index(self):
@@ -474,7 +474,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-index used in Mols.get(relative-index)
         """
         result = self.molecules.get("#6-1")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  index(fail)
     def test_MoleculeSet_range_relative_index_fail_both(self):
@@ -482,7 +482,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative_index-fail_both used in Mols.get(relative-index)
         """
         result = self.molecules.get("#6-8")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: RELATIVE-NamedResSet
     #       relative -  NamedResSet
@@ -492,21 +492,21 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet used in Mols.get(relative-NamedResSet)
         """
         result = self.molecules.get("#1-buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_relative_NamedResSet_w_spaces(self):
         """
          test range relative-NamedResSet_w_spaces used in Mols.get(relative-NamedResSet)
         """
         result = self.molecules.get("#1 - buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_relative_NamedResSet_fail_second(self):
         """
          test range relative-NamedResSet_fail_second used in Mols.get(relative-NamedResSet)
         """
         result = self.molecules.get("#1-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  NamedResSet
     def test_MoleculeSet_range_relative_fail_first_NamedResSet(self):
@@ -514,7 +514,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative_fail-first_NamedResSet used in Mols.get(relative-NamedResSet)
         """
         result = self.molecules.get("#6-buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  NamedResSet(fail)
     def test_MoleculeSet_range_relative_NamedResSet_fail_both(self):
@@ -522,7 +522,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet_fail_both used in Mols.get(relative-NamedResSet)
         """
         result = self.molecules.get("#6-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
 
     # RANGE: RELATIVE-NamedAtomSet
@@ -533,21 +533,21 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet used in Mols.get(relative-NamedAtomSet)
         """
         result = self.molecules.get("#1-backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_relative_NamedAtomSet_w_spaces(self):
         """
          test range relative-NamedAtomSet_w_spaces used in Mols.get(relative-NamedAtomSet)
         """
         result = self.molecules.get("#1 - backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_relative_NamedAtomSet_fail_second(self):
         """
          test range relative-NamedAtomSet_fail_second used in Mols.get(relative-NamedAtomSet)
         """
         result = self.molecules.get("#1-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  NamedAtomSet
     def test_MoleculeSet_range_relative_fail_first_NamedAtomSet(self):
@@ -555,7 +555,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-NamedAtomSet used in Mols.get(relative-NamedAtomSet)
         """
         result = self.molecules.get("#6-backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       relative(fail) -  NamedAtomSet(fail)
     def test_MoleculeSet_range_relative_NamedAtomSet_fail_both(self):
@@ -563,7 +563,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet_fail_both used in Mols.get(relative-NamedAtomSet)
         """
         result = self.molecules.get("#6-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #
     # RANGE: INDEX-REGEXP
@@ -574,23 +574,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-regexp used in Mols.get(index-regexp)
         """
         result = self.molecules.get("1-1*")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1-1*)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1-1*)")
 
     def test_MoleculeSet_range_index_regexp_w_spaces(self):
         """
          test range index-regexp_w_spaces used in Mols.get(index-regexp)
         """
         result = self.molecules.get("1 - 1*")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1 - 1*)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1 - 1*)")
 
     def test_MoleculeSet_range_index_regexp_fail_second(self):
         """
          test range index-regexp_fail_second used in Mols.get(index-regexp)
         """
         result = self.molecules.get("1-6*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  regexp
     def test_MoleculeSet_range_index_fail_first_regexp(self):
@@ -598,7 +598,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-regexp used in Mols.get(index-regexp)
         """
         result = self.molecules.get("6-1*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  regexp(fail)
     def test_MoleculeSet_range_index_regexp_fail_both(self):
@@ -606,7 +606,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-regexp_fail_both used in Mols.get(index-regexp)
         """
         result = self.molecules.get("6-8*")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: INDEX-RELATIVE
     #       index -  relative
@@ -616,23 +616,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-relative used in Mols.get(index-relative)
         """
         result = self.molecules.get("1-#2")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1-#2)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1-#2)")
 
     def test_MoleculeSet_range_index_relative_w_spaces(self):
         """
          test range index-relative_w_spaces used in Mols.get(index-relative)
         """
         result = self.molecules.get("1 - #2")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1 - #2)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1 - #2)")
 
     def test_MoleculeSet_range_index_relative_fail_second(self):
         """
          test range index-relative_fail_second used in Mols.get(index-relative)
         """
         result = self.molecules.get("1-#5")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  relative
     def test_MoleculeSet_range_index_fail_first_relative(self):
@@ -640,7 +640,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-relative used in Mols.get(index-relative)
         """
         result = self.molecules.get("6-#1")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  relative(fail)
     def test_MoleculeSet_range_index_relative_fail_both(self):
@@ -648,7 +648,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-relative_fail_both used in Mols.get(index-relative)
         """
         result = self.molecules.get("6-#8")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: INDEX-INDEX
     #       index -  index
@@ -658,23 +658,23 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-index used in Mols.get(index-index)
         """
         result = self.molecules.get("1-2")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1-2)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1-2)")
 
     def test_MoleculeSet_range_index_index_w_spaces(self):
         """
          test range index-index_w_spaces used in Mols.get(index-index)
         """
         result = self.molecules.get("1 - 2")
-        self.assertEquals(result, self.molecules[1:])
-        self.assertEquals(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1 - 2)")
+        self.assertEqual(result, self.molecules[1:])
+        self.assertEqual(result.stringRepr,"(hsg1/+/2plv/+/1gyc\\s\\1 - 2)")
 
     def test_MoleculeSet_range_index_index_fail_second(self):
         """
          test range index-index_fail_second used in Mols.get(index-index)
         """
         result = self.molecules.get("1-3")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  index
     def test_MoleculeSet_range_index_fail_first_index(self):
@@ -682,7 +682,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-index used in Mols.get(index-index)
         """
         result = self.molecules.get("6-1")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  index(fail)
     def test_MoleculeSet_range_index_index_fail_both(self):
@@ -690,7 +690,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index_index-fail_both used in Mols.get(index-index)
         """
         result = self.molecules.get("6-8")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     # RANGE: INDEX-NamedResSet
     #       index -  NamedResSet
@@ -700,21 +700,21 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet used in Mols.get(index-NamedResSet)
         """
         result = self.molecules.get("1-buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_index_NamedResSet_w_spaces(self):
         """
          test range index-NamedResSet_w_spaces used in Mols.get(index-NamedResSet)
         """
         result = self.molecules.get("1 - buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_index_NamedResSet_fail_second(self):
         """
          test range index-NamedResSet_fail_second used in Mols.get(index-NamedResSet)
         """
         result = self.molecules.get("1-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  NamedResSet
     def test_MoleculeSet_range_index_fail_first_NamedResSet(self):
@@ -722,7 +722,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index_fail-first_NamedResSet used in Mols.get(index-NamedResSet)
         """
         result = self.molecules.get("6-buried")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  NamedResSet(fail)
     def test_MoleculeSet_range_index_NamedResSet_fail_both(self):
@@ -730,7 +730,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet_fail_both used in Mols.get(index-NamedResSet)
         """
         result = self.molecules.get("6-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
 
     # RANGE: INDEX-NamedAtomSet
@@ -741,21 +741,21 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet used in Mols.get(index-NamedAtomSet)
         """
         result = self.molecules.get("1-backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_index_NamedAtomSet_w_spaces(self):
         """
          test range index-NamedAtomSet_w_spaces used in Mols.get(index-NamedAtomSet)
         """
         result = self.molecules.get("1 - backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     def test_MoleculeSet_range_index_NamedAtomSet_fail_second(self):
         """
          test range index-NamedAtomSet_fail_second used in Mols.get(index-NamedAtomSet)
         """
         result = self.molecules.get("1-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  NamedAtomSet
     def test_MoleculeSet_range_index_fail_first_NamedAtomSet(self):
@@ -763,7 +763,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-NamedAtomSet used in Mols.get(index-NamedAtomSet)
         """
         result = self.molecules.get("6-backbone")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
     #       index(fail) -  NamedAtomSet(fail)
     def test_MoleculeSet_range_index_NamedAtomSet_fail_both(self):
@@ -771,7 +771,7 @@ class MoleculeSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet_fail_both used in Mols.get(index-NamedAtomSet)
         """
         result = self.molecules.get("6-mistake")
-        self.assertEquals(result, MoleculeSet())
+        self.assertEqual(result, MoleculeSet())
 
 
 
@@ -790,8 +790,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test regexp used in chains.get(regexp)
         """
         result = self.chains.get("A")
-        self.assertEquals(result, self.chains[0:1] + self.chains[8:9])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\A)")
+        self.assertEqual(result, self.chains[0:1] + self.chains[8:9])
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\A)")
 
     #       regexp decimal digits
     def test_ChainSet_regexp_decimal_digits(self):
@@ -799,8 +799,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-decimal_digits used in chains.get("\d")
         """
         result = self.chains.get("\d")
-        self.assertEquals(len(result), 4)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\\\d)")
+        self.assertEqual(len(result), 4)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\\\d)")
 
     #       regexp non decimal digits
     def test_ChainSet_regexp_non_decimal_digits(self):
@@ -808,8 +808,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-non_decimal_digits used in chains.get("\D")
         """
         result = self.chains.get("\D")
-        self.assertEquals(len(result), 6)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\\\D)")
+        self.assertEqual(len(result), 6)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\\\D)")
 
     #       regexp alphabetic range
     def test_ChainSet_regexp_alphabetic_range(self):
@@ -817,8 +817,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-alphabetic_range used in chains.get("[A-Z]")
         """
         result = self.chains.get("[A-Z]")
-        self.assertEquals(len(result), 5)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\[A-Z])")
+        self.assertEqual(len(result), 5)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\[A-Z])")
 
     #       regexp numeric range
     def test_ChainSet_regexp_numeric_range(self):
@@ -826,8 +826,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-numeric_range used in chains.get("[0-9]")
         """
         result = self.chains.get("[0-9]")
-        self.assertEquals(len(result), 4)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\[0-9])")
+        self.assertEqual(len(result), 4)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\[0-9])")
 
     #       regexp compound range
     def test_ChainSet_regexp_compound_range(self):
@@ -835,8 +835,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-compound_range used in chains.get("[0-9A-Z]")
         """
         result = self.chains.get("[0-9A-Z]")
-        self.assertEquals(len(result), 9)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\[0-9A-Z])")
+        self.assertEqual(len(result), 9)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\[0-9A-Z])")
 
     #       regexp or
     def test_ChainSet_regexp_or_regexp(self):
@@ -844,8 +844,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-or-regexp used in chains.get("W|B")
         """
         result = self.chains.get("W|A")
-        self.assertEquals(len(result), 3)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W|A)")
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W|A)")
 
 
     #       regexp set  NB "(?B2)" didnot work here
@@ -854,8 +854,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-set used in chains.get("[B2]")
         """
         result = self.chains.get("[B2]")
-        self.assertEquals(len(result), 2)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\[B2])")
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\[B2])")
 
 
     #       regexp with space
@@ -864,8 +864,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-with_space used in chains.get("\s")
         """
         result = self.chains.get("\s")
-        self.assertEquals(len(result), 1)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\\\s)")
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\\\s)")
 
 
     #   relative: 
@@ -874,8 +874,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test relative index used in chains.get(relative_index)
         """
         result = self.chains.get("#1")
-        self.assertEquals(result, self.molecules[0].chains[0:1]+ self.molecules[1].chains[0:1]+ self.molecules[2].chains[0:1])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1)")
+        self.assertEqual(result, self.molecules[0].chains[0:1]+ self.molecules[1].chains[0:1]+ self.molecules[2].chains[0:1])
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1)")
 
 
     #   index: 
@@ -887,8 +887,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
         result = self.chains.get("1")
         #@@
         #index matches a chain id which is matched first!!!
-        self.assertEquals(result, self.molecules[1].chains[0:1])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\1)")
+        self.assertEqual(result, self.molecules[1].chains[0:1])
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\1)")
 
     def test_ChainSet_index(self):
         """
@@ -897,8 +897,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
         result = self.chains.get("0")
         #@@
         #index matches a chain id which is matched first!!!
-        self.assertEquals(result, self.chains[0:1])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\0)")
+        self.assertEqual(result, self.chains[0:1])
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\0)")
 
 
     #   NamedChainSet:  
@@ -908,8 +908,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
         """
         result = self.chains.get("proteic")
         #result.id = ['A','B','1','2','3']
-        self.assertEquals(len(result), 5)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\proteic)")
+        self.assertEqual(len(result), 5)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\proteic)")
 
 
     def test_ChainSet_NamedChainSet_dna(self):
@@ -920,8 +920,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
         mol = Read("Data/bdna_HS.pdb")
         result = mol.chains.get("dna")
         #print result.id  #['A', 'B']
-        self.assertEquals(len(result), 2)
-        self.assertEquals(result.stringRepr,"(bdna_HS:\\s\\dna)")
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result.stringRepr,"(bdna_HS:\\s\\dna)")
 
 
     #   NamedAtomSet: n/a
@@ -930,7 +930,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test NamedAtomSet used in chains.get(NamedAtomSet)
         """
         result = self.chains.get("backbone")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
 
     #compound
@@ -944,7 +944,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
         """
         result = self.chains.get("W*-*Z")
         #self.assertEquals(result, self.chains)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W*-*Z)")
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W*-*Z)")
 
     def test_ChainSet_range_regexp_regexp_w_spaces(self):
         """
@@ -952,14 +952,14 @@ class ChainSetSelectionTests(SelectionBaseTest):
         """
         result = self.chains.get("W* - *Z")
         #self.assertEquals(result, self.chains)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W* - *Z)")
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W* - *Z)")
 
     def test_ChainSet_range_regexp_regexp_fail_second(self):
         """
          test range regexp-regexp_fail_second used in chains.get(regexp-regexp)
         """
         result = self.chains.get("W*-6*")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  regexp
     def test_ChainSet_range_regexp_fail_first_regexp(self):
@@ -967,7 +967,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-regexp used in chains.get(regexp-regexp)
         """
         result = self.chains.get("*6-*Z")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  regexp(fail)
     def test_ChainSet_range_regexp_regexp_fail_both(self):
@@ -975,7 +975,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp_fail_both used in chains.get(regexp-regexp)
         """
         result = self.chains.get("*6-*6")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: REGEXP-RELATIVE
     #       regexp -  relative
@@ -986,7 +986,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
         """
         result = self.chains.get("W*-#2")
         #self.assertEquals(result, self.chains)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W*-#2)")
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W*-#2)")
 
     def test_ChainSet_range_regexp_relative_w_spaces(self):
         """
@@ -994,14 +994,14 @@ class ChainSetSelectionTests(SelectionBaseTest):
         """
         result = self.chains.get("W* - #2")
         #self.assertEquals(result, self.chains)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W* - #2)")
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W* - #2)")
 
     def test_ChainSet_range_regexp_relative_fail_second(self):
         """
          test range regexp-relative_fail_second used in chains.get(regexp-relative)
         """
         result = self.chains.get("*1-#11")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  relative
     def test_ChainSet_range_regexp_fail_first_relative(self):
@@ -1009,7 +1009,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-relative used in chains.get(regexp-relative)
         """
         result = self.chains.get("*6-#1")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  relative(fail)
     def test_ChainSet_range_regexp_relative_fail_both(self):
@@ -1017,7 +1017,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-relative_fail_both used in chains.get(regexp-relative)
         """
         result = self.chains.get("*6-#8")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: REGEXP-INDEX
     #       regexp -  index
@@ -1029,7 +1029,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
         result = self.chains.get("W*-2")
         #self.chains.id= ['W', 'A', 'B', '1', '2', '4', '3', ' ', 'A', 'Z']
         #self.assertEquals(result, self.chains[:3])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W*-2)")
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W*-2)")
 
     def test_ChainSet_range_regexp_index_w_spaces(self):
         """
@@ -1038,14 +1038,14 @@ class ChainSetSelectionTests(SelectionBaseTest):
         result = self.chains.get("W* - 2")
         #self.chains.id= ['W', 'A', 'B', '1', '2', '4', '3', ' ', 'A', 'Z']
         #self.assertEquals(result, self.chains[:3])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W* - 2)")
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W* - 2)")
 
     def test_ChainSet_range_regexp_index_fail_second(self):
         """
          test range regexp-index_fail_second used in chains.get(regexp-index)
         """
         result = self.chains.get("W*-13")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  index
     def test_ChainSet_range_regexp_fail_first_index(self):
@@ -1053,7 +1053,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-index used in chains.get(regexp-index)
         """
         result = self.chains.get("T*-1")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  index(fail)
     def test_ChainSet_range_regexp_index_fail_both(self):
@@ -1061,7 +1061,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-index_fail_both used in chains.get(regexp-index)
         """
         result = self.chains.get("T*-18")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: REGEXP-NamedChainSet
     #       regexp -  NamedChainSet
@@ -1070,8 +1070,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet used in chains.get(regexp-NamedChainSet)
         """
         result = self.chains.get("W*-proteic")
-        self.assertEquals(len(result), 4)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W*-proteic)")
+        self.assertEqual(len(result), 4)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\W*-proteic)")
 
     # RANGE: REGEXP-NamedResSet
     #       regexp -  NamedResSet
@@ -1080,7 +1080,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet used in chains.get(regexp-NamedResSet)
         """
         result = self.chains.get("hs*-buried")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp -  NamedResSet(fail)
     def test_ChainSet_range_regexp_NamedResSet_fail_second(self):
@@ -1088,7 +1088,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet_fail_second used in chains.get(regexp-NamedResSet)
         """
         result = self.chains.get("*1-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  NamedResSet
     def test_ChainSet_range_regexp_fail_first_NamedResSet(self):
@@ -1096,7 +1096,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedResSet used in chains.get(regexp-NamedResSet)
         """
         result = self.chains.get("*6-buried")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  NamedResSet(fail)
     def test_ChainSet_range_regexp_NamedResSet_fail_both(self):
@@ -1104,7 +1104,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet_fail_both used in chains.get(regexp-NamedResSet)
         """
         result = self.chains.get("*6-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
 
     # RANGE: REGEXP-NamedAtomSet
@@ -1114,7 +1114,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet used in chains.get(regexp-NamedAtomSet)
         """
         result = self.chains.get("hs*-backbone")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp -  NamedAtomSet(fail)
     def test_ChainSet_range_regexp_NamedAtomSet_fail_second(self):
@@ -1122,7 +1122,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet_fail_second used in chains.get(regexp-NamedAtomSet)
         """
         result = self.chains.get("*1-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  NamedAtomSet
     def test_ChainSet_range_regexp_fail_first_NamedAtomSet(self):
@@ -1130,7 +1130,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedAtomSet used in chains.get(regexp-NamedAtomSet)
         """
         result = self.chains.get("*6-backbone")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       regexp(fail) -  NamedAtomSet(fail)
     def test_ChainSet_range_regexp_NamedAtomSet_fail_both(self):
@@ -1138,7 +1138,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet_fail_both used in chains.get(regexp-NamedAtomSet)
         """
         result = self.chains.get("*6-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #
     # RANGE: RELATIVE-REGEXP
@@ -1148,8 +1148,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-regexp used in chains.get(relative-regexp)
         """
         result = self.chains.get("#1-Z*")
-        self.assertEquals(result, self.chains)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1-Z*)")
+        self.assertEqual(result, self.chains)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1-Z*)")
 
     #       relative -  regexp(fail)
     def test_ChainSet_range_relative_regexp_fail_second(self):
@@ -1157,7 +1157,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-regexp_fail_second used in chains.get(relative-regexp)
         """
         result = self.chains.get("#1-Q*")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  regexp
     def test_ChainSet_range_relative_fail_first_regexp(self):
@@ -1165,7 +1165,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-regexp used in chains.get(relative-regexp)
         """
         result = self.chains.get("#16-Z*")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  regexp(fail)
     def test_ChainSet_range_relative_regexp_fail_both(self):
@@ -1173,7 +1173,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-regexp_fail_both used in chains.get(relative-regexp)
         """
         result = self.chains.get("#16-8*")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: RELATIVE-RELATIVE
     #       relative -  relative
@@ -1183,8 +1183,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
         """
         result = self.chains.get("#1-#2")
         #.flat #1 matches the first chain, #2 the last, hence all of them
-        self.assertEquals(result, self.chains)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1-#2)")
+        self.assertEqual(result, self.chains)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1-#2)")
 
     def test_ChainSet_range_relative_relative_2(self):
         """
@@ -1192,9 +1192,9 @@ class ChainSetSelectionTests(SelectionBaseTest):
         """
         result = self.chains.get("#1-#3")
         #.flat #1 matches the first chain, #3 the last of second molecule
-        self.assertEquals(result, self.chains[:6])
-        self.assertEquals(result, self.molecules[0].chains + self.molecules[1].chains[:3])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1-#3)")
+        self.assertEqual(result, self.chains[:6])
+        self.assertEqual(result, self.molecules[0].chains + self.molecules[1].chains[:3])
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1-#3)")
 
     #       relative -  relative(fail)
     def test_ChainSet_range_relative_relative_fail_second(self):
@@ -1202,7 +1202,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-relative_fail_second used in chains.get(relative-relative)
         """
         result = self.chains.get("#1-#15")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  relative
     def test_ChainSet_range_relative_fail_first_relative(self):
@@ -1210,7 +1210,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-relative used in chains.get(relative-relative)
         """
         result = self.chains.get("#16-#1")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  relative(fail)
     def test_ChainSet_range_relative_relative_fail_both(self):
@@ -1218,7 +1218,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-relative_fail_both used in chains.get(relative-relative)
         """
         result = self.chains.get("#16-#18")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: RELATIVE-INDEX
     #       relative -  index
@@ -1227,8 +1227,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-index used in chains.get(relative-index)
         """
         result = self.chains.get("#1-2")
-        self.assertEquals(result, self.molecules[0].chains)
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1-2)")
+        self.assertEqual(result, self.molecules[0].chains)
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\#1-2)")
 
     #       relative -  index(fail)
     def test_ChainSet_range_relative_index_fail_second(self):
@@ -1236,7 +1236,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-index_fail_second used in chains.get(relative-index)
         """
         result = self.chains.get("#1-13")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
 
     #       relative(fail) -  index
@@ -1245,7 +1245,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-index used in chains.get(relative-index)
         """
         result = self.chains.get("#16-1")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  index(fail)
     def test_ChainSet_range_relative_index_fail_both(self):
@@ -1253,7 +1253,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative_index-fail_both used in chains.get(relative-index)
         """
         result = self.chains.get("#16-18")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: RELATIVE-NamedResSet
     #       relative -  NamedResSet
@@ -1262,7 +1262,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet used in chains.get(relative-NamedResSet)
         """
         result = self.chains.get("#1-buried")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative -  NamedResSet(fail)
     def test_ChainSet_range_relative_NamedResSet_fail_second(self):
@@ -1270,7 +1270,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet_fail_second used in chains.get(relative-NamedResSet)
         """
         result = self.chains.get("#1-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  NamedResSet
     def test_ChainSet_range_relative_fail_first_NamedResSet(self):
@@ -1278,7 +1278,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative_fail-first_NamedResSet used in chains.get(relative-NamedResSet)
         """
         result = self.chains.get("#16-buried")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  NamedResSet(fail)
     def test_ChainSet_range_relative_NamedResSet_fail_both(self):
@@ -1286,7 +1286,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet_fail_both used in chains.get(relative-NamedResSet)
         """
         result = self.chains.get("#16-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
 
     # RANGE: RELATIVE-NamedAtomSet
@@ -1296,7 +1296,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet used in chains.get(relative-NamedAtomSet)
         """
         result = self.chains.get("#1-backbone")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative -  NamedAtomSet(fail)
     def test_ChainSet_range_relative_NamedAtomSet_fail_second(self):
@@ -1304,7 +1304,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet_fail_second used in chains.get(relative-NamedAtomSet)
         """
         result = self.chains.get("#1-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  NamedAtomSet
     def test_ChainSet_range_relative_fail_first_NamedAtomSet(self):
@@ -1312,7 +1312,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-NamedAtomSet used in chains.get(relative-NamedAtomSet)
         """
         result = self.chains.get("#16-backbone")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       relative(fail) -  NamedAtomSet(fail)
     def test_ChainSet_range_relative_NamedAtomSet_fail_both(self):
@@ -1320,7 +1320,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet_fail_both used in chains.get(relative-NamedAtomSet)
         """
         result = self.chains.get("#16-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #
     # RANGE: INDEX-REGEXP
@@ -1330,8 +1330,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-regexp used in chains.get(index-regexp)
         """
         result = self.chains.get("1-Z*")
-        self.assertEquals(result, self.chains[1:])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\1-Z*)")
+        self.assertEqual(result, self.chains[1:])
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\1-Z*)")
 
     #       index -  regexp(fail)
     def test_ChainSet_range_index_regexp_fail_second(self):
@@ -1339,7 +1339,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-regexp_fail_second used in chains.get(index-regexp)
         """
         result = self.chains.get("1-6*")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  regexp
     def test_ChainSet_range_index_fail_first_regexp(self):
@@ -1347,7 +1347,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-regexp used in chains.get(index-regexp)
         """
         result = self.chains.get("6-1*")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  regexp(fail)
     def test_ChainSet_range_index_regexp_fail_both(self):
@@ -1355,7 +1355,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-regexp_fail_both used in chains.get(index-regexp)
         """
         result = self.chains.get("6-8*")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: INDEX-RELATIVE
     #       index -  relative
@@ -1364,8 +1364,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-relative used in chains.get(index-relative)
         """
         result = self.chains.get("1-#2")
-        self.assertEquals(result, self.chains[1:])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\1-#2)")
+        self.assertEqual(result, self.chains[1:])
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\1-#2)")
 
     #       index -  relative(fail)
     def test_ChainSet_range_index_relative_fail_second(self):
@@ -1373,7 +1373,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-relative_fail_second used in chains.get(index-relative)
         """
         result = self.chains.get("1-#15")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  relative
     def test_ChainSet_range_index_fail_first_relative(self):
@@ -1381,7 +1381,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-relative used in chains.get(index-relative)
         """
         result = self.chains.get("16-#1")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  relative(fail)
     def test_ChainSet_range_index_relative_fail_both(self):
@@ -1389,7 +1389,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-relative_fail_both used in chains.get(index-relative)
         """
         result = self.chains.get("16-#18")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: INDEX-INDEX
     #       index -  index
@@ -1398,8 +1398,8 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-index used in chains.get(index-index)
         """
         result = self.chains.get("1-2")
-        self.assertEquals(result, self.chains[1:3])
-        self.assertEquals(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\1-2)")
+        self.assertEqual(result, self.chains[1:3])
+        self.assertEqual(result.stringRepr,"(hsg1:/+/2plv:/+/1gyc:\\s\\1-2)")
 
     #       index -  index(fail)
     def test_ChainSet_range_index_index_fail_second(self):
@@ -1407,7 +1407,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-index_fail_second used in chains.get(index-index)
         """
         result = self.chains.get("1-13")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  index
     def test_ChainSet_range_index_fail_first_index(self):
@@ -1415,7 +1415,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-index used in chains.get(index-index)
         """
         result = self.chains.get("16-1")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  index(fail)
     def test_ChainSet_range_index_index_fail_both(self):
@@ -1423,7 +1423,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index_index-fail_both used in chains.get(index-index)
         """
         result = self.chains.get("16-18")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     # RANGE: INDEX-NamedResSet
     #       index -  NamedResSet
@@ -1432,7 +1432,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet used in chains.get(index-NamedResSet)
         """
         result = self.chains.get("1-buried")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index -  NamedResSet(fail)
     def test_ChainSet_range_index_NamedResSet_fail_second(self):
@@ -1440,7 +1440,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet_fail_second used in chains.get(index-NamedResSet)
         """
         result = self.chains.get("1-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  NamedResSet
     def test_ChainSet_range_index_fail_first_NamedResSet(self):
@@ -1448,7 +1448,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index_fail-first_NamedResSet used in chains.get(index-NamedResSet)
         """
         result = self.chains.get("6-buried")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  NamedResSet(fail)
     def test_ChainSet_range_index_NamedResSet_fail_both(self):
@@ -1456,7 +1456,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet_fail_both used in chains.get(index-NamedResSet)
         """
         result = self.chains.get("6-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
 
     # RANGE: INDEX-NamedAtomSet
@@ -1466,7 +1466,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet used in chains.get(index-NamedAtomSet)
         """
         result = self.chains.get("1-backbone")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index -  NamedAtomSet(fail)
     def test_ChainSet_range_index_NamedAtomSet_fail_second(self):
@@ -1474,7 +1474,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet_fail_second used in chains.get(index-NamedAtomSet)
         """
         result = self.chains.get("1-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  NamedAtomSet
     def test_ChainSet_range_index_fail_first_NamedAtomSet(self):
@@ -1482,7 +1482,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-NamedAtomSet used in chains.get(index-NamedAtomSet)
         """
         result = self.chains.get("6-backbone")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
     #       index(fail) -  NamedAtomSet(fail)
     def test_ChainSet_range_index_NamedAtomSet_fail_both(self):
@@ -1490,7 +1490,7 @@ class ChainSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet_fail_both used in chains.get(index-NamedAtomSet)
         """
         result = self.chains.get("6-mistake")
-        self.assertEquals(result, ChainSet())
+        self.assertEqual(result, ChainSet())
 
 
 class ResidueSetSelectionTests(SelectionBaseTest):
@@ -1508,8 +1508,8 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test regexp used in residues.get(regexp)
         """
         result = self.residues.get("ALA*")
-        self.assertEquals(len(result), 121)
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\ALA*)")
+        self.assertEqual(len(result), 121)
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\ALA*)")
 
 
     #   relative: 
@@ -1518,8 +1518,8 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test relative index used in residues.get(relative_index)
         """
         result = self.residues.get("#1")
-        self.assertEquals(len(result),len(self.molecules.chains))
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1)")
+        self.assertEqual(len(result),len(self.molecules.chains))
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1)")
 
 
     #   index: 
@@ -1528,16 +1528,16 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test index used in residues.get(index)
         """
         result = self.residues.get("1")
-        self.assertEquals(result, self.molecules.chains.residues[1:2])
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1)")
+        self.assertEqual(result, self.molecules.chains.residues[1:2])
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1)")
 
     def test_ResidueSet_index_0(self):
         """
          test index used in residues.get(index)
         """
         result = self.residues.get("0")
-        self.assertEquals(result, self.residues[0:1])
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\0)")
+        self.assertEqual(result, self.residues[0:1])
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\0)")
 
 
     #   NamedResSet:  
@@ -1546,8 +1546,8 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test NamedResSet used in residues.get(NamedResSet)
         """
         result = self.residues.get("acidic")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\acidic)")
-        self.assertEquals(len(result), 132)
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\acidic)")
+        self.assertEqual(len(result), 132)
 
 
     #   NamedAtomSet: n/a
@@ -1556,7 +1556,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test NamedAtomSet used in residues.get(NamedAtomSet)
         """
         result = self.residues.get("backbone")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
 
     #compound
@@ -1568,7 +1568,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp used in residues.get(regexp-regexp)
         """
         result = self.residues.get("ALA*-TRP*")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\ALA*-TRP*)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\ALA*-TRP*)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), 1153)
         #self.assertEquals(len(result), 1996)
@@ -1579,7 +1579,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp_fail_second used in residues.get(regexp-regexp)
         """
         result = self.residues.get("ALA*-FOO*")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  regexp
     def test_ResidueSet_range_regexp_fail_first_regexp(self):
@@ -1587,7 +1587,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-regexp used in residues.get(regexp-regexp)
         """
         result = self.residues.get("FOO*-TRP*")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  regexp(fail)
     def test_ResidueSet_range_regexp_regexp_fail_both(self):
@@ -1595,7 +1595,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp_fail_both used in residues.get(regexp-regexp)
         """
         result = self.residues.get("FOO*-*BAR")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: REGEXP-RELATIVE
     #       regexp -  relative
@@ -1604,7 +1604,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-relative used in residues.get(regexp-relative)
         """
         result = self.residues.get("PRO*-#2")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\PRO*-#2)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\PRO*-#2)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result),  4)
         #self.assertEquals(len(result),  2049)
@@ -1615,7 +1615,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-relative_fail_second used in residues.get(regexp-relative)
         """
         result = self.residues.get("ALA*-#11111")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  relative
     def test_ResidueSet_range_regexp_fail_first_relative(self):
@@ -1623,7 +1623,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-relative used in residues.get(regexp-relative)
         """
         result = self.residues.get("FOO*-#1")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  relative(fail)
     def test_ResidueSet_range_regexp_relative_fail_both(self):
@@ -1631,7 +1631,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-relative_fail_both used in residues.get(regexp-relative)
         """
         result = self.residues.get("FOO*-#88888")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: REGEXP-INDEX
     #       regexp -  index
@@ -1640,7 +1640,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-index used in residues.get(regexp-index)
         """
         result = self.residues.get("PRO*-2")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\PRO*-2)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\PRO*-2)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), 7)
         #self.assertEquals(len(result), 0)
@@ -1651,7 +1651,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-index_fail_second used in residues.get(regexp-index)
         """
         result = self.residues.get("PRO*-13333")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  index
     def test_ResidueSet_range_regexp_fail_first_index(self):
@@ -1659,7 +1659,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-index used in residues.get(regexp-index)
         """
         result = self.residues.get("FOO*-1")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  index(fail)
     def test_ResidueSet_range_regexp_index_fail_both(self):
@@ -1667,7 +1667,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-index_fail_both used in residues.get(regexp-index)
         """
         result = self.residues.get("FOO*-18")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: REGEXP-NamedResSet
     #       regexp -  NamedResSet
@@ -1679,7 +1679,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), 1449)
         #self.assertEquals(len(result), 2030)
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\PRO*-buried)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\PRO*-buried)")
 
     #       regexp -  NamedResSet(fail)
     def test_ResidueSet_range_regexp_NamedResSet_fail_second(self):
@@ -1687,7 +1687,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet_fail_second used in residues.get(regexp-NamedResSet)
         """
         result = self.residues.get("PRO*-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  NamedResSet
     def test_ResidueSet_range_regexp_fail_first_NamedResSet(self):
@@ -1695,7 +1695,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedResSet used in residues.get(regexp-NamedResSet)
         """
         result = self.residues.get("FOO*-buried")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  NamedResSet(fail)
     def test_ResidueSet_range_regexp_NamedResSet_fail_both(self):
@@ -1703,7 +1703,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet_fail_both used in residues.get(regexp-NamedResSet)
         """
         result = self.residues.get("FOO*-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
 
     # RANGE: REGEXP-NamedAtomSet
@@ -1713,7 +1713,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet used in residues.get(regexp-NamedAtomSet)
         """
         result = self.residues.get("PRO*-backbone")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp -  NamedAtomSet(fail)
     def test_ResidueSet_range_regexp_NamedAtomSet_fail_second(self):
@@ -1721,7 +1721,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet_fail_second used in residues.get(regexp-NamedAtomSet)
         """
         result = self.residues.get("PRO*-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  NamedAtomSet
     def test_ResidueSet_range_regexp_fail_first_NamedAtomSet(self):
@@ -1729,7 +1729,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedAtomSet used in residues.get(regexp-NamedAtomSet)
         """
         result = self.residues.get("FOO*-backbone")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       regexp(fail) -  NamedAtomSet(fail)
     def test_ResidueSet_range_regexp_NamedAtomSet_fail_both(self):
@@ -1737,7 +1737,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet_fail_both used in residues.get(regexp-NamedAtomSet)
         """
         result = self.residues.get("FOO*-atomSetmistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #
     # RANGE: RELATIVE-REGEXP
@@ -1747,10 +1747,10 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-regexp used in residues.get(relative-regexp)
         """
         result = self.residues.get("#1-PRO*")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-PRO*)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-PRO*)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), 1461)
-        self.assertEquals(len(result), 2149)
+        self.assertEqual(len(result), 2149)
 
     #       relative -  regexp(fail)
     def test_ResidueSet_range_relative_regexp_fail_second(self):
@@ -1758,7 +1758,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-regexp_fail_second used in residues.get(relative-regexp)
         """
         result = self.residues.get("#1-Q*")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  regexp
     def test_ResidueSet_range_relative_fail_first_regexp(self):
@@ -1766,7 +1766,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-regexp used in residues.get(relative-regexp)
         """
         result = self.residues.get("#16666-PRO*")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  regexp(fail)
     def test_ResidueSet_range_relative_regexp_fail_both(self):
@@ -1774,7 +1774,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-regexp_fail_both used in residues.get(relative-regexp)
         """
         result = self.residues.get("#166666-FOO*")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: RELATIVE-RELATIVE
     #       relative -  relative
@@ -1784,16 +1784,16 @@ class ResidueSetSelectionTests(SelectionBaseTest):
         """
         result = self.residues.get("#1-#2")
         #.flat #1 matches the first reisude, #2 the second
-        self.assertEquals(len(result), 20)
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-#2)")
+        self.assertEqual(len(result), 20)
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-#2)")
 
     def test_ResidueSet_range_relative_relative_2(self):
         """
          test range relative-relative used in residues.get(relative-relative)
         """
         result = self.residues.get("#1-#3")
-        self.assertEquals(len(result), 30)
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-#3)")
+        self.assertEqual(len(result), 30)
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-#3)")
 
     #       relative -  relative(fail)
     def test_ResidueSet_range_relative_relative_fail_second(self):
@@ -1801,7 +1801,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-relative_fail_second used in residues.get(relative-relative)
         """
         result = self.residues.get("#1-#15555")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  relative
     def test_ResidueSet_range_relative_fail_first_relative(self):
@@ -1809,7 +1809,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-relative used in residues.get(relative-relative)
         """
         result = self.residues.get("#166666-#1")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  relative(fail)
     def test_ResidueSet_range_relative_relative_fail_both(self):
@@ -1817,7 +1817,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-relative_fail_both used in residues.get(relative-relative)
         """
         result = self.residues.get("#166666-#1888888")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: RELATIVE-INDEX
     #       relative -  index
@@ -1826,10 +1826,10 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-index used in residues.get(relative-index)
         """
         result = self.residues.get("#1-2") #matches 0,1,2
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-2)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-2)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), 30)
-        self.assertEquals(len(result), 3)
+        self.assertEqual(len(result), 3)
 
     #       relative -  index(fail)
     def test_ResidueSet_range_relative_index_fail_second(self):
@@ -1837,7 +1837,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-index_fail_second used in residues.get(relative-index)
         """
         result = self.residues.get("#1-133333")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
 
     #       relative(fail) -  index
@@ -1846,7 +1846,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-index used in residues.get(relative-index)
         """
         result = self.residues.get("#166666-1")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  index(fail)
     def test_ResidueSet_range_relative_index_fail_both(self):
@@ -1854,7 +1854,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative_index-fail_both used in residues.get(relative-index)
         """
         result = self.residues.get("#166666-1888888")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: RELATIVE-NamedResSet
     #       relative -  NamedResSet
@@ -1863,10 +1863,10 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet used in residues.get(relative-NamedResSet)
         """
         result = self.residues.get("#1-buried")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-buried)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\#1-buried)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), 1545)
-        self.assertEquals(len(result), 2157)
+        self.assertEqual(len(result), 2157)
 
     #       relative -  NamedResSet(fail)
     def test_ResidueSet_range_relative_NamedResSet_fail_second(self):
@@ -1874,7 +1874,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet_fail_second used in residues.get(relative-NamedResSet)
         """
         result = self.residues.get("#1-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  NamedResSet
     def test_ResidueSet_range_relative_fail_first_NamedResSet(self):
@@ -1882,7 +1882,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative_fail-first_NamedResSet used in residues.get(relative-NamedResSet)
         """
         result = self.residues.get("#166666-buried")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  NamedResSet(fail)
     def test_ResidueSet_range_relative_NamedResSet_fail_both(self):
@@ -1890,7 +1890,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet_fail_both used in residues.get(relative-NamedResSet)
         """
         result = self.residues.get("#166666-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
 
     # RANGE: RELATIVE-NamedAtomSet
@@ -1900,7 +1900,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet used in residues.get(relative-NamedAtomSet)
         """
         result = self.residues.get("#1-backbone")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative -  NamedAtomSet(fail)
     def test_ResidueSet_range_relative_NamedAtomSet_fail_second(self):
@@ -1908,7 +1908,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet_fail_second used in residues.get(relative-NamedAtomSet)
         """
         result = self.residues.get("#1-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  NamedAtomSet
     def test_ResidueSet_range_relative_fail_first_NamedAtomSet(self):
@@ -1916,7 +1916,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-NamedAtomSet used in residues.get(relative-NamedAtomSet)
         """
         result = self.residues.get("#1666666-backbone")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       relative(fail) -  NamedAtomSet(fail)
     def test_ResidueSet_range_relative_NamedAtomSet_fail_both(self):
@@ -1924,7 +1924,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet_fail_both used in residues.get(relative-NamedAtomSet)
         """
         result = self.residues.get("#1666666-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #
     # RANGE: INDEX-REGEXP
@@ -1934,10 +1934,10 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-regexp used in residues.get(index-regexp)
         """
         result = self.residues.get("1-PRO*")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1-PRO*)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1-PRO*)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), 1454)
-        self.assertEquals(len(result), 2148)
+        self.assertEqual(len(result), 2148)
 
     #       index -  regexp(fail)
     def test_ResidueSet_range_index_regexp_fail_second(self):
@@ -1945,7 +1945,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-regexp_fail_second used in residues.get(index-regexp)
         """
         result = self.residues.get("1-666666*")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  regexp
     def test_ResidueSet_range_index_fail_first_regexp(self):
@@ -1953,7 +1953,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-regexp used in residues.get(index-regexp)
         """
         result = self.residues.get("66666-1*")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  regexp(fail)
     def test_ResidueSet_range_index_regexp_fail_both(self):
@@ -1961,7 +1961,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-regexp_fail_both used in residues.get(index-regexp)
         """
         result = self.residues.get("6666-FOO*")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: INDEX-RELATIVE
     #       index -  relative
@@ -1970,10 +1970,10 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-relative used in residues.get(index-relative)
         """
         result = self.residues.get("1-#2")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1-#2)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1-#2)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), 10)
-        self.assertEquals(len(result), 2175)
+        self.assertEqual(len(result), 2175)
 
     #       index -  relative(fail)
     def test_ResidueSet_range_index_relative_fail_second(self):
@@ -1981,7 +1981,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-relative_fail_second used in residues.get(index-relative)
         """
         result = self.residues.get("1-#15555")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  relative
     def test_ResidueSet_range_index_fail_first_relative(self):
@@ -1991,7 +1991,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
         result = self.residues.get("16-#1")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(result, ResidueSet())
-        self.assertEquals(len(result), 2159)
+        self.assertEqual(len(result), 2159)
 
     #       index(fail) -  relative(fail)
     def test_ResidueSet_range_index_relative_fail_both(self):
@@ -1999,7 +1999,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-relative_fail_both used in residues.get(index-relative)
         """
         result = self.residues.get("16666-#188888")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: INDEX-INDEX
     #       index -  index
@@ -2008,10 +2008,10 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-index used in residues.get(index-index)
         """
         result = self.residues.get("1-2")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1-2)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1-2)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result), len(self.molecules.chains)*2)
-        self.assertEquals(len(result), 2)
+        self.assertEqual(len(result), 2)
 
     #       index -  index(fail)
     def test_ResidueSet_range_index_index_fail_second(self):
@@ -2019,7 +2019,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-index_fail_second used in residues.get(index-index)
         """
         result = self.residues.get("1-133333")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  index
     def test_ResidueSet_range_index_fail_first_index(self):
@@ -2027,7 +2027,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-index used in residues.get(index-index)
         """
         result = self.residues.get("166666-1")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  index(fail)
     def test_ResidueSet_range_index_index_fail_both(self):
@@ -2035,7 +2035,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index_index-fail_both used in residues.get(index-index)
         """
         result = self.residues.get("166666-188888")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     # RANGE: INDEX-NamedResSet
     #       index -  NamedResSet
@@ -2044,10 +2044,10 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet used in residues.get(index-NamedResSet)
         """
         result = self.residues.get("1-buried")
-        self.assertEquals(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1-buried)")
+        self.assertEqual(result.stringRepr,"(hsg1::/+/2plv::/+/1gyc::\\s\\1-buried)")
         #with correction which limited relative ranges to #num-#num only
         #self.assertEquals(len(result),  1538)
-        self.assertEquals(len(result),  2156)
+        self.assertEqual(len(result),  2156)
 
     #       index -  NamedResSet(fail)
     def test_ResidueSet_range_index_NamedResSet_fail_second(self):
@@ -2055,7 +2055,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet_fail_second used in residues.get(index-NamedResSet)
         """
         result = self.residues.get("1-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  NamedResSet
     def test_ResidueSet_range_index_fail_first_NamedResSet(self):
@@ -2063,7 +2063,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index_fail-first_NamedResSet used in residues.get(index-NamedResSet)
         """
         result = self.residues.get("666666-buried")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  NamedResSet(fail)
     def test_ResidueSet_range_index_NamedResSet_fail_both(self):
@@ -2071,7 +2071,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet_fail_both used in residues.get(index-NamedResSet)
         """
         result = self.residues.get("6-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
 
     # RANGE: INDEX-NamedAtomSet
@@ -2081,7 +2081,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet used in residues.get(index-NamedAtomSet)
         """
         result = self.residues.get("1-backbone")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index -  NamedAtomSet(fail)
     def test_ResidueSet_range_index_NamedAtomSet_fail_second(self):
@@ -2089,7 +2089,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet_fail_second used in residues.get(index-NamedAtomSet)
         """
         result = self.residues.get("1-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  NamedAtomSet
     def test_ResidueSet_range_index_fail_first_NamedAtomSet(self):
@@ -2097,7 +2097,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-NamedAtomSet used in residues.get(index-NamedAtomSet)
         """
         result = self.residues.get("666666-backbone")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
     #       index(fail) -  NamedAtomSet(fail)
     def test_ResidueSet_range_index_NamedAtomSet_fail_both(self):
@@ -2105,7 +2105,7 @@ class ResidueSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet_fail_both used in residues.get(index-NamedAtomSet)
         """
         result = self.residues.get("666666-mistake")
-        self.assertEquals(result, ResidueSet())
+        self.assertEqual(result, ResidueSet())
 
 
 class AtomSetSelectionTests(SelectionBaseTest):
@@ -2124,8 +2124,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test regexp used in atoms.get(regexp)
         """
         result = self.atoms.get("C*")
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\C*)")
-        self.assertEquals(len(result), 7781)
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\C*)")
+        self.assertEqual(len(result), 7781)
 
 
     def test_AtomSet_regexp_sanity_no_wild_cards(self):
@@ -2134,7 +2134,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         """
         result = self.atoms.get("C")
         one_letter = self.atoms.get(lambda x:x.element[0]=='C' and len(x.name)==1)
-        self.assertEquals(result, one_letter)
+        self.assertEqual(result, one_letter)
 
 
     def test_AtomSet_regexp_sanity_one_dot_wild_card(self):
@@ -2143,7 +2143,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         """
         result = self.atoms.get("C.")
         two_letters = self.atoms.get(lambda x:x.element[0]=='C' and len(x.name)==2)
-        self.assertEquals(result, two_letters)
+        self.assertEqual(result, two_letters)
 
 
     def test_AtomSet_regexp_sanity_combo_wild_cards(self):
@@ -2153,7 +2153,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         result = self.atoms.get("C*")
         two_or_more_result = self.atoms.get("C.*")
         one_result = self.atoms.get("C")
-        self.assertEquals(len(result), len(two_or_more_result + one_result))
+        self.assertEqual(len(result), len(two_or_more_result + one_result))
 
 
     #   relative: 
@@ -2162,8 +2162,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test relative index used in atoms.get(relative_index)
         """
         result = self.atoms.get("#1")
-        self.assertEquals(len(result),len(self.molecules.chains.residues))
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\#1)")
+        self.assertEqual(len(result),len(self.molecules.chains.residues))
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\#1)")
 
 
     #   index: 
@@ -2172,16 +2172,16 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test index used in atoms.get(index)
         """
         result = self.atoms.get("1")
-        self.assertEquals(result, self.molecules.chains.residues.atoms[1:2])
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\1)")
+        self.assertEqual(result, self.molecules.chains.residues.atoms[1:2])
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\1)")
 
     def test_AtomSet_index_0(self):
         """
          test index used in atoms.get(index)
         """
         result = self.atoms.get("0")
-        self.assertEquals(result, self.atoms[0:1])
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\0)")
+        self.assertEqual(result, self.atoms[0:1])
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\0)")
 
 
     #   NamedResSet:  n/a
@@ -2190,7 +2190,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test NamedResSet used in atoms.get(NamedResSet)
         """
         result = self.atoms.get("acidic")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
 
     #   NamedAtomSet: 
@@ -2199,8 +2199,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
         test NamedAtomSet used in atoms.get(NamedAtomSet)
         """
         result = self.atoms.get("backbone")
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\backbone)")
-        self.assertEquals(len(result), 6165)
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\backbone)")
+        self.assertEqual(len(result), 6165)
 
 
     #compound
@@ -2212,8 +2212,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp used in atoms.get(regexp-regexp)
         """
         result = self.atoms.get("C*-N*")
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\C*-N*)")
-        self.assertEquals(len(result), 12799)
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\C*-N*)")
+        self.assertEqual(len(result), 12799)
 
     #       regexp -  regexp(fail)
     def test_AtomSet_range_regexp_regexp_fail_second(self):
@@ -2221,7 +2221,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp_fail_second used in atoms.get(regexp-regexp)
         """
         result = self.atoms.get("C*-FOO*")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  regexp
     def test_AtomSet_range_regexp_fail_first_regexp(self):
@@ -2229,7 +2229,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-regexp used in atoms.get(regexp-regexp)
         """
         result = self.atoms.get("FOO*-C*")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  regexp(fail)
     def test_AtomSet_range_regexp_regexp_fail_both(self):
@@ -2237,7 +2237,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-regexp_fail_both used in atoms.get(regexp-regexp)
         """
         result = self.atoms.get("FOO*-*BAR")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: REGEXP-RELATIVE
     #       regexp -  relative
@@ -2247,8 +2247,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
         """
         result = self.molecules[0].chains[1].residues[0:2].atoms.get("C*-#5")
         #with correction which limited relative ranges to #num-#num only
-        self.assertEquals(len(result),  11)
-        self.assertEquals(result.stringRepr,"(hsg1:B:0-1:\s\\C*-#5)")
+        self.assertEqual(len(result),  11)
+        self.assertEqual(result.stringRepr,"(hsg1:B:0-1:\s\\C*-#5)")
 
     #       regexp -  relative(fail)
     def test_AtomSet_range_regexp_relative_fail_second(self):
@@ -2256,7 +2256,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-relative_fail_second used in atoms.get(regexp-relative)
         """
         result = self.molecules[0].chains[0].residues[0].atoms.get("C*-#11111")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  relative
     def test_AtomSet_range_regexp_fail_first_relative(self):
@@ -2264,7 +2264,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-relative used in atoms.get(regexp-relative)
         """
         result = self.molecules[0].chains[0].residues[0].atoms.get("FOO*-#1")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  relative(fail)
     def test_AtomSet_range_regexp_relative_fail_both(self):
@@ -2272,7 +2272,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-relative_fail_both used in atoms.get(regexp-relative)
         """
         result = self.molecules[0].chains[0].residues[0].atoms.get("FOO*-#88888")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: REGEXP-INDEX
     #       regexp -  index
@@ -2281,8 +2281,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-index used in atoms.get(regexp-index)
         """
         result = self.molecules[0].chains[1].residues[0:2].atoms.get("C*-7")
-        self.assertEquals(result.stringRepr,"(hsg1:B:0-1:\\s\\C*-7)")
-        self.assertEquals(len(result), 7)
+        self.assertEqual(result.stringRepr,"(hsg1:B:0-1:\\s\\C*-7)")
+        self.assertEqual(len(result), 7)
 
     #       regexp -  index(fail)
     def test_AtomSet_range_regexp_index_fail_second(self):
@@ -2290,7 +2290,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-index_fail_second used in atoms.get(regexp-index)
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("C*-7777")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  index
     def test_AtomSet_range_regexp_fail_first_index(self):
@@ -2298,7 +2298,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-index used in atoms.get(regexp-index)
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("FOO*-7")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  index(fail)
     def test_AtomSet_range_regexp_index_fail_both(self):
@@ -2306,7 +2306,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-index_fail_both used in atoms.get(regexp-index)
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("FOO*-778")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: REGEXP-NamedResSet
     #       regexp -  NamedResSet
@@ -2315,7 +2315,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet used in atoms.get(regexp-NamedResSet)
         """
         result = self.atoms.get("PRO*-buried")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp -  NamedResSet(fail)
     def test_AtomSet_range_regexp_NamedResSet_fail_second(self):
@@ -2323,7 +2323,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet_fail_second used in atoms.get(regexp-NamedResSet)
         """
         result = self.atoms.get("PRO*-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  NamedResSet
     def test_AtomSet_range_regexp_fail_first_NamedResSet(self):
@@ -2331,7 +2331,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedResSet used in atoms.get(regexp-NamedResSet)
         """
         result = self.atoms.get("FOO*-buried")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  NamedResSet(fail)
     def test_AtomSet_range_regexp_NamedResSet_fail_both(self):
@@ -2339,7 +2339,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedResSet_fail_both used in atoms.get(regexp-NamedResSet)
         """
         result = self.atoms.get("FOO*-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
 
     # RANGE: REGEXP-NamedAtomSet
@@ -2349,8 +2349,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet used in atoms.get(regexp-NamedAtomSet)
         """
         result = self.molecules[0].chains[1].residues[0:2].atoms.get("C*-backbone")
-        self.assertEquals(result.stringRepr,"(hsg1:B:0-1:\\s\\C*-backbone)")
-        self.assertEquals(len(result), 10)
+        self.assertEqual(result.stringRepr,"(hsg1:B:0-1:\\s\\C*-backbone)")
+        self.assertEqual(len(result), 10)
 
     #       regexp -  NamedAtomSet(fail)
     def test_AtomSet_range_regexp_NamedAtomSet_fail_second(self):
@@ -2358,7 +2358,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet_fail_second used in atoms.get(regexp-NamedAtomSet)
         """
         result = self.atoms.get("C*-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  NamedAtomSet
     def test_AtomSet_range_regexp_fail_first_NamedAtomSet(self):
@@ -2366,7 +2366,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp_fail_first-NamedAtomSet used in atoms.get(regexp-NamedAtomSet)
         """
         result = self.atoms.get("FOO*-backbone")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       regexp(fail) -  NamedAtomSet(fail)
     def test_AtomSet_range_regexp_NamedAtomSet_fail_both(self):
@@ -2374,7 +2374,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range regexp-NamedAtomSet_fail_both used in atoms.get(regexp-NamedAtomSet)
         """
         result = self.atoms.get("FOO*-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #
     # RANGE: RELATIVE-REGEXP
@@ -2384,9 +2384,9 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range relative-regexp used in atoms.get(relative-regexp)
         """
         result = self.molecules[0].chains[1].residues[0:2].atoms.get("#1-N*")
-        self.assertEquals(result.stringRepr,"(hsg1:B:0-1:\\s\\#1-N*)")
+        self.assertEqual(result.stringRepr,"(hsg1:B:0-1:\\s\\#1-N*)")
         #with correction which limited relative ranges to #num-#num only
-        self.assertEquals(len(result), 16)
+        self.assertEqual(len(result), 16)
 
     #       relative -  regexp(fail)
     def test_AtomSet_range_relative_regexp_fail_second(self):
@@ -2396,7 +2396,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         """
         #result = self.atoms.get("#1-Q*")
         result = self.molecules[0].allAtoms.get("#1-Q*")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  regexp
     def test_AtomSet_range_relative_fail_first_regexp(self):
@@ -2406,7 +2406,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         """
         #result = self.atoms.get("#16666666-C*")
         result = self.molecules[0].allAtoms.get("#1666666-C*")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  regexp(fail)
     def test_AtomSet_range_relative_regexp_fail_both(self):
@@ -2416,7 +2416,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         """
         #result = self.atoms.get("#166666-FOO*")
         result = self.molecules[0].allAtoms.get("#1666666-FOO*")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: RELATIVE-RELATIVE
     #       relative -  relative
@@ -2425,9 +2425,9 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range relative-relative used in atoms.get(relative-relative)
         """
         result = self.molecules[0].chains[1].residues[0:2].atoms.get("#1-#3")
-        self.assertEquals(result.stringRepr,"(hsg1:B:0-1:\\s\\#1-#3)")
+        self.assertEqual(result.stringRepr,"(hsg1:B:0-1:\\s\\#1-#3)")
         #.flat #1 matches the first atom, #2 the second
-        self.assertEquals(len(result), 6)
+        self.assertEqual(len(result), 6)
 
     #       relative -  relative(fail)
     def test_AtomSet_range_relative_relative_fail_second(self):
@@ -2435,7 +2435,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range relative-relative_fail_second used in atoms.get(relative-relative)
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1-#333333")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  relative
     def test_AtomSet_range_relative_fail_first_relative(self):
@@ -2443,7 +2443,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-relative used in atoms.get(relative-relative)
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1111-#3")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  relative(fail)
     def test_AtomSet_range_relative_relative_fail_both(self):
@@ -2452,7 +2452,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         THIS was TOO SLOW 
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1111-#33333")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: RELATIVE-INDEX
     #       relative -  index
@@ -2461,9 +2461,9 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range relative-index used in atoms.get(relative-index)
         """
         result = self.molecules[0].chains[1].residues[0:2].atoms.get("#1-3")
-        self.assertEquals(result.stringRepr,"(hsg1:B:0-1:\\s\\#1-3)")
+        self.assertEqual(result.stringRepr,"(hsg1:B:0-1:\\s\\#1-3)")
         #with correction which limited relative ranges to #num-#num only
-        self.assertEquals(len(result), 4)
+        self.assertEqual(len(result), 4)
 
 
     #       relative -  index(fail)
@@ -2473,7 +2473,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         THIS was TOO SLOW 
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1-333333")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
 
     #       relative(fail) -  index
@@ -2483,7 +2483,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         THIS was TOO SLOW 
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1666666-#3")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  index(fail)
     def test_AtomSet_range_relative_index_fail_both(self):
@@ -2492,7 +2492,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         THIS was TOO SLOW 
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1666666-#333333")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: RELATIVE-NamedResSet
     #       relative -  NamedResSet
@@ -2501,7 +2501,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range relative-NamedResSet used in atoms.get(relative-NamedResSet)
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1-buried")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative -  NamedResSet(fail)
     def test_AtomSet_range_relative_NamedResSet_fail_second(self):
@@ -2510,7 +2510,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         THIS was TOO SLOW 
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  NamedResSet
     def test_AtomSet_range_relative_fail_first_NamedResSet(self):
@@ -2519,7 +2519,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         THIS was TOO SLOW 
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1666-buried")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  NamedResSet(fail)
     def test_AtomSet_range_relative_NamedResSet_fail_both(self):
@@ -2528,7 +2528,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         THIS was TOO SLOW 
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1666-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
 
     # RANGE: RELATIVE-NamedAtomSet
@@ -2539,9 +2539,9 @@ class AtomSetSelectionTests(SelectionBaseTest):
         THIS was TOO SLOW 
         """
         result = self.molecules[0].chains[1].residues[0:2].atoms.get("#1-backbone")
-        self.assertEquals(result.stringRepr,"(hsg1:B:0-1:\\s\\#1-backbone)")
+        self.assertEqual(result.stringRepr,"(hsg1:B:0-1:\\s\\#1-backbone)")
         #with correction which limited relative ranges to #num-#num only
-        self.assertEquals(len(result), 11)
+        self.assertEqual(len(result), 11)
 
 
     #       relative -  NamedAtomSet(fail)
@@ -2550,7 +2550,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range relative-NamedAtomSet_fail_second used in atoms.get(relative-NamedAtomSet)
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#1-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  NamedAtomSet
     def test_AtomSet_range_relative_fail_first_NamedAtomSet(self):
@@ -2558,7 +2558,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range relative_fail_first-NamedAtomSet used in atoms.get(relative-NamedAtomSet)
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#166666-backbone")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       relative(fail) -  NamedAtomSet(fail)
     def test_AtomSet_range_relative_NamedAtomSet_fail_both(self):
@@ -2567,7 +2567,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          #THIS was too slow
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("#166666-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #
     # RANGE: INDEX-REGEXP
@@ -2577,8 +2577,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-regexp used in atoms.get(index-regexp)
         """
         result = self.atoms.get("1-C*")
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\1-C*)")
-        self.assertEquals(len(result), 12811)
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\1-C*)")
+        self.assertEqual(len(result), 12811)
 
     #       index -  regexp(fail)
     def test_AtomSet_range_index_regexp_fail_second(self):
@@ -2586,7 +2586,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-regexp_fail_second used in atoms.get(index-regexp)
         """
         result = self.atoms.get("1-666666*")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  regexp
     def test_AtomSet_range_index_fail_first_regexp(self):
@@ -2594,7 +2594,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-regexp used in atoms.get(index-regexp)
         """
         result = self.atoms.get("66666-1*")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  regexp(fail)
     def test_AtomSet_range_index_regexp_fail_both(self):
@@ -2602,7 +2602,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-regexp_fail_both used in atoms.get(index-regexp)
         """
         result = self.atoms.get("6666-FOO*")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: INDEX-RELATIVE
     #       index -  relative
@@ -2614,7 +2614,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
         result = self.molecules[0].chains[0].residues[0:2].atoms.get("1-#2")
         #self.assertEquals(len(result), 2)
         #with correction which limited relative ranges to #num-#num only
-        self.assertEquals(len(result), 8)
+        self.assertEqual(len(result), 8)
 
     #       index -  relative(fail)
     def test_AtomSet_range_index_relative_fail_second(self):
@@ -2623,7 +2623,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          THIS WAS TOO SLOW
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("1-#222222")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  relative
     def test_AtomSet_range_index_fail_first_relative(self):
@@ -2632,7 +2632,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          THIS WAS TOO SLOW
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("1666666-#2")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  relative(fail)
     def test_AtomSet_range_index_relative_fail_both(self):
@@ -2641,7 +2641,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          THIS WAS TOO SLOW
         """
         result = self.molecules[0].chains[2].residues[0:2].atoms.get("1666666-#22222")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: INDEX-INDEX
     #       index -  index
@@ -2650,8 +2650,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-index used in atoms.get(index-index)
         """
         result = self.atoms.get("1-2")
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\1-2)")
-        self.assertEquals(len(result), 2)
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\1-2)")
+        self.assertEqual(len(result), 2)
 
     #       index -  index(fail)
     def test_AtomSet_range_index_index_fail_second(self):
@@ -2659,7 +2659,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-index_fail_second used in atoms.get(index-index)
         """
         result = self.atoms.get("1-133333")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  index
     def test_AtomSet_range_index_fail_first_index(self):
@@ -2667,7 +2667,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-index used in atoms.get(index-index)
         """
         result = self.atoms.get("166666-1")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  index(fail)
     def test_AtomSet_range_index_index_fail_both(self):
@@ -2675,7 +2675,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index_index-fail_both used in atoms.get(index-index)
         """
         result = self.atoms.get("166666-188888")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     # RANGE: INDEX-NamedResSet
     #       index -  NamedResSet
@@ -2684,7 +2684,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet used in atoms.get(index-NamedResSet)
         """
         result = self.atoms.get("1-buried")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
 
     #       index -  NamedResSet(fail)
@@ -2693,7 +2693,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet_fail_second used in atoms.get(index-NamedResSet)
         """
         result = self.atoms.get("1-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  NamedResSet
     def test_AtomSet_range_index_fail_first_NamedResSet(self):
@@ -2701,7 +2701,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index_fail-first_NamedResSet used in atoms.get(index-NamedResSet)
         """
         result = self.atoms.get("666666-buried")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
 
     #       index(fail) -  NamedResSet(fail)
@@ -2710,7 +2710,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-NamedResSet_fail_both used in atoms.get(index-NamedResSet)
         """
         result = self.atoms.get("666666-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
 
     # RANGE: INDEX-NamedAtomSet
@@ -2720,8 +2720,8 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet used in atoms.get(index-NamedAtomSet)
         """
         result = self.atoms.get("1-backbone")
-        self.assertEquals(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\1-backbone)")
-        self.assertEquals(len(result),  12668)
+        self.assertEqual(result.stringRepr,"(hsg1:::/+/2plv:::/+/1gyc:::\\s\\1-backbone)")
+        self.assertEqual(len(result),  12668)
 
 
     #       index -  NamedAtomSet(fail)
@@ -2730,7 +2730,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet_fail_second used in atoms.get(index-NamedAtomSet)
         """
         result = self.atoms.get("1-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  NamedAtomSet
     def test_AtomSet_range_index_fail_first_NamedAtomSet(self):
@@ -2738,7 +2738,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index_fail_first-NamedAtomSet used in atoms.get(index-NamedAtomSet)
         """
         result = self.atoms.get("666666-backbone")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
     #       index(fail) -  NamedAtomSet(fail)
     def test_AtomSet_range_index_NamedAtomSet_fail_both(self):
@@ -2746,7 +2746,7 @@ class AtomSetSelectionTests(SelectionBaseTest):
          test range index-NamedAtomSet_fail_both used in atoms.get(index-NamedAtomSet)
         """
         result = self.atoms.get("666666-mistake")
-        self.assertEquals(result, AtomSet())
+        self.assertEqual(result, AtomSet())
 
 
 

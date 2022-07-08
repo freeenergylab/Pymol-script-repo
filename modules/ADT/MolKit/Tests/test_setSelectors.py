@@ -24,7 +24,7 @@ class ProteinSetSelectorBaseTests(unittest.TestCase):
         instantiate an ProteinSetSelector
         """
         stringSel = ProteinSetSelector()
-        self.assertEquals(stringSel.__class__, ProteinSetSelector)
+        self.assertEqual(stringSel.__class__, ProteinSetSelector)
 
 
 #    def test_constructorOptions(self):
@@ -58,7 +58,7 @@ class ProteinSetSelectorTests(ProteinSetSelectorBaseTests):
          test result with empty string returns all mols
         """
         result, msg = self.stringSel.select(self.mols, "")
-        self.assertEquals(result, self.mols)
+        self.assertEqual(result, self.mols)
 
 
     def test_select_end(self):
@@ -68,7 +68,7 @@ class ProteinSetSelectorTests(ProteinSetSelectorBaseTests):
         new_mols = Read("Data/1crn.pdb")
         self.mols +=new_mols
         result, msg = self.stringSel.select(self.mols, "$")
-        self.assertEquals(result[-1], self.mols[-1])
+        self.assertEqual(result[-1], self.mols[-1])
 
 
     def test_select_with_valid_index(self):
@@ -78,7 +78,7 @@ class ProteinSetSelectorTests(ProteinSetSelectorBaseTests):
         selString = "0"
         #selString = "1"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
 
 
     def test_select_with_invalid_index_returns_empty_set(self):
@@ -101,7 +101,7 @@ class ProteinSetSelectorTests(ProteinSetSelectorBaseTests):
         selString = "0-1"
         #selString = "1-2"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), 2)
+        self.assertEqual(len(result), 2)
 
 
     def test_select_with_invalid_range(self):
@@ -112,7 +112,7 @@ class ProteinSetSelectorTests(ProteinSetSelectorBaseTests):
         self.mols +=new_mols
         selString = "4-6"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), 0)
+        self.assertEqual(len(result), 0)
 
 
     def test_select_with_valid_regex(self):
@@ -125,7 +125,7 @@ class ProteinSetSelectorTests(ProteinSetSelectorBaseTests):
         selString = "[1-3]*"
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
 
 
     def test_select_with_valid_regex_2(self):
@@ -139,7 +139,7 @@ class ProteinSetSelectorTests(ProteinSetSelectorBaseTests):
         selString = "[s-z]*"
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
 
 
     def test_select_valid_set(self):
@@ -155,8 +155,8 @@ class ProteinSetSelectorTests(ProteinSetSelectorBaseTests):
         result, msg = self.stringSel.select(self.mols, selString, 
                                         sets=these_sets)
         #print "result=", result
-        self.assertEquals(len(result), 1)
-        self.assertEquals(result, self.mols[1:])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result, self.mols[1:])
 
 
 
@@ -167,7 +167,7 @@ class ChainSetSelectorBaseTests(unittest.TestCase):
         instantiate an ChainSetSelector
         """
         stringSel = ChainSetSelector()
-        self.assertEquals(stringSel.__class__, ChainSetSelector)
+        self.assertEqual(stringSel.__class__, ChainSetSelector)
 
 
 
@@ -195,7 +195,7 @@ class ChainSetSelectorTests(ChainSetSelectorBaseTests):
          test result with empty string returns all chains
         """
         result, msg = self.stringSel.select(self.chains, "")
-        self.assertEquals(result, self.chains)
+        self.assertEqual(result, self.chains)
 
 
     def test_select_end(self):
@@ -203,7 +203,7 @@ class ChainSetSelectorTests(ChainSetSelectorBaseTests):
         test select with '$'  returns last item
         """
         result, msg = self.stringSel.select(self.chains, "$")
-        self.assertEquals(result, self.chains[-1:])
+        self.assertEqual(result, self.chains[-1:])
 
 
     def test_select_with_valid_index(self):
@@ -212,7 +212,7 @@ class ChainSetSelectorTests(ChainSetSelectorBaseTests):
         """
         selString = "1"
         result, msg = self.stringSel.select(self.chains, selString)
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
 
 
     def test_select_with_invalid_index_returns_empty_set(self):
@@ -232,7 +232,7 @@ class ChainSetSelectorTests(ChainSetSelectorBaseTests):
         """
         selString = "1-2"
         result, msg = self.stringSel.select(self.chains, selString)
-        self.assertEquals(len(result), 2)
+        self.assertEqual(len(result), 2)
 
 
     def test_select_with_invalid_range(self):
@@ -241,7 +241,7 @@ class ChainSetSelectorTests(ChainSetSelectorBaseTests):
         """
         selString = "4-6"
         result, msg = self.stringSel.select(self.chains, selString)
-        self.assertEquals(len(result), 0)
+        self.assertEqual(len(result), 0)
 
 
     def test_select_with_valid_regex(self):
@@ -253,7 +253,7 @@ class ChainSetSelectorTests(ChainSetSelectorBaseTests):
         selString = "A"
         result, msg = self.stringSel.select(self.chains, selString)
         #print "result=", result
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
 
 
     def test_select_valid_set(self):
@@ -267,8 +267,8 @@ class ChainSetSelectorTests(ChainSetSelectorBaseTests):
         result, msg = self.stringSel.select(self.chains, selString, 
                                         sets=these_sets)
         #print "result=", result
-        self.assertEquals(len(result), 2)
-        self.assertEquals(result, self.chains[1:])
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result, self.chains[1:])
 
 
 
@@ -280,7 +280,7 @@ class ResidueSetSelectorBaseTests(unittest.TestCase):
         instantiate an ResidueSetSelector
         """
         stringSel = ResidueSetSelector()
-        self.assertEquals(stringSel.__class__, ResidueSetSelector)
+        self.assertEqual(stringSel.__class__, ResidueSetSelector)
 
 
 
@@ -308,7 +308,7 @@ class ResidueSetSelectorTests(ResidueSetSelectorBaseTests):
          test result with empty string returns all residues
         """
         result, msg = self.stringSel.select(self.residues, "")
-        self.assertEquals(result, self.residues)
+        self.assertEqual(result, self.residues)
 
 
     def test_select_end(self):
@@ -316,7 +316,7 @@ class ResidueSetSelectorTests(ResidueSetSelectorBaseTests):
         test select with '$'  returns last item
         """
         result, msg = self.stringSel.select(self.residues, "$")
-        self.assertEquals(result, self.residues[-1:])
+        self.assertEqual(result, self.residues[-1:])
 
 
     def test_select_with_valid_index(self):
@@ -325,7 +325,7 @@ class ResidueSetSelectorTests(ResidueSetSelectorBaseTests):
         """
         selString = "1"
         result, msg = self.stringSel.select(self.residues, selString)
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
 
 
     def test_select_with_invalid_index_returns_empty_set(self):
@@ -345,7 +345,7 @@ class ResidueSetSelectorTests(ResidueSetSelectorBaseTests):
         """
         selString = "1-2"
         result, msg = self.stringSel.select(self.residues, selString)
-        self.assertEquals(len(result), 2)
+        self.assertEqual(len(result), 2)
 
 
     def test_select_with_invalid_range(self):
@@ -354,7 +354,7 @@ class ResidueSetSelectorTests(ResidueSetSelectorBaseTests):
         """
         selString = "64-71"
         result, msg = self.stringSel.select(self.residues, selString)
-        self.assertEquals(len(result), 0)
+        self.assertEqual(len(result), 0)
 
 
     def test_select_with_valid_regex(self):
@@ -366,7 +366,7 @@ class ResidueSetSelectorTests(ResidueSetSelectorBaseTests):
         selString = "A*"
         result, msg = self.stringSel.select(self.residues, selString)
         #print "result=", result
-        self.assertEquals(len(result), 11)
+        self.assertEqual(len(result), 11)
 
 
     def test_select_valid_set(self):
@@ -380,8 +380,8 @@ class ResidueSetSelectorTests(ResidueSetSelectorBaseTests):
         selString = key
         result, msg = self.stringSel.select(self.residues, selString, 
                                         sets=these_sets)
-        self.assertEquals(len(result), len(new_set))
-        self.assertEquals(result, new_set)
+        self.assertEqual(len(result), len(new_set))
+        self.assertEqual(result, new_set)
 
 
 class AtomSetSelectorBaseTests(unittest.TestCase):
@@ -391,7 +391,7 @@ class AtomSetSelectorBaseTests(unittest.TestCase):
         instantiate an AtomSetSelector
         """
         stringSel = AtomSetSelector()
-        self.assertEquals(stringSel.__class__, AtomSetSelector)
+        self.assertEqual(stringSel.__class__, AtomSetSelector)
 
 
 
@@ -419,7 +419,7 @@ class AtomSetSelectorTests(AtomSetSelectorBaseTests):
          test result with empty string returns all atoms
         """
         result, msg = self.stringSel.select(self.atoms, "")
-        self.assertEquals(result, self.atoms)
+        self.assertEqual(result, self.atoms)
 
 
     def test_select_end(self):
@@ -427,7 +427,7 @@ class AtomSetSelectorTests(AtomSetSelectorBaseTests):
         test select with '$'  returns last item
         """
         result, msg = self.stringSel.select(self.atoms, "$")
-        self.assertEquals(result, self.atoms[-1:])
+        self.assertEqual(result, self.atoms[-1:])
 
 
     def test_select_with_valid_index(self):
@@ -436,7 +436,7 @@ class AtomSetSelectorTests(AtomSetSelectorBaseTests):
         """
         selString = "1"
         result, msg = self.stringSel.select(self.atoms, selString)
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
 
 
     def test_select_with_invalid_index_returns_empty_set(self):
@@ -457,7 +457,7 @@ class AtomSetSelectorTests(AtomSetSelectorBaseTests):
         selString = "1-2"
         result, msg = self.stringSel.select(self.atoms, selString)
         #FIX THIS
-        self.assertEquals(len(result), 2)
+        self.assertEqual(len(result), 2)
 
 
     def test_select_with_invalid_range(self):
@@ -466,7 +466,7 @@ class AtomSetSelectorTests(AtomSetSelectorBaseTests):
         """
         selString = "649-713"
         result, msg = self.stringSel.select(self.atoms, selString)
-        self.assertEquals(len(result), 0)
+        self.assertEqual(len(result), 0)
 
 
     def test_select_with_valid_regex(self):
@@ -478,7 +478,7 @@ class AtomSetSelectorTests(AtomSetSelectorBaseTests):
         selString = "CA"
         result, msg = self.stringSel.select(self.atoms, selString)
         #print "result=", result
-        self.assertEquals(len(result), 49)
+        self.assertEqual(len(result), 49)
 
 
     def test_select_valid_set(self):
@@ -492,8 +492,8 @@ class AtomSetSelectorTests(AtomSetSelectorBaseTests):
         selString = key
         result, msg = self.stringSel.select(self.atoms, selString, 
                                         sets=these_sets)
-        self.assertEquals(len(result), len(new_set))
-        self.assertEquals(result, new_set)
+        self.assertEqual(len(result), len(new_set))
+        self.assertEqual(result, new_set)
 
 
 
@@ -504,7 +504,7 @@ class StringSelectorBaseTests(unittest.TestCase):
         instantiate an StringSelector()
         """
         stringSel = StringSelector()
-        self.assertEquals(stringSel.__class__, StringSelector)
+        self.assertEqual(stringSel.__class__, StringSelector)
 
 
 class StringSelectorTests(StringSelectorBaseTests):
@@ -531,8 +531,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         #stringSel = MVProteinSetSelector(self.mols, self.selString)
         #result, msg =  stringSel.go()
         result, msg = self.stringSel.select(self.mols, ":")
-        self.assertEquals(result, self.mols.chains)
-        self.assertEquals(result.__class__, self.mols.chains.__class__)
+        self.assertEqual(result, self.mols.chains)
+        self.assertEqual(result.__class__, self.mols.chains.__class__)
 
 
 
@@ -543,7 +543,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         new_mols = Read("Data/1crn.pdb")
         self.mols +=new_mols
         result, msg = self.stringSel.select(self.mols, "$:")
-        self.assertEquals(result, self.mols[-1:].chains)
+        self.assertEqual(result, self.mols[-1:].chains)
 
 
     def test_1level_select_end_2(self):
@@ -553,7 +553,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         new_mols = Read("Data/1crn.pdb")
         self.mols +=new_mols
         result, msg = self.stringSel.select(self.mols, ":$")
-        self.assertEquals(result[0], self.mols[-1:].chains[-1])
+        self.assertEqual(result[0], self.mols[-1:].chains[-1])
 
 
     def test_1level_select_with_valid_index(self):
@@ -563,8 +563,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         selString = "0:"
         #selString = "1:"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), len(self.mols[0].chains))
-        self.assertEquals(result.__class__, self.mols.chains.__class__)
+        self.assertEqual(len(result), len(self.mols[0].chains))
+        self.assertEqual(result.__class__, self.mols.chains.__class__)
 
 
     def test_1level_select_with_invalid_index_returns_empty_set(self):
@@ -590,7 +590,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         selString = "0-1:"
         #selString = "1-2:"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), len(self.mols.chains))
+        self.assertEqual(len(result), len(self.mols.chains))
 
 
     def test_1level_select_with_invalid_range(self):
@@ -602,8 +602,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         self.mols +=new_mols
         selString = "4-6:"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), 0)
-        self.assertEquals(result.__class__, ChainSet)
+        self.assertEqual(len(result), 0)
+        self.assertEqual(result.__class__, ChainSet)
         #self.assertEquals(result.__class__, self.mols.chains.__class__)
 
 
@@ -618,8 +618,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
         #1crn has 1 chain
-        self.assertEquals(len(result), 1)
-        self.assertEquals(result.__class__, self.mols.chains.__class__)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result.__class__, self.mols.chains.__class__)
 
 
     def test_1level_select_with_valid_regex_2(self):
@@ -633,8 +633,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         selString = "[s-z]*:"
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
-        self.assertEquals(len(result), len(self.mols[0].chains))
-        self.assertEquals(result.__class__, self.mols.chains.__class__)
+        self.assertEqual(len(result), len(self.mols[0].chains))
+        self.assertEqual(result.__class__, self.mols.chains.__class__)
 
 
     #tests with 2 changes of level
@@ -645,8 +645,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         #stringSel = MVProteinSetSelector(self.mols, self.selString)
         #result, msg =  stringSel.go()
         result, msg = self.stringSel.select(self.mols, "::")
-        self.assertEquals(result, self.mols.chains.residues)
-        self.assertEquals(result.__class__, self.mols.chains.residues.__class__)
+        self.assertEqual(result, self.mols.chains.residues)
+        self.assertEqual(result.__class__, self.mols.chains.residues.__class__)
 
 
     def test_2level_select_end(self):
@@ -656,7 +656,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         new_mols = Read("Data/1crn.pdb")
         self.mols +=new_mols
         result, msg = self.stringSel.select(self.mols, "$::")
-        self.assertEquals(result, self.mols[-1:].chains.residues)
+        self.assertEqual(result, self.mols[-1:].chains.residues)
 
 
     def test_2level_select_end_2(self):
@@ -666,7 +666,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         new_mols = Read("Data/1crn.pdb")
         self.mols +=new_mols
         result, msg = self.stringSel.select(self.mols, "::$")
-        self.assertEquals(result[0], self.mols[-1:].chains.residues[-1])
+        self.assertEqual(result[0], self.mols[-1:].chains.residues[-1])
 
 
     def test_2level_select_with_valid_index(self):
@@ -676,8 +676,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         selString = "0::"
         #selString = "1::"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), len(self.mols.chains.residues))
-        self.assertEquals(result.__class__, self.mols.chains.residues.__class__)
+        self.assertEqual(len(result), len(self.mols.chains.residues))
+        self.assertEqual(result.__class__, self.mols.chains.residues.__class__)
 
 
     def test_2level_select_with_invalid_index_returns_empty_set(self):
@@ -703,7 +703,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         selString = "0-1::"
         #selString = "1-2::"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), len(self.mols.chains.residues))
+        self.assertEqual(len(result), len(self.mols.chains.residues))
 
 
     def test_2level_select_with_invalid_range(self):
@@ -715,8 +715,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         self.mols +=new_mols
         selString = "4-6::"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), 0)
-        self.assertEquals(result.__class__, ResidueSet)
+        self.assertEqual(len(result), 0)
+        self.assertEqual(result.__class__, ResidueSet)
         #self.assertEquals(result.__class__, self.mols.chains.residues.__class__)
 
 
@@ -731,8 +731,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
         #result matches 1crn only
-        self.assertEquals(len(result), len(self.mols[1].chains.residues))
-        self.assertEquals(result.__class__, self.mols.chains.residues.__class__)
+        self.assertEqual(len(result), len(self.mols[1].chains.residues))
+        self.assertEqual(result.__class__, self.mols.chains.residues.__class__)
 
 
     def test_2level_select_with_valid_regex_2(self):
@@ -747,8 +747,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
         #result matches mols[0] only
-        self.assertEquals(len(result), len(self.mols[0].chains.residues))
-        self.assertEquals(result.__class__, self.mols.chains.residues.__class__)
+        self.assertEqual(len(result), len(self.mols[0].chains.residues))
+        self.assertEqual(result.__class__, self.mols.chains.residues.__class__)
 
 
     #tests with 3 changes of level
@@ -759,8 +759,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         #stringSel = MVProteinSetSelector(self.mols, self.selString)
         #result, msg =  stringSel.go()
         result, msg = self.stringSel.select(self.mols, ":::")
-        self.assertEquals(result, self.mols.allAtoms)
-        self.assertEquals(result.__class__, self.mols.allAtoms.__class__)
+        self.assertEqual(result, self.mols.allAtoms)
+        self.assertEqual(result.__class__, self.mols.allAtoms.__class__)
 
 
     def test_3level_select_end(self):
@@ -770,7 +770,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         new_mols = Read("Data/1crn.pdb")
         self.mols +=new_mols
         result, msg = self.stringSel.select(self.mols, "$:::")
-        self.assertEquals(result, self.mols[-1:].allAtoms)
+        self.assertEqual(result, self.mols[-1:].allAtoms)
 
 
     def test_3level_select_end_2(self):
@@ -780,7 +780,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         new_mols = Read("Data/1crn.pdb")
         self.mols +=new_mols
         result, msg = self.stringSel.select(self.mols, ":::$")
-        self.assertEquals(result[0], self.mols[-1:].allAtoms[-1])
+        self.assertEqual(result[0], self.mols[-1:].allAtoms[-1])
 
 
     def test_3level_select_with_valid_index(self):
@@ -791,8 +791,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         #selString = "1:::"
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
-        self.assertEquals(len(result), len(self.mols[0].allAtoms))
-        self.assertEquals(result.__class__, self.mols.allAtoms.__class__)
+        self.assertEqual(len(result), len(self.mols[0].allAtoms))
+        self.assertEqual(result.__class__, self.mols.allAtoms.__class__)
 
 
     def test_3level_select_with_invalid_index_returns_empty_set(self):
@@ -817,7 +817,7 @@ class StringSelectorTests(StringSelectorBaseTests):
         selString = "0-1:::"
         #selString = "1-2:::"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), len(self.mols.allAtoms))
+        self.assertEqual(len(result), len(self.mols.allAtoms))
 
 
     def test_3level_select_with_invalid_range(self):
@@ -829,8 +829,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         self.mols +=new_mols
         selString = "4-6:::"
         result, msg = self.stringSel.select(self.mols, selString)
-        self.assertEquals(len(result), 0)
-        self.assertEquals(result.__class__, AtomSet)
+        self.assertEqual(len(result), 0)
+        self.assertEqual(result.__class__, AtomSet)
         #self.assertEquals(result.__class__, self.mols.allAtoms.__class__)
 
 
@@ -845,8 +845,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
         #result matches 1crn only
-        self.assertEquals(len(result), len(self.mols[1].allAtoms))
-        self.assertEquals(result.__class__, self.mols.allAtoms.__class__)
+        self.assertEqual(len(result), len(self.mols[1].allAtoms))
+        self.assertEqual(result.__class__, self.mols.allAtoms.__class__)
 
 
     def test_3level_select_with_valid_regex_2(self):
@@ -861,8 +861,8 @@ class StringSelectorTests(StringSelectorBaseTests):
         result, msg = self.stringSel.select(self.mols, selString)
         #print "result=", result
         #result matches mols[0] only
-        self.assertEquals(len(result), len(self.mols[0].allAtoms))
-        self.assertEquals(result.__class__, self.mols.allAtoms.__class__)
+        self.assertEqual(len(result), len(self.mols[0].allAtoms))
+        self.assertEqual(result.__class__, self.mols.allAtoms.__class__)
 
 
 class BondSetSelectorBaseTests(unittest.TestCase):
@@ -872,7 +872,7 @@ class BondSetSelectorBaseTests(unittest.TestCase):
         instantiate an BondSetSelector
         """
         stringSel = BondSetSelector()
-        self.assertEquals(stringSel.__class__, BondSetSelector)
+        self.assertEqual(stringSel.__class__, BondSetSelector)
 
 
 
@@ -900,7 +900,7 @@ class BondSetSelectorTests(BondSetSelectorBaseTests):
          test result with empty string returns all bonds
         """
         result, msg = self.stringSel.select(self.bonds, "")
-        self.assertEquals(result, self.bonds)
+        self.assertEqual(result, self.bonds)
 
 
     def test_select_end(self):
@@ -908,7 +908,7 @@ class BondSetSelectorTests(BondSetSelectorBaseTests):
          test select with '$'  returns last item
         """
         result, msg = self.stringSel.select(self.bonds, "$")
-        self.assertEquals(result[-1], self.bonds[-1])
+        self.assertEqual(result[-1], self.bonds[-1])
 
 
     def test_select_with_valid_index(self):
@@ -917,8 +917,8 @@ class BondSetSelectorTests(BondSetSelectorBaseTests):
         """
         selString = "0"
         result, msg = self.stringSel.select(self.bonds, selString)
-        self.assertEquals(len(result), 1)
-        self.assertEquals(result[0], self.bonds[0])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0], self.bonds[0])
 
 
     def test_select_with_invalid_index_returns_empty_set(self):
@@ -938,7 +938,7 @@ class BondSetSelectorTests(BondSetSelectorBaseTests):
         """
         selString = "0-1"
         result, msg = self.stringSel.select(self.bonds, selString)
-        self.assertEquals(len(result), 2)
+        self.assertEqual(len(result), 2)
 
 
     def test_select_with_invalid_range(self):
@@ -947,7 +947,7 @@ class BondSetSelectorTests(BondSetSelectorBaseTests):
         """
         selString = "400-623"
         result, msg = self.stringSel.select(self.bonds, selString)
-        self.assertEquals(len(result), 0)
+        self.assertEqual(len(result), 0)
 
 
     def test_select_with_valid_lambda_exp(self):
@@ -958,7 +958,7 @@ class BondSetSelectorTests(BondSetSelectorBaseTests):
         selString = "lambda x: x.atom1.name=='NE2' or x.atom2.name=='NE2'"
         result, msg = self.stringSel.select(self.bonds, selString)
         #print "result=", result
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
 
 
     def test_no_select_with_valid_regex_2(self):
@@ -968,7 +968,7 @@ class BondSetSelectorTests(BondSetSelectorBaseTests):
         """
         selString = "[1-2]"
         result, msg = self.stringSel.select(self.bonds, selString)
-        self.assertEquals(len(result), 0)
+        self.assertEqual(len(result), 0)
 
 
     def test_select_valid_set(self):
@@ -982,8 +982,8 @@ class BondSetSelectorTests(BondSetSelectorBaseTests):
         result, msg = self.stringSel.select(self.bonds, selString, 
                                         sets=these_sets)
         #print "result=", result
-        self.assertEquals(len(result), 23)
-        self.assertEquals(result, self.bonds[1:])
+        self.assertEqual(len(result), 23)
+        self.assertEqual(result, self.bonds[1:])
 
 
 

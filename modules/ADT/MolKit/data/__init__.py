@@ -34,7 +34,7 @@ def Read(filename):
         parser = Mol2Parser(filename)
 
     else:
-        print "File Format unknown can't parse it"
+        print("File Format unknown can't parse it")
         return []
     molecules = parser.parse()
     return molecules

@@ -1,6 +1,6 @@
 from time import sleep
 from mglutil.gui.BasicWidgets.Tk.TreeWidget.tree import TreeView
-import Tkinter
+import tkinter
 
 def pause(sleepTime=None):
     if sleepTime is None:
@@ -42,7 +42,7 @@ def test_addNode():
 
     # addNode returns the handle of the noded added
     node = tv.addNode('S', parent='protein_2|residue_21|AminoAcid')
-    print node.name, "was added to" , node.parentFullname
+    print(node.name, "was added to" , node.parentFullname)
 
     tv.destroy()
 
@@ -51,14 +51,14 @@ def test_createTree():
     tv = TreeView()
     # paint canvas red so we see it disappear when distroyed
     tv.canvas.configure(bg='red')
-    Tkinter._default_root.update()
+    tkinter._default_root.update()
     pause(0.2)
     tv.destroy()
     
 def test_createWithMaster():
     from mglutil.gui.BasicWidgets.Tk.TreeWidget.tree import TreeView
-    import Tkinter
-    master = Tkinter.Toplevel()
+    import tkinter
+    master = tkinter.Toplevel()
     tv = TreeView(master)
     tv.canvas.configure(bg='red')
     tv.canvas.update()
@@ -117,16 +117,16 @@ def test_Expand_or_Collaps():
     tv.addNode('protein_2')
     
     # equivalent to 
-    print "Is node", node.name, "expanded?: ",
-    print node.expanded
+    print("Is node", node.name, "expanded?: ", end=' ')
+    print(node.expanded)
     
     tv.ExpandNode('protein_1|residue_11')
-    print "After expanding, is node", node.name, "expanded?: ",
-    print node.expanded
+    print("After expanding, is node", node.name, "expanded?: ", end=' ')
+    print(node.expanded)
     
     tv.CollapseNode('protein_1|residue_11')
-    print "After collapsing, is node", node.name, "expanded?: ",
-    print node.expanded
+    print("After collapsing, is node", node.name, "expanded?: ", end=' ')
+    print(node.expanded)
     
     tv.destroy()
 
@@ -144,18 +144,18 @@ def test_SelectNode_deSelectNode():
 
     selection = tv.GetSelected()
     if selection:
-        print "Now", selection.name, "is selected"
+        print("Now", selection.name, "is selected")
     else:
-        print "Nothing is selected"
+        print("Nothing is selected")
 
     # Now select a node 
     tv.Select("protein_1|residue_11|AminoAcid|A")
     
     selection = tv.GetSelected()
     if selection:
-        print "***", selection.name, "is selected ***"
+        print("***", selection.name, "is selected ***")
     else:
-        print "Nothing is selected"
+        print("Nothing is selected")
     
     tv.destroy()
 
@@ -174,9 +174,9 @@ def test_Add_to_History():
     
     selection = tv.GetSelected()
     if selection:
-        print "Adding", selection.name, "to the history list"
+        print("Adding", selection.name, "to the history list")
     else:
-        print "Nothing is selected"
+        print("Nothing is selected")
 
     # add the current selected node to the list
     tv.AddToHistoryList()
@@ -239,7 +239,7 @@ def test_Lock_Unlock_History():
     tv.destroy()
 
 def foo(item): # called by test_SetAction()
-    print item.name
+    print(item.name)
 
 def test_SetAction():
     from mglutil.gui.BasicWidgets.Tk.TreeWidget.tree import TreeView
@@ -281,9 +281,9 @@ def test_NoHistory():
     
     selection = tv.GetSelected()
     if selection:
-        print "Adding", selection.name, "to the history list"
+        print("Adding", selection.name, "to the history list")
     else:
-        print "Nothing is selected"
+        print("Nothing is selected")
 
     # add the current selected node to the list
     tv.AddToHistoryList()
@@ -339,7 +339,7 @@ def test_copyTree():
     tv.copy(tv2)
     node = tv2.findNodeFromName(nodetest.GetFullName())
     assert node.name == 'H'
-    Tkinter._default_root.update()
+    tkinter._default_root.update()
     pause()
     tv.destroy()    
     tv2.destroy()    
@@ -349,7 +349,7 @@ def test_delete2TreesWithSameMaster():
 
     tv = TreeView()
     tv2 = TreeView()
-    Tkinter._default_root.update()
+    tkinter._default_root.update()
     pause()
     tv.destroy()
     tv2.destroy()

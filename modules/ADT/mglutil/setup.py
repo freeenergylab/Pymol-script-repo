@@ -90,7 +90,7 @@ def getDataFiles(file_list, directory, names):
 os.path.walk("mglutil", getDataFiles, data_files)
 #print "data_files:", data_files, len(data_files)
 
-from version import VERSION
+from .version import VERSION
 setup (name = "mglutil",
        version = VERSION,
        description = "Molecular Graphics Laboratory utility collection",

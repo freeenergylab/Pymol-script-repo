@@ -14,7 +14,7 @@ http://www.pymolwiki.org/index.php/rotkit
 -------------------------------------------------------------------------------
 '''
 
-from __future__ import print_function
+
 
 from pymol import cmd
 import math

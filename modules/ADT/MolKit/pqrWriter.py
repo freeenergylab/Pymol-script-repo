@@ -131,13 +131,13 @@ class PqrWriter(MoleculeWriter):
 		try:
 		    atmset.charge
 		except:
-		    print 'ERROR: atoms with missing charge found'
+		    print('ERROR: atoms with missing charge found')
 		    return 'Error'
 
 		try:
 		    atmset.radius
 		except:
-		    print 'ERROR: atoms with missing radius found'
+		    print('ERROR: atoms with missing radius found')
 		    return 'Error'
 
 		for a in atmset:
@@ -150,12 +150,12 @@ class PqrWriter(MoleculeWriter):
 	    try:
 	        atmset.charge
 	    except:
-	        print 'ERROR: atoms with missing charge found'
+	        print('ERROR: atoms with missing charge found')
 		return 'Error'
 	    try:
 	        atmset.radius
 	    except:
-	        print 'ERROR: atoms with missing radius found'
+	        print('ERROR: atoms with missing radius found')
 		return 'Error'
 
 	    for a in atmset:

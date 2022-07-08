@@ -4,7 +4,7 @@ import sys
 import struct
 from tempfile import mkdtemp, mkstemp, NamedTemporaryFile
 from shutil import rmtree
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from numpy.testing import *
 
@@ -283,7 +283,7 @@ class TestRepositoryExists(NumpyTestCase):
         # would do.
         scheme, netloc, upath, pms, qry, frg = urlparse(localfile)
         local_path = os.path.join(self.repos._destpath, netloc)
-        os.mkdir(local_path, 0700)
+        os.mkdir(local_path, 0o700)
         tmpfile = valid_textfile(local_path)
         assert self.repos.exists(tmpfile)
 

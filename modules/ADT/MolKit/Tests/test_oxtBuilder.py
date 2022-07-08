@@ -29,7 +29,7 @@ class BaseTests(unittest.TestCase):
         instantiate an HydrogenBuilder
         """
         oxt_builder = OxtBuilder()
-        self.assertEquals(oxt_builder.__class__, OxtBuilder)
+        self.assertEqual(oxt_builder.__class__, OxtBuilder)
 
 
 #    def test_constructorOptions(self):
@@ -55,7 +55,7 @@ class BaseTests(unittest.TestCase):
             #print "added ", new_at.full_name()
         afterLen = len(self.mol.allAtoms)
         #print "beforeLen=", beforeLen, ' afterLen=', afterLen
-        self.assertEquals(beforeLen+len(self.mol.chains[:-1]), afterLen)
+        self.assertEqual(beforeLen+len(self.mol.chains[:-1]), afterLen)
 
 
 

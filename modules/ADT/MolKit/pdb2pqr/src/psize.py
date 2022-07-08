@@ -400,7 +400,7 @@ def main():
     longOptList = ["help", "CFAC=", "FADD=", "SPACE=", "GMEMFAC=", "GMEMCEIL=", "OFAC=", "REDFAC=", "TFAC_ALPHA=", "TFAC_XEON=", "TFAC_ALPHA="]
     try:
         opts, args = getopt.getopt(sys.argv[1:], shortOptList, longOptList)
-    except getopt.GetoptError, details:
+    except getopt.GetoptError as details:
         sys.stderr.write("Option error (%s)!\n" % details)
         usage()
     if len(args) != 1: 

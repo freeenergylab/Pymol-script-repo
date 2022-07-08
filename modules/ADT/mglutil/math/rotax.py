@@ -120,11 +120,11 @@ vect1 and vect2 can be any vector (non-normalized)
     # compute angle of rotation
     if nc<0.0:
         if i is not None:
-            print 'truncating nc on step:', i, nc
+            print('truncating nc on step:', i, nc)
         nc=0.0
     elif nc>1.0:
         if i is not None:
-            print 'truncating nc on step:', i, nc
+            print('truncating nc on step:', i, nc)
         nc=1.0
         
     alpha = asin(nc)
@@ -181,8 +181,8 @@ def mat_to_quat(matrix,transpose=1):
 
     det = matrix[0]*cofactor1 + matrix[1]*cofactor2 + matrix[2]*cofactor3
     if not (0.999 < det < 1.001):
-        print "Not a unit matrix: so not a pure rotation"
-        print 'Value of Determinant is: ',det
+        print("Not a unit matrix: so not a pure rotation")
+        print('Value of Determinant is: ',det)
     trace = matrix[0] + matrix[5] + matrix[10] + matrix[15]       
     if trace > 0.0000001:# rotation other than 180deg
         S = 0.5/sqrt(trace)

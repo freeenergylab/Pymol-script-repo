@@ -42,7 +42,7 @@ __all__ = ['NumericType','HasUInt64','typeDict','IsType',
 MAX_ALIGN = 8
 MAX_INT_SIZE = 8
 
-import numpy
+from . import numpy
 LP64 = numpy.intp(0).itemsize == 8
 
 HasUInt64 = 1
@@ -312,31 +312,31 @@ else:
                        'Int32', 'UInt32', 'Int64', 'UInt64',
                        'Float32','Float64', 'Complex32', 'Complex64', 'Object']
 
-pythonTypeRank = [ bool, int, long, float, complex ]
+pythonTypeRank = [ bool, int, int, float, complex ]
 
 # The next line is not platform independent XXX Needs to be generalized
 if not LP64:
     pythonTypeMap  = {
         int:("Int32","int"),
-        long:("Int64","int"),
+        int:("Int64","int"),
         float:("Float64","float"),
         complex:("Complex64","complex")}
 
     scalarTypeMap = {
         int:"Int32",
-        long:"Int64",
+        int:"Int64",
         float:"Float64",
         complex:"Complex64"}
 else:
     pythonTypeMap  = {
         int:("Int64","int"),
-        long:("Int64","int"),
+        int:("Int64","int"),
         float:("Float64","float"),
         complex:("Complex64","complex")}
 
     scalarTypeMap = {
         int:"Int64",
-        long:"Int64",
+        int:"Int64",
         float:"Float64",
         complex:"Complex64"}
 
@@ -509,7 +509,7 @@ def getType(type):
     except KeyError:
         raise TypeError("Not a numeric type")
 
-scalarTypes = (bool,int,long,float,complex)
+scalarTypes = (bool,int,int,float,complex)
 
 _scipy_dtypechar = {
     Int8 : 'b',
@@ -527,7 +527,7 @@ _scipy_dtypechar = {
     }
 
 _scipy_dtypechar_inverse = {}
-for key,value in _scipy_dtypechar.items():
+for key,value in list(_scipy_dtypechar.items()):
     _scipy_dtypechar_inverse[value] = key
 
 _val = numpy.int_(0).itemsize

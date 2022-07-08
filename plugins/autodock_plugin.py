@@ -35,8 +35,8 @@ Is described at: http://www.pymolwiki.org/index.php/autodock_plugin
 #================================================================
 '''
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 
 import sys
 import os
@@ -50,12 +50,12 @@ from stat import ST_SIZE
 from time import sleep, time
 
 if sys.version_info[0] < 3:
-    import Tkinter
-    from Tkinter import *
-    import tkMessageBox
-    import tkFileDialog
-    import tkColorChooser
-    import Queue
+    import tkinter
+    from tkinter import *
+    import tkinter.messagebox
+    import tkinter.filedialog
+    import tkinter.colorchooser
+    import queue
 else:
     import tkinter as Tkinter
     from tkinter import *
@@ -446,7 +446,7 @@ class Receptor:
 
     def flex_res_string(self):
         flex_res_str = ''
-        for key, val in self.flexible_residues.items():
+        for key, val in list(self.flexible_residues.items()):
             s = os.path.basename(self.receptor_pdbqt)[:-6]
             lst = []
             for idx, resname in val:
@@ -578,7 +578,7 @@ class Autodock:
 
         # the title
 
-        self.title_label = Tkinter.Label(self.dialog.interior(),
+        self.title_label = tkinter.Label(self.dialog.interior(),
                                          text='PyMOL Autodock/Vina Plugin\nDaniel Seeliger\n<http://wwwuser.gwdg.de/~dseelig>',
                                          background='navy',
                                          foreground='white',
@@ -611,7 +611,7 @@ class Autodock:
         self.grid_page_left_side.pack(side=LEFT, fill='both', expand=0, padx=10, pady=3)
 
         # grid spacing entry
-        self.grid_spacing_frame = Tkinter.Frame(self.grid_page_left_side.interior())
+        self.grid_spacing_frame = tkinter.Frame(self.grid_page_left_side.interior())
         self.grid_spacing_label = Label(self.grid_spacing_frame, text='Spacing:', width=10)
         self.grid_spacing_location = Entry(self.grid_spacing_frame, textvariable=self.grid_spacing, bg='black', fg='green', width=10)
         self.grid_spacing_scrollbar = Scrollbar(self.grid_spacing_frame, orient='horizontal', command=self.grid_spacing_changed)
@@ -621,7 +621,7 @@ class Autodock:
         self.grid_spacing_frame.pack(fill='x', padx=4, pady=1)
 
         # n grid points entries
-        self.n_points_X_frame = Tkinter.Frame(self.grid_page_left_side.interior())
+        self.n_points_X_frame = tkinter.Frame(self.grid_page_left_side.interior())
         self.n_points_X_label = Label(self.n_points_X_frame, text='X-points:', width=10)
         self.n_points_X_location = Entry(self.n_points_X_frame, textvariable=self.n_points_X, bg='black', fg='green', width=10)
         self.n_points_X_scrollbar = Scrollbar(self.n_points_X_frame, orient='horizontal', command=self.n_points_X_changed)
@@ -630,7 +630,7 @@ class Autodock:
         self.n_points_X_scrollbar.pack(side=LEFT, anchor='w')
         self.n_points_X_frame.pack(fill='x', padx=4, pady=1)
 
-        self.n_points_Y_frame = Tkinter.Frame(self.grid_page_left_side.interior())
+        self.n_points_Y_frame = tkinter.Frame(self.grid_page_left_side.interior())
         self.n_points_Y_label = Label(self.n_points_Y_frame, text='Y-points:', width=10)
         self.n_points_Y_location = Entry(self.n_points_Y_frame, textvariable=self.n_points_Y, bg='black', fg='green', width=10)
         self.n_points_Y_scrollbar = Scrollbar(self.n_points_Y_frame, orient='horizontal', command=self.n_points_Y_changed)
@@ -639,7 +639,7 @@ class Autodock:
         self.n_points_Y_scrollbar.pack(side=LEFT, anchor='w')
         self.n_points_Y_frame.pack(fill='x', padx=4, pady=1)
 
-        self.n_points_Z_frame = Tkinter.Frame(self.grid_page_left_side.interior())
+        self.n_points_Z_frame = tkinter.Frame(self.grid_page_left_side.interior())
         self.n_points_Z_label = Label(self.n_points_Z_frame, text='Z-points:', width=10)
         self.n_points_Z_location = Entry(self.n_points_Z_frame, textvariable=self.n_points_Z, bg='black', fg='green', width=10)
         self.n_points_Z_scrollbar = Scrollbar(self.n_points_Z_frame, orient='horizontal', command=self.n_points_Z_changed)
@@ -672,10 +672,10 @@ class Autodock:
         self.grid_page_right_side.pack(side=LEFT, fill='both', expand=0, padx=10, pady=3)
 
         self.box_display_radiogroups = []
-        self.box_display_radioframe = Tkinter.Frame(self.grid_page_right_side.interior())
+        self.box_display_radioframe = tkinter.Frame(self.grid_page_right_side.interior())
 
         self.box_display_cylinder_frame = Pmw.Group(self.box_display_radioframe,
-                                                    tag_pyclass=Tkinter.Radiobutton,
+                                                    tag_pyclass=tkinter.Radiobutton,
                                                     tag_text='Cylindric Box',
                                                     tag_value=0,
                                                     tag_variable=self.box_display_mode
@@ -683,7 +683,7 @@ class Autodock:
         self.box_display_cylinder_frame.pack(fill='x', expand=1, side=TOP)
         self.box_display_radiogroups.append(self.box_display_cylinder_frame)
 
-        self.box_display_cylinder_size_frame = Tkinter.Frame(self.box_display_cylinder_frame.interior())
+        self.box_display_cylinder_size_frame = tkinter.Frame(self.box_display_cylinder_frame.interior())
         self.box_display_cylinder_size_label = Label(self.box_display_cylinder_size_frame, text='Size:', width=10)
         self.box_display_cylinder_size_location = Entry(self.box_display_cylinder_size_frame,
                                                         textvariable=self.box_display_cylinder_size,
@@ -697,7 +697,7 @@ class Autodock:
         self.box_display_cylinder_size_frame.pack(fill='x', padx=4, pady=1)
 
         self.box_display_wire_frame = Pmw.Group(self.box_display_radioframe,
-                                                tag_pyclass=Tkinter.Radiobutton,
+                                                tag_pyclass=tkinter.Radiobutton,
                                                 tag_text='Wired Box',
                                                 tag_value=1,
                                                 tag_variable=self.box_display_mode
@@ -705,7 +705,7 @@ class Autodock:
         self.box_display_wire_frame.pack(fill='x', expand=1)
         self.box_display_radiogroups.append(self.box_display_wire_frame)
 
-        self.box_display_mesh_line_width_frame = Tkinter.Frame(self.box_display_wire_frame.interior())
+        self.box_display_mesh_line_width_frame = tkinter.Frame(self.box_display_wire_frame.interior())
         self.box_display_mesh_line_width_label = Label(self.box_display_mesh_line_width_frame, text='Line Width:', width=10)
         self.box_display_mesh_line_width_location = Entry(self.box_display_mesh_line_width_frame,
                                                           textvariable=self.box_display_line_width,
@@ -717,7 +717,7 @@ class Autodock:
         self.box_display_mesh_line_width_scrollbar.pack(side=LEFT)
         self.box_display_mesh_line_width_frame.pack(fill='x', padx=4, pady=1)
 
-        self.box_display_mesh_grid_frame = Tkinter.Frame(self.box_display_wire_frame.interior())
+        self.box_display_mesh_grid_frame = tkinter.Frame(self.box_display_wire_frame.interior())
         self.box_display_mesh_grid_label = Label(self.box_display_mesh_grid_frame, text='Grid Size:', width=10)
         self.box_display_mesh_grid_location = Entry(self.box_display_mesh_grid_frame,
                                                     textvariable=self.box_display_mesh_grid,
@@ -737,10 +737,10 @@ class Autodock:
         self.grid_center_radiogroups = []
         self.grid_center_selection_mode = IntVar()
         self.grid_center_selection_mode.set(GRID_CENTER_FROM_SELECTION)
-        self.grid_center_radioframe = Tkinter.Frame(self.grid_definition_page)
+        self.grid_center_radioframe = tkinter.Frame(self.grid_definition_page)
 
         self.grid_center_radio_button_pymol_selection = Pmw.Group(self.grid_center_radioframe,
-                                                                  tag_pyclass=Tkinter.Radiobutton,
+                                                                  tag_pyclass=tkinter.Radiobutton,
                                                                   tag_text='Calculate Grid Center by Selection',
                                                                   tag_value=GRID_CENTER_FROM_SELECTION,
                                                                   tag_variable=self.grid_center_selection_mode
@@ -758,7 +758,7 @@ class Autodock:
         self.grid_center_selection_entry.pack(fill='x', padx=4, pady=1, expand=0)
 
         self.grid_center_radio_button_coordinates = Pmw.Group(self.grid_center_radioframe,
-                                                              tag_pyclass=Tkinter.Radiobutton,
+                                                              tag_pyclass=tkinter.Radiobutton,
                                                               tag_text='Grid Center Coordinates',
                                                               tag_value=GRID_CENTER_FROM_COORDINATES,
                                                               tag_variable=self.grid_center_selection_mode
@@ -770,17 +770,17 @@ class Autodock:
         self.grid_center_radioframe.pack(padx=6, pady=6, expand='yes', fill='both')
         Pmw.aligngrouptags(self.grid_center_radiogroups)
 
-        self.grid_center_X_frame = Tkinter.Frame(self.grid_center_radio_button_coordinates.interior())
+        self.grid_center_X_frame = tkinter.Frame(self.grid_center_radio_button_coordinates.interior())
         self.grid_center_X_label = Label(self.grid_center_X_frame, text='X:')
         self.grid_center_X_location = Entry(self.grid_center_X_frame, textvariable=self.grid_center[0], bg='black', fg='green', width=10)
         self.grid_center_X_scrollbar = Scrollbar(self.grid_center_X_frame, orient='horizontal', command=self.grid_center_X_changed)
 
-        self.grid_center_Y_frame = Tkinter.Frame(self.grid_center_radio_button_coordinates.interior())
+        self.grid_center_Y_frame = tkinter.Frame(self.grid_center_radio_button_coordinates.interior())
         self.grid_center_Y_label = Label(self.grid_center_Y_frame, text='Y:')
         self.grid_center_Y_location = Entry(self.grid_center_Y_frame, textvariable=self.grid_center[1], bg='black', fg='green', width=10)
         self.grid_center_Y_scrollbar = Scrollbar(self.grid_center_Y_frame, orient='horizontal', command=self.grid_center_Y_changed)
 
-        self.grid_center_Z_frame = Tkinter.Frame(self.grid_center_radio_button_coordinates.interior())
+        self.grid_center_Z_frame = tkinter.Frame(self.grid_center_radio_button_coordinates.interior())
         self.grid_center_Z_label = Label(self.grid_center_Z_frame, text='Z:')
         self.grid_center_Z_location = Entry(self.grid_center_Z_frame, textvariable=self.grid_center[2], bg='black', fg='green', width=10)
         self.grid_center_Z_scrollbar = Scrollbar(self.grid_center_Z_frame, orient='horizontal', command=self.grid_center_Z_changed)
@@ -846,7 +846,7 @@ class Autodock:
         self.configuration_top_group = Pmw.Group(self.configuration_page, tag_text='General Notes')
         self.configuration_top_group.pack(fill='both', expand=0, padx=10, pady=5)
 
-        self.text_field = Tkinter.Label(self.configuration_top_group.interior(),
+        self.text_field = tkinter.Label(self.configuration_top_group.interior(),
                                         text=intro_text,
                                         background='black',
                                         foreground='yellow',
@@ -1113,7 +1113,7 @@ class Autodock:
                                                 )
 
         self.docking_nposes_list = Pmw.ComboBox(self.docking_top_group.interior(),
-                                                scrolledlist_items=range(1, 101),
+                                                scrolledlist_items=list(range(1, 101)),
                                                 labelpos='nw',
                                                 label_text='# Poses',
                                                 listbox_height=10,
@@ -1331,7 +1331,7 @@ class Autodock:
 
         # GUI updates from other threads
         self._gui_active = True
-        self._gui_updates_queue = Queue.Queue(100)
+        self._gui_updates_queue = queue.Queue(100)
         self._gui_updates_flush()
 
     def _gui_updates_flush(self):
@@ -1474,7 +1474,7 @@ class Autodock:
         self.box_is_on_display = False
 
     def change_box_color(self):
-        color = tkColorChooser.Chooser(
+        color = tkinter.colorchooser.Chooser(
             initialcolor='white', title='Choose box color').show()
         if color[0] is not None:
             self.box_color = [color[0][0] / 100.,
@@ -1876,7 +1876,7 @@ class Autodock:
         self.config_settings['vina_exe'] = self.vina_location.getvalue()
         self.config_settings['autodock_tools_path'] = self.autodock_tools_location.getvalue()
         # print 'ADDD', self.autodock_location.getvalue()
-        for key, val in self.config_settings.items():
+        for key, val in list(self.config_settings.items()):
             print(key, '=', val, file=fp)
         fp.close()
         self.status_line.configure(text='Wrote configuration file %s' % config_file_name)
@@ -1908,7 +1908,7 @@ class Autodock:
         sel = self.receptor_list.get()
         receptor_object = self.receptor_dic[sel]
         lst = []
-        for key, val in receptor_object.flexible_residues.items():
+        for key, val in list(receptor_object.flexible_residues.items()):
             for resn, resi in val:
                 lst.append("%s:%4d %s" % (key, resn, resi))
         self.flexible_residues_list.setlist(lst)
@@ -2195,7 +2195,7 @@ class Autodock:
 
     def generate_all_ligands(self):
         self.multiple_ligands = True
-        for key, ligand in self.ligand_dic.items():
+        for key, ligand in list(self.ligand_dic.items()):
             if key != 'VS_DIR':
                 self.ligand_list.selectitem(key)
                 self.generate_ligand()
@@ -2363,7 +2363,7 @@ class Autodock:
 
         else:
             ligand_list = []
-            for lig in self.ligand_dic.values():
+            for lig in list(self.ligand_dic.values()):
                 if hasattr(lig, "ligand_pdbqt") and lig.ligand_pdbqt != '':
                     ligand_list.append(lig)
             for idx in range(len(ligand_list)):
@@ -2464,7 +2464,7 @@ class Autodock:
 
         else:
             ligand_list = []
-            for lig in self.ligand_dic.values():
+            for lig in list(self.ligand_dic.values()):
                 if hasattr(lig, "ligand_pdbqt") and lig.ligand_pdbqt != '':
                     ligand_list.append(lig)
             for idx in range(len(ligand_list)):
@@ -2498,7 +2498,7 @@ class Autodock:
 
     def load_all_ligand_files(self):
         lst = []
-        for name, ligand in self.ligand_dic.items():
+        for name, ligand in list(self.ligand_dic.items()):
             if name != 'VS_DIR' and ligand.outfile_poses != '':
                 lst.append(ligand.outfile_poses)
         for f in lst:
@@ -2621,7 +2621,7 @@ class Autodock:
             ligand = self.pose_viewer_ligand_dic[name][str(value)]
             cmd.read_pdbstr(ligand.as_pdb_string(), str(value))
             pmlname = value.replace(' ', '_').replace('::', '_')
-            for key, val in self.ligand_display_mode.items():
+            for key, val in list(self.ligand_display_mode.items()):
                 #        print key, val
                 if val == True:
                     cmd.show(key, pmlname)
@@ -2671,8 +2671,8 @@ class Autodock:
 
     def make_complete_ligand_list(self):
         self.all_ligands = []
-        for key, val in self.pose_viewer_ligand_dic.items():
-            self.all_ligands.extend(val.values())
+        for key, val in list(self.pose_viewer_ligand_dic.items()):
+            self.all_ligands.extend(list(val.values()))
         self.sort_complete_ligand_list()
 
     def sort_complete_ligand_list(self):
@@ -2858,7 +2858,7 @@ class Autodock:
             pass
 
     def select_map_color(self):
-        color = tkColorChooser.Chooser(
+        color = tkinter.colorchooser.Chooser(
             initialcolor='red', title='Choose map color').show()
         if color[0] is not None:
             self.map_color = [color[0][0] / 255.,
@@ -2868,7 +2868,7 @@ class Autodock:
     def delete_map(self):
         name = self.map_viewer_notebook.getcurselection()
         # print name
-        for mp in self.map_dic[name].keys():
+        for mp in list(self.map_dic[name].keys()):
             cmd.delete(mp)
         cmd.delete(name + '*')
         del self.map_pages[name]
@@ -2889,17 +2889,17 @@ class Autodock:
         self.map_pages[name] = {'name': self.map_viewer_notebook.add(name)}
 #        self.map_pages[name].update({'maps':self.map_dic.keys()})
 
-        self.upper_part = Tkinter.Frame(self.map_pages[name]['name'])
-        self.lower_part = Tkinter.Frame(self.map_pages[name]['name'])
+        self.upper_part = tkinter.Frame(self.map_pages[name]['name'])
+        self.lower_part = tkinter.Frame(self.map_pages[name]['name'])
         self.upper_part.pack(side=TOP)
         self.lower_part.pack(side=BOTTOM)
 
-        self.upper_part1 = Tkinter.Frame(self.upper_part)
-        self.upper_part2 = Tkinter.Frame(self.upper_part)
+        self.upper_part1 = tkinter.Frame(self.upper_part)
+        self.upper_part2 = tkinter.Frame(self.upper_part)
         self.upper_part1.pack(side=TOP, fill='x')
         self.upper_part2.pack(side=BOTTOM, fill='x')
 
-        self.map_thresholdfr = Tkinter.Frame(self.upper_part1)
+        self.map_thresholdfr = tkinter.Frame(self.upper_part1)
         labmap_threshold = Label(self.map_thresholdfr, text="Threshold:")
         self.map_thresholdloc = Entry(self.map_thresholdfr, textvariable=self.map_threshold[name], bg='black', fg='green', width=15)
         self.scrmap_threshold = Scrollbar(self.map_thresholdfr, orient="horizontal", command=self.change_map_threshold)
@@ -2920,7 +2920,7 @@ class Autodock:
         self.map_pages[name]['combo'] = Pmw.ComboBox(self.lower_part,
                                                      label_text='Representations',
                                                      labelpos='nw',
-                                                     scrolledlist_items=self.map_dic[name].keys(),
+                                                     scrolledlist_items=list(self.map_dic[name].keys()),
                                                      selectioncommand=self.status_mapbox,
                                                      listbox_height=15,
                                                      listbox_width=1,
@@ -2974,7 +2974,7 @@ class Autodock:
             fp = open(filename, mode)
             return fp
         except:
-            tkMessageBox.showerror('Error', 'Could not open file %s' % filename)
+            tkinter.messagebox.showerror('Error', 'Could not open file %s' % filename)
             return None
 
 
@@ -3019,14 +3019,14 @@ class FileDialogButtonClassFactory:
         """This returns a FileDialogButton class that will
         call the specified function with the resulting file.
         """
-        class FileDialogButton(Tkinter.Button):
+        class FileDialogButton(tkinter.Button):
             # This is just an ordinary button with special colors.
 
             def __init__(self, master=None, cnf={}, **kw):
                 '''when we get a file, we call fn(filename)'''
                 self.fn = fn
                 self.__toggle = 0
-                Tkinter.Button.__init__(self, master, cnf, **kw)
+                tkinter.Button.__init__(self, master, cnf, **kw)
                 self.configure(command=self.set)
 
             def set(self):
@@ -3051,14 +3051,14 @@ class DirDialogButtonClassFactory:
         """This returns a FileDialogButton class that will
         call the specified function with the resulting file.
         """
-        class DirDialogButton(Tkinter.Button):
+        class DirDialogButton(tkinter.Button):
             # This is just an ordinary button with special colors.
 
             def __init__(self, master=None, cnf={}, **kw):
                 '''when we get a file, we call fn(filename)'''
                 self.fn = fn
                 self.__toggle = 0
-                Tkinter.Button.__init__(self, master, cnf, **kw)
+                tkinter.Button.__init__(self, master, cnf, **kw)
                 self.configure(command=self.set)
 
             def set(self):
@@ -3077,14 +3077,14 @@ class MyFileDialog:
         self.types = types
 
     def getopenfile(self):
-        result = tkFileDialog.askopenfilename(filetypes=self.types)
+        result = tkinter.filedialog.askopenfilename(filetypes=self.types)
         if result == "":
             return None
         else:
             return result
 
     def getsavefile(self):
-        result = tkFileDialog.asksaveasfilename(filetypes=self.types)
+        result = tkinter.filedialog.asksaveasfilename(filetypes=self.types)
         if result == "":
             return None
         else:
@@ -3171,7 +3171,7 @@ class PmwFileDialog(Pmw.Dialog):
         return self.createcomponent(
             'infobox',
             (), None,
-            Tkinter.Label, (self.interior(),),
+            tkinter.Label, (self.interior(),),
             width=51,
             relief='groove',
             foreground='darkblue',
@@ -3706,7 +3706,7 @@ class Tail(object):
         """
         return self
 
-    def next(self):
+    def __next__(self):
         """Kick the iterator interface. Used under the covers to support:
 
         for line in filetail.Tail('log.txt'):

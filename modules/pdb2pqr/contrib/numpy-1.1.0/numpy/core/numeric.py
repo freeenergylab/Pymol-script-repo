@@ -25,8 +25,8 @@ import sys
 import multiarray
 import umath
 from umath import *
-import numerictypes
-from numerictypes import *
+from . import numerictypes
+from .numerictypes import *
 
 bitwise_not = invert
 
@@ -95,7 +95,7 @@ def extend_all(module):
     try:
         mall = getattr(module, '__all__')
     except AttributeError:
-        mall = [k for k in module.__dict__.keys() if not k.startswith('_')]
+        mall = [k for k in list(module.__dict__.keys()) if not k.startswith('_')]
     for a in mall:
         if a not in adict:
             __all__.append(a)
@@ -322,8 +322,8 @@ def tensordot(a, b, axes=2):
     try:
         iter(axes)
     except:
-        axes_a = range(-axes,0)
-        axes_b = range(0,axes)
+        axes_a = list(range(-axes,0))
+        axes_b = list(range(0,axes))
     else:
         axes_a, axes_b = axes
     try:
@@ -347,7 +347,7 @@ def tensordot(a, b, axes=2):
     equal = 1
     if (na != nb): equal = 0
     else:
-        for k in xrange(na):
+        for k in range(na):
             if as_[axes_a[k]] != bs[axes_b[k]]:
                 equal = 0
                 break
@@ -356,7 +356,7 @@ def tensordot(a, b, axes=2):
             if axes_b[k] < 0:
                 axes_b[k] += ndb
     if not equal:
-        raise ValueError, "shape-mismatch for sum"
+        raise ValueError("shape-mismatch for sum")
 
     # Move the axes to sum over to the end of "a"
     # and to the front of "b"
@@ -425,14 +425,14 @@ def rollaxis(a, axis, start=0):
         start += n
     msg = 'rollaxis: %s (%d) must be >=0 and < %d'
     if not (0 <= axis < n):
-        raise ValueError, msg % ('axis', axis, n)
+        raise ValueError(msg % ('axis', axis, n))
     if not (0 <= start < n+1):
-        raise ValueError, msg % ('start', start, n+1)
+        raise ValueError(msg % ('start', start, n+1))
     if (axis < start): # it's been removed
         start -= 1
     if axis==start:
         return a
-    axes = range(0,n)
+    axes = list(range(0,n))
     axes.remove(axis)
     axes.insert(start, axis)
     return a.transpose(axes)
@@ -485,7 +485,7 @@ def cross(a, b, axisa=-1, axisb=-1, axisc=-1, axis=None):
 
 
 #Use numarray's printing function
-from arrayprint import array2string, get_printoptions, set_printoptions
+from .arrayprint import array2string, get_printoptions, set_printoptions
 
 _typelessdata = [int_, float_, complex_]
 if issubclass(intc, int):
@@ -641,14 +641,14 @@ def base_repr (number, base=2, padding=0):
         return res + chars[0]
     exponent = int (math.log (number)/lnb)
     while(exponent >= 0):
-        term = long(base)**exponent
+        term = int(base)**exponent
         lead_digit = int(number / term)
         res += chars[lead_digit]
         number -= term*lead_digit
         exponent -= 1
     return res
 
-from cPickle import load, loads
+from pickle import load, loads
 _cload = load
 _file = file
 
@@ -760,7 +760,7 @@ _errdict = {"ignore":ERR_IGNORE,
             "log":ERR_LOG}
 
 _errdict_rev = {}
-for key in _errdict.keys():
+for key in list(_errdict.keys()):
     _errdict_rev[_errdict[key]] = key
 del key
 
@@ -835,11 +835,11 @@ def setbufsize(size):
     """Set the size of the buffer used in ufuncs.
     """
     if size > 10e6:
-        raise ValueError, "Buffer size, %s, is too big." % size
+        raise ValueError("Buffer size, %s, is too big." % size)
     if size < 5:
-        raise ValueError, "Buffer size, %s, is too small." %size
+        raise ValueError("Buffer size, %s, is too small." %size)
     if size % 16 != 0:
-        raise ValueError, "Buffer size, %s, is not a multiple of 16." %size
+        raise ValueError("Buffer size, %s, is not a multiple of 16." %size)
 
     pyvals = umath.geterrobj()
     old = getbufsize()
@@ -865,7 +865,7 @@ def seterrcall(func):
     """
     if func is not None and not callable(func):
         if not hasattr(func, 'write') or not callable(func.write):
-            raise ValueError, "Only callable can be used as callback"
+            raise ValueError("Only callable can be used as callback")
     pyvals = umath.geterrobj()
     old = geterrcall()
     pyvals[2] = func
@@ -932,6 +932,6 @@ nan = NaN = NAN
 False_ = bool_(False)
 True_ = bool_(True)
 
-import fromnumeric
-from fromnumeric import *
+from . import fromnumeric
+from .fromnumeric import *
 extend_all(fromnumeric)

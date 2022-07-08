@@ -45,22 +45,22 @@ SEE ALSO
         if method in cmd.keyword:
             method = cmd.keyword[method][0]
         else:
-            print('Unknown method ' + str(method))
+            print(('Unknown method ' + str(method)))
             raise CmdException
     for model in models:
         x = method(mobile='(%s) and model %s' % (selection, model),
                    target='(%s) and model %s' % (selection, reference), **kwargs)
         if not quiet:
             if cmd.is_sequence(x):
-                print('%-20s RMS = %8.3f (%d atoms)' % (model, x[0], x[1]))
+                print(('%-20s RMS = %8.3f (%d atoms)' % (model, x[0], x[1])))
             elif isinstance(x, float):
-                print('%-20s RMS = %8.3f' % (model, x))
+                print(('%-20s RMS = %8.3f' % (model, x)))
             elif _self.is_dict(x) and 'RMSD' in x:
                 natoms = x.get('alignment_length', 0)
                 suffix = (' (%s atoms)' % natoms) if natoms else ''
-                print('%-20s RMS = %8.3f' % (model, x['RMSD']) + suffix)
+                print(('%-20s RMS = %8.3f' % (model, x['RMSD']) + suffix))
             else:
-                print('%-20s' % (model,))
+                print(('%-20s' % (model,)))
 
     if zoom:
         cmd.zoom(selection)

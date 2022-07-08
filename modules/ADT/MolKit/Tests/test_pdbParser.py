@@ -25,9 +25,9 @@ def test_parseMol_HelixRec():
     from MolKit.pdbParser import PdbParser
     parser = PdbParser('Data/1crn.pdb')
     parser.SetReadOptions('HELIX')
-    assert 'HELIX' in parser.pdbRecordParser.keys()
+    assert 'HELIX' in list(parser.pdbRecordParser.keys())
     mols = parser.parse()
-    assert parser.recordInfo.has_key('HELIX')
+    assert 'HELIX' in parser.recordInfo
 
 def test_parseSSData():
     from MolKit.pdbParser import PdbParser
@@ -45,9 +45,9 @@ def test_parseSSData_2():
     parser.SetReadOptions('SHEET')
     parser.SetReadOptions('TURN')
     mols = parser.parse()
-    assert parser.recordInfo.has_key('HELIX')
-    assert parser.recordInfo.has_key('SHEET')
-    assert parser.recordInfo.has_key('TURN')
+    assert 'HELIX' in parser.recordInfo
+    assert 'SHEET' in parser.recordInfo
+    assert 'TURN' in parser.recordInfo
     ssDataForMol = parser.parseSSData(mols[0])
 
 def test_parseHYDBND_1():
@@ -175,11 +175,11 @@ def test_parseTERRecord():
     from MolKit import Read
 
     # Protein with TER records specifying chain A and ChainB
-    print "Testing 1bsr: protein with normal TER records"
+    print("Testing 1bsr: protein with normal TER records")
     mol = Read("./Data/1bsr.pdb")[0]
     assert len(mol.chains)==2
     assert mol.chains.name == ['A', 'B']
-    print mol.chains.name
+    print((mol.chains.name))
 
     # Protein with TER records specifying, 1- several chains and 2-
     # Gaps in chain E.
@@ -195,31 +195,31 @@ def test_parseTERRecord():
     # Protein with incorrect TER record...Only TER record no information
     # on the chain ID.
     # TER record doesn't have the right information
-    print "Testing ind.pdb: protein with INCORRECT TER record"
+    print("Testing ind.pdb: protein with INCORRECT TER record")
     mol = Read("./Data/ind.pdb")[0]
     assert len(mol.chains)==1, "Expecting 1 chain I got %s %s"%(len(mol.chains),mol.chains.name)
-    print mol.chains.name
+    print((mol.chains.name))
 
     # Protein with No TER records at all and 1 chain
-    print "Testing 1crn_Hs.pdbq: protein with no TER Record and 1 chain"
+    print("Testing 1crn_Hs.pdbq: protein with no TER Record and 1 chain")
     mol = Read("Data/1crn_Hs.pdbq")[0]
     assert len(mol.chains)==1, "Expecting 1 chain got %s"%len(mol.chains)
     assert mol.chains[0].name == " ", "Expecting chain name ' ', got %s"%mol.chains[0].name
-    print mol.chains.name
+    print((mol.chains.name))
 
     # Protein with 1 TER records and 2 chains A and B
-    print "Testing 1crn2Chains.pdb: protein with only 1 TER record and 2 chains"
+    print("Testing 1crn2Chains.pdb: protein with only 1 TER record and 2 chains")
     mol = Read("Data/1crn2Chains.pdb")[0]
     assert len(mol.chains)==2, "Expecting 1 chain got %s"%len(mol.chains)
     assert mol.chains.name == ['A','B'], "Expecting chain name ' ', got %s"%mol.chains.name
-    print mol.chains.name
+    print((mol.chains.name))
     
     # Protein with No TER records at all and 2 chains
-    print "Testing 1crn2Chains.pdb: protein with only 1 TER record at the end of the ATOM"
+    print("Testing 1crn2Chains.pdb: protein with only 1 TER record at the end of the ATOM")
     mol = Read("Data/1crn2ChainsNOTER.pdb")[0]
     assert len(mol.chains)==2, "Expecting 1 chain got %s"%len(mol.chains)
     assert mol.chains.name == ['A','B'], "Expecting chain name ' ', got %s"%mol.chains.name
-    print mol.chains.name
+    print((mol.chains.name))
 
 def test_parsePQR():
     from MolKit.pdbParser import PQRParser
@@ -237,6 +237,6 @@ harness = testplus.TestHarness( __name__,
                                 )
 
 if __name__ == '__main__':
-    print harness
+    print(harness)
     sys.exit( len( harness))
 

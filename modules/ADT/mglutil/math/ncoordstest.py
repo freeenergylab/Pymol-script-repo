@@ -61,7 +61,7 @@ class InputOutputValues(NcoordsTest):
 
     def test_input_error(self):
         """__init__         -- ValueError on bad input"""
-        self.assertRaises(ValueError, Ncoords, range(10))
+        self.assertRaises(ValueError, Ncoords, list(range(10)))
         self.assertRaises(ValueError, Ncoords, [(1,1,1),(1,1)] )
 
 

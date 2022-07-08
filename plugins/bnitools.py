@@ -32,7 +32,7 @@ system which adds additional functionalities and
 presets to the PyMOL GUI. 
 '''
 
-from __future__ import print_function
+
 
 # for plugin description end
 from pymol import cmd
@@ -47,10 +47,10 @@ import zlib
 import sys
 
 if sys.version_info[0] < 3:
-    from Tkinter import *
-    import Tkinter
-    import tkSimpleDialog
-    import tkFileDialog
+    from tkinter import *
+    import tkinter
+    import tkinter.simpledialog
+    import tkinter.filedialog
 else:
     from tkinter import *
     import tkinter as Tkinter
@@ -232,7 +232,7 @@ def getpic(picture, decode=0):
     return pic
 bni_image = getpic(bni_gif)
 try:
-    bni_image = Tkinter.PhotoImage(data=bni_image)
+    bni_image = tkinter.PhotoImage(data=bni_image)
 except:
     bni_image = ""
 def do_nothing():
@@ -463,7 +463,7 @@ class AboutGui:
                           )
         about_image = getpic(about_gif)
         try:
-            self.about_image = Tkinter.PhotoImage(data=about_image)
+            self.about_image = tkinter.PhotoImage(data=about_image)
         except:
             self.about_image = ""
         self.dialog = Pmw.Dialog(parent,
@@ -521,7 +521,7 @@ class AboutGui:
             self.lastinterior.destroy()
     def defaultwindow(self):
         self.destroylast()
-        self.w = Tkinter.Label(self.dialog.interior(),
+        self.w = tkinter.Label(self.dialog.interior(),
                                text='Beyond Normal Interaction - Tools',
                                background='white',
                                foreground='black',
@@ -654,7 +654,7 @@ def __init__(self):
                              activeforeground="blue",
                              label='v. %s %s' % (__version__, __copyright__),
                              command=do_nothing)
-    self.bni_toggleHelp = Tkinter.IntVar(self.root)
+    self.bni_toggleHelp = tkinter.IntVar(self.root)
     # Initialise the checkbutton to 0:
     self.bni_toggleHelp.set(0)
     self.menuBar.addmenuitem('bni-tools', 'separator', '')
@@ -1116,7 +1116,7 @@ def bni_fetch(parent, typ="pdb"):
     print("# -------------------#")
     print("# BNI-Tools v. %s" % __version__)
     print("# -------------------#")
-    PDBcode = tkSimpleDialog.askstring('BNI Fetch',
+    PDBcode = tkinter.simpledialog.askstring('BNI Fetch',
                                        'Please enter 4-digit\npdb codes (space separated):',
                                        parent=parent.root)
     if PDBcode:
@@ -1297,7 +1297,7 @@ def _set_bni_ray(setting="set", app=None, async_=1):
     dpi = 200
     width_unit = "mm"
     if setting == "set" and app:
-        value = tkSimpleDialog.askstring('Width mm/cm/inch/dots resolution dpi',
+        value = tkinter.simpledialog.askstring('Width mm/cm/inch/dots resolution dpi',
                                          'Please specify width of image and resolution',
                                          parent=app.root)
         value = _remove_brakets(value)
@@ -1680,7 +1680,7 @@ def get_plane_handler(selection="(sele)", app=None, action="set", name="plane", 
     invert = str(invert)
     sphere = str(sphere)
     if action == "set" and app:
-        value = tkSimpleDialog.askstring('Plane settings',
+        value = tkinter.simpledialog.askstring('Plane settings',
                                          'Specify [size %s] [invert 2/1/0]  [sphere 1/0]' % "A",
                                          parent=app.root)
         value = _remove_brakets(value)
@@ -1772,7 +1772,7 @@ def _get_list(input, message="Error"):
     input = _remove_brakets(input)
     if type(input) is str:
         try:
-            input = map(int, input.split(","))
+            input = list(map(int, input.split(",")))
         except TypeError:
             print("# %s:\n%s" % (message, mobile))
             return
@@ -1836,7 +1836,7 @@ def runsidebar(set="", value=None, app=None):
     '''Run sidebar input
     '''
     if value == "set" and app:
-        value = tkSimpleDialog.askstring('Input Sidebar Value',
+        value = tkinter.simpledialog.askstring('Input Sidebar Value',
                                          'Please specify a Value e.g 250',
                                          parent=app.root)
     sidebar(set="width", value=value)
@@ -3289,7 +3289,7 @@ def get_box_handler(selection="(sele)", app=None, action="medium", name="box", c
     draw = str(draw)
     linewidth = str(linewidth)
     if action == "set" and app:
-        value = tkSimpleDialog.askstring('Box settings',
+        value = tkinter.simpledialog.askstring('Box settings',
                                          'Specify [cushion] [draw full/lines] [linewidth]',
                                          parent=app.root)
         value = _remove_brakets(value)
@@ -3598,7 +3598,7 @@ def fast_sym(selection='', cutoff=4.0, delete_sym=1, use=1, app=None):
     '''
     selection = _remove_brakets(selection)
     if cutoff == "set" and app:
-        cutoff = tkSimpleDialog.askstring('Input Symetry Distance',
+        cutoff = tkinter.simpledialog.askstring('Input Symetry Distance',
                                           'Please specify a Distance e.g 4.25',
                                           parent=app.root)
     if cutoff:
@@ -4173,7 +4173,7 @@ class multi_pdb:
             title = 'Select CASoX Map'
             filetypes = [
                 ('CASoX Map', '.omap'), ('CASoX Map', '.map'), ('all', '*')]
-        filenamelist = tkFileDialog.askopenfilenames(title=title,
+        filenamelist = tkinter.filedialog.askopenfilenames(title=title,
                                                      initialdir=self.__class__.filedir,
                                                      filetypes=filetypes,
                                                      )

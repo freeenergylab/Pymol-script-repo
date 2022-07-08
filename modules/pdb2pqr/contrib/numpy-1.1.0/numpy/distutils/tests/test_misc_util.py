@@ -52,9 +52,9 @@ class TestGpaths(NumpyTestCase):
     def check_gpaths(self):
         local_path = minrelpath(os.path.join(os.path.dirname(__file__),'..'))
         ls = gpaths('command/*.py', local_path)
-        assert os.path.join(local_path,'command','build_src.py') in ls,`ls`
+        assert os.path.join(local_path,'command','build_src.py') in ls,repr(ls)
         f = gpaths('system_info.py', local_path)
-        assert os.path.join(local_path,'system_info.py')==f[0],`f`
+        assert os.path.join(local_path,'system_info.py')==f[0],repr(f)
 
 if __name__ == "__main__":
     NumpyTest().run()

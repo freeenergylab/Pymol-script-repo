@@ -11,7 +11,7 @@
 #
 #$Id: test_graphtool.py,v 1.8 2007/09/27 21:00:50 annao Exp $
 import sys,unittest
-from Tkinter import Tk
+from tkinter import Tk
 from time import sleep
 from mglutil.gui.BasicWidgets.Tk.graphtool import GraphApp
 import numpy

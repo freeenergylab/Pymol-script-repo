@@ -12,7 +12,7 @@ This module implements a set of functions to test the InputForm class
 import sys
 from mglutil.regression import testplus
 import numpy as Numeric
-import Tkinter, Pmw
+import tkinter, Pmw
 from mglutil.gui.InputForm.Tk.gui import InputFormDescr, InputForm,\
      CallBackFunction
 from mglutil.gui.BasicWidgets.Tk.customizedWidgets import ListChooser
@@ -28,14 +28,14 @@ def setUp():
     global master
     global root
     global Value
-    master = Tkinter.Tk()
+    master = tkinter.Tk()
     
 def createDescr():
     descr = InputFormDescr(title = 'Testing InputForm')
     descr.append({'name':'checkbutton',
-                  'widgetType':Tkinter.Checkbutton,
+                  'widgetType':tkinter.Checkbutton,
                   'wcfg':{'text':'Checkbutton',
-                          'variable':Tkinter.IntVar()},
+                          'variable':tkinter.IntVar()},
                   'gridcfg':{'sticky':'w'}})
     
 
@@ -199,10 +199,10 @@ def test_inputform_okcfg():
         dismiss = True
 
     def validate_cb():
-        print "In validate_cb"
+        print("In validate_cb")
         global validate
         validate = True
-        print validate
+        print(validate)
         
     descr = createDescr()
     form = InputForm(master, root, descr, modal=1, blocking=0,
@@ -213,8 +213,8 @@ def test_inputform_okcfg():
     setWidget = {'checkbutton':1, 'radioselect':'rb9', 'radioselect2':'rb4',
                  'listchooser':'Pistachio'}
     value = form.testForm(setWidget=setWidget)
-    print 'validate', validate
-    print 'dismiss', dismiss
+    print('validate', validate)
+    print('dismiss', dismiss)
     assert validate
     assert not dismiss
     form.destroy() 
@@ -242,12 +242,12 @@ def test_inputform_initialize():
                  'listchooser':'Pistachio'}
     value = form.testForm(setWidget=setWidget)
     ent = form.descr.entryByName['listchooser']['widget'].entries
-    assert 'Coconut' in map(lambda x: x[0], ent)
+    assert 'Coconut' in [x[0] for x in ent]
 
 def test_inputform_groupwidgetsdefault():
     descr = InputFormDescr(title = 'Testing InputForm')
     descr.append({'name':'group',
-                  'widgetType':Tkinter.Radiobutton,
+                  'widgetType':tkinter.Radiobutton,
                   'listtext':['rb1', 'rb2', 'rb3'],
                   'defaultValue':'rb3',
                   'gridcfg':{'sticky':'w'}})
@@ -388,5 +388,5 @@ harness = testplus.TestHarness( __name__,
                                 )
 
 if __name__ == '__main__':
-    print harness
+    print(harness)
     sys.exit( len( harness))

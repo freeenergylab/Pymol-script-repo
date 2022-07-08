@@ -55,7 +55,7 @@ def fv(rate, nper, pmt, pv, when='end'):
     """future value computed by solving the equation
     """
     when = _convert_when(when)
-    rate, nper, pmt, pv, when = map(np.asarray, [rate, nper, pmt, pv, when])
+    rate, nper, pmt, pv, when = list(map(np.asarray, [rate, nper, pmt, pv, when]))
     temp = (1+rate)**nper
     miter = np.broadcast(rate, nper, pmt, pv, when)
     zer = np.zeros(miter.shape)
@@ -81,7 +81,7 @@ def pmt(rate, nper, pv, fv=0, when='end'):
     """Payment computed by solving the equation
     """
     when = _convert_when(when)
-    rate, nper, pv, fv, when = map(np.asarray, [rate, nper, pv, fv, when])
+    rate, nper, pv, fv, when = list(map(np.asarray, [rate, nper, pv, fv, when]))
     temp = (1+rate)**nper
     miter = np.broadcast(rate, nper, pv, fv, when)
     zer = np.zeros(miter.shape)
@@ -105,7 +105,7 @@ def nper(rate, pmt, pv, fv=0, when='end'):
     """Number of periods found by solving the equation
     """
     when = _convert_when(when)
-    rate, pmt, pv, fv, when = map(np.asarray, [rate, pmt, pv, fv, when])
+    rate, pmt, pv, fv, when = list(map(np.asarray, [rate, pmt, pv, fv, when]))
     try:
         z = pmt*(1.0+rate*when)/rate
     except ZeroDivisionError:
@@ -151,7 +151,7 @@ def pv(rate, nper, pmt, fv=0.0, when='end'):
     """Number of periods found by solving the equation
     """
     when = _convert_when(when)
-    rate, nper, pmt, fv, when = map(np.asarray, [rate, nper, pmt, fv, when])
+    rate, nper, pmt, fv, when = list(map(np.asarray, [rate, nper, pmt, fv, when]))
     temp = (1+rate)**nper
     miter = np.broadcast(rate, nper, pmt, fv, when)
     zer = np.zeros(miter.shape)
@@ -178,7 +178,7 @@ def rate(nper, pmt, pv, fv, when='end', guess=0.10, tol=1e-6, maxiter=100):
     """Number of periods found by solving the equation
     """
     when = _convert_when(when)
-    nper, pmt, pv, fv, when = map(np.asarray, [nper, pmt, pv, fv, when])
+    nper, pmt, pv, fv, when = list(map(np.asarray, [nper, pmt, pv, fv, when]))
     rn = guess
     iter = 0
     close = False

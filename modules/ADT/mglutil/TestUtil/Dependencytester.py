@@ -42,10 +42,10 @@ class DEPENDENCYCHECKER:
             continue
         pwdir = os.path.join(p, f)
         if os.path.exists( os.path.join( pwdir, '__init__.py')):
-            if not packages.has_key(f):
+            if f not in packages:
                 packages[f] = pwdir
         elif os.path.exists( os.path.join( p, '.pth') ):
-            if not packages.has_key(f):
+            if f not in packages:
                 packages[f] = pwdir
   os.chdir(cwd)
 
@@ -54,7 +54,7 @@ class DEPENDENCYCHECKER:
 ###################################################################
 
 
-  pack_site=packages.keys()
+  pack_site=list(packages.keys())
 
 
 ##########################################################################
@@ -76,7 +76,7 @@ class DEPENDENCYCHECKER:
    for pack in packages:
     files = []
     pat = re.compile('import')
-    print "please wait ...."
+    print("please wait ....")
     for root, dirs, files in os.walk(packages[pack]):
         # remove directories not to visit
         for rem in ['CVS', 'regression', 'Tutorial', 'test','Doc','doc']:
@@ -356,7 +356,7 @@ class DEPENDENCYCHECKER:
                         #return Total_packs
                     else:
                         Total_packs.append('result_%s %s %s %s' %(pack,path,f,result))    
-                    print "result_%s %s %s %s" %(pack,path,f,result)
+                    print("result_%s %s %s %s" %(pack,path,f,result))
     if Total_packs:
         return Total_packs
 
@@ -370,7 +370,7 @@ class DEPENDENCYCHECKER:
       for p in pack_list:
          packs[p]=packages[p]
       packages = packs
-   print "please wait ......."
+   print("please wait .......")
    for pack in packages:
     files = []
     pat = re.compile('import')
@@ -612,7 +612,7 @@ class DEPENDENCYCHECKER:
             if res[:3] in ['tmp','TMP','win']:
                 result.remove(res)
                 continue 
-    print "result_%s %s" %(pack,result)
+    print("result_%s %s" %(pack,result))
     Total_packs.append('result_%s %s' %(pack,result))
    return Total_packs
 ############################################################

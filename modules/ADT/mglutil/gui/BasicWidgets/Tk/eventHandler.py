@@ -12,7 +12,7 @@
 # $Id: eventHandler.py,v 1.2 2003/08/29 18:09:15 sophiec Exp $
 #
 
-from Tkinter import Frame
+from tkinter import Frame
 
 class EventManager:
     """Object used to manage callback functions for the events of a Widget
@@ -76,7 +76,7 @@ class EventManager:
 	if not self.ValideEvent(eventType):
 	    raise ValueError('%s is not a valide event type' % eventType)
 
-	if eventType in self.eventHandlers.keys():
+	if eventType in list(self.eventHandlers.keys()):
 	    self.eventHandlers[eventType].append(callback)
 	else:
 	    self.eventHandlers[eventType] = [callback,]
@@ -97,7 +97,7 @@ class EventManager:
 	"""
 
 	assert callable(callback)
-	if self.eventHandlers.has_key(eventType):
+	if eventType in self.eventHandlers:
 	    for f in self.eventHandlers[eventType]:
 	    	if f==callback: return 1
 	return 0
@@ -108,7 +108,7 @@ class EventManager:
 
 	assert type(eventType) == type('string')
 
-	if self.eventHandlers.has_key(eventType):
+	if eventType in self.eventHandlers:
 	    funcList = self.eventHandlers[eventType]
 	else: funcList = None
 
@@ -136,7 +136,7 @@ functions')
     def RemoveCallback(self, eventType, func):
 	"""Delete function func from the list of callbacks for eventType"""
 
-	if not self.eventHandlers.has_key(eventType):
+	if eventType not in self.eventHandlers:
             return None
 #	    raise ValueError('Widget %s has no event %s registered' % \
 #			     self.widget, eventType)
@@ -160,19 +160,19 @@ functions')
     def ListOneBinding(self, key):
 	"""List all bindings for one events"""
 
-	print 'Event', key
-	if self.eventHandlers.has_key(key):
+	print('Event', key)
+	if key in self.eventHandlers:
 	    for f in self.eventHandlers[key]:
-		print '\t %s' % f.__name__
+		print('\t %s' % f.__name__)
 	else:
-	    print '\tNone'
+	    print('\tNone')
 
 
     def ListBindings(self, event=None):
 	"""List all bindings for one or all events"""
 
 	if event is None:
-	    for k in self.eventHandlers.keys():
+	    for k in list(self.eventHandlers.keys()):
 		self.ListOneBinding(k)
 	else:
 	    self.ListOneBinding(event)

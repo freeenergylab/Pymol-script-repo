@@ -44,7 +44,7 @@ SEE ALSO
     else:
         for name in names.split():
             if name not in valid_names:
-                print(' Error: no such distance object: ' + name)
+                print((' Error: no such distance object: ' + name))
                 raise CmdException
 
     raw_objects = cmd.get_session(names, 1, 1, 0, 0)['names']
@@ -67,10 +67,10 @@ SEE ALSO
             try:
                 r.append((xyz2idx[xyz1], xyz2idx[xyz2], cpv.distance(xyz1, xyz2)))
                 if not quiet:
-                    print(' get_raw_distances: ' + str(r[-1]))
+                    print((' get_raw_distances: ' + str(r[-1])))
             except KeyError:
                 if quiet < 0:
-                    print(' Debug: no index for %s %s' % (xyz1, xyz2))
+                    print((' Debug: no index for %s %s' % (xyz1, xyz2)))
     return r
 
 
@@ -110,7 +110,7 @@ SEE ALSO
         cmd.delete(tmp_name)
 
     if not quiet:
-        print(' Selector: selection "%s" defined with %d atoms.' % (name, r))
+        print((' Selector: selection "%s" defined with %d atoms.' % (name, r)))
     return r
 
 cmd.extend('get_raw_distances', get_raw_distances)

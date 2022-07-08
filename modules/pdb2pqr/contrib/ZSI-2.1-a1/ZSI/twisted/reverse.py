@@ -4,7 +4,7 @@
 # $Id: $
 ###########################################################################
 from ZSI import _get_element_nsuri_name, SoapWriter, ParsedSoap
-from interfaces import HandlerChainInterface
+from .interfaces import HandlerChainInterface
 from zope.interface import classProvides, implements, Interface
 
 
@@ -47,7 +47,7 @@ class CallbackHandler:
                                               
         try:
             req,rsp = method(ps, request=request)
-        except Exception, ex:
+        except Exception as ex:
             raise
         
         return rsp

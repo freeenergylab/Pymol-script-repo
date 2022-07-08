@@ -1,8 +1,8 @@
 __all__ = ['matrix', 'bmat', 'mat', 'asmatrix']
 
 import sys
-import numeric as N
-from numeric import concatenate, isscalar, binary_repr, identity
+from . import numeric as N
+from .numeric import concatenate, isscalar, binary_repr, identity
 from numpy.lib.utils import issubdtype
 
 # make translation table
@@ -31,11 +31,11 @@ def _convert_from_string(data):
         newrow = []
         for col in trow:
             temp = col.split()
-            newrow.extend(map(_eval,temp))
+            newrow.extend(list(map(_eval,temp)))
         if count == 0:
             Ncols = len(newrow)
         elif len(newrow) != Ncols:
-            raise ValueError, "Rows not the same size."
+            raise ValueError("Rows not the same size.")
         count += 1
         newdata.append(newrow)
     return newdata
@@ -184,7 +184,7 @@ class matrix(N.ndarray):
         ndim = arr.ndim
         shape = arr.shape
         if (ndim > 2):
-            raise ValueError, "matrix must be 2-dimensional"
+            raise ValueError("matrix must be 2-dimensional")
         elif ndim == 0:
             shape = (1,1)
         elif ndim == 1:
@@ -215,7 +215,7 @@ class matrix(N.ndarray):
                 self.shape = newshape
                 return
             elif (ndim > 2):
-                raise ValueError, "shape too large to be a matrix."
+                raise ValueError("shape too large to be a matrix.")
         else:
             newshape = self.shape
         if ndim == 0:
@@ -302,7 +302,7 @@ class matrix(N.ndarray):
         elif axis==1:
             return self.transpose()
         else:
-            raise ValueError, "unsupported axis"
+            raise ValueError("unsupported axis")
 
     # Necessary because base-class tolist expects dimension
     #  reduction by x[0]
@@ -526,7 +526,7 @@ def _from_string(str,gdict,ldict):
                 try:
                     thismat = gdict[col]
                 except KeyError:
-                    raise KeyError, "%s not found" % (col,)
+                    raise KeyError("%s not found" % (col,))
 
             coltup.append(thismat)
         rowtup.append(concatenate(coltup,axis=-1))

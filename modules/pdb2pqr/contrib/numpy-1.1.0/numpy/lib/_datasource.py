@@ -37,8 +37,9 @@ __docformat__ = "restructuredtext en"
 import os
 import tempfile
 from shutil import rmtree
-from urllib2 import urlopen, URLError
-from urlparse import urlparse
+from urllib.request import urlopen
+from urllib.error import URLError
+from urllib.parse import urlparse
 
 # TODO: .zip support, .tar support?
 _file_openers = {None: open}
@@ -144,7 +145,7 @@ class DataSource (object):
         """Test if the filename is a zip file by looking at the file extension.
         """
         fname, ext = os.path.splitext(filename)
-        return ext in _file_openers.keys()
+        return ext in list(_file_openers.keys())
 
     def _iswritemode(self, mode):
         """Test if the given mode will open a file for writing."""
@@ -173,7 +174,7 @@ class DataSource (object):
         """Return a tuple containing compressed filename variations."""
         names = [filename]
         if not self._iszip(filename):
-            for zipext in _file_openers.keys():
+            for zipext in list(_file_openers.keys()):
                 if zipext:
                     names.append(filename+zipext)
         return names
@@ -460,7 +461,6 @@ class Repository (DataSource):
     def listdir(self):
         '''List files in the source Repository.'''
         if self._isurl(self._baseurl):
-            raise NotImplementedError, \
-                  "Directory listing of URLs, not supported yet."
+            raise NotImplementedError("Directory listing of URLs, not supported yet.")
         else:
             return os.listdir(self._baseurl)

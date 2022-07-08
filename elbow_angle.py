@@ -35,7 +35,7 @@ CHANGELOG
 
 '''
 
-from __future__ import print_function
+
 
 __author__ = 'Jared Sampson'
 __version__ = '0.1.1'

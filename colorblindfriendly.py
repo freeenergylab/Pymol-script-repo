@@ -82,7 +82,7 @@ CHANGELOG
             [10/26/2017]
 
 '''
-from __future__ import print_function
+
 
 __author__ = 'Jared Sampson'
 __version__ = '0.2.0'
@@ -134,7 +134,7 @@ def set_colors(replace=False):
     # Track the added colors
     added_colors = []
 
-    for color, properties in CB_COLORS.items():
+    for color, properties in list(CB_COLORS.items()):
         # RGB tuple shortcut
         rgb = properties['rgb']
 

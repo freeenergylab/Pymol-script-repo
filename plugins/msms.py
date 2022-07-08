@@ -33,8 +33,8 @@
 # PERFORMANCE OF THIS SOFTWARE.
 # ----------------------------------------------------------------------
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 
 # python lib
 import os
@@ -43,10 +43,10 @@ import platform
 import subprocess
 import time
 if sys.version_info[0] < 3:
-    import Tkinter
-    import tkMessageBox
-    import tkFileDialog
-    import tkColorChooser
+    import tkinter
+    import tkinter.messagebox
+    import tkinter.filedialog
+    import tkinter.colorchooser
 else:
     import tkinter as Tkinter
     import tkinter.messagebox as tkMessageBox
@@ -98,14 +98,14 @@ class MSMSPlugin:
         Pmw.setbusycursorattributes(self.dialog.component('hull'))
 
         # parameters used by MSMS
-        self.pdb_fn = Tkinter.StringVar()
-        self.pymol_sel = Tkinter.StringVar()
-        self.msms_bin = Tkinter.StringVar()
+        self.pdb_fn = tkinter.StringVar()
+        self.pymol_sel = tkinter.StringVar()
+        self.msms_bin = tkinter.StringVar()
 ##         self.pdb2xyzr_bin  = Tkinter.StringVar()
-        self.pdb2xyzrn_bin = Tkinter.StringVar()
-        self.tmp_dir = Tkinter.StringVar()
+        self.pdb2xyzrn_bin = tkinter.StringVar()
+        self.tmp_dir = tkinter.StringVar()
 
-        self.cleanup_saved_pymol_sel = Tkinter.BooleanVar()
+        self.cleanup_saved_pymol_sel = tkinter.BooleanVar()
         self.cleanup_saved_pymol_sel.set(True)  # by default, clean up
 
         self.pdb_fn.set('')
@@ -157,15 +157,15 @@ class MSMSPlugin:
         self.pymol_sel.set(cmd.get_names('selections')[-1])
         # self.tmp_dir.set('/tmp')
         self.tmp_dir.set(os.getcwd())
-        self.cleanup_msms_output = Tkinter.BooleanVar()
+        self.cleanup_msms_output = tkinter.BooleanVar()
         self.cleanup_msms_output.set(True)  # by default, clean up msms output
 
         # MSMS parameters
-        self.probe_radius = Tkinter.DoubleVar()
-        self.density = Tkinter.DoubleVar()
-        self.hdensity = Tkinter.DoubleVar()
-        self.noh = Tkinter.BooleanVar()  # ignore hydrogen atoms
-        self.allcpn = Tkinter.BooleanVar()  # consider all surface components
+        self.probe_radius = tkinter.DoubleVar()
+        self.density = tkinter.DoubleVar()
+        self.hdensity = tkinter.DoubleVar()
+        self.noh = tkinter.BooleanVar()  # ignore hydrogen atoms
+        self.allcpn = tkinter.BooleanVar()  # consider all surface components
         self.probe_radius.set(1.5)
         self.density.set(1.0)
         self.hdensity.set(3.0)
@@ -196,12 +196,12 @@ class MSMSPlugin:
         self.norm_col_G = 180
         self.norm_col_B = 50
 
-        self.vert_rad = Tkinter.DoubleVar()  # radius for spheres representing vertices
-        self.norm_len = Tkinter.DoubleVar()  # length of normal vectors
+        self.vert_rad = tkinter.DoubleVar()  # radius for spheres representing vertices
+        self.norm_len = tkinter.DoubleVar()  # length of normal vectors
         self.vert_rad.set(0.2)
         self.norm_len.set(1.0)
 
-        w = Tkinter.Label(self.dialog.interior(),
+        w = tkinter.Label(self.dialog.interior(),
                           text='\nMSMS Plugin for PyMOL\nHongbo Zhu, 2010.\n\nDisplaying protein surface calculated by MSMS.',
                           background='black', foreground='green'
                           )
@@ -216,7 +216,7 @@ class MSMSPlugin:
         ######################
         page = self.notebook.add('Structure')
         self.notebook.tab('Structure').focus_set()
-        group_struc = Tkinter.LabelFrame(page, text='Structure')
+        group_struc = tkinter.LabelFrame(page, text='Structure')
         group_struc.pack(fill='both', expand=True, padx=10, pady=5)
 
         pymol_sel_ent = Pmw.EntryField(group_struc,
@@ -224,16 +224,16 @@ class MSMSPlugin:
                                        labelpos='wn',
                                        entry_textvariable=self.pymol_sel
                                        )
-        clean_cb = Tkinter.Checkbutton(group_struc,
+        clean_cb = tkinter.Checkbutton(group_struc,
                                        text='Clean up tmp pdb (saved PyMOL selection) in the temp dir.',
                                        variable=self.cleanup_saved_pymol_sel,
                                        onvalue=True, offvalue=False)
-        label = Tkinter.Label(group_struc, text='or')
+        label = tkinter.Label(group_struc, text='or')
 
         pdb_fn_ent = Pmw.EntryField(group_struc,
                                     label_text='PDB file:', labelpos='wn',
                                     entry_textvariable=self.pdb_fn)
-        pdb_fn_but = Tkinter.Button(group_struc, text='Browse...',
+        pdb_fn_but = tkinter.Button(group_struc, text='Browse...',
                                     command=self.getPDBFile)
 
         # arrange widgets using grid
@@ -252,8 +252,8 @@ class MSMSPlugin:
         ######################
         page = self.notebook.add('MSMS Configuration')
 
-        group_loc = Tkinter.LabelFrame(page, text='Locations')
-        group_msms_param = Tkinter.LabelFrame(page, text='Parameters')
+        group_loc = tkinter.LabelFrame(page, text='Locations')
+        group_msms_param = tkinter.LabelFrame(page, text='Parameters')
         group_loc.grid(sticky='eswn', row=0, column=0, columnspan=2, padx=10, pady=5)
         group_msms_param.grid(sticky='eswn', row=0, column=2, padx=10, pady=5)
         page.columnconfigure(0, weight=2)
@@ -263,7 +263,7 @@ class MSMSPlugin:
                                       label_text='MSMS binary:', labelpos='wn',
                                       entry_textvariable=self.msms_bin,
                                       entry_width=20)
-        msms_bin_but = Tkinter.Button(group_loc, text='Browse...',
+        msms_bin_but = tkinter.Button(group_loc, text='Browse...',
                                       command=self.getMsmsBin)
 
 # pdb2xyzr_bin_ent = Pmw.EntryField(group_loc,
@@ -276,16 +276,16 @@ class MSMSPlugin:
                                            label_text='pdb2xyzrn binary:', labelpos='wn',
                                            entry_textvariable=self.pdb2xyzrn_bin,
                                            entry_width=20)
-        pdb2xyzrn_bin_but = Tkinter.Button(group_loc, text='Browse...',
+        pdb2xyzrn_bin_but = tkinter.Button(group_loc, text='Browse...',
                                            command=self.getPdb2xyzrnBin)
 
         tmp_dir_ent = Pmw.EntryField(group_loc,
                                      label_text='Temporary dir:', labelpos='wn',
                                      entry_textvariable=self.tmp_dir,
                                      entry_width=20)
-        tmp_dir_but = Tkinter.Button(group_loc, text='Browse...',
+        tmp_dir_but = tkinter.Button(group_loc, text='Browse...',
                                      command=self.getTmpDir)
-        ko_cb = Tkinter.Checkbutton(group_loc,
+        ko_cb = tkinter.Checkbutton(group_loc,
                                     text='Clean up MSMS output (.vert and .face files) in the temp dir.',
                                     variable=self.cleanup_msms_output,
                                     onvalue=True, offvalue=False)
@@ -322,11 +322,11 @@ class MSMSPlugin:
                                   entry_textvariable=self.hdensity,
                                   entry_width=10
                                   )
-        noh_cb = Tkinter.Checkbutton(group_msms_param,
+        noh_cb = tkinter.Checkbutton(group_msms_param,
                                      text='Ignore hydrogens.',
                                      variable=self.noh,
                                      onvalue=True, offvalue=False)
-        allcpn_cb = Tkinter.Checkbutton(group_msms_param,
+        allcpn_cb = tkinter.Checkbutton(group_msms_param,
                                         text='Consider all surface components.',
                                         variable=self.allcpn,
                                         onvalue=True, offvalue=False)
@@ -344,23 +344,23 @@ class MSMSPlugin:
         ######################
         page = self.notebook.add('Visualization')
 
-        group_vis_msms = Tkinter.LabelFrame(page, text='MSMS Surface')
+        group_vis_msms = tkinter.LabelFrame(page, text='MSMS Surface')
         group_vis_msms.grid(sticky='eswn', row=0, column=0, padx=10, pady=5)
 
         # colors for MSMS surface
-        mesh_col_lab = Tkinter.Label(group_vis_msms, text='Surface mesh color:')
-        self.mesh_col_but = Tkinter.Button(group_vis_msms,
+        mesh_col_lab = tkinter.Label(group_vis_msms, text='Surface mesh color:')
+        self.mesh_col_but = tkinter.Button(group_vis_msms,
                                            bg=self.mesh_col,
                                            activebackground=self.mesh_col,
                                            command=self.custermizeMeshColor)
-        vert_col_lab = Tkinter.Label(group_vis_msms, text='Surface vertex color:')
-        self.vert_col_but = Tkinter.Button(group_vis_msms,
+        vert_col_lab = tkinter.Label(group_vis_msms, text='Surface vertex color:')
+        self.vert_col_but = tkinter.Button(group_vis_msms,
                                            bg=self.vert_col,
                                            activebackground=self.vert_col,
                                            command=self.custermizeVertColor)
 
-        norm_col_lab = Tkinter.Label(group_vis_msms, text='Normal vector color:')
-        self.norm_col_but = Tkinter.Button(group_vis_msms,
+        norm_col_lab = tkinter.Label(group_vis_msms, text='Normal vector color:')
+        self.norm_col_but = tkinter.Button(group_vis_msms,
                                            bg=self.norm_col,
                                            activebackground=self.norm_col,
                                            command=self.custermizeNormColor)
@@ -391,7 +391,7 @@ class MSMSPlugin:
         # Tab : About Tab
         ######################
         page = self.notebook.add('About')
-        group_about = Tkinter.LabelFrame(page, text='About MSMS Plugin for PyMOL')
+        group_about = tkinter.LabelFrame(page, text='About MSMS Plugin for PyMOL')
         group_about.grid(sticky='we', row=0, column=0, padx=10, pady=5)
         about_plugin = """ This plugin provides a GUI for running MSMS and displaying its results in PyMOL.
 Created by Hongbo Zhu <hongbo.zhu.cn@googlemail.com>, Biotechnology Center (BIOTEC), TU Dresden.
@@ -403,7 +403,7 @@ Citation for PyMOL can be found at:
 http://pymol.sourceforge.net/faq.html#CITE
 """
 
-        label_about = Tkinter.Label(group_about, text=about_plugin)
+        label_about = tkinter.Label(group_about, text=about_plugin)
         label_about.grid(sticky='we', row=0, column=0, padx=5, pady=10)
 
         self.notebook.setnaturalsize()
@@ -411,7 +411,7 @@ http://pymol.sourceforge.net/faq.html#CITE
         return
 
     def getPDBFile(self):
-        file_name = tkFileDialog.askopenfilename(
+        file_name = tkinter.filedialog.askopenfilename(
             title='PDB File', initialdir='',
             filetypes=[('pdb files', '*.pdb *.ent'), ('all files', '*')],
             parent=self.parent)
@@ -419,7 +419,7 @@ http://pymol.sourceforge.net/faq.html#CITE
             self.pdb_fn.set(file_name)
 
     def getMsmsBin(self):
-        msms_bin_fname = tkFileDialog.askopenfilename(
+        msms_bin_fname = tkinter.filedialog.askopenfilename(
             title='MSMS Binary', initialdir='',
             filetypes=[('all', '*')], parent=self.parent)
         if msms_bin_fname:
@@ -432,14 +432,14 @@ http://pymol.sourceforge.net/faq.html#CITE
 # self.pdb2xyzr_bin.set(pdb2xyzr_bin_fname)
 
     def getPdb2xyzrnBin(self):
-        pdb2xyzrn_bin_fname = tkFileDialog.askopenfilename(
+        pdb2xyzrn_bin_fname = tkinter.filedialog.askopenfilename(
             title='pdb2xyzrn Binary', initialdir='',
             filetypes=[('all', '*')], parent=self.parent)
         if pdb2xyzrn_bin_fname:
             self.pdb2xyzrn_bin.set(pdb2xyzrn_bin_fname)
 
     def getTmpDir(self):
-        tmp_dir = tkFileDialog.askdirectory()
+        tmp_dir = tkinter.filedialog.askdirectory()
         if tmp_dir:
             self.tmp_dir.set(tmp_dir)
 
@@ -470,19 +470,19 @@ http://pymol.sourceforge.net/faq.html#CITE
             else:  # sel is unknown
                 err_msg = 'Unknown selection name: %s' % (sel,)
                 print('ERROR: %s' % (err_msg,))
-                tkMessageBox.showinfo(title='ERROR', message=err_msg)
+                tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
 
         elif len(self.pdb_fn.get()) > 0:  # if no selection specified, use specified PDB file
             pdb_fn = self.pdb_fn.get()
             if not os.path.isfile(pdb_fn):
                 err_msg = 'PDB file does not exist: %s' % (pdb_fn,)
                 print('ERROR: %s' % (err_msg,))
-                tkMessageBox.showinfo(title='ERROR', message=err_msg)
+                tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
 
         else:   # what structure do you want MSMS to work on?
             err_msg = 'Neither PyMOL selection nor PDB file specified!'
             print('ERROR: %s' % (err_msg,))
-            tkMessageBox.showinfo(title='ERROR', message=err_msg)
+            tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
 
         return pdb_fn
 
@@ -587,42 +587,42 @@ http://pymol.sourceforge.net/faq.html#CITE
 
     def custermizeMeshColor(self):
         try:
-            color_tuple, color = tkColorChooser.askcolor(color=self.mesh_col)
+            color_tuple, color = tkinter.colorchooser.askcolor(color=self.mesh_col)
             if color_tuple is not None and color is not None:
                 self.mesh_col_R, self.mesh_col_G, self.mesh_col_B = color_tuple
                 self.mesh_col = color
                 self.mesh_col_but['bg'] = self.mesh_col
                 self.mesh_col_but['activebackground'] = self.mesh_col
                 self.mesh_col_but.update()
-        except Tkinter._tkinter.TclError:
+        except tkinter._tkinter.TclError:
             print('Old color (%s) will be used.' % (self.mesh_col))
 
         return
 
     def custermizeVertColor(self):
         try:
-            color_tuple, color = tkColorChooser.askcolor(color=self.vert_col)
+            color_tuple, color = tkinter.colorchooser.askcolor(color=self.vert_col)
             if color_tuple is not None and color is not None:
                 self.vert_col_R, self.vert_col_G, self.vert_col_B = color_tuple
                 self.vert_col = color
                 self.vert_col_but['bg'] = self.vert_col
                 self.vert_col_but['activebackground'] = self.vert_col
                 self.vert_col_but.update()
-        except Tkinter._tkinter.TclError:
+        except tkinter._tkinter.TclError:
             print('Old color (%s) will be used.' % (self.vert_col))
 
         return
 
     def custermizeNormColor(self):
         try:
-            color_tuple, color = tkColorChooser.askcolor(color=self.norm_col)
+            color_tuple, color = tkinter.colorchooser.askcolor(color=self.norm_col)
             if color_tuple is not None and color is not None:
                 self.norm_col_R, self.norm_col_G, self.norm_col_B = color_tuple
                 self.norm_col = color
                 self.norm_col_but['bg'] = self.norm_col
                 self.norm_col_but['activebackground'] = self.norm_col
                 self.norm_col_but.update()
-        except Tkinter._tkinter.TclError:
+        except tkinter._tkinter.TclError:
             print('Old color (%s) will be used.' % (self.norm_col))
 
         return
@@ -661,7 +661,7 @@ http://pymol.sourceforge.net/faq.html#CITE
             if len(self.msp.vert_coords) == 0:
                 err_msg = 'Please execute MSMS first.'
                 print('ERROR: %s' % (err_msg,))
-                tkMessageBox.showinfo(title='ERROR', message=err_msg)
+                tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
             else:
                 self.msp.displayMsmsSurfMesh(mesh_cgo_color=(self.mesh_col_R / 255.0,
                                               self.mesh_col_G / 255.0,
@@ -678,7 +678,7 @@ http://pymol.sourceforge.net/faq.html#CITE
             if len(self.msp.vert_coords) == 0:
                 err_msg = 'Please execute MSMS first.'
                 print('ERROR: %s' % (err_msg,))
-                tkMessageBox.showinfo(title='ERROR', message=err_msg)
+                tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
 
             else:
                 print('Vertex sphere radius =', self.vert_rad.get())
@@ -1579,7 +1579,7 @@ if __name__ == '__main__':
             pass
 
     app = App()
-    app.root = Tkinter.Tk()
+    app.root = tkinter.Tk()
     Pmw.initialise(app.root)
     app.root.title('It seems to work!')
 

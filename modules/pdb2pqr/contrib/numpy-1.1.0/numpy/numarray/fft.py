@@ -1,6 +1,6 @@
 
-from numpy.oldnumeric.fft import *
-import numpy.oldnumeric.fft as nof
+from .numpy.oldnumeric.fft import *
+from . import numpy.oldnumeric.fft as nof
 
 __all__ = nof.__all__
 

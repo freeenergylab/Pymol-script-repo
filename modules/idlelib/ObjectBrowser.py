@@ -9,9 +9,9 @@
 # XXX TO DO:
 # - for classes/modules, add "open source" to object browser
 
-from TreeWidget import TreeItem, TreeNode, ScrolledCanvas
+from .TreeWidget import TreeItem, TreeNode, ScrolledCanvas
 
-from repr import Repr
+from reprlib import Repr
 
 myrepr = Repr()
 myrepr.maxstring = 100
@@ -87,10 +87,10 @@ class SequenceTreeItem(ObjectTreeItem):
     def IsExpandable(self):
         return len(self.object) > 0
     def keys(self):
-        return range(len(self.object))
+        return list(range(len(self.object)))
     def GetSubList(self):
         sublist = []
-        for key in self.keys():
+        for key in list(self.keys()):
             try:
                 value = self.object[key]
             except KeyError:
@@ -103,7 +103,7 @@ class SequenceTreeItem(ObjectTreeItem):
 
 class DictTreeItem(SequenceTreeItem):
     def keys(self):
-        keys = self.object.keys()
+        keys = list(self.object.keys())
         try:
             keys.sort()
         except:
@@ -126,7 +126,7 @@ dispatch = {
 
 def make_objecttreeitem(labeltext, object, setfunction=None):
     t = type(object)
-    if dispatch.has_key(t):
+    if t in dispatch:
         c = dispatch[t]
     else:
         c = ObjectTreeItem
@@ -136,7 +136,7 @@ def make_objecttreeitem(labeltext, object, setfunction=None):
 
 def _test():
     import sys
-    from Tkinter import Tk
+    from tkinter import Tk
     root = Tk()
     root.configure(bd=0, bg="yellow")
     root.focus_set()

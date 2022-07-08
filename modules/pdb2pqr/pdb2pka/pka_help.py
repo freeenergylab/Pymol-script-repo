@@ -33,7 +33,7 @@ def get_res_energies(pdbfile,mol2file,residue,fix_states={}):
     mypkaRoutines = pKaRoutines(protein, routines, forcefield, apbs_setup, maps, sd)
     if debug:
         CM.init_protein(mypkaRoutines)
-    print 'Doing desolvation for single residue',residue
+    print('Doing desolvation for single residue',residue)
     x=mypkaRoutines.calculate_desolvation_for_residues(residues=[residue],fix_states=fix_states)
     if debug:
         CM.mainloop()
@@ -64,14 +64,14 @@ def titrate_one_group(name,intpkas,is_charged,acidbase):
     #
     # Call our little C++ module
     #
-    import pMC_mult
+    from . import pMC_mult
     FAST=pMC_mult.MC(intpkas,linear,acidbase,state_counter,is_charged)
     FAST.set_MCsteps(int(mcsteps))
-    print 'Calculating intrinsic pKa value'
+    print('Calculating intrinsic pKa value')
     pKavals=FAST.calc_pKas(phstart,phend,phstep)
     count=0
     intpka=pKavals[0]
-    print 'Simulated intrinsic pKa value: %5.2f' %intpka
+    print('Simulated intrinsic pKa value: %5.2f' %intpka)
     count=1
     #
     # Get the charges
@@ -93,8 +93,8 @@ def titrate_one_group(name,intpkas,is_charged,acidbase):
     if pKavals[count+1]==999.0 and pKavals[count+2]==-999.0:
         count=count+2
     else:
-        print 'Something is wrong'
-        print pKavals[count:count+30]
+        print('Something is wrong')
+        print(pKavals[count:count+30])
         raise Exception('Incorrect data format from pMC_mult')
     return intpka
 

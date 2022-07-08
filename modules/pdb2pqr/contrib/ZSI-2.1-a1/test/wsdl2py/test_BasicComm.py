@@ -3,7 +3,7 @@
 import os, sys, unittest
 from ServiceTest import main, ServiceTestCase, ServiceTestSuite
 from ZSI import FaultException, Fault
-from ConfigParser import ConfigParser, NoSectionError, NoOptionError
+from configparser import ConfigParser, NoSectionError, NoOptionError
 """
 Unittest 
 
@@ -62,12 +62,12 @@ class BasicCommTestCase(ServiceTestCase):
         msg = self.client_module.BasicRequest()
         msg._BasicIn = 'bla bla bla'
         rsp = port.Basic(msg)
-        self.failUnless(rsp._BasicResult == msg._BasicIn, "Bad Echo")
+        self.assertTrue(rsp._BasicResult == msg._BasicIn, "Bad Echo")
 
         # test whether we get an HTTP response on a message with
         # no soap response.
-        import httplib
-        msg = u"""
+        import http.client
+        msg = """
             <SOAP-ENV:Envelope 
                xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
                xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -87,16 +87,16 @@ class BasicCommTestCase(ServiceTestCase):
         port = CONFIG_PARSER.get(SECTION_DISPATCH, 'port')
         path = CONFIG_PARSER.get(SECTION_DISPATCH, 'path')
 
-        conn = httplib.HTTPConnection("%s:%s" % (host, port))
+        conn = http.client.HTTPConnection("%s:%s" % (host, port))
         conn.request('POST', '/' + path, msg, headers)
         try:
             response = conn.getresponse()
-        except httplib.BadStatusLine:
+        except http.client.BadStatusLine:
             conn.close()
             self.fail('No HTTP Response')
 
         conn.close()
-        self.failUnless(response.status == 200, 'Wrong HTTP Result')
+        self.assertTrue(response.status == 200, 'Wrong HTTP Result')
 
     def test_dispatch_BasicOneWay(self):
         loc = self.client_module.BasicServerLocator()
@@ -105,7 +105,7 @@ class BasicCommTestCase(ServiceTestCase):
         msg = self.client_module.BasicOneWayRequest()
         msg.BasicIn = 'bla bla bla'
         rsp = port.BasicOneWay(msg)
-        self.failUnless(rsp == None, "Bad One-Way")
+        self.assertTrue(rsp == None, "Bad One-Way")
 
     def test_dispatch_BasicOneWay_fault(self):
         """server will send back a soap:fault
@@ -115,7 +115,7 @@ class BasicCommTestCase(ServiceTestCase):
         
         msg = self.client_module.BasicOneWayRequest()
         msg.BasicIn = 'fault'
-        self.failUnlessRaises(FaultException, port.BasicOneWay, msg)
+        self.assertRaises(FaultException, port.BasicOneWay, msg)
 
 
 if __name__ == "__main__" :

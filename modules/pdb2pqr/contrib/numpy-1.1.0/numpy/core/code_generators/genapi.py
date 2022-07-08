@@ -38,7 +38,8 @@ class Function(object):
         self.args = args
         self.doc = doc
 
-    def _format_arg(self, (typename, name)):
+    def _format_arg(self, xxx_todo_changeme):
+        (typename, name) = xxx_todo_changeme
         if typename.endswith('*'):
             return typename + name
         else:
@@ -165,7 +166,7 @@ def find_functions(filename, tag='API'):
     function_name = None
     function_args = []
     doclist = []
-    SCANNING, STATE_DOC, STATE_RETTYPE, STATE_NAME, STATE_ARGS = range(5)
+    SCANNING, STATE_DOC, STATE_RETTYPE, STATE_NAME, STATE_ARGS = list(range(5))
     state = SCANNING
     tagcomment = '/*' + tag
     for lineno, line in enumerate(fo):
@@ -216,7 +217,7 @@ def find_functions(filename, tag='API'):
                 else:
                     function_args.append(line)
         except:
-            print filename, lineno+1
+            print(filename, lineno+1)
             raise
     fo.close()
     return functions
@@ -285,11 +286,11 @@ def main():
     functions = get_api_functions(tagname, order_file)
     m = md5.new(tagname)
     for func in functions:
-        print func
+        print(func)
         ah = func.api_hash()
         m.update(ah)
-        print hex(int(ah,16))
-    print hex(int(m.hexdigest()[:8],16))
+        print(hex(int(ah,16)))
+    print(hex(int(m.hexdigest()[:8],16)))
 
 if __name__ == '__main__':
     main()

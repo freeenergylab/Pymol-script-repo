@@ -2,9 +2,9 @@
 # $Id: multiListbox.py,v 1.5 2008/10/16 22:09:26 vareille Exp $
 # Source: http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52266
 # Modifed by: Sargis Dallakyan sargis@scripps.edu
-from Tkinter import *
+from tkinter import *
 import Pmw
-import tkFont
+import tkinter.font
 
 from mglutil.util.misc import ensureFontCase
 
@@ -21,7 +21,7 @@ class MultiListbox(Pmw.ScrolledFrame):
         self.colmapping = {}
         self.origData = None
         self.rows = None
-        self.myFont = tkFont.Font(font = (ensureFontCase('helvetica'), 11, "bold"))
+        self.myFont = tkinter.font.Font(font = (ensureFontCase('helvetica'), 11, "bold"))
         frame_main = Frame(self.interior())
         frame_main.pack(side=LEFT, expand=YES, fill=BOTH)
         frame_sb = Frame(self.interior())
@@ -32,7 +32,7 @@ class MultiListbox(Pmw.ScrolledFrame):
         self.PanedWindow = m
         for l,w in lists:
             frame = Frame(m,bd=0); frame.pack(side=LEFT, expand=YES, fill=BOTH)
-            b = Button(frame, text=unicode(l),  relief=RAISED, font=self.myFont,bd=1)
+            b = Button(frame, text=str(l),  relief=RAISED, font=self.myFont,bd=1)
             b.pack(fill = X)
             b.bind('<Button-1>', self._sort)
             self.colmapping[b]=(len(self.lists),1)
@@ -67,18 +67,18 @@ class MultiListbox(Pmw.ScrolledFrame):
         rowcount = len(tableData)
 
         #remove old sort indicators if it exists
-        for btn in self.colmapping.keys():
+        for btn in list(self.colmapping.keys()):
             lab = btn.cget('text')
-            if lab[-1] == u"\u25BC" or lab[-1] ==u"\u25B2":
-                btn.config(text=unicode(lab[:-2]))
+            if lab[-1] == "\u25BC" or lab[-1] =="\u25B2":
+                btn.config(text=str(lab[:-2]))
 
         btnLabel = b.cget('text')
         #sort data based on direction
         if direction==0:
             tableData = self.origData
         else:
-            if direction==1: b.config(text = unicode(btnLabel + " " + u"\u25B2"), font=self.myFont)
-            else: b.config(text=unicode(btnLabel + " " + u"\u25BC"),font=self.myFont)
+            if direction==1: b.config(text = str(btnLabel + " " + "\u25B2"), font=self.myFont)
+            else: b.config(text=str(btnLabel + " " + "\u25BC"),font=self.myFont)
             # sort by col
             def colsort(x, y, mycol=col, direction=direction):
                 return direction*cmp(x[mycol], y[mycol])
@@ -113,7 +113,7 @@ class MultiListbox(Pmw.ScrolledFrame):
 
     def _scroll(self, *args):
          for l in self.lists:
-             apply(l.yview, args)
+             l.yview(*args)
 
     def curselection(self):
          return self.lists[0].curselection()
@@ -126,7 +126,7 @@ class MultiListbox(Pmw.ScrolledFrame):
          result = []
          for l in self.lists:
              result.append(l.get(first,last))
-         if last: return apply(map, [None] + result)
+         if last: return list(map(*[None] + result))
          return result
              
     def index(self, index):
@@ -164,7 +164,7 @@ class MultiListbox(Pmw.ScrolledFrame):
     def output(self, y):
         row = self.lists[0].nearest(y)
         if self.rows:
-            print self.rows[row][1]
+            print(self.rows[row][1])
         
 if __name__ == '__main__':
     tk = Tk()

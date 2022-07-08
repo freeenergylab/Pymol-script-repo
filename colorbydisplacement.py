@@ -40,7 +40,7 @@ Date    : January 2011
         Modifies the B-factor columns in your original structures.
 
 '''
-from __future__ import print_function
+
 from pymol import cmd
 from pymol import stored
 

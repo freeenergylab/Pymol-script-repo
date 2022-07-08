@@ -116,7 +116,7 @@ propka
 ##############################################################################################################################################################################################################################
 '''
 
-from __future__ import print_function
+
 
 try:
     from pymol import cmd
@@ -832,7 +832,7 @@ def writepymolcmd(newmolecule, pkafile, verbose, makebonds):
 
 
 def replace_all(text, dic):
-    for i, j in dic.items():
+    for i, j in list(dic.items()):
         text = text.replace(i, j)
     return(text)
 

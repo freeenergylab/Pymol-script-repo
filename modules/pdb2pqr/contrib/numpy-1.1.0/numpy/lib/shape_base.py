@@ -22,7 +22,7 @@ def apply_along_axis(func1d,axis,arr,*args):
             % (axis,nd))
     ind = [0]*(nd-1)
     i = zeros(nd,'O')
-    indlist = range(nd)
+    indlist = list(range(nd))
     indlist.remove(axis)
     i[axis] = slice(None,None)
     outshape = asarray(arr.shape).take(indlist)
@@ -93,8 +93,8 @@ def apply_over_axes(func, a, axes):
             if res.ndim == val.ndim:
                 val = res
             else:
-                raise ValueError, "function is not returning"\
-                      " an array of correct shape"
+                raise ValueError("function is not returning"\
+                      " an array of correct shape")
     return val
 
 def expand_dims(a, axis):
@@ -209,7 +209,7 @@ def vstack(tup):
                    [4]])
 
     """
-    return _nx.concatenate(map(atleast_2d,tup),0)
+    return _nx.concatenate(list(map(atleast_2d,tup)),0)
 
 def hstack(tup):
     """ Stack arrays in sequence horizontally (column wise)
@@ -236,7 +236,7 @@ def hstack(tup):
                    [3, 4]])
 
     """
-    return _nx.concatenate(map(atleast_1d,tup),1)
+    return _nx.concatenate(list(map(atleast_1d,tup)),1)
 
 row_stack = vstack
 
@@ -301,7 +301,7 @@ def dstack(tup):
                [[3, 4]]])
 
     """
-    return _nx.concatenate(map(atleast_3d,tup),2)
+    return _nx.concatenate(list(map(atleast_3d,tup)),2)
 
 def _replace_zero_by_x_arrays(sub_arys):
     for i in range(len(sub_arys)):
@@ -349,7 +349,7 @@ def array_split(ary,indices_or_sections,axis = 0):
     except TypeError: #indices_or_sections is a scalar, not an array.
         Nsections = int(indices_or_sections)
         if Nsections <= 0:
-            raise ValueError, 'number sections must be larger than 0.'
+            raise ValueError('number sections must be larger than 0.')
         Neach_section,extras = divmod(Ntotal,Nsections)
         section_sizes = [0] + \
                         extras * [Neach_section+1] + \
@@ -404,7 +404,7 @@ def split(ary,indices_or_sections,axis=0):
         sections = indices_or_sections
         N = ary.shape[axis]
         if N % sections:
-            raise ValueError, 'array split does not result in an equal division'
+            raise ValueError('array split does not result in an equal division')
     res = array_split(ary,indices_or_sections,axis)
     return res
 
@@ -445,7 +445,7 @@ def hsplit(ary,indices_or_sections):
 
     """
     if len(_nx.shape(ary)) == 0:
-        raise ValueError, 'hsplit only works on arrays of 1 or more dimensions'
+        raise ValueError('hsplit only works on arrays of 1 or more dimensions')
     if len(ary.shape) > 1:
         return split(ary,indices_or_sections,1)
     else:
@@ -490,7 +490,7 @@ def vsplit(ary,indices_or_sections):
 
     """
     if len(_nx.shape(ary)) < 2:
-        raise ValueError, 'vsplit only works on arrays of 2 or more dimensions'
+        raise ValueError('vsplit only works on arrays of 2 or more dimensions')
     return split(ary,indices_or_sections,0)
 
 def dsplit(ary,indices_or_sections):
@@ -528,7 +528,7 @@ def dsplit(ary,indices_or_sections):
 
     """
     if len(_nx.shape(ary)) < 3:
-        raise ValueError, 'vsplit only works on arrays of 3 or more dimensions'
+        raise ValueError('vsplit only works on arrays of 3 or more dimensions')
     return split(ary,indices_or_sections,2)
 
 def get_array_wrap(*args):
@@ -573,7 +573,7 @@ def kron(a,b):
             nd = nda
     result = outer(a,b).reshape(as_+bs)
     axis = nd-1
-    for _ in xrange(nd):
+    for _ in range(nd):
         result = concatenate(result, axis=axis)
     if wrapper is not None:
         result = wrapper(result)

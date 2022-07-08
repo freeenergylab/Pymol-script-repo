@@ -163,10 +163,10 @@ class build_src(build_ext.build_ext):
                     build_dir = self.get_package_dir('.'.join(d.split(os.sep)))
                 else:
                     build_dir = os.path.join(self.build_src,d)
-                funcs = filter(callable,files)
-                files = filter(lambda f:not callable(f), files)
+                funcs = list(filter(callable,files))
+                files = [f for f in files if not callable(f)]
                 for f in funcs:
-                    if f.func_code.co_argcount==1:
+                    if f.__code__.co_argcount==1:
                         s = f(build_dir)
                     else:
                         s = f()
@@ -402,8 +402,8 @@ class build_src(build_ext.build_ext):
                 pyrex_result = Pyrex.Compiler.Main.compile(source,
                                                            options=options)
                 if pyrex_result.num_errors != 0:
-                    raise DistutilsError,"%d errors while compiling %r with Pyrex" \
-                          % (pyrex_result.num_errors, source)
+                    raise DistutilsError("%d errors while compiling %r with Pyrex" \
+                          % (pyrex_result.num_errors, source))
             elif os.path.isfile(target_file):
                 log.warn("Pyrex required for compiling %r but not available,"\
                          " using old target %r"\
@@ -465,7 +465,7 @@ class build_src(build_ext.build_ext):
         if not (f2py_sources or f_sources):
             return new_sources
 
-        map(self.mkpath, target_dirs)
+        list(map(self.mkpath, target_dirs))
 
         f2py_options = extension.f2py_options + self.f2py_opts
 
@@ -632,7 +632,7 @@ class build_src(build_ext.build_ext):
         if skip_swig:
             return new_sources + py_files
 
-        map(self.mkpath, target_dirs)
+        list(map(self.mkpath, target_dirs))
         swig = self.swig or self.find_swig()
         swig_cmd = [swig, "-python"]
         if is_cpp:

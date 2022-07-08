@@ -1,7 +1,7 @@
 # To get sub-modules
-from info import __doc__
+from .info import __doc__
 
-from linalg import *
+from .linalg import *
 
 def test(level=1, verbosity=1):
     from numpy.testing import NumpyTest

@@ -17,9 +17,9 @@ import numpy.core.umath as umath
 from numpy.testing import NumpyTest, NumpyTestCase
 from numpy.testing.utils import build_err_msg, rand
 
-import core
-from core import mask_or, getmask, getmaskarray, masked_array, nomask, masked
-from core import filled, equal, less
+from . import core
+from .core import mask_or, getmask, getmaskarray, masked_array, nomask, masked
+from .core import filled, equal, less
 
 #------------------------------------------------------------------------------
 def approx (a, b, fill_value=True, rtol=1.e-5, atol=1.e-8):
@@ -81,7 +81,7 @@ def assert_equal(actual,desired,err_msg=''):
     if isinstance(desired, dict):
         assert isinstance(actual, dict), repr(type(actual))
         assert_equal(len(actual),len(desired),err_msg)
-        for k,i in desired.items():
+        for k,i in list(desired.items()):
             assert k in actual, repr(k)
             assert_equal(actual[k], desired[k], 'key=%r\n%s' % (k,err_msg))
         return
@@ -111,7 +111,7 @@ def fail_if_equal(actual,desired,err_msg='',):
     if isinstance(desired, dict):
         assert isinstance(actual, dict), repr(type(actual))
         fail_if_equal(len(actual),len(desired),err_msg)
-        for k,i in desired.items():
+        for k,i in list(desired.items()):
             assert k in actual, repr(k)
             fail_if_equal(actual[k], desired[k], 'key=%r\n%s' % (k,err_msg))
         return

@@ -92,7 +92,7 @@ EXAMPLE
         name = cmd.get_unused_name('dssr_block')
 
     states = [state] if state != 0 else \
-            range(1, cmd.count_states(selection) + 1)
+            list(range(1, cmd.count_states(selection) + 1))
 
     try:
         for state in states:

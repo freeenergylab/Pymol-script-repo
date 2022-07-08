@@ -51,7 +51,7 @@ SEE ALSO
 
     minimum, maximum = float(minimum), float(maximum)
     if not quiet:
-        print(' b2transparency: range (%.5f to %.5f)' % (minimum, maximum))
+        print((' b2transparency: range (%.5f to %.5f)' % (minimum, maximum)))
 
     cmd.iterate(selection, """cmd.set('%s', min(max((%s - %f) / %f, 0), 0.9),
             '(%%s`%%d)' %% (model, index))

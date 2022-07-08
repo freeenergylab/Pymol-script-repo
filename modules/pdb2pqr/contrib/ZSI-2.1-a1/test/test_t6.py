@@ -3,47 +3,47 @@ import unittest, sys, multifile, mimetools, base64
 from ZSI import *
 from ZSI import resolvers
 try:
-    import cStringIO as StringIO
+    import io as StringIO
 except ImportError:
-    import StringIO
+    import io
 
 class t6TestCase(unittest.TestCase):
     "Test case wrapper for old ZSI t6 test case"
 
     def checkt6(self):
         try:
-            istr = StringIO.StringIO(intext)
+            istr = io.StringIO(intext)
             m = mimetools.Message(istr)
             cid = resolvers.MIMEResolver(m['content-type'], istr)
             xml = cid.GetSOAPPart()
             ps = ParsedSoap(xml, resolver=cid.Resolve)
-        except ParseException, e:
-            print >>OUT, FaultFromZSIException(e).AsSOAP()
+        except ParseException as e:
+            print(FaultFromZSIException(e).AsSOAP(), file=OUT)
             self.fail()
-        except Exception, e:
+        except Exception as e:
             # Faulted while processing; assume it's in the header.
-            print >>OUT, FaultFromException(e, 1, sys.exc_info()[2]).AsSOAP() 
+            print(FaultFromException(e, 1, sys.exc_info()[2]).AsSOAP(), file=OUT) 
             self.fail()
 
         try:
             dict = ps.Parse(typecode)
-        except Exception, e:
+        except Exception as e:
             # Faulted while processing; now it's the body
-            print >>OUT, FaultFromException(e, 0, sys.exc_info()[2]).AsSOAP()
+            print(FaultFromException(e, 0, sys.exc_info()[2]).AsSOAP(), file=OUT)
             self.fail()
 
-        self.failUnlessEqual(dict['stringtest'], strExtTest, 
+        self.assertEqual(dict['stringtest'], strExtTest, 
                             "Failed to extract stringtest correctly")
-        print base64.encodestring(cid['partii@zolera.com'].read()) 
+        print(base64.encodestring(cid['partii@zolera.com'].read())) 
         v = dict['b64']
-        print type(v), 'is type(v)' 
-        self.failUnlessEqual(cid['partii@zolera.com'].getvalue(), v,
+        print(type(v), 'is type(v)') 
+        self.assertEqual(cid['partii@zolera.com'].getvalue(), v,
                                     "mismatch")
-        print base64.encodestring(v)             
+        print(base64.encodestring(v))             
         from ZSI.wstools.c14n import Canonicalize 
         z = dict['xmltest'] 
-        print type(z), z 
-        print Canonicalize(z)
+        print(type(z), z) 
+        print(Canonicalize(z))
 
 def makeTestSuite():
     suite = unittest.TestSuite()

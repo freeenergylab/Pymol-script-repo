@@ -83,7 +83,7 @@ import types as _types
 
 # we don't export these for import *, but we do want them accessible
 # as numerictypes.bool, etc.
-from __builtin__ import bool, int, long, float, complex, object, unicode, str
+from builtins import bool, int, int, float, complex, object, str, str
 
 
 # String-handling utilities to avoid locale-dependence.
@@ -238,7 +238,7 @@ def bitname(obj):
 
 
 def _add_types():
-    for a in typeinfo.keys():
+    for a in list(typeinfo.keys()):
         name = english_lower(a)
         if isinstance(typeinfo[a], tuple):
             typeobj = typeinfo[a][-1]
@@ -254,7 +254,7 @@ def _add_types():
 _add_types()
 
 def _add_aliases():
-    for a in typeinfo.keys():
+    for a in list(typeinfo.keys()):
         name = english_lower(a)
         if not isinstance(typeinfo[a], tuple):
             continue
@@ -265,7 +265,7 @@ def _add_aliases():
         if base != '':
             myname = "%s%d" % (base, bit)
             if (name != 'longdouble' and name != 'clongdouble') or \
-                   myname not in allTypes.keys():
+                   myname not in list(allTypes.keys()):
                 allTypes[myname] = typeobj
                 sctypeDict[myname] = typeobj
                 if base == 'complex':
@@ -307,7 +307,7 @@ def _add_integer_aliases():
         uval = typeinfo['U'+ctype]
         typeobj = val[-1]
         utypeobj = uval[-1]
-        if intname not in allTypes.keys():
+        if intname not in list(allTypes.keys()):
             uintname = 'uint%d' % bits
             allTypes[intname] = typeobj
             allTypes[uintname] = utypeobj
@@ -372,7 +372,7 @@ _set_up_aliases()
 # Now, construct dictionary to lookup character codes from types
 _sctype2char_dict = {}
 def _construct_char_code_lookup():
-    for name in typeinfo.keys():
+    for name in list(typeinfo.keys()):
         tup = typeinfo[name]
         if isinstance(tup, tuple):
             if tup[0] not in ['p','P']:
@@ -384,7 +384,7 @@ sctypes = {'int': [],
            'uint':[],
            'float':[],
            'complex':[],
-           'others':[bool,object,str,unicode,void]}
+           'others':[bool,object,str,str,void]}
 
 def _add_array_type(typename, bits):
     try:
@@ -443,7 +443,7 @@ _python_types = {int : 'int_',
                  complex: 'complex_',
                  bool: 'bool_',
                  str: 'string_',
-                 unicode: 'unicode_',
+                 str: 'unicode_',
                  _types.BufferType: 'void',
                 }
 def _python_type(t):
@@ -494,7 +494,7 @@ _alignment = _typedict()
 _maxvals = _typedict()
 _minvals = _typedict()
 def _construct_lookups():
-    for name, val in typeinfo.iteritems():
+    for name, val in typeinfo.items():
         if not isinstance(val, tuple):
             continue
         obj = val[-1]
@@ -512,7 +512,7 @@ _construct_lookups()
 def sctype2char(sctype):
     sctype = obj2sctype(sctype)
     if sctype is None:
-        raise ValueError, "unrecognized type"
+        raise ValueError("unrecognized type")
     return _sctype2char_dict[sctype]
 
 # Create dictionary of casting functions that wrap sequences
@@ -523,9 +523,9 @@ cast = _typedict()
 ScalarType = [_types.IntType, _types.FloatType,
               _types.ComplexType, _types.LongType, _types.BooleanType,
               _types.StringType, _types.UnicodeType, _types.BufferType]
-ScalarType.extend(_sctype2char_dict.keys())
+ScalarType.extend(list(_sctype2char_dict.keys()))
 ScalarType = tuple(ScalarType)
-for key in _sctype2char_dict.keys():
+for key in list(_sctype2char_dict.keys()):
     cast[key] = lambda x, k=key : array(x, copy=False).astype(k)
 
 
@@ -533,14 +533,14 @@ _unicodesize = array('u','U1').itemsize
 
 # Create the typestring lookup dictionary
 _typestr = _typedict()
-for key in _sctype2char_dict.keys():
+for key in list(_sctype2char_dict.keys()):
     if issubclass(key, allTypes['flexible']):
         _typestr[key] = _sctype2char_dict[key]
     else:
         _typestr[key] = empty((1,),key).dtype.str[1:]
 
 # Make sure all typestrings are in sctypeDict
-for key, val in _typestr.items():
+for key, val in list(_typestr.items()):
     if val not in sctypeDict:
         sctypeDict[val] = key
 

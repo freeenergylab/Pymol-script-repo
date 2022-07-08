@@ -8,7 +8,7 @@ __all__ = ['iscomplexobj','isrealobj','imag','iscomplex',
 import numpy.core.numeric as _nx
 from numpy.core.numeric import asarray, asanyarray, array, isnan, \
                 obj2sctype, zeros
-from ufunclike import isneginf, isposinf
+from .ufunclike import isneginf, isposinf
 
 _typecodes_by_elsize = 'GDFgdfQqLlIiHhBb?'
 
@@ -99,7 +99,7 @@ def isrealobj(x):
 #-----------------------------------------------------------------------------
 
 def _getmaxmin(t):
-    import getlimits
+    from . import getlimits
     f = getlimits.finfo(t)
     return f.max, f.min
 
@@ -152,7 +152,7 @@ def real_if_close(a,tol=100):
     if not issubclass(a.dtype.type, _nx.complexfloating):
         return a
     if tol > 1:
-        import getlimits
+        from . import getlimits
         f = getlimits.finfo(a.dtype.type)
         tol = f.eps * tol
     if _nx.allclose(a.imag, 0, atol=tol):

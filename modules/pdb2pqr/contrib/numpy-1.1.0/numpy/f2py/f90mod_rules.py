@@ -26,13 +26,13 @@ errmess=sys.stderr.write
 outmess=sys.stdout.write
 show=pprint.pprint
 
-from auxfuncs import *
+from .auxfuncs import *
 import numpy as np
-import capi_maps
-import cfuncs
-import rules
-import func2subr
-from crackfortran import undo_rmbadname, undo_rmbadname1
+from . import capi_maps
+from . import cfuncs
+from . import rules
+from . import func2subr
+from .crackfortran import undo_rmbadname, undo_rmbadname1
 
 options={}
 
@@ -103,7 +103,7 @@ def buildhooks(pymod):
         mfargs = []
         if hasbody(m):
             for b in m['body']: notvars.append(b['name'])
-        for n in m['vars'].keys():
+        for n in list(m['vars'].keys()):
             var = m['vars'][n]
             if (n not in notvars) and (not l_or(isintent_hide,isprivate)(var)):
                 onlyvars.append(n)
@@ -160,7 +160,7 @@ def buildhooks(pymod):
                 fadd('integer flag\n')
                 fhooks[0]=fhooks[0]+fgetdims1
                 dms = eval('range(1,%s+1)'%(dm['rank']))
-                fadd(' allocate(d(%s))\n'%(','.join(map(lambda i:'s(%s)'%i,dms))))
+                fadd(' allocate(d(%s))\n'%(','.join(['s(%s)'%i for i in dms])))
                 fhooks[0]=fhooks[0]+use_fgetdims2
                 fadd('end subroutine %s'%(fargs[-1]))
             else:
@@ -173,7 +173,7 @@ def buildhooks(pymod):
         if hasbody(m):
             for b in m['body']:
                 if not isroutine(b):
-                    print 'Skipping',b['block'],b['name']
+                    print('Skipping',b['block'],b['name'])
                     continue
                 modobjs.append('%s()'%(b['name']))
                 b['modulename'] = m['name']

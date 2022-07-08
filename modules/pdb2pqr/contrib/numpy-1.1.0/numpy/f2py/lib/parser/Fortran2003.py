@@ -13,9 +13,9 @@ Created: Oct 2006
 """
 
 import re
-from splitline import string_replace_map
-import pattern_tools as pattern
-from readfortran import FortranReaderBase
+from .splitline import string_replace_map
+from . import pattern_tools as pattern
+from .readfortran import FortranReaderBase
 
 ###############################################################################
 ############################## BASE CLASSES ###################################
@@ -64,7 +64,7 @@ class Base(object):
         if match is not None:
             try:
                 result = cls.match(string)
-            except NoMatchError, msg:
+            except NoMatchError as msg:
                 if str(msg)==errmsg: # avoid recursion 1.
                     raise
                 result = None
@@ -87,13 +87,13 @@ class Base(object):
                 #print '%s:%s: %r' % (cls.__name__,subcls.__name__,string)
                 try:
                     obj = subcls(string, parent_cls = parent_cls)
-                except NoMatchError, msg:
+                except NoMatchError as msg:
                     obj = None
                 if obj is not None:
                     return obj
         else:
-            raise AssertionError,`result`
-        raise NoMatchError,errmsg
+            raise AssertionError(repr(result))
+        raise NoMatchError(errmsg)
 
 ##     def restore_reader(self):
 ##         self._item.reader.put_item(self._item)
@@ -129,7 +129,7 @@ class BlockBase(Base):
                      [ <endcls> ]
     """
     def match(startcls, subclasses, endcls, reader):
-        assert isinstance(reader,FortranReaderBase),`reader`
+        assert isinstance(reader,FortranReaderBase),repr(reader)
         content = []
         if startcls is not None:
             try:
@@ -1501,7 +1501,7 @@ class Component_Decl(Base): # R442
         if newline.startswith('='):
             init = Component_Initialization(newline)
         else:
-            assert newline=='',`newline`
+            assert newline=='',repr(newline)
         return name, array_spec, char_length, init
     match = staticmethod(match)
     def tostr(self):
@@ -2009,7 +2009,7 @@ class Entity_Decl(Base): # R504
         if newline.startswith('='):
             init = Initialization(newline)
         else:
-            assert newline=='',`newline`
+            assert newline=='',repr(newline)
         return name, array_spec, char_length, init
     match = staticmethod(match)
     def tostr(self):
@@ -3091,7 +3091,7 @@ class Level_1_Expr(UnaryOpBase): # R702
     use_names = []
     def match(string):
         if pattern.non_defined_binary_op.match(string):
-            raise NoMatchError,'%s: %r' % (Level_1_Expr.__name__, string)
+            raise NoMatchError('%s: %r' % (Level_1_Expr.__name__, string))
         return UnaryOpBase.match(\
             pattern.defined_unary_op.named(),Primary,string)
     match = staticmethod(match)
@@ -3110,7 +3110,7 @@ class Defined_Op(STRINGBase): # R703, 723
     subclass_names = []
     def match(string):
         if pattern.non_defined_binary_op.match(string):
-            raise NoMatchError,'%s: %r' % (Defined_Unary_Op.__name__, string)
+            raise NoMatchError('%s: %r' % (Defined_Unary_Op.__name__, string))
         return STRINGBase.match(pattern.abs_defined_op, string)
     match = staticmethod(match)
 
@@ -3983,7 +3983,7 @@ class Block_Do_Construct(BlockBase): # R826
     subclass_names = []
     use_names = ['Do_Stmt', 'Do_Block', 'End_Do']
     def match(reader):
-        assert isinstance(reader,FortranReaderBase),`reader`
+        assert isinstance(reader,FortranReaderBase),repr(reader)
         content = []
         try:
             obj = Do_Stmt(reader)
@@ -4003,7 +4003,7 @@ class Block_Do_Construct(BlockBase): # R826
                 if isinstance(obj, Continue_Stmt) and obj.item.label==label:
                     return content,
             return
-            raise RuntimeError,'Expected continue stmt with specified label'
+            raise RuntimeError('Expected continue stmt with specified label')
         else:
             obj = End_Do(reader)
             content.append(obj)
@@ -4082,7 +4082,7 @@ class Loop_Control(Base): # R830
         var,rhs = line.split('=')
         rhs = [s.strip() for s in rhs.lstrip().split(',')]
         if not 2<=len(rhs)<=3: return
-        return Variable(repmap(var.rstrip())),map(Scalar_Int_Expr, map(repmap,rhs))
+        return Variable(repmap(var.rstrip())),list(map(Scalar_Int_Expr, list(map(repmap,rhs))))
     match = staticmethod(match)
     def tostr(self):
         if len(self.items)==1: return ', WHILE (%s)' % (self.items[0])
@@ -4971,7 +4971,7 @@ class Data_Edit_Desc(Base): # R1005
                     return '%s%s' % (c, self.items[1])
                 else:
                     return '%s%s(%s)' % (c, self.items[1], self.items[2])
-        raise NotImpletenetedError,`c`
+        raise NotImpletenetedError(repr(c))
 
 class W(Base): # R1006
     """
@@ -5786,29 +5786,29 @@ for clsname in _names:
             _names.append(n)
             n = n[:-5]
             #print 'Generating %s_List' % (n)
-            exec '''\
+            exec('''\
 class %s_List(SequenceBase):
     subclass_names = [\'%s\']
     use_names = []
     def match(string): return SequenceBase.match(r\',\', %s, string)
     match = staticmethod(match)
-''' % (n, n, n)
+''' % (n, n, n))
         elif n.endswith('_Name'):
             _names.append(n)
             n = n[:-5]
             #print 'Generating %s_Name' % (n)
-            exec '''\
+            exec('''\
 class %s_Name(Base):
     subclass_names = [\'Name\']
-''' % (n)
+''' % (n))
         elif n.startswith('Scalar_'):
             _names.append(n)
             n = n[7:]
             #print 'Generating Scalar_%s' % (n)
-            exec '''\
+            exec('''\
 class Scalar_%s(Base):
     subclass_names = [\'%s\']
-''' % (n,n)
+''' % (n,n))
 
 
 Base_classes = {}
@@ -5826,7 +5826,7 @@ if 1: # Optimize subclass tree:
 
     def _rpl_list(clsname):
         if clsname not in Base_classes:
-            print 'Not implemented:',clsname
+            print('Not implemented:',clsname)
             return [] # remove this code when all classes are implemented
         cls = Base_classes[clsname]
         if 'match' in cls.__dict__:
@@ -5839,7 +5839,7 @@ if 1: # Optimize subclass tree:
                     l.append(n1)
         return l
 
-    for cls in Base_classes.values():
+    for cls in list(Base_classes.values()):
         if not hasattr(cls, 'subclass_names'): continue
         opt_subclass_names = []
         for n in cls.subclass_names:
@@ -5853,10 +5853,10 @@ if 1: # Optimize subclass tree:
 
 
 # Initialize Base.subclasses dictionary:
-for clsname, cls in Base_classes.items():
+for clsname, cls in list(Base_classes.items()):
     subclass_names = getattr(cls, 'subclass_names', None)
     if subclass_names is None:
-        print '%s class is missing subclass_names list' % (clsname)
+        print('%s class is missing subclass_names list' % (clsname))
         continue
     try:
         l = Base.subclasses[clsname]
@@ -5866,10 +5866,10 @@ for clsname, cls in Base_classes.items():
         if n in Base_classes:
             l.append(Base_classes[n])
         else:
-            print '%s not implemented needed by %s' % (n,clsname)
+            print('%s not implemented needed by %s' % (n,clsname))
 
 if 1:
-    for cls in Base_classes.values():
+    for cls in list(Base_classes.values()):
         subclasses = Base.subclasses.get(cls.__name__,[])
         subclasses_names = [c.__name__ for c in subclasses]
         subclass_names = getattr(cls,'subclass_names', [])
@@ -5877,14 +5877,14 @@ if 1:
         for n in subclasses_names:
             break
             if n not in subclass_names:
-                print '%s needs to be added to %s subclasses_name list' % (n,cls.__name__)
+                print('%s needs to be added to %s subclasses_name list' % (n,cls.__name__))
         for n in subclass_names:
             break
             if n not in subclasses_names:
-                print '%s needs to be added to %s subclass_name list' % (n,cls.__name__)
+                print('%s needs to be added to %s subclass_name list' % (n,cls.__name__))
         for n in use_names + subclass_names:
             if n not in Base_classes:
-                print '%s not defined used by %s' % (n, cls.__name__)
+                print('%s not defined used by %s' % (n, cls.__name__))
 
 
 #EOF

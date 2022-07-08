@@ -32,13 +32,13 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #THE SOFTWARE.
 
-from __future__ import print_function
+
 
 from pymol import cmd
 
 try:
-    import Tkinter
-    from Tkinter import *
+    import tkinter
+    from tkinter import *
 except ImportError:
     import tkinter as Tkinter
     from tkinter import *
@@ -59,7 +59,7 @@ class FrameSlider:
         
 
         #make a little window for the slider
-        self.master = Tkinter.Tk()
+        self.master = tkinter.Tk()
         self.master.minsize(width=400, height=1)
         self.master.title("Frame Slider " + VERSION)
 
@@ -74,7 +74,7 @@ class FrameSlider:
 
 
         #main slider object
-        self.slider = Tkinter.Scale(self.master, 
+        self.slider = tkinter.Scale(self.master, 
                                     from_ = 1, 
                                     to = self.max_frame.get(), 
                                     orient=HORIZONTAL, 
@@ -95,7 +95,7 @@ class FrameSlider:
         update_frame = self.master.register(self.update_frame_field)
         
         #make a field that you can type the frame into
-        self.frame_entry = Tkinter.Entry(self.master, 
+        self.frame_entry = tkinter.Entry(self.master, 
                                            textvariable = self.frame, 
                                            bg = 'black', 
                                            fg = 'white', 

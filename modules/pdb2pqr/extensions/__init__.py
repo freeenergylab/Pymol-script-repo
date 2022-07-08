@@ -62,7 +62,7 @@ def setupExtensionsOptions(parser):
         return None
     
     group = OptionGroup(parser,"Extension options", "Options for output extensions.")
-    for extName, extModule in extDict.items():
+    for extName, extModule in list(extDict.items()):
         helpArg = {}
         if hasattr(extModule, 'usage'):
             helpArg['help'] = extModule.usage()
@@ -72,8 +72,8 @@ def setupExtensionsOptions(parser):
         if hasattr(extModule, 'addExtensionOptions'):
             try:
                 extModule.addExtensionOptions(group)
-            except OptionConflictError, value:
-                print 'Error adding command line option for extension ' + extName + ' ' + '(' + str(value) + ')'
+            except OptionConflictError as value:
+                print('Error adding command line option for extension ' + extName + ' ' + '(' + str(value) + ')')
     
     parser.add_option_group(group)
     

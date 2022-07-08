@@ -25,27 +25,27 @@ class t4TestCase(unittest.TestCase):
         try:
             r = resolvers.NetworkResolver(['http:'])
             ps = ParsedSoap(IN, resolver=r.Resolve)
-        except ParseException, e:
-            print >>OUT, FaultFromZSIException(e).AsSOAP()
+        except ParseException as e:
+            print(FaultFromZSIException(e).AsSOAP(), file=OUT)
             self.fail() 
-        except Exception, e: 
+        except Exception as e: 
             # Faulted while processing; assume it's in the header.  
-            print >>OUT, FaultFromException(e, 1, sys.exc_info()[2]).AsSOAP() 
+            print(FaultFromException(e, 1, sys.exc_info()[2]).AsSOAP(), file=OUT) 
             self.fail() 
-        print 'resolving' 
+        print('resolving') 
         typecode = TC.Struct(None, [ TC.XML('xmltest'), 
                            TC.String('stringtest', resolver=r.Opaque), ]) 
         try: 
             dict = ps.Parse(typecode) 
-        except EvaluateException, e: 
-            print >>OUT, FaultFromZSIException(e).AsSOAP() 
+        except EvaluateException as e: 
+            print(FaultFromZSIException(e).AsSOAP(), file=OUT) 
             self.fail() 
-        except Exception, e: 
+        except Exception as e: 
             # Faulted while processing; now it's the body 
-            print >>OUT, FaultFromException(e, 0, sys.exc_info()[2]).AsSOAP() 
+            print(FaultFromException(e, 0, sys.exc_info()[2]).AsSOAP(), file=OUT) 
             self.fail() 
         ##PrettyPrint(dict['xmltest']) 
-        print '**', dict['stringtest'], '**'
+        print('**', dict['stringtest'], '**')
 
 def makeTestSuite():
     suite = unittest.TestSuite()

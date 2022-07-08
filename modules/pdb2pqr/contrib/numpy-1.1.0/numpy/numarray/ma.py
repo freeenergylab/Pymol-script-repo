@@ -1,2 +1,2 @@
 
-from numpy.oldnumeric.ma import *
+from .numpy.oldnumeric.ma import *

@@ -8,24 +8,24 @@ from ZSI.parse import DefaultReader as Reader
 
 
 try:
-    import cStringIO as StringIO
+    import io as StringIO
 except ImportError:
-    import StringIO
+    import io
 
 class t5TestCase(unittest.TestCase):
     "Test case wrapper for old ZSI t5 test case"
 
     def checkt5(self):
-        istr = StringIO.StringIO(intext)
+        istr = io.StringIO(intext)
         m = mimetools.Message(istr)
         if  m.gettype()[0:10] == "multipart/":
             cid = resolvers.MIMEResolver(m['content-type'], istr)
             xml = cid.GetSOAPPart()
-            print 'xml=', xml.getvalue()
+            print('xml=', xml.getvalue())
             for h,b in cid.parts:
-                print h, b.read()
+                print(h, b.read())
             dom = Reader.fromStream(xml)
-            print dom
+            print(dom)
 
 def makeTestSuite():
     suite = unittest.TestSuite()

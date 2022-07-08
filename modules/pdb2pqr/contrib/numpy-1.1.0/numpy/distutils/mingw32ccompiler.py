@@ -10,7 +10,7 @@ Support code for building Python extensions on Windows.
 
 import os
 import sys
-import log
+from . import log
 
 # Overwrite certain distutils.ccompiler functions:
 import numpy.distutils.ccompiler
@@ -150,7 +150,7 @@ class Mingw32CCompiler(distutils.cygwinccompiler.CygwinCCompiler):
             func = distutils.cygwinccompiler.CygwinCCompiler.link
         else:
             func = UnixCCompiler.link
-        func(*args[:func.im_func.func_code.co_argcount])
+        func(*args[:func.__func__.__code__.co_argcount])
         return
 
     def object_filenames (self,
@@ -171,9 +171,8 @@ class Mingw32CCompiler(distutils.cygwinccompiler.CygwinCCompiler):
                 base = base[1:]
 
             if ext not in (self.src_extensions + ['.rc','.res']):
-                raise UnknownFileError, \
-                      "unknown file type '%s' (from '%s')" % \
-                      (ext, src_name)
+                raise UnknownFileError("unknown file type '%s' (from '%s')" % \
+                      (ext, src_name))
             if strip_dir:
                 base = os.path.basename (base)
             if ext == '.res' or ext == '.rc':

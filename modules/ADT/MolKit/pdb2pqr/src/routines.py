@@ -56,13 +56,13 @@ REPAIR_LIMIT = 10
 
 import math
 import copy
-from pdb import *
-from utilities import *
-from quatfit import *
-from forcefield import *
-from structures import *
-from protein import *
-from definitions import *
+from .pdb import *
+from .utilities import *
+from .quatfit import *
+from .forcefield import *
+from .structures import *
+from .protein import *
+from .definitions import *
 
 class Routines:
     def __init__(self, protein, verbose):
@@ -280,7 +280,7 @@ class Routines:
                 residue:    The residue to apply the patch to (residue)
         """
         if patchname not in self.protein.patchmap:
-            raise ValueError,"Unable to find patch %s!" % patchname
+            raise ValueError("Unable to find patch %s!" % patchname)
         
         # Make a copy of the reference, i.e. a new reference for
         # this patch.  Two examples:
@@ -360,7 +360,7 @@ class Routines:
 
 	if len(chain.residues) == 0: 
 	    text = "Error: chain \"%s\" has 0 residues!" % chain.chainID
-	    raise ValueError, text
+	    raise ValueError(text)
 
         # Set the N-Terminus/ 5' Terminus
 
@@ -544,7 +544,7 @@ class Routines:
                     self.write("Deleted this atom.\n")
 
         if heavycount == 0:
-            raise ValueError, "No heavy atoms found!"
+            raise ValueError("No heavy atoms found!")
                             
         misspct = 100.0 * float(misscount) / heavycount 
         if misspct > REPAIR_LIMIT:
@@ -552,7 +552,7 @@ class Routines:
             error += "%i, %.2f%%) heavy atoms to accurately repair the file.  " % \
                      (heavycount, misspct)
             error += "The current repair limit is set at %i%%." % REPAIR_LIMIT
-            raise ValueError, error
+            raise ValueError(error)
         elif misscount > 0:
             self.write("Missing %i out of %i heavy atoms (%.2f percent) - " %\
                        (misscount, heavycount, misspct))
@@ -778,7 +778,7 @@ class Routines:
                     if seenmap[atomname] > nummissing:
                         text = "Unable to rebuild atom %s in %s!" % \
                                (atomname, residue)
-                        raise ValueError, text
+                        raise ValueError(text)
                     else: missing.append(atomname)
 
                 else: # Rebuild the atom
@@ -807,7 +807,7 @@ class Routines:
 
             if caatom == None:
                 text = "Cannot set references to %s without CA atom!\n"
-                raise ValueError, text
+                raise ValueError(text)
             
             # Set up the linked map
             
@@ -1141,7 +1141,7 @@ class Routines:
             if residue.hasAtom(atomname):
                 coordlist.append(residue.getAtom(atomname).getCoords())
             else:
-                raise ValueError, "Error occurred while trying to debump!"
+                raise ValueError("Error occurred while trying to debump!")
 
         initcoords = subtract(coordlist[2], coordlist[1])
 
@@ -1172,7 +1172,7 @@ class Routines:
             if residue.hasAtom(atomname):
                 coordlist.append(residue.getAtom(atomname).getCoords())
             else:
-                raise ValueError, "Error occurred while trying to debump!" 
+                raise ValueError("Error occurred while trying to debump!") 
         
         di = getDihedral(coordlist[0], coordlist[1], coordlist[2], coordlist[3])
         residue.dihedrals[anglenum] = di
@@ -1225,7 +1225,7 @@ class Routines:
             from propka.propkalib import runPKA
         except ImportError:
             text = "Couldn't find propka - make sure it has been installed!"
-            raise ValueError, text
+            raise ValueError(text)
 
         # Reorder the atoms in each residue to start with N
    
@@ -1238,8 +1238,8 @@ class Routines:
             if not atom.isHydrogen():
                 atomtxt = str(atom)
                 if len(atomtxt) + 1 != linelen:
-                    print "Atom line length (%i) does not match constant (%i)!" % \
-                          ((len(atomtxt) +1), linelen)
+                    print(("Atom line length (%i) does not match constant (%i)!" % \
+                          ((len(atomtxt) +1), linelen)))
                     sys.exit()
                 txt += "%s\n" % atomtxt
 
@@ -1248,7 +1248,7 @@ class Routines:
 
         txtlen = len(txt)
         if txtlen % linelen != 0:
-            raise ValueError, "Extra characters in pka string!"
+            raise ValueError("Extra characters in pka string!")
 
 
         # Run PropKa

@@ -27,7 +27,7 @@ errmess=sys.stderr.write
 outmess=sys.stdout.write
 show=pprint.pprint
 
-from auxfuncs import *
+from .auxfuncs import *
 def var2fixfortran(vars,a,fa=None,f90mode=None):
     if fa is None:
         fa = a

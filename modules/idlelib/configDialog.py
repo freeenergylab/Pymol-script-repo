@@ -8,26 +8,26 @@ and default window size.  Define additional help sources.
 Note that tab width in IDLE is currently fixed at eight due to Tk issues.
 Refer to comments in EditorWindow autoindent code for details.
 """
-from Tkinter import Toplevel, Frame, Button, Scale, Label, LabelFrame, Text, \
+from tkinter import Toplevel, Frame, Button, Scale, Label, LabelFrame, Text, \
                     Listbox, Scrollbar, Checkbutton, Radiobutton, Entry, \
                     Checkbutton, StringVar, BooleanVar, IntVar
-from Tkconstants import LEFT, RIGHT, BOTTOM, TOP, BOTH, GROOVE, SOLID, NONE, \
+from tkinter.constants import LEFT, RIGHT, BOTTOM, TOP, BOTH, GROOVE, SOLID, NONE, \
                         END, DISABLED, NSEW, Y, X, W, E, HORIZONTAL, NS, EW, \
                         N, ANCHOR, NORMAL
-import tkMessageBox, tkColorChooser, tkFont
+import tkinter.messagebox, tkinter.colorchooser, tkinter.font
 
-from stylist import PoorManStyle
-from tabbedpages import get_tabbedpage
-from configHandler import idleConf
-from keybindingDialog import GetKeysDialog
-from dynOptionMenuWidget import DynOptionMenu
-from configHelpSourceEdit import GetHelpSourceDialog
-from configSectionNameDialog import GetCfgSectionNameDialog
+from .stylist import PoorManStyle
+from .tabbedpages import get_tabbedpage
+from .configHandler import idleConf
+from .keybindingDialog import GetKeysDialog
+from .dynOptionMenuWidget import DynOptionMenu
+from .configHelpSourceEdit import GetHelpSourceDialog
+from .configSectionNameDialog import GetCfgSectionNameDialog
 
 TabbedPageSet = get_tabbedpage()
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import Frame, Button, Checkbutton, LabelFrame, LabeledScale, \
+    from tkinter.ttk import Frame, Button, Checkbutton, LabelFrame, LabeledScale, \
                     Combobox, Checkbutton, Entry, Radiobutton, Scrollbar, \
                     Label, Style
 
@@ -131,7 +131,7 @@ class ConfigDialog(Toplevel):
         self.fontBold=BooleanVar(self)
         self.fontName=StringVar(self)
         self.spaceNum=IntVar(self)
-        self.editFont=tkFont.Font(self,('courier',10,'normal'))
+        self.editFont=tkinter.font.Font(self,('courier',10,'normal'))
         ##widget creation
         #body frame
         frame=self.tabPages.pages['Fonts/Tabs'].frame
@@ -236,7 +236,7 @@ class ConfigDialog(Toplevel):
         )
         for txTa in textAndTags:
             text.insert(END, txTa[0], txTa[1])
-        for element in self.themeElements.keys():
+        for element in list(self.themeElements.keys()):
             text.tag_bind(self.themeElements[element][0], '<ButtonPress-1>',
                 lambda event, elem=element:
                     event.widget.winfo_toplevel().highlightTarget.set(elem))
@@ -648,13 +648,13 @@ class ConfigDialog(Toplevel):
 
     def AddChangedItem(self,type,section,item,value):
         value = str(value) #make sure we use a string
-        if not self.changedItems[type].has_key(section):
+        if section not in self.changedItems[type]:
             self.changedItems[type][section] = {}
         self.changedItems[type][section][item] = value
 
     def GetDefaultItems(self):
         dItems={'main':{},'highlight':{},'keys':{},'extensions':{}}
-        for configType in dItems.keys():
+        for configType in list(dItems.keys()):
             sections=idleConf.GetSectionList('default',configType)
             for section in sections:
                 dItems[configType][section]={}
@@ -695,11 +695,11 @@ class ConfigDialog(Toplevel):
         else:
             currentKeySetName=self.customKeys.get()
         currentBindings=idleConf.GetCurrentKeySet()
-        if currentKeySetName in self.changedItems['keys'].keys(): #unsaved changes
+        if currentKeySetName in list(self.changedItems['keys'].keys()): #unsaved changes
             keySetChanges=self.changedItems['keys'][currentKeySetName]
-            for event in keySetChanges.keys():
+            for event in list(keySetChanges.keys()):
                 currentBindings[event]=keySetChanges[event].split()
-        currentKeySequences=currentBindings.values()
+        currentKeySequences=list(currentBindings.values())
         newKeys=GetKeysDialog(self,'Get New Keys',bindName,
                 currentKeySequences).result
         if newKeys: #new keys were specified
@@ -746,14 +746,14 @@ class ConfigDialog(Toplevel):
             prevKeySetName=self.customKeys.get()
         prevKeys=idleConf.GetCoreKeys(prevKeySetName)
         newKeys={}
-        for event in prevKeys.keys(): #add key set to changed items
+        for event in list(prevKeys.keys()): #add key set to changed items
             eventName=event[2:-2] #trim off the angle brackets
             binding=' '.join(prevKeys[event])
             newKeys[eventName]=binding
         #handle any unsaved changes to prev key set
-        if prevKeySetName in self.changedItems['keys'].keys():
+        if prevKeySetName in list(self.changedItems['keys'].keys()):
             keySetChanges=self.changedItems['keys'][prevKeySetName]
-            for event in keySetChanges.keys():
+            for event in list(keySetChanges.keys()):
                 newKeys[event]=keySetChanges[event]
         #save the new theme
         self.SaveNewKeySet(newKeySetName,newKeys)
@@ -771,15 +771,15 @@ class ConfigDialog(Toplevel):
             reselect=1
             listIndex=self.listBindings.index(ANCHOR)
         keySet=idleConf.GetKeySet(keySetName)
-        bindNames=keySet.keys()
+        bindNames=list(keySet.keys())
         bindNames.sort()
         self.listBindings.delete(0,END)
         for bindName in bindNames:
             key=' '.join(keySet[bindName]) #make key(s) into a string
             bindName=bindName[2:-2] #trim off the angle brackets
-            if keySetName in self.changedItems['keys'].keys():
+            if keySetName in list(self.changedItems['keys'].keys()):
                 #handle any unsaved changes to this key set
-                if bindName in self.changedItems['keys'][keySetName].keys():
+                if bindName in list(self.changedItems['keys'][keySetName].keys()):
                     key=self.changedItems['keys'][keySetName][bindName]
             self.listBindings.insert(END, bindName+' - '+key)
         if reselect:
@@ -789,13 +789,13 @@ class ConfigDialog(Toplevel):
 
     def DeleteCustomKeys(self):
         keySetName=self.customKeys.get()
-        if not tkMessageBox.askyesno("Delete Key Set",
+        if not tkinter.messagebox.askyesno("Delete Key Set",
             "Are you sure you wish to delete the key set %r ?" % keySetName,
             parent=self):
             return
         #remove key set from config
         idleConf.userCfg['keys'].remove_section(keySetName)
-        if self.changedItems['keys'].has_key(keySetName):
+        if keySetName in self.changedItems['keys']:
             del(self.changedItems['keys'][keySetName])
         #write changes
         idleConf.userCfg['keys'].Save()
@@ -817,13 +817,13 @@ class ConfigDialog(Toplevel):
 
     def DeleteCustomTheme(self):
         themeName = self.customTheme.get()
-        if not tkMessageBox.askyesno("Delete Theme",
+        if not tkinter.messagebox.askyesno("Delete Theme",
             "Are you sure you wish to delete the theme %r ?" % themeName,
             parent=self):
             return
         #remove theme from config
         idleConf.userCfg['highlight'].remove_section(themeName)
-        if self.changedItems['highlight'].has_key(themeName):
+        if themeName in self.changedItems['highlight']:
             del(self.changedItems['highlight'][themeName])
         #write changes
         idleConf.userCfg['highlight'].Save()
@@ -846,7 +846,7 @@ class ConfigDialog(Toplevel):
     def GetColour(self):
         target=self.highlightTarget.get()
         prevColour = self.ttkstyle.configure('Color.TFrame', 'background')
-        rgbTuplet, colourString = tkColorChooser.askcolor(parent=self,
+        rgbTuplet, colourString = tkinter.colorchooser.askcolor(parent=self,
             title='Pick new colour for : '+target,initialcolor=prevColour)
         if colourString and (colourString!=prevColour):
             #user didn't cancel, and they chose a new colour
@@ -913,9 +913,9 @@ class ConfigDialog(Toplevel):
             themeName=self.customTheme.get()
         newTheme=idleConf.GetThemeDict(themeType,themeName)
         #apply any of the old theme's unsaved changes to the new theme
-        if themeName in self.changedItems['highlight'].keys():
+        if themeName in list(self.changedItems['highlight'].keys()):
             themeChanges=self.changedItems['highlight'][themeName]
-            for element in themeChanges.keys():
+            for element in list(themeChanges.keys()):
                 newTheme[element]=themeChanges[element]
         #save the new theme
         self.SaveNewTheme(newThemeName,newTheme)
@@ -934,9 +934,9 @@ class ConfigDialog(Toplevel):
     def SetFontSample(self,event=None):
         fontName=self.fontName.get()
         if self.fontBold.get():
-            fontWeight=tkFont.BOLD
+            fontWeight=tkinter.font.BOLD
         else:
-            fontWeight=tkFont.NORMAL
+            fontWeight=tkinter.font.NORMAL
         self.editFont.config(size=self.fontSize.get(),
                 weight=fontWeight,family=fontName)
 
@@ -975,18 +975,18 @@ class ConfigDialog(Toplevel):
             theme = self.builtinTheme.get()
         else: #a user theme
             theme = self.customTheme.get()
-        for elementTitle in self.themeElements.keys():
+        for elementTitle in list(self.themeElements.keys()):
             element = self.themeElements[elementTitle][0]
             colours = idleConf.GetHighlight(theme, element)
             if element == 'cursor': #cursor sample needs special painting
                 colours['background'] = idleConf.GetHighlight(theme,
                     'normal', fgBg='bg')
             #handle any unsaved changes to this theme
-            if theme in self.changedItems['highlight'].keys():
+            if theme in list(self.changedItems['highlight'].keys()):
                 themeDict = self.changedItems['highlight'][theme]
-                if themeDict.has_key(element + '-foreground'):
+                if element + '-foreground' in themeDict:
                     colours['foreground'] = themeDict[element + '-foreground']
-                if themeDict.has_key(element + '-background'):
+                if element + '-background' in themeDict:
                     colours['background'] = themeDict[element + '-background']
             self.textHighlightSample.tag_config(element, **colours)
         self.SetColourSample()
@@ -1043,7 +1043,7 @@ class ConfigDialog(Toplevel):
 
     def LoadFontCfg(self):
         ##base editor font selection list
-        fonts=list(tkFont.families(self))
+        fonts=list(tkinter.font.families(self))
         fonts.sort()
         for font in fonts:
             self.listFontName.insert(END,font)
@@ -1101,7 +1101,7 @@ class ConfigDialog(Toplevel):
             self.optMenuThemeBuiltin.SetMenu(itemList, itemList[0])
         self.SetThemeType()
         ##load theme element option menu
-        themeNames = self.themeElements.keys()
+        themeNames = list(self.themeElements.keys())
         themeNames.sort(self.__ThemeNameIndexCompare)
         self.optMenuHighlightTarget.SetMenu(themeNames, themeNames[0])
         self.PaintThemeSample()
@@ -1194,7 +1194,7 @@ class ConfigDialog(Toplevel):
         """
         if not idleConf.userCfg['keys'].has_section(keySetName):
             idleConf.userCfg['keys'].add_section(keySetName)
-        for event in keySet.keys():
+        for event in list(keySet.keys()):
             value=keySet[event]
             idleConf.userCfg['keys'].SetOption(keySetName,event,value)
 
@@ -1206,7 +1206,7 @@ class ConfigDialog(Toplevel):
         """
         if not idleConf.userCfg['highlight'].has_section(themeName):
             idleConf.userCfg['highlight'].add_section(themeName)
-        for element in theme.keys():
+        for element in list(theme.keys()):
             value=theme[element]
             idleConf.userCfg['highlight'].SetOption(themeName,element,value)
 
@@ -1221,14 +1221,14 @@ class ConfigDialog(Toplevel):
     def SaveAllChangedConfigs(self):
         "Save configuration changes to the user config file."
         idleConf.userCfg['main'].Save()
-        for configType in self.changedItems.keys():
+        for configType in list(self.changedItems.keys()):
             cfgTypeHasChanges = False
-            for section in self.changedItems[configType].keys():
+            for section in list(self.changedItems[configType].keys()):
                 if section == 'HelpFiles':
                     #this section gets completely replaced
                     idleConf.userCfg['main'].remove_section('HelpFiles')
                     cfgTypeHasChanges = True
-                for item in self.changedItems[configType][section].keys():
+                for item in list(self.changedItems[configType][section].keys()):
                     value = self.changedItems[configType][section][item]
                     if self.SetUserValue(configType,section,item,value):
                         cfgTypeHasChanges = True
@@ -1242,13 +1242,13 @@ class ConfigDialog(Toplevel):
     def DeactivateCurrentConfig(self):
         #Before a config is saved, some cleanup of current
         #config must be done - remove the previous keybindings
-        winInstances=self.parent.instance_dict.keys()
+        winInstances=list(self.parent.instance_dict.keys())
         for instance in winInstances:
             instance.RemoveKeybindings()
 
     def ActivateConfigChanges(self):
         "Dynamically apply configuration changes"
-        winInstances=self.parent.instance_dict.keys()
+        winInstances=list(self.parent.instance_dict.keys())
         for instance in winInstances:
             instance.ResetColorizer()
             instance.ResetFont()
@@ -1274,7 +1274,7 @@ class ConfigDialog(Toplevel):
         pass
 
 if __name__ == '__main__':
-    from Tkinter import Tk
+    from tkinter import Tk
     #test the dialog
     root=Tk()
     Button(root,text='Dialog',

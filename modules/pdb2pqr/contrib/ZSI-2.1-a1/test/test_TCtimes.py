@@ -2,9 +2,9 @@
 import unittest, sys, tests_good, tests_bad, time
 from ZSI import *
 try:
-    import cStringIO as StringIO
+    import io as StringIO
 except ImportError:
-    import StringIO
+    import io
 
 
 class TestCase(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestCase(unittest.TestCase):
         stamp = typecode.get_formatted_content(data)
 
         correct = "1968-04-01T22:20:00Z"
-        self.failUnless(stamp == correct, 
+        self.assertTrue(stamp == correct, 
             'dateTime with local offset(%s), expecting "%s" got "%s"' %(
             stamp_offset, correct, stamp))
 
@@ -36,20 +36,20 @@ class TestCase(unittest.TestCase):
         good = (1968, 4, 2, 13, 20, 15, 511, 0, 0)
         typecode = TC.gDateTime()
         data = typecode.text_to_data('1968-04-02T13:20:15.511', None, None)
-        self.failUnless(data == good,
+        self.assertTrue(data == good,
             'did not parse something %s, not equal %s' %(data,good))
 
     def check_serialize_microseconds(self):
         dateTime = '1968-04-02T13:20:15.511Z'
         typecode = TC.gDateTime()
         text = typecode.get_formatted_content((1968, 4, 2, 13, 20, 15, 511, 0, 0))
-        self.failUnless(text == dateTime,
+        self.assertTrue(text == dateTime,
             'did not serialze correctly %s, not equal %s' %(text, dateTime))
 
     def check_serialize_microseconds_1000(self):
         bad = (1968, 4, 2, 13, 20, 15, 1000, 0)
         typecode = TC.gDateTime()
-        self.failUnlessRaises(ValueError, typecode.get_formatted_content, bad)
+        self.assertRaises(ValueError, typecode.get_formatted_content, bad)
 
     def check_serialize_microseconds_lessZero(self):
         '''ignore negative microseconds
@@ -63,7 +63,7 @@ class TestCase(unittest.TestCase):
         good = (1968, 4, 2, 13, 20, 15, 500, 0, 0)
         typecode = TC.gDateTime()
         data = typecode.text_to_data('1968-04-02T13:20:15.5Z', None,None)
-        self.failUnless(data == good,
+        self.assertTrue(data == good,
             'did not serialze correctly %s, not equal %s' %(data, good))
 
         #text = typecode.get_formatted_content((1968, 4, 2, 13, 20, 15, 5, 0, 500))
@@ -86,17 +86,17 @@ class TestCase(unittest.TestCase):
     def check_invalid_time(self):
         typecode = TC.gTime()
         for i in ('5:20:00', '13:20.5:00',):
-            self.failUnlessRaises(Exception, typecode.text_to_data, i, None, None),
+            self.assertRaises(Exception, typecode.text_to_data, i, None, None),
 
     def broke_invalid_time_no_seconds(self):
         typecode = TC.gTime()
         i = '13:20:'
-        self.failUnlessRaises(Exception, typecode.text_to_data, i, None, None)
+        self.assertRaises(Exception, typecode.text_to_data, i, None, None)
 
     def broke_invalid_time_bad_timeofday(self):
         typecode = TC.gTime()
         i = '13:65:00'
-        self.failUnlessRaises(Exception, typecode.text_to_data, i, None, None)
+        self.assertRaises(Exception, typecode.text_to_data, i, None, None)
 
     def check_valid_date(self):
         typecode = TC.gDate()
@@ -107,22 +107,22 @@ class TestCase(unittest.TestCase):
     def check_invalid_date(self):
         typecode = TC.gDate()
         for i in ('68-04-02', '1968-4-2', '1968/04/02', '04-02-1968',):
-            self.failUnlessRaises(Exception, typecode.text_to_data, i, None, None),
+            self.assertRaises(Exception, typecode.text_to_data, i, None, None),
 
     def broke_invalid_date_april31(self):
         # No checks for valid date April 30 days
         typecode = TC.gDate()
-        self.failUnlessRaises(Exception, typecode.text_to_data, '1968-04-31', None, None),
+        self.assertRaises(Exception, typecode.text_to_data, '1968-04-31', None, None),
 
 #
 # Creates permutation of test options: "check", "check_any", etc
 #
 _SEP = '_'
-for t in [i[0].split(_SEP) for i in filter(lambda i: callable(i[1]), TestCase.__dict__.items())]:
+for t in [i[0].split(_SEP) for i in [i for i in list(TestCase.__dict__.items()) if callable(i[1])]]:
     test = ''
     for f in t:
         test += f
-        if globals().has_key(test): test += _SEP; continue
+        if test in globals(): test += _SEP; continue
         def _closure():
             name = test
             def _makeTestSuite():

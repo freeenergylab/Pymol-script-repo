@@ -1,14 +1,14 @@
 import os
 import sys
 import fnmatch
-from Tkinter import StringVar, BooleanVar, Checkbutton
+from tkinter import StringVar, BooleanVar, Checkbutton
 
-import SearchEngine
-from SearchDialogBase import SearchDialogBase
-from configHandler import idleConf
+from . import SearchEngine
+from .SearchDialogBase import SearchDialogBase
+from .configHandler import idleConf
 
 if idleConf.GetOption('main', 'General', 'use-ttk', type='int'):
-    from ttk import Checkbutton
+    from tkinter.ttk import Checkbutton
 
 def grep(text, io=None, flist=None):
     root = text._root()
@@ -66,7 +66,7 @@ class GrepDialog(SearchDialogBase):
         if not path:
             self.top.bell()
             return
-        from OutputWindow import OutputWindow
+        from .OutputWindow import OutputWindow
         save = sys.stdout
         try:
             sys.stdout = OutputWindow(self.flist)
@@ -80,13 +80,13 @@ class GrepDialog(SearchDialogBase):
         list.sort()
         self.close()
         pat = self.engine.getpat()
-        print "Searching %r in %s ..." % (pat, path)
+        print("Searching %r in %s ..." % (pat, path))
         hits = 0
         for fn in list:
             try:
                 f = open(fn)
-            except IOError, msg:
-                print msg
+            except IOError as msg:
+                print(msg)
                 continue
             lineno = 0
             while 1:
@@ -105,16 +105,16 @@ class GrepDialog(SearchDialogBase):
                 s = ""
             else:
                 s = "s"
-            print "Found", hits, "hit%s." % s
-            print "(Hint: right-click to open locations.)"
+            print("Found", hits, "hit%s." % s)
+            print("(Hint: right-click to open locations.)")
         else:
-            print "No hits."
+            print("No hits.")
 
     def findfiles(self, dir, base, rec):
         try:
             names = os.listdir(dir or os.curdir)
-        except os.error, msg:
-            print msg
+        except os.error as msg:
+            print(msg)
             return []
         list = []
         subdirs = []

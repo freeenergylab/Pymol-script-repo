@@ -3,17 +3,18 @@ Described at PyMOL wiki: http://www.pymolwiki.org/index.php/lisica
  
 '''
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 
 import os
 import stat
 
 import sys
 if sys.version_info[0] < 3:
-    import tkMessageBox
-    import urllib2
-    from urllib2 import urlopen,URLError,HTTPError
+    import tkinter.messagebox
+    import urllib.request, urllib.error, urllib.parse
+    from urllib.request import urlopen
+    from urllib.error import URLError, HTTPError
 else:
     import tkinter.messagebox as tkMessageBox
     import urllib.request as urllib2
@@ -155,14 +156,14 @@ class UpgraderGitlab:
     def findLatestVersionGUI(self):
         try:
             #from insilab git server
-            versionFile=urllib2.urlopen(self.firstVersionURL, timeout=5)
+            versionFile=urllib.request.urlopen(self.firstVersionURL, timeout=5)
             self.latestVersionGUI=versionFile.read().strip()
             print("l1 = ", self.latestVersionGUI)
             
         except:
             try:
                 #from secondary git server
-                versionFile=urllib2.urlopen(self.secondVersionURL, timeout=5)
+                versionFile=urllib.request.urlopen(self.secondVersionURL, timeout=5)
                 self.latestVersionGUI=versionFile.read().strip()
                 print("l2 = ", self.latestVersionGUI)
             except HTTPError as e1:

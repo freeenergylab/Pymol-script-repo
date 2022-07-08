@@ -20,15 +20,15 @@ Literature:
  DeLano, W.L. The PyMOL Molecular Graphics System (2002) DeLano Scientific, San Carlos, CA, USA. http://www.pymol.org
 '''
 
-from __future__ import print_function
-from __future__ import absolute_import
+
+
 
 import colorsys
 import sys
 from pymol import cmd, stored
 
 if sys.version_info[0] < 3:
-    from Tkinter import *
+    from tkinter import *
 else:
     from tkinter import *
 

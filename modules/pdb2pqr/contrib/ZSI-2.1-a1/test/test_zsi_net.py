@@ -5,8 +5,7 @@ from test_zsi import *
 
 def makeTestSuite():
     return unittest.TestSuite(
-        map(lambda t: globals()[t].makeTestSuite(),
-            filter(lambda g: g.startswith('test_') and True, globals()))
+        [globals()[t].makeTestSuite() for t in [g for g in globals() if g.startswith('test_') and True]]
     )
 
 def main():

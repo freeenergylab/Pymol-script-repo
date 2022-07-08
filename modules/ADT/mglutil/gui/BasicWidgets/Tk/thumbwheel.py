@@ -10,7 +10,7 @@
 #
 #########################################################################
 
-import Tkinter
+import tkinter
 import numpy as Numeric
 import math
 import types
@@ -19,11 +19,11 @@ import os
 
 from mglutil.util.callback import CallbackManager
 from mglutil.util.misc import ensureFontCase
-from optionsPanel import OptionsPanel
+from .optionsPanel import OptionsPanel
 
-from KeyboardEntry import KeyboardEntry
+from .KeyboardEntry import KeyboardEntry
 
-class ThumbWheel(Tkinter.Frame, KeyboardEntry):
+class ThumbWheel(tkinter.Frame, KeyboardEntry):
     """ This class builds a thumbwheel put onto a wheelpad.
 constructor options:
 - master: the master into the thumwheel can be packed. If one is specified,
@@ -86,8 +86,8 @@ components see configure(). value is 0 or 1. 1 disables,0 enables.
 #        if __debug__:
 #            checkkeywords(kw)
             
-	Tkinter.Frame.__init__(self, master)
-	Tkinter.Pack.config(self, side='left', anchor='w')
+	tkinter.Frame.__init__(self, master)
+	tkinter.Pack.config(self, side='left', anchor='w')
 
         #FIXME: nblines are not dynamically computed
         self.nblines = 30
@@ -197,8 +197,7 @@ components see configure(). value is 0 or 1. 1 disables,0 enables.
 
         # now set the constructor options correctly using the configure method
         self.setValue(value)
-        apply( self.configure, (),
-               {'type':type, 'min':min, 'max':max, 'increment':increment,
+        self.configure(*(), **{'type':type, 'min':min, 'max':max, 'increment':increment,
                 'precision':precision, 'showLabel':showLabel,
                 'continuous':continuous, 'oneTurn':oneTurn,
                 'lockType':lockType, 'lockMin':lockMin, 'lockBMin':lockBMin,
@@ -241,14 +240,14 @@ components see configure(). value is 0 or 1. 1 disables,0 enables.
 
 
     def setWidth(self, width):
-        assert isinstance(width, types.IntType),\
+        assert isinstance(width, int),\
                "Illegal width: expected %s, got %s"%(type(1),type(width))
         assert width > 0,"Illegal width: must be > 0, got %s"%width
         self.width = width
 
 
     def setHeight(self, height):
-        assert isinstance(height, types.IntType),\
+        assert isinstance(height, int),\
                "Illegal height: expected %s, got %s"%(type(1),type(height))
         assert height > 0,"Illegal height: must be > 0, got %s"%height
         self.height = height
@@ -258,10 +257,10 @@ components see configure(). value is 0 or 1. 1 disables,0 enables.
         """Set widget callback. Must be callable function. Callback is called
 every time the widget value is set/modified"""
 
-        assert cb is None or callable(cb) or type(cb) is types.ListType,\
+        assert cb is None or callable(cb) or type(cb) is list,\
                "Illegal callback: must be either None or callable. Got %s"%cb
         if cb is None: return
-        elif type(cb) is types.ListType:
+        elif type(cb) is list:
             for func in cb:
                 assert callable(func), "Illegal callback must be callable. Got %s"%func
                 self.callbacks.AddCallback(func)
@@ -435,10 +434,10 @@ every time the widget value is set/modified"""
         cd={'width':self.width+bw, 'height':self.height+bw, 'relief':'raised',
                 'borderwidth':3}
         
-        for k, w in self.canvasCfg.items():
+        for k, w in list(self.canvasCfg.items()):
             cd[k] = w
 
-        self.canvas = Tkinter.Canvas(self, cd)
+        self.canvas = tkinter.Canvas(self, cd)
         cbdw = int(self.canvas.cget('borderwidth'))
         bd = self.borderWidth + cbdw + 1 # +1 for pixel0 that is not drawn
 
@@ -518,10 +517,10 @@ every time the widget value is set/modified"""
         
         wlabCfg = {'padx':0,'pady':0}
         wlabCfg.update(self.wheelLabCfg)
-        self.valueLabel = apply( Tkinter.Label, (self.master,), wlabCfg)
+        self.valueLabel = tkinter.Label(*(self.master,), **wlabCfg)
 
         self.drawLines()
-	self.canvas.pack(side=Tkinter.LEFT)
+	self.canvas.pack(side=tkinter.LEFT)
         self.toggleWidgetLabel(self.showLabel)
 
         
@@ -588,7 +587,7 @@ every time the widget value is set/modified"""
             self.valueLabel.place_forget()
 
     def setValue(self, val):
-        assert type(val) in [types.IntType, types.FloatType],\
+        assert type(val) in [int, float],\
                "Illegal type for value: expected %s or %s, got %s"%(
                    type(1), type(1.0), type(val) )
 
@@ -607,11 +606,11 @@ every time the widget value is set/modified"""
  #####################################################################
 
     def configure(self, **kw):
-        if 'type' in kw.keys(): # make sure type is set first
+        if 'type' in list(kw.keys()): # make sure type is set first
             self.setType(kw['type'])
             del kw['type']
             
-        for key,value in kw.items():
+        for key,value in list(kw.items()):
             # the 'set' parameter callbacks
             if key=='labCfg': self.setLabel(value)
             elif key=='callback': self.setCallbacks(value)
@@ -652,14 +651,14 @@ every time the widget value is set/modified"""
             return
 
         d={}
-        for k, w in self.labCfg.items():
+        for k, w in list(self.labCfg.items()):
             if k == 'side': continue
             else: d[k] = w
-        if not 'side' in self.labCfg.keys():
+        if not 'side' in list(self.labCfg.keys()):
             self.labCfg['side'] = 'left'
 
         if not self.lab:
-            self.lab = Tkinter.Label(self, d)
+            self.lab = tkinter.Label(self, d)
             self.lab.pack(side=self.labCfg['side'])
             self.lab.bind("<Button-3>", self.toggleOptPanel)
         else:
@@ -667,7 +666,7 @@ every time the widget value is set/modified"""
 
 
     def setType(self, Type):
-        assert type(Type) in [types.StringType, types.TypeType],\
+        assert type(Type) in [bytes, type],\
                "Illegal type for datatype. Expected %s or %s, got %s"%(
                    type('a'), type(type), type(Type) )
 
@@ -702,7 +701,7 @@ every time the widget value is set/modified"""
     def setMin(self, min):
         if min is not None:
 
-            assert type(min) in [types.IntType, types.FloatType],\
+            assert type(min) in [int, float],\
                  "Illegal type for minimum. Expected type %s or %s, got %s"%(
                      type(0), type(0.0), type(min) )
 
@@ -735,7 +734,7 @@ every time the widget value is set/modified"""
     def setMax(self, max):
         if max is not None:
 
-            assert type(max) in [types.IntType, types.FloatType],\
+            assert type(max) in [int, float],\
                  "Illegal type for maximum. Expected type %s or %s, got %s"%(
                      type(0), type(0.0), type(max) )
 
@@ -767,7 +766,7 @@ every time the widget value is set/modified"""
     def setIncrement(self, incr):
         if incr is not None:
 
-            assert type(incr) in [types.IntType, types.FloatType],\
+            assert type(incr) in [int, float],\
                "Illegal type for increment. Expected type %s or %s, got %s"%(
                    type(0), type(0.0), type(incr) )
 
@@ -790,7 +789,7 @@ every time the widget value is set/modified"""
 
 
     def setPrecision(self, val):
-        assert type(val) in [types.IntType, types.FloatType],\
+        assert type(val) in [int, float],\
                "Illegal type for precision. Expected type %s or %s, got %s"%(
                      type(0), type(0.0), type(val) )
         val = int(val)
@@ -842,7 +841,7 @@ every time the widget value is set/modified"""
                "Illegal value for showLabel. Expected 0, 1 or 2, got %s"%val
         
         if val != 0 and val != 1 and val != 2:
-            print "Illegal value. Must be 0, 1 or 2"
+            print("Illegal value. Must be 0, 1 or 2")
             return
         self.showLabel = val
         self.toggleWidgetLabel(val)
@@ -862,7 +861,7 @@ every time the widget value is set/modified"""
 
 
     def setOneTurn(self, oneTurn):
-        assert type(oneTurn) in [types.IntType, types.FloatType],\
+        assert type(oneTurn) in [int, float],\
                "Illegal type for oneTurn. Expected %s or %s, got %s"%(
                    type(0), type(0.0), type(oneTurn) )
 
@@ -985,7 +984,7 @@ every time the widget value is set/modified"""
         
 if __name__ == '__main__':
     def foo(val):
-        print val
+        print(val)
     tw = ThumbWheel(width=100, height=20, labCfg={'text':'X:'},
 #    tw = ThumbWheel(width=20, height=100, labCfg={'text':'X:'},
 #                    orient='vertical',

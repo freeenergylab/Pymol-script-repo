@@ -32,7 +32,8 @@ Each function will be called at most once for each event.
 import sys
 import string
 import re
-import Tkinter
+import tkinter
+from functools import reduce
 
 # the event type constants, which define the meaning of mc_type
 MC_KEYPRESS=0; MC_KEYRELEASE=1; MC_BUTTONPRESS=2; MC_BUTTONRELEASE=3;
@@ -105,17 +106,15 @@ class _SimpleBinder:
 # _state_subsets gives for each combination of modifiers, or *state*,
 # a list of the states which are a subset of it. This list is ordered by the
 # number of modifiers is the state - the most specific state comes first.
-_states = range(1 << len(_modifiers))
+_states = list(range(1 << len(_modifiers)))
 _state_names = [reduce(lambda x, y: x + y,
                        [_modifiers[i][0]+'-' for i in range(len(_modifiers))
                         if (1 << i) & s],
                        "")
                 for s in _states]
-_state_subsets = map(lambda i: filter(lambda j: not (j & (~i)), _states),
-                      _states)
+_state_subsets = [[j for j in _states if not (j & (~i))] for i in _states]
 for l in _state_subsets:
-    l.sort(lambda a, b, nummod = lambda x: len(filter(lambda i: (1<<i) & x,
-                                                      range(len(_modifiers)))):
+    l.sort(lambda a, b, nummod = lambda x: len([i for i in range(len(_modifiers)) if (1<<i) & x]):
            nummod(b) - nummod(a))
 # _state_codes gives for each state, the portable code to be passed as mc_state
 _state_codes = [reduce(lambda x, y: x | y,
@@ -184,7 +183,7 @@ class _ComplexBinder:
                                                           seq, handler)))
 
     def bind(self, triplet, func):
-        if not self.bindedfuncs.has_key(triplet[2]):
+        if triplet[2] not in self.bindedfuncs:
             self.bindedfuncs[triplet[2]] = [[] for s in _states]
             for s in _states:
                 lists = [ self.bindedfuncs[detail][i]
@@ -292,10 +291,10 @@ def MultiCallCreator(widget):
         return _multicall_dict[widget]
 
     class MultiCall (widget):
-        assert issubclass(widget, Tkinter.Misc)
+        assert issubclass(widget, tkinter.Misc)
 
         def __init__(self, *args, **kwargs):
-            apply(widget.__init__, (self,)+args, kwargs)
+            widget.__init__(*(self,)+args, **kwargs)
             # a dictionary which maps a virtual event to a tuple with:
             #  0. the function binded
             #  1. a list of triplets - the sequences it is binded to
@@ -382,12 +381,12 @@ def MultiCallCreator(widget):
 
 if __name__ == "__main__":
     # Test
-    root = Tkinter.Tk()
-    text = MultiCallCreator(Tkinter.Text)(root)
+    root = tkinter.Tk()
+    text = MultiCallCreator(tkinter.Text)(root)
     text.pack()
     def bindseq(seq, n=[0]):
         def handler(event):
-            print seq
+            print(seq)
         text.bind("<<handler%d>>"%n[0], handler)
         text.event_add("<<handler%d>>"%n[0], seq)
         n[0] += 1

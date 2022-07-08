@@ -18,8 +18,8 @@ import sys
 import numpy
 
 def issequence(a):
-    return type(a) is types.TupleType or \
-           type(a) is types.ListType or \
+    return type(a) is tuple or \
+           type(a) is list or \
            isinstance(a, numpy.ndarray)
 
 def isnumericstring(a):
@@ -35,7 +35,7 @@ def uniq(objectSequence):
     l = []
     d = {}
     for o in objectSequence:
-        if not d.has_key(o):
+        if o not in d:
             d[o] = None
             l.append(o)
     return l
@@ -79,7 +79,7 @@ def isInstance(lObject):
             elif inspect.isclass(lObject) is False \
               and isinstance(lObject, ltype) is True:
                 from abc import ABCMeta
-                if ltype == types.ClassType is True:
+                if ltype == type is True:
                     return True
                 elif type(ltype) == ABCMeta:
                     return True
@@ -101,7 +101,7 @@ def importMainOrIPythonMain():
 def suppressMultipleQuotes(aString):
     lStringToSimplify = aString
     lSimplifiedString = lStringToSimplify
-    while type(lStringToSimplify) == types.StringType:
+    while type(lStringToSimplify) == bytes:
         lSimplifiedString = lStringToSimplify
         try:
            lStringToSimplify = eval(lSimplifiedString)

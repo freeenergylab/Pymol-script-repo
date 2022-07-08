@@ -1,10 +1,10 @@
-from Tkinter import Toplevel, Frame, Label, Entry, Button, Checkbutton, \
+from tkinter import Toplevel, Frame, Label, Entry, Button, Checkbutton, \
                     Radiobutton
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
 if idleConf.GetOption('main', 'General', 'use-ttk', type='int'):
-    from ttk import Frame, Label, Entry, Button, Checkbutton, Radiobutton
+    from tkinter.ttk import Frame, Label, Entry, Button, Checkbutton, Radiobutton
 
 class SearchDialogBase:
 

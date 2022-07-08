@@ -30,8 +30,8 @@ class KBComboBox(unittest.TestCase):
         widget.master.destroy()
 
         # with root widget
-        import Tkinter
-        root = Tkinter.Toplevel()
+        import tkinter
+        root = tkinter.Toplevel()
         widget = kbComboBox(root, label_text='Numbers:', labelpos='w')
         widget.pack()
         pause()
@@ -45,11 +45,11 @@ class KBComboBox(unittest.TestCase):
 
         def chooseNumber(number):
             global wasCalled
-            print 'A you chose:', number
+            print('A you chose:', number)
             wasCalled=1
 
 
-        namelist = map(str, range(30))
+        namelist = list(map(str, list(range(30))))
         widget = kbComboBox(label_text='Numbers:', labelpos='w',
                         selectioncommand = chooseNumber,
                         scrolledlist_items = namelist )
@@ -85,8 +85,8 @@ class SLIDERWIDGETBaseTest(unittest.TestCase):
         pause()
         widget.master.destroy()
         # with root widget
-        import Tkinter
-        root = Tkinter.Toplevel()
+        import tkinter
+        root = tkinter.Toplevel()
         widget = SliderWidget(root)
         widget.pack()
         pause()
@@ -100,8 +100,8 @@ class SLIDERWIDGETBaseTest(unittest.TestCase):
             inCB = True
         global widget
         from mglutil.gui.BasicWidgets.Tk.customizedWidgets import SliderWidget
-        import Tkinter
-        root = Tkinter.Toplevel()
+        import tkinter
+        root = tkinter.Toplevel()
         widget = SliderWidget(root, command=slider_cb)
         widget.pack()
         pause()
@@ -123,8 +123,8 @@ class SLIDERWIDGETBaseTest(unittest.TestCase):
     def test_sliderwidget_discrete(self):
         global widget
         from mglutil.gui.BasicWidgets.Tk.customizedWidgets import SliderWidget
-        import Tkinter
-        root = Tkinter.Toplevel()
+        import tkinter
+        root = tkinter.Toplevel()
         widget = SliderWidget(root,label='discrete slider',
                           labelsCursorFormat='%4d', immediate=0,
                           lookup=[10, 15, 25, 46, 78, 99] )
@@ -187,8 +187,8 @@ class EXTENDEDSLIDERWIDGETBaseTest(unittest.TestCase):
     def test_extendedsliderwidget_discrete(self):
         global widget
         from mglutil.gui.BasicWidgets.Tk.customizedWidgets import ExtendedSliderWidget
-        import Tkinter
-        root = Tkinter.Toplevel()
+        import tkinter
+        root = tkinter.Toplevel()
         widget = ExtendedSliderWidget(root,label='discrete extendedslider',
                                   labelsCursorFormat='%4d', immediate=0,
                                   lookup=[10, 15, 25, 46, 78, 99] )
@@ -263,8 +263,8 @@ class EXTENDEDSLIDERWIDGETBaseTest(unittest.TestCase):
     def test_extendedsliderwidget(self):
         global widget
         from mglutil.gui.BasicWidgets.Tk.customizedWidgets import ExtendedSliderWidget
-        import Tkinter
-        root = Tkinter.Toplevel()
+        import tkinter
+        root = tkinter.Toplevel()
         widget = ExtendedSliderWidget(root)
         widget.pack()
         pause()

@@ -3,7 +3,7 @@ A number of function that enhance IDLE on MacOSX when it used as a normal
 GUI application (as opposed to an X11 application).
 """
 import sys
-import Tkinter
+import tkinter
 
 def runningAsOSXApp():
     """ Returns True iff running from the IDLE.app bundle on OSX """
@@ -26,7 +26,7 @@ def addOpenEventSupport(root, flist):
 def hideTkConsole(root):
     try:
         root.tk.call('console', 'hide')
-    except Tkinter.TclError:
+    except tkinter.TclError:
         # Some versions of the Tk framework don't have a console object
         pass
 
@@ -46,11 +46,11 @@ def overrideRootMenu(root, flist):
     #
     # Due to a (mis-)feature of TkAqua the user will also see an empty Help
     # menu.
-    from Tkinter import Menu, Text, Text
-    from EditorWindow import prepstr, get_accelerator
-    import Bindings
-    import WindowList
-    from MultiCall import MultiCallCreator
+    from tkinter import Menu, Text, Text
+    from .EditorWindow import prepstr, get_accelerator
+    from . import Bindings
+    from . import WindowList
+    from .MultiCall import MultiCallCreator
 
     menubar = Menu(root)
     root.configure(menu=menubar)
@@ -73,11 +73,11 @@ def overrideRootMenu(root, flist):
     menubar.add_cascade(label='IDLE', menu=menu)
 
     def about_dialog(event=None):
-        import aboutDialog
+        from . import aboutDialog
         aboutDialog.AboutDialog(root, 'About IDLE')
 
     def config_dialog(event=None):
-        import configDialog
+        from . import configDialog
         configDialog.ConfigDialog(root, 'Settings')
 
 

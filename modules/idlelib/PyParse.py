@@ -3,7 +3,7 @@ import sys
 
 # Reason last stmt is continued (or C_NONE if it's not).
 (C_NONE, C_BACKSLASH, C_STRING_FIRST_LINE,
- C_STRING_NEXT_LINES, C_BRACKET) = range(5)
+ C_STRING_NEXT_LINES, C_BRACKET) = list(range(5))
 
 if 0:   # for throwaway debugging output
     def dump(*stuff):
@@ -105,7 +105,7 @@ _tran = ''.join(_tran)
 del ch
 
 try:
-    UnicodeType = type(unicode(""))
+    UnicodeType = type(str(""))
 except NameError:
     UnicodeType = None
 

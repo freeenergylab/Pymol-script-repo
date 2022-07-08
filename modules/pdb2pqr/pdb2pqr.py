@@ -50,14 +50,14 @@ __author__ = "Todd Dolinsky, Nathan Baker, Jens Nielsen, Paul Czodrowski, Jan Je
 __version__ = "1.7.1"
 
 import sys,os
-from main import mainCommand
-from main_cgi import mainCGI
-from src.aconf import *
+from .main import mainCommand
+from .main_cgi import mainCGI
+from .src.aconf import *
 
 if __name__ == "__main__":
     """ Determine if called from command line or CGI """
     
-    if not os.environ.has_key("REQUEST_METHOD"):
+    if "REQUEST_METHOD" not in os.environ:
         # Append Numeric/Numpy path to sys.path if the user specified a non-standard location during configuration
         package_path = PACKAGE_PATH
         if package_path != "":

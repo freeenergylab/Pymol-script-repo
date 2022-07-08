@@ -2,9 +2,9 @@ __all__ = ['PythonCAPISubProgram']
 
 import sys
 
-from parser.api import TypeDecl, TypeStmt, Module
-from wrapper_base import *
-from py_wrap_type import *
+from .parser.api import TypeDecl, TypeStmt, Module
+from .wrapper_base import *
+from .py_wrap_type import *
 
 class PythonCAPISubProgram(WrapperBase):
     """
@@ -190,7 +190,7 @@ static void %(init_func)s_c(%(name)s_functype func_ptr) {
                         self.return_format_list.append('O&')
                         self.return_obj_list.append('\npyobj_from_%s, &%s' % (ti.ctype, argname))
             else:
-                print `ti,var.dimension,var.bounds`
+                print(repr((ti,var.dimension,var.bounds)))
                 assert var.is_scalar(),'array support not implemented: "%s"' % (var)
 
         self.call_list.append('%s_f(%s);' % (name,', '.join(args_f+extra_args_f)))

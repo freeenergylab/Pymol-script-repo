@@ -80,7 +80,7 @@ EXAMPLES
         for img in imgframeiter(img):
             if img.size != size:
                 if not quiet:
-                    print('Image size mismatch: %s != %s' % (img.size, size))
+                    print(('Image size mismatch: %s != %s' % (img.size, size)))
                 continue
             a = numpy.reshape(img, (size[0], size[1], -1))
             stack.append(a[..., channel])
@@ -100,7 +100,7 @@ EXAMPLES
             extent = _self.safe_eval(extent)
         grid = [(float(e) / (s - 1)) for (e, s) in zip(extent, stack.shape)]
         if not quiet:
-            print(' Setting grid = ' + str(grid))
+            print((' Setting grid = ' + str(grid)))
 
     brick = Brick.from_numpy(stack, grid)
     _self.load_brick(brick, name)

@@ -59,13 +59,13 @@ class annotate():
             print("Annotation in IMGT scheme:")
 
         if self.chain == "L":
-            print("L-FR1:  ", self.regionlst[0])
-            print("L-CDR1: ", self.regionlst[1])
-            print("L-FR2:  ", self.regionlst[2])
-            print("L-CDR2: ", self.regionlst[3])
-            print("L-FR3:  ", self.regionlst[4])
-            print("L-CDR3: ", self.regionlst[5])
-            print("L-FR4:  ", self.regionlst[6])
+            print(("L-FR1:  ", self.regionlst[0]))
+            print(("L-CDR1: ", self.regionlst[1]))
+            print(("L-FR2:  ", self.regionlst[2]))
+            print(("L-CDR2: ", self.regionlst[3]))
+            print(("L-FR3:  ", self.regionlst[4]))
+            print(("L-CDR3: ", self.regionlst[5]))
+            print(("L-FR4:  ", self.regionlst[6]))
 
             for region, seq in zip(["L-FR1", "L-CDR1", "L-FR2", "L-CDR2", "L-FR3", "L-CDR3", "L-FR4"], self.regionlst):
                 self.regiondict[region] = seq
@@ -73,13 +73,13 @@ class annotate():
             return self.regiondict
 
         else:
-            print("H-FR1:  ", self.regionlst[0])
-            print("H-CDR1: ", self.regionlst[1])
-            print("H-FR2:  ", self.regionlst[2])
-            print("H-CDR2: ", self.regionlst[3])
-            print("H-FR3:  ", self.regionlst[4])
-            print("H-CDR3: ", self.regionlst[5])
-            print("H-FR4:  ", self.regionlst[6])
+            print(("H-FR1:  ", self.regionlst[0]))
+            print(("H-CDR1: ", self.regionlst[1]))
+            print(("H-FR2:  ", self.regionlst[2]))
+            print(("H-CDR2: ", self.regionlst[3]))
+            print(("H-FR3:  ", self.regionlst[4]))
+            print(("H-CDR3: ", self.regionlst[5]))
+            print(("H-FR4:  ", self.regionlst[6]))
 
             for region, seq in zip(["H-FR1", "H-CDR1", "H-FR2", "H-CDR2", "H-FR3", "H-CDR3", "H-FR4"], self.regionlst):
                 self.regiondict[region] = seq
@@ -265,7 +265,7 @@ def annotate_v(selection, scheme):
     aaseq="".join(cmd.get_fastastr(selection).split("\n")[1:])
     obj=annotate(aaseq, scheme)
     result=obj.retrieve()
-    for i in result.keys():
+    for i in list(result.keys()):
         cmd.select(i, "pepseq %s" % result[i])
 
 

@@ -5,7 +5,7 @@
 debug=False
 import sys, os
 
-print __file__
+print(__file__)
 import os
 try:
     file_name=__file__
@@ -38,7 +38,7 @@ from src.forcefield import *
 from src.routines import *
 from src.protein import *
 from src.server import *
-from StringIO import *
+from io import *
 from src.hydrogens import *
 
 class conf_avg:
@@ -69,7 +69,7 @@ class conf_avg:
     
     def process_one_pdb(self,pdbfilename):
         """Do everything for one input file"""
-        print "Working on: %s" %pdbfilename
+        print("Working on: %s" %pdbfilename)
         pdbfile = getPDBFile(pdbfilename)
         
         if self.options.MD:
@@ -178,9 +178,9 @@ class conf_avg:
         myhydRoutines.cleanup()
         myRoutines.setStates()
 
-        print "Created protein object (after processing myRoutines) -"
-        print "\tNumber of residues in protein: %s" % myProtein.numResidues()
-        print "\tNumber of atoms in protein   : %s" % myProtein.numAtoms()
+        print("Created protein object (after processing myRoutines) -")
+        print("\tNumber of residues in protein: %s" % myProtein.numResidues())
+        print("\tNumber of atoms in protein   : %s" % myProtein.numAtoms())
 
         #
         # Assign charges
@@ -205,8 +205,8 @@ class conf_avg:
 		igen.sdie=80.0
 		all_center,extent=igen.getCenter()
 		igen.setfineCenter(all_center)
-		print 'Center: %5.1fA %5.1fA %5.1fA' %(all_center[0],all_center[1],all_center[2])
-		print 'Extent: %5.1fA %5.1fA %5.1fA'  %(extent[0],extent[1],extent[2])
+		print('Center: %5.1fA %5.1fA %5.1fA' %(all_center[0],all_center[1],all_center[2]))
+		print('Extent: %5.1fA %5.1fA %5.1fA'  %(extent[0],extent[1],extent[2]))
 
 		apbs_inputfile=igen.printInput()
 		return myProtein, apbs_inputfile
@@ -229,7 +229,7 @@ class conf_avg:
             currAvg=currSum/len(potentials)
             avg_pots.append(currAvg)
 
-        print avg_pots
+        print(avg_pots)
         return avg_pots
 
 #

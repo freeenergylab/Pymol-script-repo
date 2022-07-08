@@ -6,4 +6,4 @@ __all__ = ['ArgumentError', 'F', 'beta', 'binomial', 'chi_square',
            'randint', 'random', 'random_integers', 'standard_normal',
            'uniform', 'seed']
 
-from numpy.oldnumeric.random_array import *
+from .numpy.oldnumeric.random_array import *

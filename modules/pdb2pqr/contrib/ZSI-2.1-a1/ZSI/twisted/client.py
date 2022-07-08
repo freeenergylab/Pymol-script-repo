@@ -17,7 +17,7 @@ from ZSI.writer import SoapWriter
 from ZSI.fault import FaultFromFaultMessage
 from ZSI.wstools.Namespaces import WSA
 
-from WSresource import HandlerChainInterface, CheckInputArgs
+from .WSresource import HandlerChainInterface, CheckInputArgs
 
 
 # 
@@ -50,7 +50,7 @@ def getPage(url, contextFactory=None, *args, **kwargs):
     factory = client.HTTPClientFactory(url, *args, **kwargs)
     if scheme == 'https':
         if contextFactory is None:
-            raise RuntimeError, 'must provide a contextFactory'
+            raise RuntimeError('must provide a contextFactory')
         conn = reactor.connectSSL(host, port, factory, contextFactory)
     else:
         conn = reactor.connectTCP(host, port, factory)
@@ -93,9 +93,9 @@ class ClientDataHandler:
     def processRequest(cls, obj, nsdict={}, header=True, 
                        **kw):
         tc = None
-        if kw.has_key('requesttypecode'):
+        if 'requesttypecode' in kw:
             tc = kw['requesttypecode']
-        elif kw.has_key('requestclass'):
+        elif 'requestclass' in kw:
             tc = kw['requestclass'].typecode
         else:
             tc = getattr(obj.__class__, 'typecode', None)
@@ -142,7 +142,7 @@ class WSAddressHandler:
             return
         
         if not sw.header:
-            raise RuntimeError, 'expecting SOAP:Header'
+            raise RuntimeError('expecting SOAP:Header')
         
         self.address = addr = Address(url, wsAddressURI=self.uri)
         addr.setRequest(endPointReference, wsaction)
@@ -265,8 +265,8 @@ class Binding:
                                         soapaction=soapaction, **kw)
             
         if self.trace:
-            print >>self.trace, "_" * 33, time.ctime(time.time()), "REQUEST:"
-            print >>self.trace, soapdata
+            print("_" * 33, time.ctime(time.time()), "REQUEST:", file=self.trace)
+            print(soapdata, file=self.trace)
 
         f = getPage(str(url), contextFactory=self.contextFactory, 
                     postdata=soapdata, agent=self.agent, 
@@ -300,8 +300,8 @@ class Binding:
         d = chain.flow.deferred
         if self.trace:
             def trace(soapdata):
-                print >>self.trace, "_" * 33, time.ctime(time.time()), "RESPONSE:"
-                print >>self.trace, soapdata
+                print("_" * 33, time.ctime(time.time()), "RESPONSE:", file=self.trace)
+                print(soapdata, file=self.trace)
                 return soapdata
             
             d.addCallback(trace)
@@ -336,9 +336,9 @@ class Binding:
 
 def trace():
         if trace:
-            print >>trace, "_" * 33, time.ctime(time.time()), "RESPONSE:"
+            print("_" * 33, time.ctime(time.time()), "RESPONSE:", file=trace)
             for i in (self.reply_code, self.reply_msg,):
-                print >>trace, str(i)
-            print >>trace, "-------"
-            print >>trace, str(self.reply_headers)
-            print >>trace, self.data
+                print(str(i), file=trace)
+            print("-------", file=trace)
+            print(str(self.reply_headers), file=trace)
+            print(self.data, file=trace)

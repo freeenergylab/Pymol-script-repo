@@ -9,9 +9,9 @@ import os
 from os.path import join as pjoin, dirname as pdirname, basename as pbasename
 from copy import deepcopy
 
-from code_generators.generate_array_api import \
+from .code_generators.generate_array_api import \
      do_generate_api as nowrap_do_generate_array_api
-from code_generators.generate_ufunc_api import \
+from .code_generators.generate_ufunc_api import \
      do_generate_api as nowrap_do_generate_ufunc_api
 
 from numscons.numdist import process_c_str as process_str
@@ -86,7 +86,7 @@ def generate_from_template_emitter(target, source, env):
 #----------------
 def do_generate_umath(targetfile, sourcefile, env):
     t = open(targetfile, 'w')
-    from code_generators import generate_umath
+    from .code_generators import generate_umath
     code = generate_umath.make_code(generate_umath.defdict, generate_umath.__file__)
     t.write(code)
     t.close()

@@ -6,6 +6,7 @@ from numpy import int_, float_, bool_
 import numpy.core.fromnumeric as fromnumeric
 
 from numpy.testing.utils import build_err_msg, rand
+from functools import reduce
 
 
 numpy.seterr(all='ignore')
@@ -449,9 +450,9 @@ if __name__ == '__main__':
             cur = numpy.sort(cur)
 #            alt = numpy.sort(alt)
 #            tmp = numpy.sort(tmp)
-            print "#%i" % i +50*'.'
-            print eval("moduletester.test_%i.__doc__" % i)
+            print("#%i" % i +50*'.')
+            print(eval("moduletester.test_%i.__doc__" % i))
 #            print "core_ini     : %.3f - %.3f" % (new[0], new[1])
-            print "core_current : %.3f - %.3f" % (cur[0], cur[1])
+            print("core_current : %.3f - %.3f" % (cur[0], cur[1]))
 #            print "core_alt     : %.3f - %.3f" % (alt[0], alt[1])
 #            print "core_tmp     : %.3f - %.3f" % (tmp[0], tmp[1])

@@ -27,7 +27,7 @@ class WSAService(EchoServer):
             addr1 = response.EchoResult
             for a in address.Any:
                 if a not in addr1.ReferenceProperties.Any:
-                    raise RuntimeError, 'EPRs dont match'
+                    raise RuntimeError('EPRs dont match')
 
         return request,response
 

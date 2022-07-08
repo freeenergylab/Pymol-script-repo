@@ -49,7 +49,7 @@ def _SetDay(someDay, offset=None, date=None):
         offset = 0
 
     if not date:
-        raise RuntimeError, "Date is required"
+        raise RuntimeError("Date is required")
 
     someDay._year = newDate_tuple[0]
     someDay._month = newDate_tuple[1]

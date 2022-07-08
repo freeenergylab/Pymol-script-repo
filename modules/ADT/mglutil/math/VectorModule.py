@@ -26,7 +26,7 @@
 _undocumented = 1
 
 import numpy as Numeric, types
-import TensorModule
+from . import TensorModule
 
 
 class Vector:
@@ -77,11 +77,11 @@ class Vector:
     __deepcopy__ = __copy__
 
     def __repr__(self):
-	return 'Vector(%s,%s,%s)' % (`self.array[0]`,\
-				     `self.array[1]`,`self.array[2]`)
+	return 'Vector(%s,%s,%s)' % (repr(self.array[0]),\
+				     repr(self.array[1]),repr(self.array[2]))
 
     def __str__(self):
-	return `list(self.array)`
+	return repr(list(self.array))
 
     def __add__(self, other):
 	return Vector(self.array+other.array)
@@ -122,12 +122,12 @@ class Vector:
 
     def __div__(self, other):
 	if isVector(other):
-	    raise TypeError, "Can't divide by a vector"
+	    raise TypeError("Can't divide by a vector")
 	else:
 	    return Vector(Numeric.divide(self.array,1.*other))
 	    
     def __rdiv__(self, other):
-        raise TypeError, "Can't divide by a vector"
+        raise TypeError("Can't divide by a vector")
 
     def __cmp__(self, other):
 	return cmp(Numeric.add.reduce(abs(self.array-other.array)), 0)
@@ -156,13 +156,13 @@ class Vector:
         "Returns a normalized copy."
 	len = Numeric.sqrt(Numeric.add.reduce(self.array*self.array))
 	if len == 0:
-	    raise ZeroDivisionError, "Can't normalize a zero-length vector"
+	    raise ZeroDivisionError("Can't normalize a zero-length vector")
 	return Vector(Numeric.divide(self.array, len))
 
     def cross(self, other):
         "Returns the cross product with vector |other|."
 	if not isVector(other):
-	    raise TypeError, "Cross product with non-vector"
+	    raise TypeError("Cross product with non-vector")
 	return Vector(self.array[1]*other.array[2]
                                 -self.array[2]*other.array[1],
 		      self.array[2]*other.array[0]
@@ -182,12 +182,12 @@ class Vector:
 	elif TensorModule.isTensor(other):
 	    return TensorModule.Tensor(self.array, 1)*other
 	else:
-	    raise TypeError, "Dyadic product with non-vector"
+	    raise TypeError("Dyadic product with non-vector")
 	
     def angle(self, other):
         "Returns the angle to vector |other|."
 	if not isVector(other):
-	    raise TypeError, "Angle between vector and non-vector"
+	    raise TypeError("Angle between vector and non-vector")
 	cosa = Numeric.add.reduce(self.array*other.array) / \
 	       Numeric.sqrt(Numeric.add.reduce(self.array*self.array) * \
                             Numeric.add.reduce(other.array*other.array))

@@ -16,7 +16,7 @@ def main():
     request = RegisterUserRequestWrapper()
     request._User = user
     response = registration.RegisterUser(request)
-    print response._Message
+    print(response._Message)
 
 if __name__ == '__main__':
     main()

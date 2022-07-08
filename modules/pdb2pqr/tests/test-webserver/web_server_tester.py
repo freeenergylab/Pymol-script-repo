@@ -44,7 +44,7 @@
 __date__  = "26 January 2010"
 __author__ = "Samir Unni, Yong Huang"
 
-import urllib, urllib2, time, StringIO
+import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse, time, io
 import os
 import random
 from sys import argv
@@ -59,9 +59,9 @@ def launchJob(pdbID):
               'FFOUT' : 'internal',
               'DEBUMP' : 'CHECKED',
               'OPT' : 'CHECKED'}
-    data = urllib.urlencode(values)
-    req = urllib2.Request(url, data)
-    response = urllib2.urlopen(req)
+    data = urllib.parse.urlencode(values)
+    req = urllib.request.Request(url, data)
+    response = urllib.request.urlopen(req)
 
     for i in range(0,2):
         response.readline()
@@ -69,7 +69,7 @@ def launchJob(pdbID):
     return url
 
 def checkJob(url):
-    response = open(urllib.urlretrieve(url)[0])
+    response = open(urllib.request.urlretrieve(url)[0])
     while True:
         status = response.readline()
         if status[0:7]=="Message":
@@ -102,32 +102,32 @@ def main():
     while(currentID<len(pdbIDs) or len(currentJobs)>0):
         while(len(currentJobs)<threads and currentID<len(pdbIDs)):
             pdbID = pdbIDs[currentID].strip()
-            print "launching %s" % pdbID
+            print("launching %s" % pdbID)
             currentJobs.append([pdbID,launchJob(pdbID),0])
-            print "%i threads" % threads
+            print("%i threads" % threads)
             currentID = currentID+1
-        print "sleeping"
+        print("sleeping")
         time.sleep(sleeptime)
         jobsToDelete = []
         for i in range(0,len(currentJobs)):
-            print currentJobs[i]
-            print "checking %s" % currentJobs[i][0]
+            print(currentJobs[i])
+            print("checking %s" % currentJobs[i][0])
             result = checkJob(currentJobs[i][1])
-            print "%s:  %s" % (currentJobs[i][0], result)
+            print("%s:  %s" % (currentJobs[i][0], result))
             if(result=="complete" or result=="failed"):
                 completedJobs.append([currentJobs[i][0], result])
                 jobsToDelete.append(i)
             elif currentJobs[i][2]>timeout:
-                print "%s: failed" % currentJobs[i][0]
+                print("%s: failed" % currentJobs[i][0])
                 completedJobs.append([currentJobs[i][0], "failed"])
                 jobsToDelete.append(i)
             else:
                 currentJobs[i][2] = currentJobs[i][2]+1
-        print "jobsToDelete: %s" % jobsToDelete
+        print("jobsToDelete: %s" % jobsToDelete)
         jobsToDelete.reverse()
         for i in jobsToDelete:
-            print "i = %i" % i
-            print "deleting %s" % currentJobs[i][0]
+            print("i = %i" % i)
+            print("deleting %s" % currentJobs[i][0])
             del currentJobs[i]
 
     for i in range(0,len(completedJobs)):
@@ -135,9 +135,9 @@ def main():
             failedJobs.append(completedJobs[i][0])
 
     if len(failedJobs) == 0:
-        print "\nWeb test finished with no failed jobs.\n"
+        print("\nWeb test finished with no failed jobs.\n")
     else:
-        print "\nThese jobs failed: %s.\n" % (failedJobs) 
+        print("\nThese jobs failed: %s.\n" % (failedJobs)) 
 
 if __name__ == "__main__":
     main()

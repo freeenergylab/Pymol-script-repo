@@ -70,7 +70,7 @@ os.path.walk("Support", getDataFiles, data_files)
 
 # description of what is going to be included in the distribution and
 # installed.
-from version import VERSION
+from .version import VERSION
 setup (name = 'Support',
        version = VERSION,
        description = "A package providing code for update mechanism of MGLTools",

@@ -18,7 +18,7 @@ def array_map(f, ar):
         "Apply an ordinary function to all values in an array."
         flat_ar = ravel(ar)
         out = zeros(len(flat_ar), flat_ar.dtype.char)
-        for i in xrange(len(flat_ar)):
+        for i in range(len(flat_ar)):
 	        out[i] = f(flat_ar[i])
                 out.shape = ar.shape
         return out
@@ -137,7 +137,7 @@ class Spline:
                 if type(self.slopeVectors[0][1])==TupleType or type(self.slopeVectors[0][1])==ListType:
                     return self.slopeVectors
                 else:
-                    print "not given in vector form"
+                    print("not given in vector form")
                     
     def setControlPoints(self,points,slopes):
         """function to setcontrolpoints"""
@@ -157,7 +157,7 @@ class Spline:
     def deleteControlPoint(self,point):
         """function to delete controlpoint"""
         points=self.getControlPoints()
-        points=map(lambda p: ((int(round(p[0])),int(round(p[1])))) ,points)
+        points=[((int(round(p[0])),int(round(p[1])))) for p in points]
         slopes=self.getSlopesVectors()
         if point in points:
             point_index=points.index(point)
@@ -171,14 +171,14 @@ class Spline:
 
 
 #example
-import Tkinter
-class FunctionGraph1(Tkinter.Canvas):
+import tkinter
+class FunctionGraph1(tkinter.Canvas):
 
     def __init__(self, x, y,pn):
         
         sizex = 2*len(x)
         sizey = 2*len(y)
-        self.canvas = Tkinter.Canvas(width=sizex+500, height=sizey+300)
+        self.canvas = tkinter.Canvas(width=sizex+500, height=sizey+300)
         coords = []
         bb = min(x), min(y), max(x), max(y)
         points=[]
@@ -191,7 +191,7 @@ class FunctionGraph1(Tkinter.Canvas):
         for a,b in zip(x,y):
             coords.append(2*a)
             coords.append(sizey-2*b)
-        print len(coords)
+        print(len(coords))
         #self.canvas.create_line( *coords )
         self.canvas.create_line( coords[0:200] )
         self.canvas.create_line( coords [200:400])

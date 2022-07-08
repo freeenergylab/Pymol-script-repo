@@ -376,12 +376,12 @@ if __name__ == '__main__':
     log.set_verbosity(2)
     compiler = GnuFCompiler()
     compiler.customize()
-    print compiler.get_version()
-    raw_input('Press ENTER to continue...')
+    print(compiler.get_version())
+    input('Press ENTER to continue...')
     try:
         compiler = Gnu95FCompiler()
         compiler.customize()
-        print compiler.get_version()
-    except Exception, msg:
-        print msg
-    raw_input('Press ENTER to continue...')
+        print(compiler.get_version())
+    except Exception as msg:
+        print(msg)
+    input('Press ENTER to continue...')

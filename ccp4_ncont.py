@@ -23,7 +23,7 @@ See more here: http://www.pymolwiki.org/index.php/ccp4_ncont
     AUTHOR
         Gerhard Reitmayr and Dalia Daujotyte, 2009.
 '''
-from __future__ import print_function
+
 from pymol import cmd
 import re
 

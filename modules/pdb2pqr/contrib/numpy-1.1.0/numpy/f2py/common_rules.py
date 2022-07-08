@@ -15,7 +15,7 @@ Pearu Peterson
 
 __version__ = "$Revision: 1.19 $"[10:-1]
 
-import __version__
+from . import __version__
 f2py_version = __version__.version
 
 import pprint
@@ -27,17 +27,17 @@ errmess=sys.stderr.write
 outmess=sys.stdout.write
 show=pprint.pprint
 
-from auxfuncs import *
-import capi_maps
-import cfuncs
-import func2subr
-from crackfortran import rmbadname
+from .auxfuncs import *
+from . import capi_maps
+from . import cfuncs
+from . import func2subr
+from .crackfortran import rmbadname
 ##############
 
 def findcommonblocks(block,top=1):
     ret = []
     if hascommon(block):
-        for n in block['common'].keys():
+        for n in list(block['common'].keys()):
             vars={}
             for v in block['common'][n]:
                 vars[v]=block['vars'][v]
@@ -98,7 +98,7 @@ def buildhooks(m):
             cadd('\t{\"%s\",%s,{{%s}},%s},'%(n,dm['rank'],dms,at))
         cadd('\t{NULL}\n};')
         inames1 = rmbadname(inames)
-        inames1_tps = ','.join(map(lambda s:'char *'+s,inames1))
+        inames1_tps = ','.join(['char *'+s for s in inames1])
         cadd('static void f2py_setup_%s(%s) {'%(name,inames1_tps))
         cadd('\tint i_f2py=0;')
         for n in inames1:

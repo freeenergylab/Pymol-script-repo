@@ -18,21 +18,21 @@ if __name__ == '__main__':
 
     def usage():
         "Print helpful, accurate usage statement to stdout."
-        print "Usage: write_conformations_from_dlg.py -d directory"
-        print
-        print "    Description of command..."
-        print "         -d     docking filename"
-        print "    Optional parameters:"
-        print "        [-o]    output file stem"
-        print "        (default is ligandname. Outputfiles are named 'stem' plus '_num.pdbq[t]')"
-        print "        [-v]    verbose output"
+        print("Usage: write_conformations_from_dlg.py -d directory")
+        print()
+        print("    Description of command...")
+        print("         -d     docking filename")
+        print("    Optional parameters:")
+        print("        [-o]    output file stem")
+        print("        (default is ligandname. Outputfiles are named 'stem' plus '_num.pdbq[t]')")
+        print("        [-v]    verbose output")
 
 
     # process command arguments
     try:
         opt_list, args = getopt.getopt(sys.argv[1:], 'd:o:vh')
-    except getopt.GetoptError, msg:
-        print 'write_conformations_from_dlg.py: %s' %msg
+    except getopt.GetoptError as msg:
+        print(('write_conformations_from_dlg.py: %s' %msg))
         usage()
         sys.exit(2)
 
@@ -51,19 +51,19 @@ if __name__ == '__main__':
         #print "o=", o, " a=", a
         if o in ('-d', '--d'):
             docking_filename = a
-            if verbose: print 'set docking_filename to ', a
+            if verbose: print(('set docking_filename to ', a))
         if o in ('-o', '--o'):
             output_stem = a
-            if verbose: print 'set output_stem to ', a
+            if verbose: print(('set output_stem to ', a))
         if o in ('-v', '--v'):
             verbose = True
-            if verbose: print 'set verbose to ', True
+            if verbose: print(('set verbose to ', True))
         if o in ('-h', '--'):
             usage()
             sys.exit()
 
     if not docking_filename:
-        print 'write_conformations_from_dlg: docking_filename must be specified.'
+        print('write_conformations_from_dlg: docking_filename must be specified.')
         usage()
         sys.exit()
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         outfile= output_stem + '_' + str(ix+1) + ext
         conf = d.ch.conformations[ix]
         d.ligMol.parser.write_with_new_coords(conf.getCoords(),outfile)
-        if verbose: print "wrote ", outfile
+        if verbose: print(("wrote ", outfile))
 
 
 # To execute this command type:

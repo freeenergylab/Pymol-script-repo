@@ -1,6 +1,6 @@
 import re
-from Tkinter import StringVar, BooleanVar, TclError
-import tkMessageBox
+from tkinter import StringVar, BooleanVar, TclError
+import tkinter.messagebox
 
 def get(root):
     if not hasattr(root, "_searchengine"):
@@ -66,7 +66,7 @@ class SearchEngine:
             flags = flags | re.IGNORECASE
         try:
             prog = re.compile(pat, flags)
-        except re.error, what:
+        except re.error as what:
             try:
                 msg, col = what
             except:
@@ -83,7 +83,7 @@ class SearchEngine:
             msg = msg + "\np\Pattern: " + str(pat)
         if col >= 0:
             msg = msg + "\nOffset: " + str(col)
-        tkMessageBox.showerror("Regular expression error",
+        tkinter.messagebox.showerror("Regular expression error",
                                msg, master=self.root)
 
     def setcookedpat(self, pat):
@@ -174,7 +174,7 @@ class SearchEngine:
                 wrapped = 1
                 wrap = 0
                 pos = text.index("end-1c")
-                line, col = map(int, pos.split("."))
+                line, col = list(map(int, pos.split(".")))
             chars = text.get("%d.0" % line, "%d.0" % (line+1))
             col = len(chars) - 1
         return None
@@ -216,5 +216,5 @@ def get_selection(text):
 # Helper to parse a text index into a (line, col) tuple.
 
 def get_line_col(index):
-    line, col = map(int, index.split(".")) # Fails on invalid index
+    line, col = list(map(int, index.split("."))) # Fails on invalid index
     return line, col

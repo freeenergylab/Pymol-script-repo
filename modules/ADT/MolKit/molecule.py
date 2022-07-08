@@ -62,7 +62,7 @@ class AtomSet(TreeNodeSet):
                 for a in objects:
                     molDict[a.top].append(a)
 
-                for k,v in molDict.items():
+                for k,v in list(molDict.items()):
                     if len(v)==len(k.allAtoms): # special case all atoms
                         strr += k.name+':::;'
                     else:
@@ -146,7 +146,7 @@ class AtomSet(TreeNodeSet):
 
             # WARNING this assumes no duplicate atoms in the set
             uni = AtomSet(self.data)
-            uni._bndIndex_ = range(len(uni))
+            uni._bndIndex_ = list(range(len(uni)))
             uni._inset=1
             uni._inbnd=0
 
@@ -161,7 +161,7 @@ class AtomSet(TreeNodeSet):
                     b.atom1._inbnd = 1
                     b.atom2._inbnd = 1
             result = BondSet( res )
-            atnobnd = AtomSet( filter( lambda x: x._inbnd == 0, uni ) )
+            atnobnd = AtomSet( [x for x in uni if x._inbnd == 0] )
             for a in uni:
                 if hasattr(a, '_inset'):
                     del a._inset
@@ -178,7 +178,7 @@ class AtomSet(TreeNodeSet):
             # make uniq set of bonds (since each bond would be there thrice)
             return misc.uniq(flat)
 
-        elif len(result) and type(result[0]) == types.DictType:
+        elif len(result) and type(result[0]) == dict:
             # result is a list of dictionaries.
             # keys is a list of all keys in any dictionary
             # we build and return a dictionary having the same keys
@@ -189,21 +189,21 @@ class AtomSet(TreeNodeSet):
 
             l = []
             for d in result:
-                l = l + d.keys()
+                l = l + list(d.keys())
             keys = misc.uniq(l)
 
             if raiseExceptionForMissingKey:
                 try:
                     res = {}
                     for k in keys:
-                        res[k] = map(lambda x, k=k:x[k], result)
+                        res[k] = list(map(lambda x, k=k:x[k], result))
                     result = res
                 except:
                     raise RuntimeError('inconsistent set of keys across nodes')
             else:
                 res = {}
                 for k in keys:
-                    res[k] = map(lambda x, k=k: x.get(k), result)
+                    res[k] = list(map(lambda x, k=k: x.get(k), result))
                 result = res
 
 
@@ -249,7 +249,7 @@ class AtomSet(TreeNodeSet):
     def setCharges(self, chargeSet):
         """Set the charge attribute for each atom in the set"""
         assert type(chargeSet)==type('abc')
-        assert chargeSet in self.data[0]._charges.keys()
+        assert chargeSet in list(self.data[0]._charges.keys())
         #previously this made no sense:
         #assert chargeSet not in self.data[0]._charges.keys()
         for a in self.data:
@@ -259,7 +259,7 @@ class AtomSet(TreeNodeSet):
     def delCharges(self, chargeSet):
         """Delete the _charges entry for each atom in the set"""
         assert type(chargeSet)==type('abc')
-        assert chargeSet in self.data[0]._charges.keys()
+        assert chargeSet in list(self.data[0]._charges.keys())
         for a in self.data:
             del a._charges[chargeSet]
    
@@ -357,7 +357,7 @@ class Atom(TreeNode):
        
         
     def isBelow(self, Klass):
-        from protein import Protein
+        from .protein import Protein
         if Klass in (Molecule, Protein): # try both Molecule and Protein
             l = TreeNode.isBelow(self, Molecule)
             if l>0: # not below
@@ -490,7 +490,7 @@ class AtomSetSelector(TreeNodeSetSelector):
         # check for pre-defined filtering lists
         if item=='hetatm':
             return nodes.get(lambda x: x.hetatm==1)
-        elif item in self.atomList.keys():
+        elif item in list(self.atomList.keys()):
             #cannot just lists of names for filtering
             #want to restrict to atoms in std residues
             return self.getNamedAtomSet( nodes, item)
@@ -524,7 +524,7 @@ class AtomSetSelector(TreeNodeSetSelector):
         selNodes = None
         parentNodes = nodes.parent.uniq()
         for par in parentNodes:
-            nds = AtomSet(filter(lambda x, par=par: x.parent==par, nodes))
+            nds = AtomSet(list(filter(lambda x, par=par: x.parent==par, nodes)))
             firstNodes = self.processListItem(nds, levItList[0])
             lastNodes = self.processListItem(nds, levItList[-1])
             newNodes = None
@@ -541,8 +541,8 @@ class AtomSetSelector(TreeNodeSetSelector):
         #AND 8/2004: whose parents are std residues...
         alist = self.atomList[item]
         from MolKit.PDBresidueNames import AAnames
-        res_atoms = [x for x in nodes if alist.has_key(x.name) and \
-                     AAnames.has_key(x.parent.type.upper())]
+        res_atoms = [x for x in nodes if x.name in alist and \
+                     x.parent.type.upper() in AAnames]
         
 ##         if nodes.data and True in nodes.data[0].top.chains.isDna():
 ##             alist.extend(self.NAatomList[item])
@@ -551,7 +551,7 @@ class AtomSetSelector(TreeNodeSetSelector):
 ##             #only get atoms in standard residues
 ##             reslist = self.std_residues_types
 ##             res_atoms = filter(lambda x, nodes=nodes: x.parent.type in reslist, nodes)
-        ans = filter(lambda x, alist=alist, res_atoms=res_atoms: x.name in alist, res_atoms)
+        ans = list(filter(lambda x, alist=alist, res_atoms=res_atoms: x.name in alist, res_atoms))
         #previously:
         #ans = filter(lambda x, alist=alist, nodes=nodes: x.name in alist, nodes)
         return AtomSet(ans)
@@ -590,7 +590,7 @@ class BondSet(TreeNodeSet):
         for d in self.data:
             u[d.atom1] = 1
             u[d.atom2] = 1
-        return AtomSet(u.keys())
+        return AtomSet(list(u.keys()))
 
 
     def getSelector(self):
@@ -685,10 +685,9 @@ class Bond:
         # in a non aromatic cycle.
         mol = atm1.top
         if hasattr(mol, 'rings') and not mol.rings is None \
-               and mol.rings.bondRings.has_key(self):
+               and self in mol.rings.bondRings:
             indices = mol.rings.bondRings[self]
-            aromCycles = filter(lambda x: mol.rings.rings[x]['aromatic'],
-                                indices)
+            aromCycles = [x for x in indices if mol.rings.rings[x]['aromatic']]
             if not aromCycles:
                 # chose the first ring...
                 ring = mol.rings.rings[indices[0]]
@@ -791,7 +790,7 @@ class Bond:
                     continue
                 nbBonds = branch.getShortestBranch(oriAtm, endAtm)
                 results.append(nbBonds)
-            distances = map(lambda x: x[1], results)
+            distances = [x[1] for x in results]
 
             # sorting is too expansif, when only minimum needed
             vect2 = results[ distances.index( min(distances) ) ][0]
@@ -835,10 +834,10 @@ class Bond:
             
             # Get the branches coming from that branch
             if self.atom1 == oriStack[bondStackIndex]:
-                bonds = filter(lambda x, b= bond: x!=b, self.atom2.bonds)
+                bonds = list(filter(lambda x, b= bond: x!=b, self.atom2.bonds))
                 oriAtm = self.atom2
             else:
-                bonds = filter(lambda x, b= bond: x!=b, self.atom1.bonds)
+                bonds = list(filter(lambda x, b= bond: x!=b, self.atom1.bonds))
                 oriAtm = self.atom1
 
             if len(bonds) == 0:
@@ -1126,20 +1125,20 @@ class Molecule(TreeNode):
         #for a in npHSet: print a.name, ':', len(a.bonds)
         problem_npHs = npHSet.get(lambda x: len(x.bonds)>1)
         if problem_npHs is not None and len(problem_npHs)>0:
-            print "The following nonpolar hydrogens had more than one bond"
+            print("The following nonpolar hydrogens had more than one bond")
             for a in problem_npHs:
-                print a.full_name() + "-" + str(len(a.bonds)) + " bonds"
+                print((a.full_name() + "-" + str(len(a.bonds)) + " bonds"))
         mol.allAtoms = mol.allAtoms - npHSet
 
-        chList = npHSet[0]._charges.keys()
+        chList = list(npHSet[0]._charges.keys())
         for at in npHSet:
-            chs = at._charges.keys()
+            chs = list(at._charges.keys())
             for c in chList:
                 if c not in chs: 
                     chList.remove(c)
         if not len(chList):
             s = 'charges on carbons unchanged'
-            print s
+            print(s)
         else:
             for chargeSet in chList:
                 for h in npHSet:
@@ -1176,9 +1175,9 @@ class Molecule(TreeNode):
             return allHSet
         problem_allHs = allHSet.get(lambda x: len(x.bonds)>1)
         if problem_allHs is not None and len(problem_allHs)>0:
-            print "The following hydrogens had more than one bond"
+            print("The following hydrogens had more than one bond")
             for a in problem_allHs:
-                print a.full_name() + "-" + str(len(a.bonds)) + " bonds"
+                print((a.full_name() + "-" + str(len(a.bonds)) + " bonds"))
         mol.allAtoms = mol.allAtoms - allHSet
 
         for at in allHSet:
@@ -1293,7 +1292,7 @@ class Molecule(TreeNode):
                 match = p[1].search( atom.element )
             if match:  # atom name matches
                 if hasattr(atom.parent, 'type') and \
-                   type(atom.parent.type)==types.StringType:
+                   type(atom.parent.type)==bytes:
                     resname = atom.parent.type
                 else:
                     resname = 'XXX'
@@ -1306,8 +1305,8 @@ class Molecule(TreeNode):
                     atom.radius = r
                     return r
 
-        print 'no radius found for atom %s in residue %s' % \
-              (atom.name, atom.parent.name )
+        print(('no radius found for atom %s in residue %s' % \
+              (atom.name, atom.parent.name )))
         atom.radius = 0.2
         return 0.2
     
@@ -1325,7 +1324,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
             atomSet = self.findType(Atom)
 
         r2 = []
-        strType = types.StringType
+        strType = bytes
         curRes = None
         mols = atomSet.top.uniq()
         if len(mols)==1: labeltext = 'Assign Atoms Radii for %s'%mols[0].name
@@ -1359,7 +1358,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
                     break
 
             if pnum==len(self.compiled_patterns): # not found:
-                print "WARNING: no pattern match for ",a.full_name()
+                print(("WARNING: no pattern match for ",a.full_name()))
                 r = 0.2
             else:
                 if withH and united:
@@ -1413,7 +1412,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
         # alternate of each other or if they don't have the same alternate
         # name.
         la = len(atoms)
-        for i in xrange(la-1):
+        for i in range(la-1):
             a1 = atoms[i]
             c1 = array(a1.coords)
             cov_rad1 = a1.bondOrderRadius
@@ -1600,11 +1599,11 @@ if united is true large atomic radii are used for atoms which have no hydrogens
         nbnds = atoms.get(lambda x: len(x.bonds)==0)
         if verbose: 
             if len(nbnds):
-                print  self.parser.filename, "has", len(nbnds),"non-bonded atoms:"
+                print((self.parser.filename, "has", len(nbnds),"non-bonded atoms:"))
                 for b in nbnds:
-                    print b.full_name()
+                    print((b.full_name()))
             else:
-                print  self.parser.filename, "has no non-bonded atoms"
+                print((self.parser.filename, "has no non-bonded atoms"))
         return nbnds
 
 
@@ -1624,7 +1623,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
         bond_dict = {}
         for b in atoms.bonds[0]:
             bond_dict[b] = 1  
-        bnds = bond_dict.keys()
+        bnds = list(bond_dict.keys())
         #first pass: try to connect pieces
         for b in bnds:
             ind1 = b.atom1
@@ -1632,7 +1631,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
             found = b in fb
             if not found:
                 for d in l:
-                    d_keys = d.keys()
+                    d_keys = list(d.keys())
                     if ind1 in d_keys:
                         d[ind2] = 1
                         fb.append(b)
@@ -1646,7 +1645,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
         #now to try to merge fragments, use lists of keys
         key_list = []
         for dict in l:
-            key_list.append(dict.keys())
+            key_list.append(list(dict.keys()))
         #check each list of keys against following lists
         #if there are any duplications, merge current
         #into the following one..
@@ -1669,7 +1668,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
                         #.......set found flag
                         found = 1
                         #..........update jth list of keys
-                        key_list[j]= l[j].keys()
+                        key_list[j]= list(l[j].keys())
                         #............skip rest of jl
                         break
                 if found:
@@ -1687,7 +1686,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
         closest_pair = []
         for i in range(len(cl)-1):
             cdist = 10000
-            for a in cl[i].keys():
+            for a in list(cl[i].keys()):
                 #only allow one bond for hydrogen atoms
                 if a.element=='H':
                     continue
@@ -1696,7 +1695,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
                     if next_dict==cl[i]:
                         continue
                     #for next_dict in cl[i+1:]:
-                    for a2 in next_dict.keys():
+                    for a2 in list(next_dict.keys()):
                         #only allow one bond for hydrogen atoms
                         if a2.element=='H':
                             continue
@@ -1707,9 +1706,9 @@ if united is true large atomic radii are used for atoms which have no hydrogens
                             #print "new cdist =", cdist
                             closest_pair = [a, a2]
             #AT THIS POINT MAKE A BOND between a, a2            
-            print "building bond between :", closest_pair[0].name, ' and ', closest_pair[1].name
+            print(("building bond between :", closest_pair[0].name, ' and ', closest_pair[1].name))
             if len(AtomSet(closest_pair).bonds[0]):
-                print "SKIPPING!"
+                print("SKIPPING!")
             else:
                 Bond(closest_pair[0], closest_pair[1])
             ct = ct + 1
@@ -1722,7 +1721,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
                     a.found = 1
                     continue
                 for d in cl:
-                    if a in dict.keys():
+                    if a in list(dict.keys()):
                         a.found = 1
                         break
                 if not a.found and len(a.bonds)==0:
@@ -1775,7 +1774,7 @@ if united is true large atomic radii are used for atoms which have no hydrogens
                                     o_closest_pair = [orph, a]
                         #at this point, build the bond 
                         Bond(o_closest_pair[0], o_closest_pair[1])
-                        print "building bond between :", o_closest_pair[0].name, ' and ', o_closest_pair[1].name
+                        print(("building bond between :", o_closest_pair[0].name, ' and ', o_closest_pair[1].name))
                         ct = ct + 1
 
         return ct

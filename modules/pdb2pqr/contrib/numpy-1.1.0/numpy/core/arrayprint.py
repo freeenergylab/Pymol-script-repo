@@ -13,11 +13,12 @@ __docformat__ = 'restructuredtext'
 # and by Travis Oliphant  2005-8-22 for numpy
 
 import sys
-import numeric      as _nc
-import numerictypes as _nt
+from . import numeric      as _nc
+from . import numerictypes as _nt
 from umath import maximum, minimum, absolute, not_equal, isnan, isinf
 from multiarray import format_longfloat
-from fromnumeric import ravel
+from .fromnumeric import ravel
+from functools import reduce
 
 def product(x, y): return x*y
 
@@ -272,14 +273,14 @@ def _formatArray(a, format_function, rank, max_line_len,
     if rank == 1:
         s = ""
         line = next_line_prefix
-        for i in xrange(leading_items):
+        for i in range(leading_items):
             word = format_function(a[i]) + separator
             s, line = _extendLine(s, line, word, max_line_len, next_line_prefix)
 
         if summary_insert1:
             s, line = _extendLine(s, line, summary_insert1, max_line_len, next_line_prefix)
 
-        for i in xrange(trailing_items, 1, -1):
+        for i in range(trailing_items, 1, -1):
             word = format_function(a[-i]) + separator
             s, line = _extendLine(s, line, word, max_line_len, next_line_prefix)
 
@@ -290,7 +291,7 @@ def _formatArray(a, format_function, rank, max_line_len,
     else:
         s = '['
         sep = separator.rstrip()
-        for i in xrange(leading_items):
+        for i in range(leading_items):
             if i > 0:
                 s += next_line_prefix
             s += _formatArray(a[i], format_function, rank-1, max_line_len,
@@ -301,7 +302,7 @@ def _formatArray(a, format_function, rank, max_line_len,
         if summary_insert1:
             s += next_line_prefix + summary_insert1 + "\n"
 
-        for i in xrange(trailing_items, 1, -1):
+        for i in range(trailing_items, 1, -1):
             if leading_items or i != trailing_items:
                 s += next_line_prefix
             s += _formatArray(a[-i], format_function, rank-1, max_line_len,
@@ -404,8 +405,8 @@ def _digits(x, precision, format):
     return precision - len(s) + len(z)
 
 
-_MAXINT = sys.maxint
-_MININT = -sys.maxint-1
+_MAXINT = sys.maxsize
+_MININT = -sys.maxsize-1
 def _formatInteger(x, format):
     if _MININT < x < _MAXINT:
         return format % x

@@ -44,8 +44,8 @@ def pdb2xyzrn(self,pdb_fn,xyzr_fn,xyzrn_fn,use_explicit_h_r=False):
             atmnum[npats] = int(buf[2])
             if atmnum[npats] not in explicit_rad:
                 # the key has no radius --- complain and fake one
-                print 'pdb_to_xyzr: error in library file', atnfile, \
-                      'entry', buf[0], buf[1], buf[2], 'has no corresponding radius value'
+                print('pdb_to_xyzr: error in library file', atnfile, \
+                      'entry', buf[0], buf[1], buf[2], 'has no corresponding radius value')
                 explicit_rad[atmnum[npats]] = 0.01
                 united_rad[atmnum[npats]] = 0.01
 
@@ -80,15 +80,15 @@ def pdb2xyzrn(self,pdb_fn,xyzr_fn,xyzrn_fn,use_explicit_h_r=False):
             resnum  = line[22:26].strip()  # icode is not consider here!
             x,y,z   = line[30:38], line[38:46], line[46:54]
 
-            for pat in xrange(npats):
+            for pat in range(npats):
                 if re.search(atmpat[pat],aname) and re.search(respat[pat], resname):
                     if atmnum[pat] != 15: break # break only if it does not match a H atom pat
                                         # otherwise continue the search, 
                                         #as aname might match a heavy metal pattern.
 
             if pat == npats:   # Not found
-                print "pdb_to_xyzr: error, file",pdb_fn,"line",line_num,"residue", resnum,\
-                      "atom pattern",resname, aname,"was not found in ", atnfile 
+                print("pdb_to_xyzr: error, file",pdb_fn,"line",line_num,"residue", resnum,\
+                      "atom pattern",resname, aname,"was not found in ", atnfile) 
                 output_buf_xyzr.append('%s %s %s 0.01\n' % (x,y,z))
                 output_buf_xyzrn.append('%s %s %s 0.01\n' % (x,y,z))
             else:
@@ -101,11 +101,11 @@ def pdb2xyzrn(self,pdb_fn,xyzr_fn,xyzrn_fn,use_explicit_h_r=False):
                      h_select==5 and united_rad[atmnum[pat]] or explicit_rad[atmnum[pat]],
                      1, aname,resname,int(resnum.strip())))    
         
-    print 'output_fn_xyzr', xyzr_fn
+    print('output_fn_xyzr', xyzr_fn)
     fh = open(xyzr_fn,'w')
     fh.writelines(output_buf_xyzr)
     fh.close()
-    print 'output_fn_xyzrn',xyzrn_fn
+    print('output_fn_xyzrn',xyzrn_fn)
     fh = open(xyzrn_fn,'w')
     fh.writelines(output_buf_xyzrn)
     fh.close()

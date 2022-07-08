@@ -66,7 +66,7 @@ class EchoTestCase(ServiceTestCase):
         msg = self.client_module.EchoRequest()
         msg.EchoIn = 'bla bla bla'
         rsp = port.Echo(msg)
-        self.failUnless(rsp.EchoResult == msg.EchoIn, "Bad Echo")
+        self.assertTrue(rsp.EchoResult == msg.EchoIn, "Bad Echo")
 
     def test_dispatch_Echo_MIH_EPR(self):
         epr = GED('http://schemas.xmlsoap.org/ws/2004/03/addressing','EndpointReference').pyclass()
@@ -78,7 +78,7 @@ class EchoTestCase(ServiceTestCase):
         msg = self.client_module.EchoRequest()
         msg.EchoIn = 1
         rsp = port.Echo(msg)
-        self.failUnless(rsp.EchoResult == msg.EchoIn, "Bad Echo")
+        self.assertTrue(rsp.EchoResult == msg.EchoIn, "Bad Echo")
 
     def test_dispatch_Echo_MIH_EPR2(self):
         epr = GED('http://schemas.xmlsoap.org/ws/2004/03/addressing','EndpointReference').pyclass()
@@ -91,7 +91,7 @@ class EchoTestCase(ServiceTestCase):
         msg = self.client_module.EchoRequest()
         msg.EchoIn = 1
         rsp = port.Echo(msg)
-        self.failUnless(rsp.EchoResult == msg.EchoIn, "Bad Echo")
+        self.assertTrue(rsp.EchoResult == msg.EchoIn, "Bad Echo")
 
     def test_dispatch_Echo_MIH_EPR3_BadHeader(self):
         """Unqualified element "mystr" in Header
@@ -109,7 +109,7 @@ class EchoTestCase(ServiceTestCase):
         port = loc.getport(endPointReference=epr, **self.getPortKWArgs())
 
         msg = self.client_module.EchoRequest()
-        self.failUnlessRaises(FaultException, port.Echo,msg)
+        self.assertRaises(FaultException, port.Echo,msg)
 
     def test_dispatch_Echo_MIH_EPR3(self):
         epr = GED('http://schemas.xmlsoap.org/ws/2004/03/addressing','EndpointReference').pyclass()
@@ -131,8 +131,8 @@ class EchoTestCase(ServiceTestCase):
 
         msg.EchoIn = epr2
         rsp = port.Echo(msg)
-        self.failUnless(rsp.EchoResult.Address == msg.EchoIn.Address, "Bad Echo")
-        self.failUnless(rsp.EchoResult.ReferenceProperties.Any == msg.EchoIn.ReferenceProperties.Any, "Bad Echo")
+        self.assertTrue(rsp.EchoResult.Address == msg.EchoIn.Address, "Bad Echo")
+        self.assertTrue(rsp.EchoResult.ReferenceProperties.Any == msg.EchoIn.ReferenceProperties.Any, "Bad Echo")
 
 
 if __name__ == "__main__" :

@@ -2,7 +2,7 @@ __all__ = ['memmap']
 
 import mmap
 import warnings
-from numeric import uint8, ndarray, dtype
+from .numeric import uint8, ndarray, dtype
 
 dtypedescr = dtype
 valid_filemodes = ["r", "c", "r+", "w+"]
@@ -146,7 +146,7 @@ class memmap(ndarray):
         except KeyError:
             if mode not in valid_filemodes:
                 raise ValueError("mode must be one of %s" % \
-                                 (valid_filemodes + mode_equivalents.keys()))
+                                 (valid_filemodes + list(mode_equivalents.keys())))
 
         if hasattr(filename,'read'):
             fid = filename
@@ -154,7 +154,7 @@ class memmap(ndarray):
             fid = file(filename, (mode == 'c' and 'r' or mode)+'b')
 
         if (mode == 'w+') and shape is None:
-            raise ValueError, "shape must be given"
+            raise ValueError("shape must be given")
 
         fid.seek(0,2)
         flen = fid.tell()
@@ -165,8 +165,8 @@ class memmap(ndarray):
             bytes = flen-offset
             if (bytes % _dbytes):
                 fid.close()
-                raise ValueError, "Size of available data is not a "\
-                      "multiple of data-type size."
+                raise ValueError("Size of available data is not a "\
+                      "multiple of data-type size.")
             size = bytes // _dbytes
             shape = (size,)
         else:
@@ -176,7 +176,7 @@ class memmap(ndarray):
             for k in shape:
                 size *= k
 
-        bytes = long(offset + size*_dbytes)
+        bytes = int(offset + size*_dbytes)
 
         if mode == 'w+' or (mode == 'r+' and flen < bytes):
             fid.seek(bytes-1,0)

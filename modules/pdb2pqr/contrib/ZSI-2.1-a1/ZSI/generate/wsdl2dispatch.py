@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 import inspect
-from cStringIO import StringIO
-import ZSI, string, sys, getopt, urlparse, types, warnings
+from io import StringIO
+import ZSI, string, sys, getopt, urllib.parse, types, warnings
 from ZSI.wstools import WSDLTools
 from ZSI.ServiceContainer import ServiceSOAPBinding, SimpleWSResource, WSAResource
 
 from ZSI.generate import WsdlGeneratorError, Wsdl2PythonError
-from utility import TextProtect, GetModuleBaseNameFromWSDL, \
+from .utility import TextProtect, GetModuleBaseNameFromWSDL, \
     NCName_to_ClassName, GetPartsSubNames, TextProtectAttributeName
-from containers import BindingDescription
-from wsdl2python import MessageWriter, WriteServiceModule,\
+from .containers import BindingDescription
+from .wsdl2python import MessageWriter, WriteServiceModule,\
     MessageTypecodeContainer, SchemaDescription
 
 # Split last token
@@ -110,7 +110,7 @@ class ServiceModuleWriter:
         '''
         name = GetModuleBaseNameFromWSDL(self.wsdl)
         if not name:
-            raise WsdlGeneratorError, 'could not determine a service name'
+            raise WsdlGeneratorError('could not determine a service name')
         
         if self.server_module_suffix is None:
             return name
@@ -135,26 +135,26 @@ class ServiceModuleWriter:
 
         s = self._services[service.name].classdef
 
-        print >>s, 'class %s(%s):' %(self.getClassName(service.name), self.base_class_name)
+        print('class %s(%s):' %(self.getClassName(service.name), self.base_class_name), file=s)
 
-        print >>s, '%ssoapAction = {}' % self.getIndent(level=1)
-        print >>s, '%sroot = {}' % self.getIndent(level=1)
+        print('%ssoapAction = {}' % self.getIndent(level=1), file=s)
+        print('%sroot = {}' % self.getIndent(level=1), file=s)
         
     def setUpImports(self):
         '''set import statements
         '''
         i = self.imports
-        print >>i, 'from ZSI.schema import GED, GTD'
-        print >>i, 'from ZSI.TCcompound import ComplexType, Struct'
+        print('from ZSI.schema import GED, GTD', file=i)
+        print('from ZSI.TCcompound import ComplexType, Struct', file=i)
 
         module = self.getTypesModuleName()
         package = self.getTypesModulePath()
         if package:
             module = '%s.%s' %(package, module)
             
-        print >>i, 'from %s import *' %(module)
+        print('from %s import *' %(module), file=i)
             
-        print >>i, 'from %s import %s' %(self.base_module_name, self.base_class_name)
+        print('from %s import %s' %(self.base_module_name, self.base_class_name), file=i)
 
     def setUpInitDef(self, service):
         '''set __init__ function
@@ -166,18 +166,18 @@ class ServiceModuleWriter:
         d = sd.initdef
  
         if sd.location is not None:
-            scheme,netloc,path,params,query,fragment = urlparse.urlparse(sd.location)
-            print >>d, '%sdef __init__(self, post=\'%s\', **kw):' %(self.getIndent(level=1), path)
+            scheme,netloc,path,params,query,fragment = urllib.parse.urlparse(sd.location)
+            print('%sdef __init__(self, post=\'%s\', **kw):' %(self.getIndent(level=1), path), file=d)
         else:
-            print >>d, '%sdef __init__(self, post, **kw):' %self.getIndent(level=1)
+            print('%sdef __init__(self, post, **kw):' %self.getIndent(level=1), file=d)
 
         # Require POST initialization value for test implementation
         if self.base_module_name == inspect.getmodule(ServiceSOAPBinding).__name__:
-            print >>d, '%s%s.__init__(self, post)' %(self.getIndent(level=2), self.base_class_name)
+            print('%s%s.__init__(self, post)' %(self.getIndent(level=2), self.base_class_name), file=d)
             return 
 
         # No POST initialization value, obtained from HTTP Request in twisted or wsgi
-        print >>d, '%s%s.__init__(self)' %(self.getIndent(level=2), self.base_class_name)
+        print('%s%s.__init__(self)' %(self.getIndent(level=2), self.base_class_name), file=d)
 
     def mangle(self, name):
         return TextProtect(name)
@@ -202,10 +202,9 @@ class ServiceModuleWriter:
         for bop in binding.operations:
             try:
                 op = portType.operations[bop.name]
-            except KeyError, ex:
-                raise WsdlGeneratorError,\
-                    'Port(%s) PortType(%s) missing operation(%s) defined in Binding(%s)' \
-                    %(port.name,portType.name,bop.name,binding.name)
+            except KeyError as ex:
+                raise WsdlGeneratorError('Port(%s) PortType(%s) missing operation(%s) defined in Binding(%s)' \
+                    %(port.name,portType.name,bop.name,binding.name))
 
             for ext in bop.extensions:
                  if isinstance(ext, WSDLTools.SoapOperationBinding):
@@ -221,55 +220,55 @@ class ServiceModuleWriter:
             method_name = self.getMethodName(op.name)
 
             m = sd.newMethod()
-            print >>m, '%sdef %s(self, ps, **kw):' %(self.getIndent(level=1), method_name)
+            print('%sdef %s(self, ps, **kw):' %(self.getIndent(level=1), method_name), file=m)
             if msgin is not None:
-                print >>m, '%srequest = ps.Parse(%s.typecode)' %(self.getIndent(level=2), msgin_name)
+                print('%srequest = ps.Parse(%s.typecode)' %(self.getIndent(level=2), msgin_name), file=m)
             else:
-                print >>m, '%s# NO input' %self.getIndent(level=2)
+                print('%s# NO input' %self.getIndent(level=2), file=m)
 
             msgout = op.getOutputMessage()
             if msgout is not None:
                 msgout_name = TextProtect(msgout.name)
-                print >>m, '%sreturn request,%s()' %(self.getIndent(level=2), msgout_name)
+                print('%sreturn request,%s()' %(self.getIndent(level=2), msgout_name), file=m)
             else:
-                print >>m, '%s# NO output' % self.getIndent(level=2)
-                print >>m, '%sreturn request,None' % self.getIndent(level=2)
+                print('%s# NO output' % self.getIndent(level=2), file=m)
+                print('%sreturn request,None' % self.getIndent(level=2), file=m)
 
-            print >>m, ''
-            print >>m, '%ssoapAction[\'%s\'] = \'%s\'' %(self.getIndent(level=1), action_in, method_name)
-            print >>m, '%sroot[(%s.typecode.nspname,%s.typecode.pname)] = \'%s\'' \
-                     %(self.getIndent(level=1), msgin_name, msgin_name, method_name)
+            print('', file=m)
+            print('%ssoapAction[\'%s\'] = \'%s\'' %(self.getIndent(level=1), action_in, method_name), file=m)
+            print('%sroot[(%s.typecode.nspname,%s.typecode.pname)] = \'%s\'' \
+                     %(self.getIndent(level=1), msgin_name, msgin_name, method_name), file=m)
 
         return
 
     def setUpHeader(self):
-        print >>self.header, '#'*50
-        print >>self.header, '# file: %s.py' %self.getServiceModuleName()
-        print >>self.header, '#'
-        print >>self.header, '# skeleton generated by "%s"' %self.__class__
-        print >>self.header, '#      %s' %' '.join(sys.argv)
-        print >>self.header, '#'
-        print >>self.header, '#'*50
+        print('#'*50, file=self.header)
+        print('# file: %s.py' %self.getServiceModuleName(), file=self.header)
+        print('#', file=self.header)
+        print('# skeleton generated by "%s"' %self.__class__, file=self.header)
+        print('#      %s' %' '.join(sys.argv), file=self.header)
+        print('#', file=self.header)
+        print('#'*50, file=self.header)
 
     def write(self, fd=sys.stdout):
         '''write out to file descriptor, 
         should not need to override.
         '''
-        print >>fd, self.header.getvalue()
-        print >>fd, self.imports.getvalue()
+        print(self.header.getvalue(), file=fd)
+        print(self.imports.getvalue(), file=fd)
         
-        print >>fd, '# Messages ',
+        print('# Messages ', end=' ', file=fd)
         for m in self.messages:
-            print >>fd, m
+            print(m, file=fd)
         
-        print >>fd, ''
-        print >>fd, ''
-        print >>fd, '# Service Skeletons'
-        for k,v in self._services.items():
-            print >>fd, v.classdef.getvalue()
-            print >>fd, v.initdef.getvalue()
+        print('', file=fd)
+        print('', file=fd)
+        print('# Service Skeletons', file=fd)
+        for k,v in list(self._services.items()):
+            print(v.classdef.getvalue(), file=fd)
+            print(v.initdef.getvalue(), file=fd)
             for s in v.methods:
-                print >>fd, s.getvalue()
+                print(s.getvalue(), file=fd)
 
     def fromWSDL(self, wsdl):
         '''setup the service description from WSDL,
@@ -278,7 +277,7 @@ class ServiceModuleWriter:
         assert isinstance(wsdl, WSDLTools.WSDL), 'expecting WSDL instance'
 
         if len(wsdl.services) == 0:
-            raise WsdlGeneratorError, 'No service defined'
+            raise WsdlGeneratorError('No service defined')
             
         self.reset() 
         self.wsdl = wsdl
@@ -293,7 +292,7 @@ class ServiceModuleWriter:
                 desc = BindingDescription(wsdl=wsdl)
                 try:
                     desc.setUp(port.getBinding())
-                except Wsdl2PythonError, ex:
+                except Wsdl2PythonError as ex:
                     continue
                 
                 for soc in desc.operations:
@@ -352,10 +351,10 @@ class WSAServiceModuleWriter(ServiceModuleWriter):
             'expecting WSDLTools.Service instance'
 
         s = self._services[service.name].classdef
-        print >>s, 'class %s(%s):' %(self.getClassName(service.name), self.base_class_name)
-        print >>s, '%ssoapAction = {}' % self.getIndent(level=1)
-        print >>s, '%swsAction = {}' % self.getIndent(level=1)
-        print >>s, '%sroot = {}' % self.getIndent(level=1)
+        print('class %s(%s):' %(self.getClassName(service.name), self.base_class_name), file=s)
+        print('%ssoapAction = {}' % self.getIndent(level=1), file=s)
+        print('%swsAction = {}' % self.getIndent(level=1), file=s)
+        print('%sroot = {}' % self.getIndent(level=1), file=s)
 
     def setUpMethods(self, port):
         '''set up all methods representing the port operations.
@@ -372,10 +371,9 @@ class WSAServiceModuleWriter(ServiceModuleWriter):
         for bop in binding.operations:
             try:
                 op = portType.operations[bop.name]
-            except KeyError, ex:
-                raise WsdlGeneratorError,\
-                    'Port(%s) PortType(%s) missing operation(%s) defined in Binding(%s)' \
-                    %(port.name, portType.name, op.name, binding.name)
+            except KeyError as ex:
+                raise WsdlGeneratorError('Port(%s) PortType(%s) missing operation(%s) defined in Binding(%s)' \
+                    %(port.name, portType.name, op.name, binding.name))
 
             soap_action = wsaction_in = wsaction_out = None
             if op.input is not None:
@@ -395,14 +393,13 @@ class WSAServiceModuleWriter(ServiceModuleWriter):
                          %(port.name, op.name, binding.name, soap_action, wsaction_in),
                     )
                     break
-                raise WsdlGeneratorError,\
-                    'Port(%s) operation(%s) in Binding(%s) soapAction(%s) MUST match WS-Action(%s)' \
-                     %(port.name, op.name, binding.name, soap_action, wsaction_in)
+                raise WsdlGeneratorError('Port(%s) operation(%s) in Binding(%s) soapAction(%s) MUST match WS-Action(%s)' \
+                     %(port.name, op.name, binding.name, soap_action, wsaction_in))
 
             method_name = self.getMethodName(op.name)
 
             m = s.newMethod()
-            print >>m, '%sdef %s(self, ps, address):' %(self.getIndent(level=1), method_name)
+            print('%sdef %s(self, ps, address):' %(self.getIndent(level=1), method_name), file=m)
             
             msgin_name = msgout_name = None
             msgin,msgout = op.getInputMessage(),op.getOutputMessage()
@@ -413,11 +410,11 @@ class WSAServiceModuleWriter(ServiceModuleWriter):
         
             indent = self.getIndent(level=2)
             for l in self.createMethodBody(msgin_name, msgout_name):
-                print >>m, indent + l
+                print(indent + l, file=m)
 
-            print >>m, ''
-            print >>m, '%ssoapAction[\'%s\'] = \'%s\'' %(self.getIndent(level=1), wsaction_in, method_name)
-            print >>m, '%swsAction[\'%s\'] = \'%s\'' %(self.getIndent(level=1), method_name, wsaction_out)
-            print >>m, '%sroot[(%s.typecode.nspname,%s.typecode.pname)] = \'%s\'' \
-                     %(self.getIndent(level=1), msgin_name, msgin_name, method_name)
+            print('', file=m)
+            print('%ssoapAction[\'%s\'] = \'%s\'' %(self.getIndent(level=1), wsaction_in, method_name), file=m)
+            print('%swsAction[\'%s\'] = \'%s\'' %(self.getIndent(level=1), method_name, wsaction_out), file=m)
+            print('%sroot[(%s.typecode.nspname,%s.typecode.pname)] = \'%s\'' \
+                     %(self.getIndent(level=1), msgin_name, msgin_name, method_name), file=m)
  

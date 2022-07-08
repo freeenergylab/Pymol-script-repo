@@ -2,15 +2,15 @@
 Dialog that allows user to specify a new config file section name.
 Used to get new highlight theme and keybinding set names.
 """
-from Tkinter import Toplevel, Entry, Frame, Label, Button, StringVar
-from Tkconstants import TOP, BOTTOM, RIGHT, BOTH, SUNKEN, X
-import tkMessageBox
+from tkinter import Toplevel, Entry, Frame, Label, Button, StringVar
+from tkinter.constants import TOP, BOTTOM, RIGHT, BOTH, SUNKEN, X
+import tkinter.messagebox
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import Entry, Frame, Label, Button
+    from tkinter.ttk import Entry, Frame, Label, Button
 
 class GetCfgSectionNameDialog(Toplevel):
     def __init__(self, parent, title, message, usedNames):
@@ -74,16 +74,16 @@ class GetCfgSectionNameDialog(Toplevel):
         name.strip()
 
         if not name: #no name specified
-            tkMessageBox.showerror(title='Name Error',
+            tkinter.messagebox.showerror(title='Name Error',
                 message='No name specified.', parent=self)
             nameOk = 0
         elif len(name) > 30: #name too long
-            tkMessageBox.showerror(title='Name Error',
+            tkinter.messagebox.showerror(title='Name Error',
                 message=('Name too long. It should be no more than '
                          '30 characters.'), parent=self)
             nameOk=0
         elif name in self.usedNames:
-            tkMessageBox.showerror(title='Name Error',
+            tkinter.messagebox.showerror(title='Name Error',
                     message='This name is already in use.', parent=self)
             nameOk=0
 
@@ -99,13 +99,13 @@ class GetCfgSectionNameDialog(Toplevel):
         self.destroy()
 
 if __name__ == '__main__':
-    from Tkinter import Tk
+    from tkinter import Tk
     #test the dialog
     def run():
         keySeq = ''
         dlg = GetCfgSectionNameDialog(root, 'Get Name',
             'The information here should need to be word wrapped. Test.', [])
-        print dlg.result
+        print(dlg.result)
 
     root=Tk()
     Button(root, text='Dialog', command=run).pack()

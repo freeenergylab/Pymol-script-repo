@@ -33,13 +33,13 @@ class BaseTests(unittest.TestCase):
         """
         check that two bond sets have same bonds
         """
-        self.assertEquals(len(set1), len(set2))
+        self.assertEqual(len(set1), len(set2))
         idlist1 = [id(x) for x in set1]
         idlist2 = [id(x) for x in set2]
         idlist1.sort()
         idlist2.sort()
         for b1,b2 in zip(idlist1, idlist2):
-            self.assertEquals(b1,b2)
+            self.assertEqual(b1,b2)
 
 
     def test_constructor(self):
@@ -47,7 +47,7 @@ class BaseTests(unittest.TestCase):
         instantiate an BondClassifier
         """
         bndClassifier = BondClassifier()
-        self.assertEquals(bndClassifier.__class__, BondClassifier)
+        self.assertEqual(bndClassifier.__class__, BondClassifier)
 
 
     def test_constructorOptions(self):
@@ -56,7 +56,7 @@ class BaseTests(unittest.TestCase):
             options = {key: bondSelector, key2:bondSelector2,....}
         """
         bndClassifier = BondClassifier({'amide': AmideBondSelector()})
-        self.assertEquals(bndClassifier.__class__, BondClassifier)
+        self.assertEqual(bndClassifier.__class__, BondClassifier)
 
 
     def test_inputParameters(self):
@@ -91,7 +91,7 @@ class BaseTests(unittest.TestCase):
         #make the classifier do the same thing
         resultDict = bndClassifier.classify(bnds)
 
-        for k in resultDict.keys():
+        for k in list(resultDict.keys()):
             self.compareBondSets(localDict[k], resultDict[k])
 
 

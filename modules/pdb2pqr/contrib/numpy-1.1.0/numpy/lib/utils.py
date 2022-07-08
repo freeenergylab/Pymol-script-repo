@@ -79,8 +79,8 @@ if sys.version_info < (2, 4):
     # Can't set __name__ in 2.3
     import new
     def _set_function_name(func, name):
-        func = new.function(func.func_code, func.func_globals,
-                            name, func.func_defaults, func.func_closure)
+        func = new.function(func.__code__, func.__globals__,
+                            name, func.__defaults__, func.__closure__)
         return func
 else:
     def _set_function_name(func, name):
@@ -100,7 +100,7 @@ def deprecate(func, oldname=None, newname=None):
     import warnings
     if oldname is None:
         try:
-            oldname = func.func_name
+            oldname = func.__name__
         except AttributeError:
             oldname = func.__name__
     if newname is None:
@@ -213,11 +213,11 @@ def who(vardict=None):
         vardict = frame.f_globals
     sta = []
     cache = {}
-    for name in vardict.keys():
+    for name in list(vardict.keys()):
         if isinstance(vardict[name],ndarray):
             var = vardict[name]
             idv = id(var)
-            if idv in cache.keys():
+            if idv in list(cache.keys()):
                 namestr = name + " (%s)" % cache[idv]
                 original=0
             else:
@@ -249,15 +249,15 @@ def who(vardict=None):
         sp2 = max(10,maxshape)
         sp3 = max(10,maxbyte)
         prval = "Name %s Shape %s Bytes %s Type" % (sp1*' ', sp2*' ', sp3*' ')
-        print prval + "\n" + "="*(len(prval)+5) + "\n"
+        print(prval + "\n" + "="*(len(prval)+5) + "\n")
 
     for k in range(len(sta)):
         val = sta[k]
-        print "%s %s %s %s %s %s %s" % (val[0], ' '*(sp1-len(val[0])+4),
+        print("%s %s %s %s %s %s %s" % (val[0], ' '*(sp1-len(val[0])+4),
                                         val[1], ' '*(sp2-len(val[1])+5),
                                         val[2], ' '*(sp3-len(val[2])+5),
-                                        val[3])
-    print "\nUpper bound on total bytes  =       %d" % totalbytes
+                                        val[3]))
+    print("\nUpper bound on total bytes  =       %d" % totalbytes)
     return
 
 #-----------------------------------------------------------------------------
@@ -302,7 +302,7 @@ def _makenamedict(module='numpy'):
         if len(totraverse) == 0:
             break
         thisdict = totraverse.pop(0)
-        for x in thisdict.keys():
+        for x in list(thisdict.keys()):
             if isinstance(thisdict[x],types.ModuleType):
                 modname = thisdict[x].__name__
                 if modname not in dictlist:
@@ -350,22 +350,22 @@ def info(object=None,maxwidth=76,output=sys.stdout,toplevel='numpy'):
             try:
                 obj = _namedict[namestr][object]
                 if id(obj) in objlist:
-                    print >> output, "\n     *** Repeat reference found in %s *** " % namestr
+                    print("\n     *** Repeat reference found in %s *** " % namestr, file=output)
                 else:
                     objlist.append(id(obj))
-                    print >> output, "     *** Found in %s ***" % namestr
+                    print("     *** Found in %s ***" % namestr, file=output)
                     info(obj)
-                    print >> output, "-"*maxwidth
+                    print("-"*maxwidth, file=output)
                 numfound += 1
             except KeyError:
                 pass
         if numfound == 0:
-            print >> output, "Help for %s not found." % object
+            print("Help for %s not found." % object, file=output)
         else:
-            print >> output, "\n     *** Total of %d references found. ***" % numfound
+            print("\n     *** Total of %d references found. ***" % numfound, file=output)
 
     elif inspect.isfunction(object):
-        name = object.func_name
+        name = object.__name__
         arguments = inspect.formatargspec(*inspect.getargspec(object))
 
         if len(name+arguments) > maxwidth:
@@ -373,15 +373,15 @@ def info(object=None,maxwidth=76,output=sys.stdout,toplevel='numpy'):
         else:
             argstr = name + arguments
 
-        print >> output, " " + argstr + "\n"
-        print >> output, inspect.getdoc(object)
+        print(" " + argstr + "\n", file=output)
+        print(inspect.getdoc(object), file=output)
 
     elif inspect.isclass(object):
         name = object.__name__
         arguments = "()"
         try:
             if hasattr(object, '__init__'):
-                arguments = inspect.formatargspec(*inspect.getargspec(object.__init__.im_func))
+                arguments = inspect.formatargspec(*inspect.getargspec(object.__init__.__func__))
                 arglist = arguments.split(', ')
                 if len(arglist) > 1:
                     arglist[1] = "("+arglist[1]
@@ -394,30 +394,30 @@ def info(object=None,maxwidth=76,output=sys.stdout,toplevel='numpy'):
         else:
             argstr = name + arguments
 
-        print >> output, " " + argstr + "\n"
+        print(" " + argstr + "\n", file=output)
         doc1 = inspect.getdoc(object)
         if doc1 is None:
             if hasattr(object,'__init__'):
-                print >> output, inspect.getdoc(object.__init__)
+                print(inspect.getdoc(object.__init__), file=output)
         else:
-            print >> output, inspect.getdoc(object)
+            print(inspect.getdoc(object), file=output)
 
         methods = pydoc.allmethods(object)
         if methods != []:
-            print >> output, "\n\nMethods:\n"
+            print("\n\nMethods:\n", file=output)
             for meth in methods:
                 if meth[0] == '_':
                     continue
                 thisobj = getattr(object, meth, None)
                 if thisobj is not None:
                     methstr, other = pydoc.splitdoc(inspect.getdoc(thisobj) or "None")
-                print >> output, "  %s  --  %s" % (meth, methstr)
+                print("  %s  --  %s" % (meth, methstr), file=output)
 
     elif type(object) is types.InstanceType: ## check for __call__ method
-        print >> output, "Instance of class: ", object.__class__.__name__
-        print >> output
+        print("Instance of class: ", object.__class__.__name__, file=output)
+        print(file=output)
         if hasattr(object, '__call__'):
-            arguments = inspect.formatargspec(*inspect.getargspec(object.__call__.im_func))
+            arguments = inspect.formatargspec(*inspect.getargspec(object.__call__.__func__))
             arglist = arguments.split(', ')
             if len(arglist) > 1:
                 arglist[1] = "("+arglist[1]
@@ -434,18 +434,18 @@ def info(object=None,maxwidth=76,output=sys.stdout,toplevel='numpy'):
             else:
                 argstr = name + arguments
 
-            print >> output, " " + argstr + "\n"
+            print(" " + argstr + "\n", file=output)
             doc = inspect.getdoc(object.__call__)
             if doc is not None:
-                print >> output, inspect.getdoc(object.__call__)
-            print >> output, inspect.getdoc(object)
+                print(inspect.getdoc(object.__call__), file=output)
+            print(inspect.getdoc(object), file=output)
 
         else:
-            print >> output, inspect.getdoc(object)
+            print(inspect.getdoc(object), file=output)
 
     elif inspect.ismethod(object):
         name = object.__name__
-        arguments = inspect.formatargspec(*inspect.getargspec(object.im_func))
+        arguments = inspect.formatargspec(*inspect.getargspec(object.__func__))
         arglist = arguments.split(', ')
         if len(arglist) > 1:
             arglist[1] = "("+arglist[1]
@@ -458,21 +458,21 @@ def info(object=None,maxwidth=76,output=sys.stdout,toplevel='numpy'):
         else:
             argstr = name + arguments
 
-        print >> output, " " + argstr + "\n"
-        print >> output, inspect.getdoc(object)
+        print(" " + argstr + "\n", file=output)
+        print(inspect.getdoc(object), file=output)
 
     elif hasattr(object, '__doc__'):
-        print >> output, inspect.getdoc(object)
+        print(inspect.getdoc(object), file=output)
 
 
 def source(object, output=sys.stdout):
     """Write source for this object to output.
     """
     try:
-        print >> output,  "In file: %s\n" % inspect.getsourcefile(object)
-        print >> output,  inspect.getsource(object)
+        print("In file: %s\n" % inspect.getsourcefile(object), file=output)
+        print(inspect.getsource(object), file=output)
     except:
-        print >> output,  "Not available for this object."
+        print("Not available for this object.", file=output)
 
 
 # Cache for lookfor: {id(module): {name: (docstring, kind, index), ...}...}
@@ -511,7 +511,7 @@ def lookfor(what, module=None, import_modules=True, regenerate=False):
     whats = str(what).lower().split()
     if not whats: return
 
-    for name, (docstring, kind, index) in cache.iteritems():
+    for name, (docstring, kind, index) in cache.items():
         if kind in ('module', 'object'):
             # don't show modules or objects
             continue
@@ -576,7 +576,7 @@ def lookfor(what, module=None, import_modules=True, regenerate=False):
         pager = pydoc.getpager()
         pager("\n".join(help_text))
     else:
-        print "\n".join(help_text)
+        print("\n".join(help_text))
 
 def _lookfor_generate_cache(module, import_modules, regenerate):
     """
@@ -755,11 +755,11 @@ def safe_eval(source):
     walker = SafeEval()
     try:
         ast = compiler.parse(source, "eval")
-    except SyntaxError, err:
+    except SyntaxError as err:
         raise
     try:
         return walker.visit(ast)
-    except SyntaxError, err:
+    except SyntaxError as err:
         raise
 
 #-----------------------------------------------------------------------------

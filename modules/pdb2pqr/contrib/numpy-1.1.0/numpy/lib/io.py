@@ -6,13 +6,13 @@ __all__ = ['savetxt', 'loadtxt',
            'DataSource']
 
 import numpy as np
-import format
-import cStringIO
+from . import format
+import io
 import tempfile
 import os
 
-from cPickle import load as _cload, loads
-from _datasource import DataSource
+from pickle import load as _cload, loads
+from ._datasource import DataSource
 from _compiled_base import packbits, unpackbits
 
 _file = file
@@ -27,7 +27,7 @@ class BagObj(object):
         try:
             return object.__getattribute__(self, '_obj')[key]
         except KeyError:
-            raise AttributeError, key
+            raise AttributeError(key)
 
 class NpzFile(object):
     """A dictionary-like object with lazy-loading of files in the zipped
@@ -72,12 +72,12 @@ class NpzFile(object):
         if member:
             bytes = self.zip.read(key)
             if bytes.startswith(format.MAGIC_PREFIX):
-                value = cStringIO.StringIO(bytes)
+                value = io.StringIO(bytes)
                 return format.read_array(value)
             else:
                 return bytes
         else:
-            raise KeyError, "%s is not a file in the archive" % key
+            raise KeyError("%s is not a file in the archive" % key)
 
 def load(file, memmap=False):
     """Load a binary file.
@@ -129,8 +129,7 @@ def load(file, memmap=False):
         try:
             return _cload(fid)
         except:
-            raise IOError, \
-                "Failed to interpret file %s as a pickle" % repr(file)
+            raise IOError("Failed to interpret file %s as a pickle" % repr(file))
 
 def save(file, arr):
     """Save an array to a binary file (a string or file-like object).
@@ -177,8 +176,8 @@ def savez(file, *args, **kwds):
     namedict = kwds
     for i, val in enumerate(args):
         key = 'arr_%d' % i
-        if key in namedict.keys():
-            raise ValueError, "Cannot use un-named variables and keyword %s" % key
+        if key in list(namedict.keys()):
+            raise ValueError("Cannot use un-named variables and keyword %s" % key)
         namedict[key] = val
 
     zip = zipfile.ZipFile(file, mode="w")
@@ -188,7 +187,7 @@ def savez(file, *args, **kwds):
     direc = tempfile.gettempdir()
     todel = []
 
-    for key, val in namedict.iteritems():
+    for key, val in namedict.items():
         fname = key + '.npy'
         filename = os.path.join(direc, fname)
         todel.append(filename)
@@ -306,7 +305,7 @@ def loadtxt(fname, dtype=float, comments='#', delimiter=None, converters=None,
         vals = line.split(delimiter)
         if converterseq is None:
             converterseq = [converters.get(j,defconv) \
-                            for j in xrange(len(vals))]
+                            for j in range(len(vals))]
         if usecols is not None:
             row = [converterseq[j](vals[j]) for j in usecols]
         else:

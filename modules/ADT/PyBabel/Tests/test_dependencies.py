@@ -16,7 +16,7 @@ class test_dep(unittest.TestCase):
        if os.name != 'nt': #sys.platform != 'win32':
         result = d.rundeptester('PyBabel')    
         if result !=[]:
-            print "\nThe Following Packages are not present in CRITICAL or NONCRITICAL DEPENDENCIES of PyBabel :\n  %s" %result
+            print("\nThe Following Packages are not present in CRITICAL or NONCRITICAL DEPENDENCIES of PyBabel :\n  %s" %result)
             self.assertEqual(result,result_expected) 
         else:
             self.assertEqual(result,result_expected)

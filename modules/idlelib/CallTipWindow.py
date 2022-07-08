@@ -4,13 +4,13 @@ After ToolTip.py, which uses ideas gleaned from PySol
 Used by the CallTips IDLE extension.
 
 """
-from Tkinter import Toplevel, Label, TclError
-from Tkconstants import SOLID, LEFT
+from tkinter import Toplevel, Label, TclError
+from tkinter.constants import SOLID, LEFT
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
 if idleConf.GetOption('main', 'General', 'use-ttk', type='int'):
-    from ttk import Label
+    from tkinter.ttk import Label
 
 HIDE_VIRTUAL_EVENT_NAME = "<<calltipwindow-hide>>"
 HIDE_SEQUENCES = ("<Key-Escape>", "<FocusOut>")
@@ -65,8 +65,8 @@ class CallTip:
             return
 
         self.widget.mark_set(MARK_RIGHT, parenright)
-        self.parenline, self.parencol = map(
-            int, self.widget.index(parenleft).split("."))
+        self.parenline, self.parencol = list(map(
+            int, self.widget.index(parenleft).split(".")))
 
         self.tipwindow = tw = Toplevel(self.widget)
         self.position_window()
@@ -101,7 +101,7 @@ class CallTip:
             # this function, the function will be called nevertheless,
             # so do nothing in this case.
             return
-        curline, curcol = map(int, self.widget.index("insert").split('.'))
+        curline, curcol = list(map(int, self.widget.index("insert").split('.')))
         if curline < self.parenline or \
            (curline == self.parenline and curcol <= self.parencol) or \
            self.widget.compare("insert", ">", MARK_RIGHT):
@@ -148,8 +148,8 @@ class CallTip:
 #
 class container: # Conceptually an editor_window
     def __init__(self):
-        from Tkinter import Tk, Text
-        from Tkconstants import BOTH
+        from tkinter import Tk, Text
+        from tkinter.constants import BOTH
         root = Tk()
         text = self.text = Text(root)
         text.pack(side=LEFT, fill=BOTH, expand=1)

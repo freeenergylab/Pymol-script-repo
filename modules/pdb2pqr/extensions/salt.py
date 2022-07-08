@@ -56,7 +56,7 @@ def salt(routines, outroot):
     for cation in protein.getAtoms():
         # check that we've found a cation
         if cation.residue.name == "NMET":
-            print "YES NMET"
+            print("YES NMET")
         if cation.residue.name not in posresList: continue
         else:
             if cation.name not in posatomList: continue

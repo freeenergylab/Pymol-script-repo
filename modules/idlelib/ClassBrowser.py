@@ -14,9 +14,9 @@ import os
 import sys
 import pyclbr
 
-from WindowList import ListedToplevel
-from TreeWidget import TreeNode, TreeItem, ScrolledCanvas
-from configHandler import idleConf
+from .WindowList import ListedToplevel
+from .TreeWidget import TreeNode, TreeItem, ScrolledCanvas
+from .configHandler import idleConf
 
 class ClassBrowser:
 
@@ -96,11 +96,11 @@ class ModuleBrowserTreeItem(TreeItem):
             return []
         try:
             dict = pyclbr.readmodule_ex(name, [dir] + sys.path)
-        except ImportError, msg:
+        except ImportError as msg:
             return []
         items = []
         self.classes = {}
-        for key, cl in dict.items():
+        for key, cl in list(dict.items()):
             if cl.module == name:
                 s = key
                 if hasattr(cl, 'super') and cl.super:
@@ -175,7 +175,7 @@ class ClassBrowserTreeItem(TreeItem):
         if not self.cl:
             return []
         items = []
-        for name, lineno in self.cl.methods.items():
+        for name, lineno in list(self.cl.methods.items()):
             items.append((lineno, name))
         items.sort()
         list = []
@@ -207,7 +207,7 @@ class MethodBrowserTreeItem(TreeItem):
         edit.gotoline(self.cl.methods[self.name])
 
 def main():
-    import PyShell
+    from . import PyShell
     try:
         file = __file__
     except NameError:

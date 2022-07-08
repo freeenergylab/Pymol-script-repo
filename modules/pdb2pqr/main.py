@@ -55,24 +55,24 @@ import getopt
 from optparse import OptionParser, OptionGroup
 import os
 import time
-from src import pdb
-from src import utilities
-from src import structures
-from src import routines
-from src import protein
-from src.pdb import *
-from src.utilities import *
-from src.structures import *
-from src.definitions import *
-from src.forcefield import *
-from src.routines import *
-from src.protein import *
-from src.server import *
-from src.hydrogens import *
-from src.aconf import *
-from StringIO import *
+from .src import pdb
+from .src import utilities
+from .src import structures
+from .src import routines
+from .src import protein
+from .src.pdb import *
+from .src.utilities import *
+from .src.structures import *
+from .src.definitions import *
+from .src.forcefield import *
+from .src.routines import *
+from .src.protein import *
+from .src.server import *
+from .src.hydrogens import *
+from .src.aconf import *
+from io import *
 
-import extensions
+from . import extensions
 
 def printPQRHeader(atomlist, reslist, charge, ff, warnings, pH, ffout):
     """
@@ -214,16 +214,16 @@ def runPDB2PQR(pdblist, ff,
     start = time.time()
 
     if verbose:
-        print "Beginning PDB2PQR...\n"
+        print("Beginning PDB2PQR...\n")
 
     myDefinition = Definition()
     if verbose:
-        print "Parsed Amino Acid definition file."   
+        print("Parsed Amino Acid definition file.")   
 
     # Check for the presence of a ligand!  This code is taken from pdb2pka/pka.py
 
     if not ligand is None:
-        from pdb2pka.ligandclean import ligff
+        from .pdb2pka.ligandclean import ligff
         myProtein, myDefinition, Lig = ligff.initialize(myDefinition, ligand, pdblist, verbose)        
         for atom in myProtein.getAtoms():
             if atom.type == "ATOM": 
@@ -232,9 +232,9 @@ def runPDB2PQR(pdblist, ff,
         myProtein = Protein(pdblist, myDefinition)
 
     if verbose:
-        print "Created protein object -"
-        print "\tNumber of residues in protein: %s" % myProtein.numResidues()
-        print "\tNumber of atoms in protein   : %s" % myProtein.numAtoms()
+        print("Created protein object -")
+        print("\tNumber of residues in protein: %s" % myProtein.numResidues())
+        print("\tNumber of atoms in protein   : %s" % myProtein.numAtoms())
         
     myRoutines = Routines(myProtein, verbose)
 
@@ -264,7 +264,7 @@ def runPDB2PQR(pdblist, ff,
             eval(call)  
     
         if verbose:
-            print "Total time taken: %.2f seconds\n" % (time.time() - start)
+            print("Total time taken: %.2f seconds\n" % (time.time() - start))
         
         #Be sure to include None for missed ligand residues
         return header, lines, None
@@ -395,7 +395,7 @@ def runPDB2PQR(pdblist, ff,
         eval(call)
 
     if verbose:
-        print "Total time taken: %.2f seconds\n" % (time.time() - start)
+        print("Total time taken: %.2f seconds\n" % (time.time() - start))
 
     return header, lines, missedligandresidues
 
@@ -568,8 +568,8 @@ def mainCommand(argv):
         parser.error("Unable to find file %s!" % path)
 
     if len(errlist) != 0 and options.verbose:
-        print "Warning: %s is a non-standard PDB file.\n" % path
-        print errlist
+        print("Warning: %s is a non-standard PDB file.\n" % path)
+        print(errlist)
 
     outpath = args[1]
     options.outname = outpath
@@ -630,8 +630,8 @@ def mainCommand(argv):
     outfile.close()
 
     if options.input:
-        from src import inputgen
-        from src import psize
+        from .src import inputgen
+        from .src import psize
         method = "mg-auto"
         size = psize.Psize()
         size.parseInput(outpath)

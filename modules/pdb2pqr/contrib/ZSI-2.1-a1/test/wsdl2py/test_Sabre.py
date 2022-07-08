@@ -87,7 +87,7 @@ E
         msg.POS.Source = msg.POS.new_Source()
         msg.POS.Source.set_attribute_PseudoCityCode("SF") 
 
-        self.failUnlessRaises(FaultException, port.SessionCreateRQ, msg)
+        self.assertRaises(FaultException, port.SessionCreateRQ, msg)
         #response = self._ports[0].SessionCreateRQ(msg)
         #response.Success
         #response.Warnings

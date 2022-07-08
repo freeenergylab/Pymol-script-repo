@@ -53,6 +53,6 @@ harness = testplus.TestHarness( __name__,
                                 )
 
 if __name__ == '__main__':
-    print harness
+    print(harness)
     sys.exit( len( harness))
 

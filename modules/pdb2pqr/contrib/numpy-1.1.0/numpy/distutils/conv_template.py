@@ -161,7 +161,7 @@ def parse_loop_header(loophead) :
             nsub = size
         elif nsub != size :
             msg = "Mismatch in number: %s - %s" % (name, vals)
-            raise ValueError, msg
+            raise ValueError(msg)
         names.append((name,vals))
 
     # generate list of dictionaries, one for each template iteration
@@ -182,9 +182,9 @@ def parse_string(astr, env, level, line) :
         name = match.group(1)
         try :
             val = env[name]
-        except KeyError, e :
+        except KeyError as e :
             msg = '%s: %s'%(lineno, e)
-            raise KeyError, msg
+            raise KeyError(msg)
         return val
 
     code = [lineno]
@@ -202,9 +202,9 @@ def parse_string(astr, env, level, line) :
             code.append(replace_re.sub(replace, pref))
             try :
                 envlist = parse_loop_header(head)
-            except ValueError, e :
+            except ValueError as e :
                 msg = "%s: %s" % (lineno, e)
-                raise ValueError, msg
+                raise ValueError(msg)
             for newenv in envlist :
                 newenv.update(env)
                 newcode = parse_string(text, newenv, newlevel, newline)
@@ -237,7 +237,7 @@ def resolve_includes(source):
             if not os.path.isabs(fn):
                 fn = os.path.join(d,fn)
             if os.path.isfile(fn):
-                print 'Including file',fn
+                print('Including file',fn)
                 lines.extend(resolve_includes(fn))
             else:
                 lines.append(line)
@@ -258,7 +258,7 @@ def unique_key(adict):
     # currently it works by appending together n of the letters of the
     #   current keys and increasing n until a unique key is found
     # -- not particularly quick
-    allkeys = adict.keys()
+    allkeys = list(adict.keys())
     done = False
     n = 1
     while not done:

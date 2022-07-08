@@ -16,7 +16,7 @@ Pearu Peterson
 
 __version__ = "$Revision: 1.75 $"[10:-1]
 
-import __version__
+from . import __version__
 f2py_version = __version__.version
 
 import types,sys,copy,os
@@ -1051,8 +1051,8 @@ capi_fail:
 """
 
 def buildcfuncs():
-    from capi_maps import c2capi_map
-    for k in c2capi_map.keys():
+    from .capi_maps import c2capi_map
+    for k in list(c2capi_map.keys()):
         m='pyarr_from_p_%s1'%k
         cppmacros[m]='#define %s(v) (PyArray_SimpleNewFromData(0,NULL,%s,(char *)v))'%(m,c2capi_map[k])
     k='string'
@@ -1064,10 +1064,10 @@ def buildcfuncs():
 
 def append_needs(need,flag=1):
     global outneeds,needs
-    if type(need)==types.ListType:
+    if type(need)==list:
         for n in need:
             append_needs(n,flag)
-    elif type(need)==types.StringType:
+    elif type(need)==bytes:
         if not need: return
         if need in includes0:
             n = 'includes0'
@@ -1088,7 +1088,7 @@ def append_needs(need,flag=1):
         elif need in commonhooks:
             n = 'commonhooks'
         else:
-            errmess('append_needs: unknown need %s\n'%(`need`))
+            errmess('append_needs: unknown need %s\n'%(repr(need)))
             return
         if need in outneeds[n]: return
         if flag:
@@ -1096,13 +1096,13 @@ def append_needs(need,flag=1):
             if need in needs:
                 for nn in needs[need]:
                     t=append_needs(nn,0)
-                    if type(t)==types.DictType:
-                        for nnn in t.keys():
+                    if type(t)==dict:
+                        for nnn in list(t.keys()):
                             if nnn in tmp:
                                 tmp[nnn]=tmp[nnn]+t[nnn]
                             else:
                                 tmp[nnn]=t[nnn]
-            for nn in tmp.keys():
+            for nn in list(tmp.keys()):
                 for nnn in tmp[nn]:
                     if nnn not in outneeds[nn]:
                         outneeds[nn]=[nnn]+outneeds[nn]
@@ -1112,8 +1112,8 @@ def append_needs(need,flag=1):
             if need in needs:
                 for nn in needs[need]:
                     t=append_needs(nn,flag)
-                    if type(t)==types.DictType:
-                        for nnn in t.keys():
+                    if type(t)==dict:
+                        for nnn in list(t.keys()):
                             if nnn in tmp:
                                 tmp[nnn]=t[nnn]+tmp[nnn]
                             else:
@@ -1123,12 +1123,12 @@ def append_needs(need,flag=1):
             tmp[n].append(need)
             return tmp
     else:
-        errmess('append_needs: expected list or string but got :%s\n'%(`need`))
+        errmess('append_needs: expected list or string but got :%s\n'%(repr(need)))
 
 def get_needs():
     global outneeds,needs
     res={}
-    for n in outneeds.keys():
+    for n in list(outneeds.keys()):
         out=[]
         saveout=copy.copy(outneeds[n])
         while len(outneeds[n])>0:
@@ -1146,8 +1146,8 @@ def get_needs():
                 else:
                     out.append(outneeds[n][0])
                     del outneeds[n][0]
-            if saveout and (0 not in map(lambda x,y:x==y,saveout,outneeds[n])):
-                print n,saveout
+            if saveout and (0 not in list(map(lambda x,y:x==y,saveout,outneeds[n]))):
+                print(n,saveout)
                 errmess('get_needs: no progress in sorting needs, probably circular dependence, skipping.\n')
                 out=out+saveout
                 break

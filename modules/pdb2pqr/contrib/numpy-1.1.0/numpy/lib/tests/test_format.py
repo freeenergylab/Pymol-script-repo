@@ -275,7 +275,7 @@ Test the header writing.
 '''
 
 
-from cStringIO import StringIO
+from io import StringIO
 import os
 import shutil
 import tempfile

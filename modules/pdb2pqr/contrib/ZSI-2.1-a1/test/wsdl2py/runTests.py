@@ -79,9 +79,7 @@ def _makeTestSuite(test, document=None, literal=None, broke=None):
         'doc_literal', 'doc_literal_broke', 'doc_literal_broke_interop',
     ]
     boo = cp.getboolean
-    for s,d,l,b in map(\
-        lambda sec: \
-            (sec, (None,boo(sec,DOCUMENT)), (None,boo(sec,LITERAL)), (None,boo(sec,BROKE))), sections):
+    for s,d,l,b in [(sec, (None,boo(sec,DOCUMENT)), (None,boo(sec,LITERAL)), (None,boo(sec,BROKE))) for sec in sections]:
         if document in d and literal in l and broke in b:
             testSections.append(s)
         

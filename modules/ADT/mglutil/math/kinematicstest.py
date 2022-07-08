@@ -40,7 +40,7 @@ from mglutil.math.kinematics import Kinematics
 from mglutil.math.transformation import Transformation
 import unittest, math
 import numpy as Numeric, numpy.random.mtrand as RandomArray
-from UserList import UserList
+from collections import UserList
 
 
 
@@ -102,7 +102,7 @@ class KinematicsTest(unittest.TestCase):
         else:
             d = self.decimals
 
-        for point in xrange(len(a1)):
+        for point in range(len(a1)):
             for axis in [0, 1, 2]:
                 self.assertEqual(round(a1[point][axis],d),
                                  round(a2[point][axis],d))

@@ -142,23 +142,23 @@ class TestSplit(NumpyTestCase):
 class TestAtleast1d(NumpyTestCase):
     def check_0D_array(self):
         a = array(1); b = array(2);
-        res=map(atleast_1d,[a,b])
+        res=list(map(atleast_1d,[a,b]))
         desired = [array([1]),array([2])]
         assert_array_equal(res,desired)
     def check_1D_array(self):
         a = array([1,2]); b = array([2,3]);
-        res=map(atleast_1d,[a,b])
+        res=list(map(atleast_1d,[a,b]))
         desired = [array([1,2]),array([2,3])]
         assert_array_equal(res,desired)
     def check_2D_array(self):
         a = array([[1,2],[1,2]]); b = array([[2,3],[2,3]]);
-        res=map(atleast_1d,[a,b])
+        res=list(map(atleast_1d,[a,b]))
         desired = [a,b]
         assert_array_equal(res,desired)
     def check_3D_array(self):
         a = array([[1,2],[1,2]]); b = array([[2,3],[2,3]]);
         a = array([a,a]);b = array([b,b]);
-        res=map(atleast_1d,[a,b])
+        res=list(map(atleast_1d,[a,b]))
         desired = [a,b]
         assert_array_equal(res,desired)
     def check_r1array(self):
@@ -166,30 +166,30 @@ class TestAtleast1d(NumpyTestCase):
         """
         assert(atleast_1d(3).shape == (1,))
         assert(atleast_1d(3j).shape == (1,))
-        assert(atleast_1d(3L).shape == (1,))
+        assert(atleast_1d(3).shape == (1,))
         assert(atleast_1d(3.0).shape == (1,))
         assert(atleast_1d([[2,3],[4,5]]).shape == (2,2))
 
 class TestAtleast2d(NumpyTestCase):
     def check_0D_array(self):
         a = array(1); b = array(2);
-        res=map(atleast_2d,[a,b])
+        res=list(map(atleast_2d,[a,b]))
         desired = [array([[1]]),array([[2]])]
         assert_array_equal(res,desired)
     def check_1D_array(self):
         a = array([1,2]); b = array([2,3]);
-        res=map(atleast_2d,[a,b])
+        res=list(map(atleast_2d,[a,b]))
         desired = [array([[1,2]]),array([[2,3]])]
         assert_array_equal(res,desired)
     def check_2D_array(self):
         a = array([[1,2],[1,2]]); b = array([[2,3],[2,3]]);
-        res=map(atleast_2d,[a,b])
+        res=list(map(atleast_2d,[a,b]))
         desired = [a,b]
         assert_array_equal(res,desired)
     def check_3D_array(self):
         a = array([[1,2],[1,2]]); b = array([[2,3],[2,3]]);
         a = array([a,a]);b = array([b,b]);
-        res=map(atleast_2d,[a,b])
+        res=list(map(atleast_2d,[a,b]))
         desired = [a,b]
         assert_array_equal(res,desired)
     def check_r2array(self):
@@ -202,23 +202,23 @@ class TestAtleast2d(NumpyTestCase):
 class TestAtleast3d(NumpyTestCase):
     def check_0D_array(self):
         a = array(1); b = array(2);
-        res=map(atleast_3d,[a,b])
+        res=list(map(atleast_3d,[a,b]))
         desired = [array([[[1]]]),array([[[2]]])]
         assert_array_equal(res,desired)
     def check_1D_array(self):
         a = array([1,2]); b = array([2,3]);
-        res=map(atleast_3d,[a,b])
+        res=list(map(atleast_3d,[a,b]))
         desired = [array([[[1],[2]]]),array([[[2],[3]]])]
         assert_array_equal(res,desired)
     def check_2D_array(self):
         a = array([[1,2],[1,2]]); b = array([[2,3],[2,3]]);
-        res=map(atleast_3d,[a,b])
+        res=list(map(atleast_3d,[a,b]))
         desired = [a[:,:,newaxis],b[:,:,newaxis]]
         assert_array_equal(res,desired)
     def check_3D_array(self):
         a = array([[1,2],[1,2]]); b = array([[2,3],[2,3]]);
         a = array([a,a]);b = array([b,b]);
-        res=map(atleast_3d,[a,b])
+        res=list(map(atleast_3d,[a,b]))
         desired = [a,b]
         assert_array_equal(res,desired)
 

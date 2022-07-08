@@ -120,15 +120,15 @@ def _callers_modules():
     global namespace."""
     g = _callers_globals()
     mods = []
-    for k,v in g.items():
+    for k,v in list(g.items()):
         if type(v) == type(sys):
             mods.append(getattr(v,"__name__"))
     return mods
 
 def _errout(*args):
     for a in args:
-        print >>sys.stderr, a,
-    print >>sys.stderr
+        print(a, end=' ', file=sys.stderr)
+    print(file=sys.stderr)
 
 def _verbose(*args):
     if VERBOSE:
@@ -170,7 +170,7 @@ def _loadmodule(module):
         s = ""
         for i in range(len(modules)):
             s = ".".join(modules[:i+1])
-            exec "import " + s
+            exec("import " + s)
     return sys.modules[module]
 
 class _ObjectProxy(object):
@@ -235,7 +235,7 @@ def _locate(modules, object):
     for mname in modules:
         m = sys.modules[mname]
         if m:
-            for k,v in m.__dict__.items():
+            for k,v in list(m.__dict__.items()):
                 if v is object:
                     return m.__name__, k
     else:
@@ -269,11 +269,11 @@ def save(variables=None, file=SAVEFILE, dictionary=None, verbose=False):
         dictionary = _callers_globals()
 
     if variables is None:
-        keys = dictionary.keys()
+        keys = list(dictionary.keys())
     else:
         keys = variables.split(",")
 
-    source_modules = _callers_modules() + sys.modules.keys()
+    source_modules = _callers_modules() + list(sys.modules.keys())
 
     p = pickle.Pickler(file, protocol=2)
 
@@ -330,10 +330,10 @@ def load(variables=None, file=SAVEFILE, dictionary=None, verbose=False):
     while 1:
         o = p.load()
         if isinstance(o, _SaveSession):
-            session = dict(zip(o.keys, values))
+            session = dict(list(zip(o.keys, values)))
             _verbose("updating dictionary with session variables.")
             if variables is None:
-                keys = session.keys()
+                keys = list(session.keys())
             else:
                 keys = variables.split(",")
             for k in keys:

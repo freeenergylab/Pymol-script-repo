@@ -4,11 +4,11 @@ Described at: http://www.pymolwiki.org/index.php/rendering_plugin
 Plugin contributed by Michael Lerner (mglerner@gmail.com)
 '''
 
-from __future__ import print_function
+
 
 import sys
 if sys.version_info[0] < 3:
-    import Tkinter
+    import tkinter
 else:
     import tkinter as Tkinter
 
@@ -55,7 +55,7 @@ class RenderPlugin:
         self.dialog.withdraw()
         Pmw.setbusycursorattributes(self.dialog.component('hull'))
 
-        w = Tkinter.Label(self.dialog.interior(),
+        w = tkinter.Label(self.dialog.interior(),
                           text='PyMOL Rendering Plugin\nMichael Lerner, 2006 - www.umich.edu/~mlerner/PyMOL\nNOTE: make sure this window is not on top of the PyMOL window.',
                           background='black',
                           foreground='white',
@@ -147,11 +147,11 @@ if __name__ == '__main__':
         def my_show(self, *args, **kwargs):
             pass
     app = App()
-    app.root = Tkinter.Tk()
+    app.root = tkinter.Tk()
     Pmw.initialise(app.root)
     app.root.title('Some Title')
 
     widget = RenderPlugin(app)
-    exitButton = Tkinter.Button(app.root, text='Exit', command=app.root.destroy)
+    exitButton = tkinter.Button(app.root, text='Exit', command=app.root.destroy)
     exitButton.pack()
     app.root.mainloop()

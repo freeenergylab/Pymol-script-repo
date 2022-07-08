@@ -83,7 +83,7 @@ class BaseTypeInterpreter:
         untaged_xsd_types = {'boolean':TC.Boolean, 
             'decimal':TC.Decimal, 
             'base64Binary':TC.Base64String}
-        if untaged_xsd_types.has_key(msg_type):
+        if msg_type in untaged_xsd_types:
             return untaged_xsd_types[msg_type]
         for tc in self._type_list:
             if tc.type == (SCHEMA.XSD3,msg_type):
@@ -126,8 +126,7 @@ class BaseTypeInterpreter:
         elif tc in [TC.Boolean]:
             return 'bool'
         elif isinstance(tc, TypeCode):
-            raise EvaluateException,\
-               'failed to map zsi typecode to a python type'
+            raise EvaluateException('failed to map zsi typecode to a python type')
         return None
 
 

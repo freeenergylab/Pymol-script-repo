@@ -11,7 +11,7 @@ __all__ = ['abs', 'absolute', 'add', 'arccos', 'arccosh', 'arcsin', 'arcsinh',
            'subtract', 'sum', 'tan', 'tanh', 'true_divide',
            'conjugate', 'sign']
 
-from numpy import absolute as abs, absolute, add, arccos, arccosh, arcsin, \
+from .numpy import absolute as abs, absolute, add, arccos, arccosh, arcsin, \
      arcsinh,  arctan, arctan2, arctanh, bitwise_and, invert as bitwise_not, \
      bitwise_or, bitwise_xor, ceil, cos, cosh, divide, \
      equal, exp, fabs, floor, floor_divide, fmod, greater, greater_equal, \

@@ -86,11 +86,11 @@ class TestSpecialMethods(NumpyTestCase):
         x = minimum(a, a)
         assert_equal(x.arr, zeros(1))
         func, args, i = x.context
-        self.failUnless(func is minimum)
-        self.failUnlessEqual(len(args), 2)
+        self.assertTrue(func is minimum)
+        self.assertEqual(len(args), 2)
         assert_equal(args[0], a)
         assert_equal(args[1], a)
-        self.failUnlessEqual(i, 0)
+        self.assertEqual(i, 0)
 
     def check_old_wrap(self):
         class with_wrap(object):
@@ -122,25 +122,25 @@ class TestSpecialMethods(NumpyTestCase):
         b = B()
         c = C()
         f = minimum
-        self.failUnless(type(f(x,x)) is ndarray)
-        self.failUnless(type(f(x,a)) is A)
-        self.failUnless(type(f(x,b)) is B)
-        self.failUnless(type(f(x,c)) is C)
-        self.failUnless(type(f(a,x)) is A)
-        self.failUnless(type(f(b,x)) is B)
-        self.failUnless(type(f(c,x)) is C)
+        self.assertTrue(type(f(x,x)) is ndarray)
+        self.assertTrue(type(f(x,a)) is A)
+        self.assertTrue(type(f(x,b)) is B)
+        self.assertTrue(type(f(x,c)) is C)
+        self.assertTrue(type(f(a,x)) is A)
+        self.assertTrue(type(f(b,x)) is B)
+        self.assertTrue(type(f(c,x)) is C)
 
-        self.failUnless(type(f(a,a)) is A)
-        self.failUnless(type(f(a,b)) is B)
-        self.failUnless(type(f(b,a)) is B)
-        self.failUnless(type(f(b,b)) is B)
-        self.failUnless(type(f(b,c)) is C)
-        self.failUnless(type(f(c,b)) is C)
-        self.failUnless(type(f(c,c)) is C)
+        self.assertTrue(type(f(a,a)) is A)
+        self.assertTrue(type(f(a,b)) is B)
+        self.assertTrue(type(f(b,a)) is B)
+        self.assertTrue(type(f(b,b)) is B)
+        self.assertTrue(type(f(b,c)) is C)
+        self.assertTrue(type(f(c,b)) is C)
+        self.assertTrue(type(f(c,c)) is C)
 
-        self.failUnless(type(exp(a) is A))
-        self.failUnless(type(exp(b) is B))
-        self.failUnless(type(exp(c) is C))
+        self.assertTrue(type(exp(a) is A))
+        self.assertTrue(type(exp(b) is B))
+        self.assertTrue(type(exp(c) is C))
 
     def check_failing_wrap(self):
         class A(object):
@@ -149,7 +149,7 @@ class TestSpecialMethods(NumpyTestCase):
             def __array_wrap__(self, arr, context):
                 raise RuntimeError
         a = A()
-        self.failUnlessRaises(RuntimeError, maximum, a, a)
+        self.assertRaises(RuntimeError, maximum, a, a)
 
     def check_array_with_context(self):
         class A(object):
@@ -167,10 +167,10 @@ class TestSpecialMethods(NumpyTestCase):
                 return zeros(1)
         a = A()
         maximum(zeros(1), a)
-        self.failUnless(a.func is maximum)
+        self.assertTrue(a.func is maximum)
         assert_equal(a.args[0], 0)
-        self.failUnless(a.args[1] is a)
-        self.failUnless(a.i == 1)
+        self.assertTrue(a.args[1] is a)
+        self.assertTrue(a.i == 1)
         assert_equal(maximum(a, B()), 0)
         assert_equal(maximum(a, C()), 0)
 
@@ -212,8 +212,8 @@ class TestChoose(NumpyTestCase):
         add = ncu.add
         assert_equal(add.__name__, 'add')
         assert_equal(add.__doc__, 'y = add(x1,x2) adds the arguments elementwise.')
-        self.failUnless(add.ntypes >= 18) # don't fail if types added
-        self.failUnless('ii->i' in add.types)
+        self.assertTrue(add.ntypes >= 18) # don't fail if types added
+        self.assertTrue('ii->i' in add.types)
         assert_equal(add.nin, 2)
         assert_equal(add.nout, 1)
         assert_equal(add.identity, 0)

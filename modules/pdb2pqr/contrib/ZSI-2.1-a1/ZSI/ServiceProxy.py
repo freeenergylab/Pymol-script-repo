@@ -8,16 +8,16 @@
 # FOR A PARTICULAR PURPOSE.
 
 import weakref, re, os, sys
-from ConfigParser import SafeConfigParser as ConfigParser,\
+from configparser import SafeConfigParser as ConfigParser,\
     NoSectionError, NoOptionError
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from ZSI import TC
 from ZSI.client import _Binding
 from ZSI.generate import commands,containers
 from ZSI.schema import GED, GTD
 
-import wstools
+from . import wstools
 
 
 #url_to_mod = re.compile(r'<([^ \t\n\r\f\v:]+:)?include\s+location\s*=\s*"(\S+)"')
@@ -119,7 +119,7 @@ class ServiceProxy:
 
             if cp is None: cp = ConfigParser()
             if not cp.has_section(section): cp.add_section(section)
-            types = filter(lambda f: f.endswith('_types.py'), files)[0]
+            types = [f for f in files if f.endswith('_types.py')][0]
             cp.set(section, option, types)
             cp.write(open(file, 'w'))
             
@@ -157,10 +157,10 @@ class ServiceProxy:
                 
             from ZSI.wstools import XMLSchema
             reader = XMLSchema.SchemaReader(base_url=location)
-            if xml is not None and isinstance(xml, basestring):
+            if xml is not None and isinstance(xml, str):
                 schema = reader.loadFromString(xml)
             elif xml is not None:
-                raise RuntimeError, 'Unsupported: XML must be string'
+                raise RuntimeError('Unsupported: XML must be string')
             elif not os.path.isfile(location):
                 schema = reader.loadFromURL(location)
             else:
@@ -179,7 +179,7 @@ class ServiceProxy:
             files = commands._wsdl2py(options, schema)
             if cp is None: cp = ConfigParser()
             if not cp.has_section(section): cp.add_section(section)
-            types = filter(lambda f: f.endswith('_types.py'), files)[0]
+            types = [f for f in files if f.endswith('_types.py')][0]
             cp.set(section, option, types)
             cp.write(open(file, 'w'))
             
@@ -198,10 +198,10 @@ class ServiceProxy:
         def call_closure(*args, **kwargs):
             """Call the named remote web service method."""
             if len(args) and len(kwargs):
-                raise TypeError, 'Use positional or keyword argument only.'
+                raise TypeError('Use positional or keyword argument only.')
                 
             if len(args) > 0:
-                raise TypeError, 'Not supporting SOAPENC:Arrays or XSD:List'
+                raise TypeError('Not supporting SOAPENC:Arrays or XSD:List')
             
             if len(kwargs): 
                 args = kwargs
@@ -242,12 +242,12 @@ class ServiceProxy:
                         klass = GTD(*part.type)
                         if klass is None:
                             if part.type:
-                                klass = filter(lambda gt: part.type==gt.type,TC.TYPES)
+                                klass = [gt for gt in TC.TYPES if part.type==gt.type]
                                 if len(klass) == 0:
-                                    klass = filter(lambda gt: part.type[1]==gt.type[1],TC.TYPES)
+                                    klass = [gt for gt in TC.TYPES if part.type[1]==gt.type[1]]
                                     if not len(klass):klass = [TC.Any]
                                 if len(klass) > 1: #Enumerations, XMLString, etc
-                                    klass = filter(lambda i: i.__dict__.has_key('type'), klass)
+                                    klass = [i for i in klass if 'type' in i.__dict__]
                                 klass = klass[0]
                             else:
                                 klass = TC.Any
@@ -261,11 +261,11 @@ class ServiceProxy:
                 ipart,opart = callinfo.getInParameters(),callinfo.getOutParameters()
                 if ( len(ipart) != 1 or not ipart[0].element_type or 
                     ipart[0].type is None ):
-                    raise RuntimeError, 'Bad Input Message "%s"' %callinfo.name
+                    raise RuntimeError('Bad Input Message "%s"' %callinfo.name)
         
                 if ( len(opart) not in (0,1) or not opart[0].element_type or 
                     opart[0].type is None ):
-                    raise RuntimeError, 'Bad Output Message "%s"' %callinfo.name
+                    raise RuntimeError('Bad Output Message "%s"' %callinfo.name)
                 
 #                if ( len(args) > 1 ):
 #                    raise RuntimeError, 'Message has only one part:  %s' %str(args)
@@ -330,23 +330,23 @@ class MethodProxy:
         class _holder: pass
         def _remap(pyobj, **d):
             pyobj.__dict__ = d
-            for k,v in pyobj.__dict__.items():
+            for k,v in list(pyobj.__dict__.items()):
                 if type(v) is not dict: continue
                 pyobj.__dict__[k] = p = _holder()
                 _remap(p, **v)
     
-        for k,v in headers.items():
-            h = filter(lambda i: k in i.type, self.callinfo.inheaders)[0]
+        for k,v in list(headers.items()):
+            h = [i for i in self.callinfo.inheaders if k in i.type][0]
             if h.element_type != 1: 
-                raise RuntimeError, 'not implemented'
+                raise RuntimeError('not implemented')
 
             typecode = GED(*h.type)
             if typecode is None: 
-                raise RuntimeError, 'no matching element for %s' %str(h.type)
+                raise RuntimeError('no matching element for %s' %str(h.type))
 
             pyclass = typecode.pyclass
             if pyclass is None: 
-                raise RuntimeError, 'no pyclass for typecode %s' %str(h.type)
+                raise RuntimeError('no pyclass for typecode %s' %str(h.type))
 
             if type(v) is not dict:
                 pyobj = pyclass(v)

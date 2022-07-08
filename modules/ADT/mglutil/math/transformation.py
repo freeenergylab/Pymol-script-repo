@@ -188,7 +188,7 @@ class UnitQuaternion(Quaternion):
 
         # strip if necessary
         if shape in ((3,3),(9,)):
-            mtx = map(lambda x: x[:3],mtx)
+            mtx = [x[:3] for x in mtx]
             mtx = mtx[:3]
 
         if not transpose:
@@ -220,7 +220,7 @@ class UnitQuaternion(Quaternion):
             if len(pshape)==1:
                 return newpoints[:3]
             else:
-                newpoints = map(lambda x: x[:3],newpoints)
+                newpoints = [x[:3] for x in newpoints]
                 return newpoints
 
 
@@ -354,7 +354,7 @@ class Transformation(UnitQuaternion):
             if len(pshape)==1:
                 return newpoints[:3]
             else:
-                newpoints = map(lambda x: x[:3],newpoints)
+                newpoints = [x[:3] for x in newpoints]
                 return newpoints
 
             

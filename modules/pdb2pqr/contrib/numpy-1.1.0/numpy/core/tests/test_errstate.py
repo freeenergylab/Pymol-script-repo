@@ -6,7 +6,7 @@
 
 import sys
 if sys.version_info[:2] >= (2, 5):
-    exec """
+    exec("""
 from __future__ import with_statement
 from numpy.core import *
 from numpy.random import rand, randint
@@ -55,7 +55,7 @@ class TestErrstate(NumpyTestCase):
                 assert(geterrcall() is None), 'call is not None'
         assert(geterrcall() is olderrcall), 'call is not olderrcall'
 
-"""
+""")
 
 if __name__ == '__main__':
     from numpy.testing import *

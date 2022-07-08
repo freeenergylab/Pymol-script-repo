@@ -72,45 +72,45 @@ except NameError:
 
 if __NUMPY_SETUP__:
     import sys as _sys
-    print >> _sys.stderr, 'Running from numpy source directory.'
+    print('Running from numpy source directory.', file=_sys.stderr)
     del _sys
 else:
     try:
         from numpy.__config__ import show as show_config
-    except ImportError, e:
+    except ImportError as e:
         msg = """Error importing numpy: you should not try to import numpy from
         its source directory; please exit the numpy source tree, and relaunch
         your python intepreter from there."""
         raise ImportError(msg)
-    from version import version as __version__
+    from .version import version as __version__
 
-    from _import_tools import PackageLoader
+    from ._import_tools import PackageLoader
 
     def pkgload(*packages, **options):
         loader = PackageLoader(infunc=True)
         return loader(*packages, **options)
 
-    import add_newdocs
+    from . import add_newdocs
     __all__ = ['add_newdocs']
 
     pkgload.__doc__ = PackageLoader.__call__.__doc__
-    import testing
-    from testing import ScipyTest, NumpyTest
-    import core
-    from core import *
-    import lib
-    from lib import *
-    import linalg
-    import fft
-    import random
-    import ctypeslib
-    import ma
+    from . import testing
+    from .testing import ScipyTest, NumpyTest
+    from . import core
+    from .core import *
+    from . import lib
+    from .lib import *
+    from . import linalg
+    from . import fft
+    from . import random
+    from . import ctypeslib
+    from . import ma
 
     # Make these accessible from numpy name-space
     #  but not imported in from numpy import *
-    from __builtin__ import bool, int, long, float, complex, \
-         object, unicode, str
-    from core import round, abs, max, min
+    from builtins import bool, int, int, float, complex, \
+         object, str, str
+    from .core import round, abs, max, min
 
     __all__.extend(['__version__', 'pkgload', 'PackageLoader',
                'ScipyTest', 'NumpyTest', 'show_config'])
@@ -120,8 +120,8 @@ else:
 
     def test(*args, **kw):
         import os, sys
-        print 'Numpy is installed in %s' % (os.path.split(__file__)[0],)
-        print 'Numpy version %s' % (__version__,)
-        print 'Python version %s' % (sys.version.replace('\n', '',),)
+        print('Numpy is installed in %s' % (os.path.split(__file__)[0],))
+        print('Numpy version %s' % (__version__,))
+        print('Python version %s' % (sys.version.replace('\n', '',),))
         return NumpyTest().test(*args, **kw)
     test.__doc__ = NumpyTest.test.__doc__

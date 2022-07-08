@@ -1,4 +1,4 @@
-import Tkinter
+import tkinter
 
 from mglutil.util.callback import CallbackManager
 

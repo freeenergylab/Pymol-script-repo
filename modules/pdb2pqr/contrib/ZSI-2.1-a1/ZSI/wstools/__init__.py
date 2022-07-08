@@ -3,7 +3,7 @@
 
 ident = "$Id: __init__.py 840 2004-12-07 15:54:53Z blunck2 $"
 
-import WSDLTools
-import XMLname
-import logging
+from . import WSDLTools
+from . import XMLname
+from . import logging
 

@@ -258,7 +258,7 @@ def convertfile(filename, import_change=False):
     filestr = getfile(filename)
     newstr, total = add_axis(filestr, import_change)
     if total > 0:
-        print "Changing ", filename
+        print("Changing ", filename)
         copyfile(filename, filestr)
         makenewfile(filename, newstr)
         sys.stdout.flush()

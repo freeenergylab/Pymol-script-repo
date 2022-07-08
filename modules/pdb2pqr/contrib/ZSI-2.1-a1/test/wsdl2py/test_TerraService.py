@@ -203,7 +203,7 @@ class TerraServiceTestFailures(ServiceTestCase):
         try:
             response = self.RPC(operationName, request)
             
-        except Exception, msg:
+        except Exception as msg:
             exceptionString = str(msg)
             if SERIALIZE_PATTERN.match(exceptionString):
                 pass
@@ -219,7 +219,7 @@ class TerraServiceTestFailures(ServiceTestCase):
         request._place._Country = 'United States'
         try:
             response = self.RPC(operationName, request)
-        except EvaluateException, ex:
+        except EvaluateException as ex:
             pass
 
     def test_GetPlaceList(self):
@@ -230,7 +230,7 @@ class TerraServiceTestFailures(ServiceTestCase):
         request._imagePresence = 0
         try:
             response = self.RPC(operationName, request)
-        except EvaluateException, ex:
+        except EvaluateException as ex:
             pass
 
 def makeTestSuite():

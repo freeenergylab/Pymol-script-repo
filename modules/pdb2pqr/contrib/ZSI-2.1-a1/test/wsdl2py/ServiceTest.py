@@ -4,9 +4,9 @@
 # See LBNLCopyright for copyright notice!
 ###########################################################################
 from compiler.ast import Module
-import StringIO, copy, getopt
-import os, sys, unittest, urlparse, signal, time, warnings, subprocess
-from ConfigParser import ConfigParser, NoSectionError, NoOptionError
+import io, copy, getopt
+import os, sys, unittest, urllib.parse, signal, time, warnings, subprocess
+from configparser import ConfigParser, NoSectionError, NoOptionError
 from ZSI.wstools.TimeoutSocket import TimeoutError
 from ZSI.generate import commands
 
@@ -81,7 +81,7 @@ def _LaunchContainer(cmd):
     try:
         process = subprocess.Popen(['python', cmd, port], env=ENVIRON)
     except:
-        print >>sys.stderr, 'error executing: %s' %cmd
+        print('error executing: %s' %cmd, file=sys.stderr)
         raise
     time.sleep(3)
     return process
@@ -211,13 +211,13 @@ class ServiceTestCase(unittest.TestCase):
                 ok = False
             if ok: 
                 result.addSuccess(self)
-                print>>self
-                print>>self, "|"+"-"*60
-                print>>self, "|  TestCase: %s" %self.methodName
-                print>>self, "|"+"-"*20
-                print>>self, "|  run time:   %s ms" %((t2-t1)*1000)
-                print>>self, "|  return  :   %s" %pyobj
-                print>>self, "|"+"-"*60
+                print(file=self)
+                print("|"+"-"*60, file=self)
+                print("|  TestCase: %s" %self.methodName, file=self)
+                print("|"+"-"*20, file=self)
+                print("|  run time:   %s ms" %((t2-t1)*1000), file=self)
+                print("|  return  :   %s" %pyobj, file=self)
+                print("|"+"-"*60, file=self)
 
         finally:
             result.stopTest(self)
@@ -246,7 +246,7 @@ class ServiceTestCase(unittest.TestCase):
         params = query = fragment = None
         
         self.portkwargs['url'] = \
-            urlparse.urlunparse((scheme,netloc,path,params,query,fragment))
+            urllib.parse.urlunparse((scheme,netloc,path,params,query,fragment))
         
     _wsdl = {}
     def _generate(self):
@@ -266,7 +266,7 @@ class ServiceTestCase(unittest.TestCase):
         ServiceTestCase._wsdl[url] = False
         try:
             os.mkdir(MODULEDIR)
-        except OSError, ex:
+        except OSError as ex:
             pass
 
         os.chdir(MODULEDIR)
@@ -289,13 +289,12 @@ class ServiceTestCase(unittest.TestCase):
         section = self.url_section
         name = self.name
         if not section or not name:
-            raise TestException, 'section(%s) or name(%s) not defined' %(
-                section, name)
+            raise TestException('section(%s) or name(%s) not defined' %(
+                section, name))
             
         if not CONFIG_PARSER.has_section(section):
-            raise TestException,\
-                'No such section(%s) in configuration file(%s)' %(
-                self.url_section, CONFIG_FILE)
+            raise TestException('No such section(%s) in configuration file(%s)' %(
+                self.url_section, CONFIG_FILE))
 
         self.url = CONFIG_PARSER.get(section, name)
         
@@ -311,11 +310,11 @@ class ServiceTestCase(unittest.TestCase):
         cfn = self.client_file_name
         sfn = self.server_file_name
     
-        files = filter(lambda f: f is not None, [cfn, tfn,sfn])
+        files = [f for f in [cfn, tfn,sfn] if f is not None]
         if None is cfn is tfn is sfn:
             return
         
-        for n,m in map(lambda i: (i,__import__(i.split('.py')[0])), files):
+        for n,m in [(i,__import__(i.split('.py')[0])) for i in files]:
             if tfn is not None and tfn == n:
                 self.types_module = m
             elif cfn is not None and cfn == n:
@@ -335,7 +334,7 @@ class ServiceTestCase(unittest.TestCase):
 
         try:
             expath = CONFIG_PARSER.get(SECTION_DISPATCH, name)
-        except (NoSectionError, NoOptionError), ex:
+        except (NoSectionError, NoOptionError) as ex:
             self.fail('section dispatch has no item "%s"' %name)
 
         if ServiceTestCase._lastToDispatch == expath:

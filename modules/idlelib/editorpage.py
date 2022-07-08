@@ -2,25 +2,25 @@ import os
 import sys
 import imp
 import webbrowser
-import tkMessageBox
-import tkSimpleDialog
-from Tkinter import Text, Menu, TclError
+import tkinter.messagebox
+import tkinter.simpledialog
+from tkinter import Text, Menu, TclError
 
-import utils
-import textView
-import aboutDialog
-import configDialog
-import macosxSupport
-import PyParse
-import IOBinding
-import GrepDialog
-import PathBrowser
-import ClassBrowser
-import SearchDialog
-import ReplaceDialog
-from configHandler import idleConf
-from MultiCall import MultiCallCreator
-from Percolator import Percolator
+from . import utils
+from . import textView
+from . import aboutDialog
+from . import configDialog
+from . import macosxSupport
+from . import PyParse
+from . import IOBinding
+from . import GrepDialog
+from . import PathBrowser
+from . import ClassBrowser
+from . import SearchDialog
+from . import ReplaceDialog
+from .configHandler import idleConf
+from .MultiCall import MultiCallCreator
+from .Percolator import Percolator
 
 def classifyws(s, tabwidth):
     raw = effective = 0
@@ -41,7 +41,7 @@ def index2line(index):
 
 def filename_to_unicode(filename):
     """Convert filename to unicode in order to display it in Tk"""
-    if isinstance(filename, unicode) or not filename:
+    if isinstance(filename, str) or not filename:
         return filename
     else:
         try:
@@ -147,18 +147,18 @@ class EditorPage(object):
         short = self.editwin.short_title()
         long = self.long_title()
 
-        if short and long:
-            title = short + " - " + long
-            tabtitle = os.path.split(long)[-1]
+        if short and int:
+            title = short + " - " + int
+            tabtitle = os.path.split(int)[-1]
         elif short:
             title = short
             tabtitle = short
-        elif long:
-            title = long
-            tabtitle = os.path.split(long)[-1]
+        elif int:
+            title = int
+            tabtitle = os.path.split(int)[-1]
         else:
             title = tabtitle = "Untitled"
-        icon = short or long or title
+        icon = short or int or title
         if not self.get_saved():
             title = "*%s*" % title
             tabtitle = "*%s*" % tabtitle
@@ -289,7 +289,7 @@ class EditorPage(object):
             if not self.editwin.context_use_ps1:
                 for context in self.editwin.num_context_lines:
                     startat = max(lno - context, 1)
-                    startatindex = `startat` + ".0"
+                    startatindex = repr(startat) + ".0"
                     rawtext = text.get(startatindex, "insert")
                     y.set_str(rawtext)
                     bod = y.find_good_parse_start(
@@ -444,7 +444,7 @@ class EditorPage(object):
     def _open_class_browser(self, event=None):
         filename = self.io.filename
         if not filename:
-            tkMessageBox.showerror("No filename",
+            tkinter.messagebox.showerror("No filename",
                 "This buffer has no associated filename",
                 master=self.text)
             self.text.focus_set()
@@ -470,7 +470,7 @@ class EditorPage(object):
         else:
             name = name.strip()
 
-        name = tkSimpleDialog.askstring("Module",
+        name = tkinter.simpledialog.askstring("Module",
             "Enter the name of a Python module\n"
             "to search on sys.path and open:",
             parent=self.text, initialvalue=name)
@@ -482,12 +482,12 @@ class EditorPage(object):
         # XXX Ought to insert current file's directory in front of path
         try:
             (f, file, (suffix, mode, type)) = _find_module(name)
-        except (NameError, ImportError), msg:
-            tkMessageBox.showerror("Import error", str(msg), parent=self.text)
+        except (NameError, ImportError) as msg:
+            tkinter.messagebox.showerror("Import error", str(msg), parent=self.text)
             return
 
         if type != imp.PY_SOURCE:
-            tkMessageBox.showerror("Unsupported type",
+            tkinter.messagebox.showerror("Unsupported type",
                 "%s is not a source module" % name, parent=self.text)
             return
         if f:
@@ -537,7 +537,7 @@ class EditorPage(object):
 
     def _goto_line_event(self, event):
         text = self.text
-        lineno = tkSimpleDialog.askinteger("Goto", "Go to line number:",
+        lineno = tkinter.simpledialog.askinteger("Goto", "Go to line number:",
             parent=text)
 
         if lineno is None:
@@ -618,7 +618,7 @@ class EditorPage(object):
             insertpt = int(text.index("iomark").split(".")[1])
         else:
             line = text.get("insert linestart", "insert lineend")
-            for insertpt in xrange(len(line)):
+            for insertpt in range(len(line)):
                 if line[insertpt] not in (' ','\t'):
                     break
             else:
@@ -991,7 +991,7 @@ class OutputPage(EditorPage):
             line = text.get("insert -1line linestart", "insert -1line ineend")
             result = self._file_line_helper(line)
             if not result:
-                tkMessageBox.showerror("No special line",
+                tkinter.messagebox.showerror("No special line",
                     "The line you point at doesn't look like "
                     "a valid file name followed by a line number.",
                     master=text)

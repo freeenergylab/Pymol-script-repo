@@ -112,7 +112,7 @@ os.path.walk("AutoDockTools", getDataFiles, data_files)
 
 # description of what is going to be included in the distribution and
 # installed.
-from version import VERSION
+from .version import VERSION
 setup (name = 'AutoDockTools',
        version = VERSION,
        description = "ADT is a GUI to help set up, launch and analyze AutoDock  dockings",

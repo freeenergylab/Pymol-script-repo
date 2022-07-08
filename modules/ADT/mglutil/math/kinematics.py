@@ -182,7 +182,7 @@ class Kinematics:
 
         # add translation
         a = node.torBase.coords
-        print "    torBase (%2d) %4f, %4f, %4f:" % (node.bond[0], a[0], a[1], a[2])
+        print("    torBase (%2d) %4f, %4f, %4f:" % (node.bond[0], a[0], a[1], a[2]))
         for i in (0,1,2):
             rot[3][i] = a[i]
             for j in (0,1,2): rot[3][i] = rot[3][i]-rot[j][i]*a[j]

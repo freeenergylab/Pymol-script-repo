@@ -14,7 +14,7 @@ from numpy.linalg import eig, svd
 from numpy.random import rand, randn
 import numpy as nn
 
-from typeconv import convtypecode
+from .typeconv import convtypecode
 
 def eye(N, M=None, k=0, typecode=None, dtype=None):
     """ eye returns a N-by-M 2-d array where the  k-th diagonal is all ones,
@@ -76,8 +76,8 @@ def cov(m, y=None, rowvar=0, bias=0):
         y = transpose(y)
     N = m.shape[0]
     if (y.shape[0] != N):
-        raise ValueError, "x and y must have the same number "\
-              "of observations"
+        raise ValueError("x and y must have the same number "\
+              "of observations")
     m = m - _Nmean(m,axis=0)
     y = y - _Nmean(y,axis=0)
     if bias:
@@ -92,17 +92,17 @@ def corrcoef(x, y=None):
     d = diag(c)
     return c/sqrt(multiply.outer(d,d))
 
-from compat import *
-from functions import *
-from precision import *
-from ufuncs import *
-from misc import *
+from .compat import *
+from .functions import *
+from .precision import *
+from .ufuncs import *
+from .misc import *
 
-import compat
-import precision
-import functions
-import misc
-import ufuncs
+from . import compat
+from . import precision
+from . import functions
+from . import misc
+from . import ufuncs
 
 import numpy
 __version__ = numpy.__version__

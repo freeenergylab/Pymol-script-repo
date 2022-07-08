@@ -2,9 +2,9 @@
 
 TabbedPageSet -- A custom ttk.Notebook used by IDLE.
 """
-from ttk import Frame, Notebook
+from tkinter.ttk import Frame, Notebook
 
-from tabbedpages import InvalidNameError, AlreadyExistsError
+from .tabbedpages import InvalidNameError, AlreadyExistsError
 
 class FramePage(object):
     def __init__(self, notebook):
@@ -91,9 +91,9 @@ class TabbedPageSet(Notebook):
         return self.pages[self.tab(self.index('end') - 1)['text']]
 
 if __name__ == '__main__':
-    from Tkinter import Tk
-    from Tkconstants import TOP, BOTH
-    from ttk import Label, Entry, Button, Style
+    from tkinter import Tk
+    from tkinter.constants import TOP, BOTH
+    from tkinter.ttk import Label, Entry, Button, Style
     # test dialog
     root=Tk()
     style = Style()

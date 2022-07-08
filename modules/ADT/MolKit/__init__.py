@@ -18,7 +18,7 @@ import os
 
 def Read(filename, modelsAs='molecules'):
     if not os.path.exists(filename):
-         raise AssertionError , "%s does't exist" %filename
+         raise AssertionError("%s does't exist" %filename)
     from MolKit.pdbParser import PdbParser, PdbqParser,PdbqsParser,\
             PdbqtParser, PQRParser, F2DParser
     
@@ -50,7 +50,7 @@ def Read(filename, modelsAs='molecules'):
         parser = F2DParser(filename)
 
     else:
-        print "File Format unknown can't parse it"
+        print("File Format unknown can't parse it")
         return []
     molecules = parser.parse()
     return molecules

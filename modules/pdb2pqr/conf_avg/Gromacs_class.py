@@ -24,7 +24,7 @@ class GROMACS:
         #
         # Set the environment
         #
-        for key in environment.keys():
+        for key in list(environment.keys()):
             os.putenv(key,environment[key])
         if createdir:
             #
@@ -35,7 +35,7 @@ class GROMACS:
             tempfile.tempdir=self.topdir
             self.tmpdir=tempfile.mktemp()
             os.mkdir(self.tmpdir)
-            print 'Running in :',self.tmpdir
+            print('Running in :',self.tmpdir)
             os.chdir(self.tmpdir)
             #
             # Copy all the input files to the tmpdir
@@ -68,7 +68,7 @@ class GROMACS:
         #
         # forcefield: 0 for Gromacs FF, 1 for Gromacs FF with all hyds.
         #
-        print auto_select_his
+        print(auto_select_his)
         self.files['laststructure']='protein.gro'
         fd=open('pdb2gmx.scr','w')
         if auto_select_his:
@@ -115,21 +115,21 @@ class GROMACS:
         #
         # Center molecule in box and add dist space between box and protein
         #
-        if not self.files.has_key('laststructure'):
+        if 'laststructure' not in self.files:
             raise "No valid input file for editconf"
         status=os.system('editconf -f '+self.files['laststructure']+' -o out.gro -bt cubic -d '+str(dist))
         self.files['laststructure']='out.gro'
-        print 'Editconf returned',status
+        print('Editconf returned',status)
         return
 
     def solvate(self):
         #
         # Solvate the system
         #
-        print 'Solvating system'
+        print('Solvating system')
         status=os.system('genbox -cp '+self.files['laststructure']+' -cs -p topol.top -o solvated.gro')
         self.files['laststructure']='solvated.gro'
-        print 'genbox returned:',status
+        print('genbox returned:',status)
         return
 
     def EM(self,emtol=2000,nsteps=1000,emstep=0.01,nstenergy=1):
@@ -138,21 +138,21 @@ class GROMACS:
         #
         params={'cpp':'/lib/cpp','define':'-DFLEX_SPC','constraints':'none','integrator':'steep','nsteps':str(nsteps),'emtol':str(emtol),'emstep':str(emstep),'nstcomm':'1','ns_type':'grid','rlist':'2','rlist':'1','rcoulomb':'1.0','epsilon_r':'1000.0','rvdw':'1.0','Tcoupl':'no','Pcoupl':'no','gen_vel':'no','nstenergy':str(nstenergy)}
         fd=open('em.mdp','w')
-        for key in params.keys():
+        for key in list(params.keys()):
             fd.write('%s\t\t=  %s\n' %(key,params[key]))
         fd.close()
         #
         # Preprocessing
         #
         status=os.system('grompp_d -v -f em.mdp -c '+self.files['laststructure']+' -o em.tpr -p topol.top')
-        print 'grompp returned:',status
+        print('grompp returned:',status)
         #
         # Do minimisation
         #
         self.files['energytraj']='energy.ene'
         self.files['laststructure']='after_em.pdb'
         status=os.system('mdrun_d -v -s em.tpr -o em.trr -c '+self.files['laststructure']+' -g emlog -e '+self.files['energytraj'])
-        print 'mdrun returned:',status
+        print('mdrun returned:',status)
         return
 
     def PR_MD(self,nsteps=5000,genseed='173529',uparams={}):
@@ -177,20 +177,20 @@ class GROMACS:
         #
         # Did the user pass anything?
         #
-        for p in uparams.keys():
+        for p in list(uparams.keys()):
             params[p]=uparams[p]
-            print p,params[p]
+            print(p,params[p])
         #
         # Write the file
         fd=open('pr.mdp','w')
-        for key in params.keys():
+        for key in list(params.keys()):
             fd.write('%s\t\t=  %s\n' %(key,params[key]))
         fd.close()
         #
         # Preprocessing
         #
         status=os.system('grompp -v -f pr.mdp -c '+self.files['laststructure']+' -o pr.tpr -p topol.top')
-        print 'grompp returned:',status
+        print('grompp returned:',status)
 
         #
         # Do minimisation
@@ -198,7 +198,7 @@ class GROMACS:
         self.files['energytraj']='pr.ene'
         self.files['laststructure']='after_pr.pdb'
         status=os.system('mdrun -v -s pr.tpr -o pr.trr -c '+self.files['laststructure']+' -g prlog -e '+self.files['energytraj'])
-        print 'mdrun returned:',status
+        print('mdrun returned:',status)
         return
 
     #
@@ -227,13 +227,13 @@ class GROMACS:
         #
         # Did the user pass anything?
         #
-        for p in uparams.keys():
+        for p in list(uparams.keys()):
             params[p]=uparams[p]
         #
         # Write the control file
         #
         fd=open('full.mdp','w')
-        for key in params.keys():
+        for key in list(params.keys()):
             fd.write('%s\t\t=  %s\n' %(key,params[key]))
         fd.close()
         #
@@ -242,10 +242,10 @@ class GROMACS:
         self.files['mdpfile']='full.mdp'
         self.files['runinput']='full.tpr'
         command='grompp -v -f '+self.files['mdpfile']+' -c '+self.files['laststructure']+' -o '+self.files['runinput']+' -p topol.top'
-        print 'Using command'
-        print command
+        print('Using command')
+        print(command)
         status=os.system(command)
-        print 'grompp returned:',status
+        print('grompp returned:',status)
         if status!=0:
             raise Exception('Exiting with error after grompp')
         #
@@ -258,7 +258,7 @@ class GROMACS:
         self.MDtime=steps/500.0
         command='mdrun -v -s '+self.files['runinput']+' -o '+self.files['trajectory']+' -c '+self.files['laststructure']+' -g mdlog -e '+self.files['energytraj']
         status=os.system(command)
-        print 'mdrun returned:',status
+        print('mdrun returned:',status)
         if status!=0:
             self.files=backup.copy()
         return
@@ -293,5 +293,5 @@ class GROMACS:
             if self.files['snapshots'] in fn:
                 snapshots.append(os.path.join(os.getcwd(),fn))
         if len(snapshots)<numsnapshots:
-            print 'Got only %d snapshots...' %(len(snapshots))
+            print('Got only %d snapshots...' %(len(snapshots)))
         return snapshots

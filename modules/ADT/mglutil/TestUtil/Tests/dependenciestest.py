@@ -19,7 +19,7 @@ class DependencyTester:
         deptester = Dependencytester.DEPENDENCYCHECKER()
         Total_packs = deptester.rundependencychecker(pack,v,V,loc)
         if type(self.pack) is not StringType:
-            print "pack must be a string"
+            print("pack must be a string")
         result = []
         if listdependencies == []:          
             pat =re.compile('result_%s' %self.pack)
@@ -40,7 +40,7 @@ class DependencyTester:
             else:
                 return result
         except:
-               print "CRITICAL_DEPENDENCIES,NONCRITICAL_DEPENDENCIES not listed in %s.__init__.py" %self.pack
+               print("CRITICAL_DEPENDENCIES,NONCRITICAL_DEPENDENCIES not listed in %s.__init__.py" %self.pack)
                             
                             
                     

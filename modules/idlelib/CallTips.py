@@ -9,8 +9,8 @@ import re
 import sys
 import types
 
-import CallTipWindow
-from HyperParser import HyperParser
+from . import CallTipWindow
+from .HyperParser import HyperParser
 
 import __main__
 
@@ -119,7 +119,7 @@ def _find_constructor(class_ob):
     # Given a class object, return a function object used for the
     # constructor (ie, __init__() ) or None if we can't find one.
     try:
-        return class_ob.__init__.im_func
+        return class_ob.__init__.__func__
     except AttributeError:
         for base in class_ob.__bases__:
             rc = _find_constructor(base)
@@ -131,7 +131,7 @@ def get_arg_text(ob):
     arg_text = ""
     if ob is not None:
         arg_offset = 0
-        if type(ob) in (types.ClassType, types.TypeType):
+        if type(ob) in (type, type):
             # Look for the highest __init__ in the class chain.
             fob = _find_constructor(ob)
             if fob is None:
@@ -141,21 +141,21 @@ def get_arg_text(ob):
         elif type(ob)==types.MethodType:
             # bit of a hack for methods - turn it into a function
             # but we drop the "self" param.
-            fob = ob.im_func
+            fob = ob.__func__
             arg_offset = 1
         else:
             fob = ob
         # Try to build one for Python defined functions
         if type(fob) in [types.FunctionType, types.LambdaType]:
-            argcount = fob.func_code.co_argcount
-            real_args = fob.func_code.co_varnames[arg_offset:argcount]
-            defaults = fob.func_defaults or []
-            defaults = list(map(lambda name: "=%s" % repr(name), defaults))
+            argcount = fob.__code__.co_argcount
+            real_args = fob.__code__.co_varnames[arg_offset:argcount]
+            defaults = fob.__defaults__ or []
+            defaults = list(["=%s" % repr(name) for name in defaults])
             defaults = [""] * (len(real_args) - len(defaults)) + defaults
-            items = map(lambda arg, dflt: arg + dflt, real_args, defaults)
-            if fob.func_code.co_flags & 0x4:
+            items = list(map(lambda arg, dflt: arg + dflt, real_args, defaults))
+            if fob.__code__.co_flags & 0x4:
                 items.append("...")
-            if fob.func_code.co_flags & 0x8:
+            if fob.__code__.co_flags & 0x8:
                 items.append("***")
             arg_text = ", ".join(items)
             arg_text = "(%s)" % re.sub("\.\d+", "<tuple>", arg_text)
@@ -183,7 +183,7 @@ if __name__=='__main__':
     def t4(*args): "(...)"
     def t5(a, *args): "(a, ...)"
     def t6(a, b=None, *args, **kw): "(a, b=None, ..., ***)"
-    def t7((a, b), c, (d, e)): "(<tuple>, c, <tuple>)"
+    def t7(xxx_todo_changeme2, c, xxx_todo_changeme3): (a, b) = xxx_todo_changeme2; (d, e) = xxx_todo_changeme3; "(<tuple>, c, <tuple>)"
 
     class TC(object):
         "(ai=None, ...)"
@@ -194,7 +194,7 @@ if __name__=='__main__':
         def t4(self, *args): "(...)"
         def t5(self, ai, *args): "(ai, ...)"
         def t6(self, ai, b=None, *args, **kw): "(ai, b=None, ..., ***)"
-        def t7(self, (ai, b), c, (d, e)): "(<tuple>, c, <tuple>)"
+        def t7(self, xxx_todo_changeme, c, xxx_todo_changeme1): (ai, b) = xxx_todo_changeme; (d, e) = xxx_todo_changeme1; "(<tuple>, c, <tuple>)"
 
     def test(tests):
         ct = CallTips()
@@ -204,15 +204,15 @@ if __name__=='__main__':
             name = t.__name__
             # exercise fetch_tip(), not just get_arg_text()
             try:
-                qualified_name = "%s.%s" % (t.im_class.__name__, name)
+                qualified_name = "%s.%s" % (t.__self__.__class__.__name__, name)
             except AttributeError:
                 qualified_name = name
             arg_text = ct.fetch_tip(qualified_name)
             if arg_text != expected:
                 failed.append(t)
                 fmt = "%s - expected %s, but got %s"
-                print  fmt % (t.__name__, expected, get_arg_text(t))
-        print "%d of %d tests failed" % (len(failed), len(tests))
+                print(fmt % (t.__name__, expected, get_arg_text(t)))
+        print("%d of %d tests failed" % (len(failed), len(tests)))
 
     tc = TC()
     tests = (t1, t2, t3, t4, t5, t6, t7,

@@ -12,11 +12,11 @@ __all__ = ['sort', 'copy_reg', 'clip', 'rank',
            'dot', 'outerproduct', 'innerproduct', 'insert']
 
 import types
-import StringIO
+import io
 import pickle
 import math
 import copy
-import copy_reg
+import copyreg
 
 from numpy import sort, clip, rank, sign, shape, putmask, allclose, size,\
      choose, swapaxes, array_str, array_repr, e, pi, put, \
@@ -26,4 +26,4 @@ from numpy import sort, clip, rank, sign, shape, putmask, allclose, size,\
      correlate as cross_correlate, \
      place as insert
 
-from array_printer import array2string
+from .array_printer import array2string

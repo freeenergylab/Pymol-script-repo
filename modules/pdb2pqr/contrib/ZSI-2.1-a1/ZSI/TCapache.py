@@ -66,10 +66,10 @@ class _Map(TypeCode):
             for k,v in pyobj:
                 self.tc.serialize(el, sw, {'key': k, 'value': v}, name='item')
         else:
-            for k,v in pyobj.items():
+            for k,v in list(pyobj.items()):
                 self.tc.serialize(el, sw, {'key': k, 'value': v}, name='item')
 
 
 Apache.Map = _Map
 
-if __name__ == '__main__': print _copyright
+if __name__ == '__main__': print(_copyright)

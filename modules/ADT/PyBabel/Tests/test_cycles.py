@@ -22,13 +22,13 @@ def getGraphFromFile(filename):
     atoms = []
     for i in range(nba):
         data = string.split(f.readline())
-        x,y,z = map( float, data)
+        x,y,z = list(map( float, data))
         atoms.append(Atom((x,y,z)))
     bonds = []
     nbb = int(f.readline())
     for i in range(nbb):
         data = string.split(f.readline())
-        at1,at2 = map( int, data)
+        at1,at2 = list(map( int, data))
         bonds.append( Bond( atoms[at1], atoms[at2] ) )
     return atoms, bonds
 
@@ -101,5 +101,5 @@ harness = testplus.TestHarness( "PyBabel_cycles",
 
 if __name__ == '__main__':
     testplus.chdir()
-    print harness
+    print(harness)
     sys.exit( len( harness))

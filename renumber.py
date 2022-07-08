@@ -66,7 +66,7 @@ ARGUMENTS
     cmd.alter(selection, 'resi = next(atom_it).resi',
             space={'atom_it': iter(model.atom), 'next': next})
     if not quiet:
-        print(' Renumber: range (%d to %d)' % tuple(minmax))
+        print((' Renumber: range (%d to %d)' % tuple(minmax)))
 
 cmd.extend('renumber', renumber)
 

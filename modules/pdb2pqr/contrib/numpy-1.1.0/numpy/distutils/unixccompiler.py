@@ -8,7 +8,7 @@ from distutils.errors import DistutilsExecError, CompileError
 from distutils.unixccompiler import *
 from numpy.distutils.ccompiler import replace_method
 
-import log
+from . import log
 
 # Note that UnixCCompiler._compile appeared in Python 2.3
 def UnixCCompiler__compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts):
@@ -16,8 +16,8 @@ def UnixCCompiler__compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts
     try:
         self.spawn(self.compiler_so + cc_args + [src, '-o', obj] +
                    extra_postargs, display = display)
-    except DistutilsExecError, msg:
-        raise CompileError, msg
+    except DistutilsExecError as msg:
+        raise CompileError(msg)
 
 replace_method(UnixCCompiler, '_compile', UnixCCompiler__compile)
 
@@ -59,8 +59,8 @@ def UnixCCompiler_create_static_lib(self, objects, output_libname,
             try:
                 self.spawn(self.ranlib + [output_filename],
                            display = display)
-            except DistutilsExecError, msg:
-                raise LibError, msg
+            except DistutilsExecError as msg:
+                raise LibError(msg)
     else:
         log.debug("skipping %s (up-to-date)", output_filename)
     return

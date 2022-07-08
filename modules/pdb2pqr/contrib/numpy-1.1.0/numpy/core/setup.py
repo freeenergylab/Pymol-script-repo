@@ -74,14 +74,13 @@ def configuration(parent_package='',top_path=None):
             python_include = sysconfig.get_python_inc()
             python_h = join(python_include, 'Python.h')
             if not os.path.isfile(python_h):
-                raise SystemError,\
-                      "Non-existing %s. Perhaps you need to install"\
-                      " python-dev|python-devel." % (python_h)
+                raise SystemError("Non-existing %s. Perhaps you need to install"\
+                      " python-dev|python-devel." % (python_h))
             result = config_cmd.try_run(tc,include_dirs=[python_include],
                                         library_dirs = default_lib_dirs)
             if not result:
-                raise SystemError,"Failed to test configuration. "\
-                      "See previous error messages for more information."
+                raise SystemError("Failed to test configuration. "\
+                      "See previous error messages for more information.")
 
             moredefs = []
             #
@@ -117,7 +116,7 @@ def configuration(parent_package='',top_path=None):
             if sys.platform=='win32' or os.name=='nt':
                 from numpy.distutils.misc_util import get_build_architecture
                 a = get_build_architecture()
-                print 'BUILD_ARCHITECTURE: %r, os.name=%r, sys.platform=%r' % (a, os.name, sys.platform)
+                print('BUILD_ARCHITECTURE: %r, os.name=%r, sys.platform=%r' % (a, os.name, sys.platform))
                 if a == 'AMD64':
                     moredefs.append('DISTUTILS_USE_SDK')
 
@@ -133,11 +132,11 @@ def configuration(parent_package='',top_path=None):
                 else:
                     target_f.write('#define %s %s\n' % (d[0],d[1]))
             target_f.close()
-            print 'File:',target
+            print('File:',target)
             target_f = open(target)
-            print target_f.read()
+            print(target_f.read())
             target_f.close()
-            print 'EOF'
+            print('EOF')
         else:
             mathlibs = []
             target_f = open(target)
@@ -169,9 +168,8 @@ def configuration(parent_package='',top_path=None):
             python_include = sysconfig.get_python_inc()
             python_h = join(python_include, 'Python.h')
             if not os.path.isfile(python_h):
-                raise SystemError,\
-                      "Non-existing %s. Perhaps you need to install"\
-                      " python-dev|python-devel." % (python_h)
+                raise SystemError("Non-existing %s. Perhaps you need to install"\
+                      " python-dev|python-devel." % (python_h))
 
             config.numpy_include_dirs
             result = config_cmd.try_run(testcode,
@@ -180,14 +178,14 @@ def configuration(parent_package='',top_path=None):
                                         library_dirs = default_lib_dirs)
 
             if not result:
-                raise SystemError,"Failed to generate numpy configuration. "\
-                      "See previous error messages for more information."
+                raise SystemError("Failed to generate numpy configuration. "\
+                      "See previous error messages for more information.")
 
-            print 'File: %s' % target
+            print('File: %s' % target)
             target_f = open(target)
-            print target_f.read()
+            print(target_f.read())
             target_f.close()
-            print 'EOF'
+            print('EOF')
         config.add_data_files((header_dir, target))
         return target
 

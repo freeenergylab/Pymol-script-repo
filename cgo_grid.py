@@ -18,7 +18,7 @@ cgo_grid renders a mesh-like grid with overlapping sine waves (cf. examples).
 
 ################################################################################
 '''
-from __future__ import print_function
+
 from pymol import cmd
 from pymol import stored
 from pymol.cgo import *

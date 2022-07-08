@@ -36,7 +36,7 @@ class SoapWriter:
         '''
         outputclass = outputclass or ElementProxy
         if not issubclass(outputclass, MessageInterface):
-            raise TypeError, 'outputclass must subclass MessageInterface'
+            raise TypeError('outputclass must subclass MessageInterface')
 
         self.dom, self.memo, self.nsdict= \
             outputclass(self), [], nsdict
@@ -92,7 +92,7 @@ class SoapWriter:
         if self.envelope: 
             soap_env = _reserved_ns['SOAP-ENV']
             self.dom.createDocument(soap_env, 'Envelope')
-            for prefix, nsuri in _reserved_ns.items():
+            for prefix, nsuri in list(_reserved_ns.items()):
                 self.dom.setNamespaceAttribute(prefix, nsuri)
             self.writeNSdict(self.nsdict)
             if self.encodingStyle:
@@ -118,7 +118,7 @@ class SoapWriter:
             
         if root is not None:
             if root not in [ 0, 1 ]:
-                raise ValueError, "SOAP-ENC root attribute not in [0,1]"
+                raise ValueError("SOAP-ENC root attribute not in [0,1]")
             elt.setAttributeNS(SOAP.ENC, 'root', root)
                         
         return self
@@ -127,7 +127,7 @@ class SoapWriter:
         '''Write a namespace dictionary, taking care to not clobber the
         standard (or reserved by us) prefixes.
         '''
-        for k,v in nsdict.items():
+        for k,v in list(nsdict.items()):
             if (k,v) in _standard_ns: continue
             rv = _reserved_ns.get(k)
             if rv:
@@ -180,11 +180,11 @@ class SoapWriter:
         '''
         if self.closed: return
         for func,arglist in self.callbacks:
-            apply(func, arglist)
+            func(*arglist)
         self.closed = True
 
     def __del__(self):
         if not self.closed: self.close()
         
 
-if __name__ == '__main__': print _copyright
+if __name__ == '__main__': print(_copyright)

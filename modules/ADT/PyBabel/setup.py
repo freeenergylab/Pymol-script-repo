@@ -64,7 +64,7 @@ for dir in ['PyBabel',
 
 # description of what is going to be included in the distribution and
 # installed.
-from version import VERSION
+from .version import VERSION
 setup (name = 'PyBabel',
        version = VERSION,
        description = "an OpenGL based 3D geometry viewer python package",

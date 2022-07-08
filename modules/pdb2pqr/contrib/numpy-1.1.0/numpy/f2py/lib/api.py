@@ -11,4 +11,4 @@ Created: Oct 2006
 -----
 """
 
-from main import main
+from .main import main

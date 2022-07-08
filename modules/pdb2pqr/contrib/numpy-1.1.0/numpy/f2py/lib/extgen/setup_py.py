@@ -4,12 +4,12 @@ __all__ = ['SetupPy']
 import os
 import sys
 from numpy.distutils.exec_command import exec_command
-from base import Component
-from utils import FileSource
+from .base import Component
+from .utils import FileSource
 
 def write_files(container):
     s = ['creating files and directories:']
-    for filename, i in container.label_map.items():
+    for filename, i in list(container.label_map.items()):
         content = container.list[i]
         d,f = os.path.split(filename)
         if d and not os.path.isdir(d):
@@ -89,7 +89,7 @@ if __name__ == "__main__":
         self += init_py
         self += setup_py
 
-        map(self.add, components)
+        list(map(self.add, components))
 
         return self
 

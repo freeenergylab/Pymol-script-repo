@@ -1,7 +1,7 @@
 import os
-import tkMessageBox
+import tkinter.messagebox
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
 def _canonize(filename):
     if not os.path.isabs(filename):
@@ -15,7 +15,7 @@ def _canonize(filename):
 
 class FileList:
 
-    from EditorWindow import EditorWindow  # class variable, may be overridden
+    from .EditorWindow import EditorWindow  # class variable, may be overridden
                                            # e.g. by PyShellFileList
 
     def __init__(self, root):
@@ -29,13 +29,13 @@ class FileList:
         filename = _canonize(filename)
         if os.path.isdir(filename):
             # This can happen when bad filename is passed on command line:
-            tkMessageBox.showerror(
+            tkinter.messagebox.showerror(
                 "File Error",
                 "%r is a directory." % (filename,),
                 master=self.root)
             return None
         key = os.path.normcase(filename)
-        if self.dict.has_key(key):
+        if key in self.dict:
             edit = self.dict[key]
             edit.top.wakeup()
             return edit
@@ -71,7 +71,7 @@ class FileList:
         return self.EditorWindow(self, filename)
 
     def close_all_callback(self, event):
-        for edit in self.inversedict.keys():
+        for edit in list(self.inversedict.keys()):
             reply = edit.close()
             if reply == "cancel":
                 break
@@ -81,7 +81,7 @@ class FileList:
         try:
             key = self.inversedict[edit]
         except KeyError:
-            print "Don't know this EditorWindow object.  (close)"
+            print("Don't know this EditorWindow object.  (close)")
             return
         if key:
             del self.dict[key]
@@ -94,7 +94,7 @@ class FileList:
         try:
             key = self.inversedict[editwin]
         except KeyError:
-            print "Don't know this EditorWindow object.  (rename)"
+            print("Don't know this EditorWindow object.  (rename)")
             return
         filename = page.io.filename
         if not filename:
@@ -106,10 +106,10 @@ class FileList:
         newkey = os.path.normcase(filename)
         if newkey == key:
             return
-        if self.dict.has_key(newkey):
+        if newkey in self.dict:
             conflict = self.dict[newkey]
             self.inversedict[conflict] = None
-            tkMessageBox.showerror(
+            tkinter.messagebox.showerror(
                 "Name Conflict",
                 "You now have multiple edit windows open for %r" % (filename,),
                 master=self.root)
@@ -124,8 +124,8 @@ class FileList:
 
 def _test():
     import sys
-    from Tkinter import Tk
-    from EditorWindow import fixwordbreaks
+    from tkinter import Tk
+    from .EditorWindow import fixwordbreaks
     root = Tk()
     fixwordbreaks(root)
     root.withdraw()

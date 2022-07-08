@@ -1,10 +1,10 @@
 import re
-import tkMessageBox
+import tkinter.messagebox
 
-import utils
-import IOBinding
-from editorpage import OutputPage
-from EditorWindow import EditorWindow
+from . import utils
+from . import IOBinding
+from .editorpage import OutputPage
+from .EditorWindow import EditorWindow
 
 class OutputWindow(EditorWindow):
     """An editor window that can serve as an output file.
@@ -29,7 +29,7 @@ class OutputWindow(EditorWindow):
         # we assume that they are in the locale's encoding
         if isinstance(s, str):
             try:
-                s = unicode(s, IOBinding.encoding)
+                s = str(s, IOBinding.encoding)
             except UnicodeError:
                 # some other encoding; let Tcl deal with it
                 pass
@@ -38,7 +38,7 @@ class OutputWindow(EditorWindow):
         text.update()
 
     def writelines(self, l):
-        map(self.write, l, text=self.current_page.text)
+        list(map(self.write, l, text=self.current_page.text))
 
     def flush(self):
         pass

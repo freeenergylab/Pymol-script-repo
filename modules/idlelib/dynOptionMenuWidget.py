@@ -2,21 +2,21 @@
 OptionMenu widget modified to allow dynamic menu reconfiguration
 and setting of highlightthickness
 """
-from Tkinter import OptionMenu, Menu
-from Tkinter import _setit
+from tkinter import OptionMenu, Menu
+from tkinter import _setit
 import copy
 
-from configHandler import idleConf
+from .configHandler import idleConf
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import OptionMenu
+    from tkinter.ttk import OptionMenu
 
 class DynOptionMenu(OptionMenu):
     """Unlike OptionMenu, our kwargs can include highlightthickness"""
     def __init__(self, master, variable, value, *values, **kwargs):
         #get a copy of kwargs before OptionMenu.__init__ munges them
         kwargsCopy=copy.copy(kwargs)
-        if 'highlightthickness' in kwargs.keys():
+        if 'highlightthickness' in list(kwargs.keys()):
             del(kwargs['highlightthickness'])
         self.command=kwargs.get('command')
         self.variable=variable

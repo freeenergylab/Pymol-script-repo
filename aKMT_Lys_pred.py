@@ -62,7 +62,7 @@ def get_resis_from_resn(target_sel="all", resn="lys", atom_name="CA", verb=True)
             return_list_resn_resi_sel.append(sel_str)
             # If verbose
             if verb:
-                print("%s , sel: %s"%(resn_resi, sel_str))
+                print(("%s , sel: %s"%(resn_resi, sel_str)))
     # Group selections
     cmd.group(group, "%s_*"%group)
     cmd.select("%s_sel"%group, "%s_*"%group)
@@ -70,7 +70,7 @@ def get_resis_from_resn(target_sel="all", resn="lys", atom_name="CA", verb=True)
 
     # If verbose
     if verb:
-        print("\nThere are %i hits, in target_sel=%s, with resn=%s\n"%(len(return_list_resn_resi), target_sel, resn))
+        print(("\nThere are %i hits, in target_sel=%s, with resn=%s\n"%(len(return_list_resn_resi), target_sel, resn)))
     return return_list_resn_resi, return_list_resn_resi_sel
 cmd.extend("get_resis_from_resn", get_resis_from_resn)
 
@@ -113,7 +113,7 @@ def match_peptides(target_sel="all", peptides=[], verb=True):
         # Check for results. Is there any found?
         if len(stored.infolist) == 0:
             print("\n#####################################################################")
-            print("ERROR: The following sequence cannot be found: %s     %s"%(sequence, modification))
+            print(("ERROR: The following sequence cannot be found: %s     %s"%(sequence, modification)))
             print("\n#####################################################################\n")
             continue
 
@@ -133,7 +133,7 @@ def match_peptides(target_sel="all", peptides=[], verb=True):
         # Check if the residue type match
         if peptide_match_modification_resn != resn:
             print("\n#####################################################################")
-            print("ERROR: The match is not equal: %s=%s != %s"%(modification[0], resn, peptide_match_modification_resn))
+            print(("ERROR: The match is not equal: %s=%s != %s"%(modification[0], resn, peptide_match_modification_resn)))
             print("\n#####################################################################\n")
             continue
 
@@ -150,7 +150,7 @@ def match_peptides(target_sel="all", peptides=[], verb=True):
 
         # Print
         if verb:
-            print("The peptide=%s, with modification=%s, corresponds to resi=%s"%(sequence, modification, peptide_match_modification_resn_resi))
+            print(("The peptide=%s, with modification=%s, corresponds to resi=%s"%(sequence, modification, peptide_match_modification_resn_resi)))
 
     # Group selections
     cmd.group(group, "%s_*"%group)
@@ -159,7 +159,7 @@ def match_peptides(target_sel="all", peptides=[], verb=True):
 
     # If verbose
     if verb:
-        print("\nThere are %i uniq matches, in target_sel=%s\n"%(len(return_list_resn_resi), target_sel))
+        print(("\nThere are %i uniq matches, in target_sel=%s\n"%(len(return_list_resn_resi), target_sel)))
     return return_list_resn_resi, return_list_resn_resi_sel
 cmd.extend("match_peptides", match_peptides)
 
@@ -212,7 +212,7 @@ def get_resi_stats(target_sel="all", residues=[], group_id="X", atom="NZ", atom_
         cmd.select(test_str, sel_str_atom_test)
         nr_test = cmd.count_atoms(test_str)
         if nr_test != 1:
-            print("\nERROR: The selection '%s', has only nr of atoms:%s. SKIPPING"%(sel_str_atom_test, nr_test))
+            print(("\nERROR: The selection '%s', has only nr of atoms:%s. SKIPPING"%(sel_str_atom_test, nr_test)))
             continue
 
         # MSA = Molecular Surface Area

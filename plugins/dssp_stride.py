@@ -57,7 +57,7 @@
 # PERFORMANCE OF THIS SOFTWARE.
 # ----------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 # python lib
 import os
@@ -77,11 +77,11 @@ if sys.version_info[0] > 2:
     import tkinter.colorchooser as tkColorChooser
     import tkinter as Tkinter
 else:
-    import tkSimpleDialog
-    import tkMessageBox
-    import tkFileDialog
-    import tkColorChooser
-    import Tkinter
+    import tkinter.simpledialog
+    import tkinter.messagebox
+    import tkinter.filedialog
+    import tkinter.colorchooser
+    import tkinter
 
 # pymol lib
 try:
@@ -132,9 +132,9 @@ class DSSPPlugin:
         Pmw.setbusycursorattributes(self.dialog.component('hull'))
 
         # parameters used by DSSP
-        self.pymol_sel = Tkinter.StringVar()
-        self.dssp_bin = Tkinter.StringVar()
-        self.stride_bin = Tkinter.StringVar()
+        self.pymol_sel = tkinter.StringVar()
+        self.dssp_bin = tkinter.StringVar()
+        self.stride_bin = tkinter.StringVar()
         self.dssp_rlt_dict = {}
         self.stride_rlt_dict = {}
         self.ss_asgn_prog = None  # which program is used to assign ss
@@ -242,7 +242,7 @@ class DSSPPlugin:
             'C': (0, 0, 255)
         }
         self.SSE_col = {}
-        for sse in self.SSE_col_RGB.keys():
+        for sse in list(self.SSE_col_RGB.keys()):
             self.SSE_col[sse] = '#%s%s%s' % (hex(self.SSE_col_RGB[sse][0])[2:].zfill(2),
                                              hex(self.SSE_col_RGB[sse][1])[2:].zfill(2),
                                              hex(self.SSE_col_RGB[sse][2])[2:].zfill(2))
@@ -250,7 +250,7 @@ class DSSPPlugin:
         self.SSE_res_dict = {}
         self.SSE_sel_dict = {}
 
-        w = Tkinter.Label(self.dialog.interior(),
+        w = tkinter.Label(self.dialog.interior(),
                           #                          text = '\nDSSP Plugin for PyMOL\nHongbo Zhu, 2011.\n\nColor proteins according to the secondary structure determined by DSSP.',
                           text='\nDSSP and Stride Plugin for PyMOL\nby Hongbo Zhu, 2011\n',
                           background='black', foreground='green'
@@ -266,7 +266,7 @@ class DSSPPlugin:
         ######################
         page = self.notebook.add('Structure')
         self.notebook.tab('Structure').focus_set()
-        group_struc = Tkinter.LabelFrame(page, text='Structure')
+        group_struc = tkinter.LabelFrame(page, text='Structure')
         group_struc.pack(fill='both', expand=True, padx=10, pady=5)
 
         pymol_sel_ent = Pmw.EntryField(group_struc,
@@ -279,14 +279,14 @@ class DSSPPlugin:
                                       label_text='DSSP binary:', labelpos='wn',
                                       entry_textvariable=self.dssp_bin,
                                       entry_width=20)
-        dssp_bin_but = Tkinter.Button(group_struc, text='Browse...',
+        dssp_bin_but = tkinter.Button(group_struc, text='Browse...',
                                       command=self.getDSSPBin)
 
         stride_bin_ent = Pmw.EntryField(group_struc,
                                         label_text='Stride binary:', labelpos='wn',
                                         entry_textvariable=self.stride_bin,
                                         entry_width=20)
-        stride_bin_but = Tkinter.Button(group_struc, text='Browse...',
+        stride_bin_but = tkinter.Button(group_struc, text='Browse...',
                                         command=self.getStrideBin)
 
         # arrange widgets using grid
@@ -323,61 +323,61 @@ class DSSPPlugin:
 
         page = self.notebook.add('Color')
 
-        group_sse_color = Tkinter.LabelFrame(page, text='Secondary Structure Element Color')
+        group_sse_color = tkinter.LabelFrame(page, text='Secondary Structure Element Color')
         group_sse_color.grid(sticky='eswn', row=0, column=0, padx=10, pady=5)
 
         # colors for DSSP surface
-        H_col_lab = Tkinter.Label(group_sse_color, text='Alpha helix (H):')
-        self.H_col_but = Tkinter.Button(group_sse_color,
+        H_col_lab = tkinter.Label(group_sse_color, text='Alpha helix (H):')
+        self.H_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['H'],
                                         activebackground=self.SSE_col['H'],
                                         command=self.custermizeHColor)
-        G_col_lab = Tkinter.Label(group_sse_color, text='3-10 helix (G):')
-        self.G_col_but = Tkinter.Button(group_sse_color,
+        G_col_lab = tkinter.Label(group_sse_color, text='3-10 helix (G):')
+        self.G_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['G'],
                                         activebackground=self.SSE_col['G'],
                                         command=self.custermizeGColor)
-        I_col_lab = Tkinter.Label(group_sse_color, text='PI helix (I):')
-        self.I_col_but = Tkinter.Button(group_sse_color,
+        I_col_lab = tkinter.Label(group_sse_color, text='PI helix (I):')
+        self.I_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['I'],
                                         activebackground=self.SSE_col['G'],
                                         command=self.custermizeIColor)
 
-        E_col_lab = Tkinter.Label(group_sse_color, text='Extended strand (E):')
-        self.E_col_but = Tkinter.Button(group_sse_color,
+        E_col_lab = tkinter.Label(group_sse_color, text='Extended strand (E):')
+        self.E_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['E'],
                                         activebackground=self.SSE_col['E'],
                                         command=self.custermizeEColor)
-        B_col_lab = Tkinter.Label(group_sse_color, text='Isolated beta-bridge (B):')
-        self.B_col_but = Tkinter.Button(group_sse_color,
+        B_col_lab = tkinter.Label(group_sse_color, text='Isolated beta-bridge (B):')
+        self.B_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['B'],
                                         activebackground=self.SSE_col['B'],
                                         command=self.custermizeBColor)
 
-        T_col_lab = Tkinter.Label(group_sse_color, text='Turn (T):')
-        self.T_col_but = Tkinter.Button(group_sse_color,
+        T_col_lab = tkinter.Label(group_sse_color, text='Turn (T):')
+        self.T_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['T'],
                                         activebackground=self.SSE_col['T'],
                                         command=self.custermizeTColor)
-        S_col_lab = Tkinter.Label(group_sse_color, text='Bend (DSSP S):')
-        self.S_col_but = Tkinter.Button(group_sse_color,
+        S_col_lab = tkinter.Label(group_sse_color, text='Bend (DSSP S):')
+        self.S_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['S'],
                                         activebackground=self.SSE_col['S'],
                                         command=self.custermizeSColor)
-        N_col_lab = Tkinter.Label(group_sse_color, text='None (DSSP NA):')
-        self.N_col_but = Tkinter.Button(group_sse_color,
+        N_col_lab = tkinter.Label(group_sse_color, text='None (DSSP NA):')
+        self.N_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['-'],
                                         activebackground=self.SSE_col['-'],
                                         command=self.custermizeNColor)
 
-        b_col_lab = Tkinter.Label(group_sse_color, text='Isolated beta-bridge (Stride b):')
-        self.b_col_but = Tkinter.Button(group_sse_color,
+        b_col_lab = tkinter.Label(group_sse_color, text='Isolated beta-bridge (Stride b):')
+        self.b_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['b'],
                                         activebackground=self.SSE_col['b'],
                                         command=self.custermizebColor)
 
-        C_col_lab = Tkinter.Label(group_sse_color, text='Coil (Stride C):')
-        self.C_col_but = Tkinter.Button(group_sse_color,
+        C_col_lab = tkinter.Label(group_sse_color, text='Coil (Stride C):')
+        self.C_col_but = tkinter.Button(group_sse_color,
                                         bg=self.SSE_col['C'],
                                         activebackground=self.SSE_col['C'],
                                         command=self.custermizeCColor)
@@ -410,7 +410,7 @@ class DSSPPlugin:
         # Tab : About Tab
         ######################
         page = self.notebook.add('About')
-        group_about = Tkinter.LabelFrame(page, text='About DSSP and Stride Plugin for PyMOL')
+        group_about = tkinter.LabelFrame(page, text='About DSSP and Stride Plugin for PyMOL')
         group_about.grid(sticky='we', row=0, column=0, padx=5, pady=3)
         about_plugin = """ Assign and color secondary structures using DSSP or Stride.
 by Hongbo Zhu <hongbo.zhu.cn .at. googlemail.com>
@@ -418,7 +418,7 @@ Please cite this plugin if you use it in a publication.
 Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
 """
 
-        label_about = Tkinter.Label(group_about, text=about_plugin)
+        label_about = tkinter.Label(group_about, text=about_plugin)
         label_about.grid(sticky='we', row=0, column=0, padx=5, pady=10)
 
         self.notebook.setnaturalsize()
@@ -426,7 +426,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
         return
 
     def getDSSPBin(self):
-        dssp_bin_fname = tkFileDialog.askopenfilename(
+        dssp_bin_fname = tkinter.filedialog.askopenfilename(
             title='DSSP Binary', initialdir='',
             filetypes=[('all', '*')], parent=self.parent)
         if dssp_bin_fname:  # if nonempty
@@ -434,7 +434,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
         return
 
     def getStrideBin(self):
-        stride_bin_fname = tkFileDialog.askopenfilename(
+        stride_bin_fname = tkinter.filedialog.askopenfilename(
             title='Stride Binary', initialdir='',
             filetypes=[('all', '*')], parent=self.parent)
         if stride_bin_fname:  # if nonempty
@@ -516,7 +516,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
         print('Got SSE for %d residues.' % (len(self.dssp_rlt_dict[one_obj_sel]),))
 
         # group residues according to their SSE, and chain name
-        for k in self.dssp_rlt_dict[one_obj_sel].keys():
+        for k in list(self.dssp_rlt_dict[one_obj_sel].keys()):
             # res = '/%s//%s/%d%s/' % (sel,k[0],k[1][1], k[1][2].strip()) # sel name, chain ID, res serial num, icode
             sse = self.dssp_rlt_dict[one_obj_sel][k]
             chn = k[0]
@@ -570,7 +570,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
                 if cmd.count_atoms(sel) == 0:
                     err_msg = 'ERROR: The selection %s is empty.' % (sel,)
                     print('ERROR: %s' % (err_msg,))
-                    tkMessageBox.showinfo(title='ERROR', message=err_msg)
+                    tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
                     return False
                 else:
                     sel_name = sel
@@ -590,14 +590,14 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
                     cmd.delete(tmpsel)
                     err_msg = 'ERROR: The selection %s is empty.' % (sel,)
                     print('ERROR: %s' % (err_msg,))
-                    tkMessageBox.showinfo(title='ERROR', message=err_msg)
+                    tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
                     return False
                 else:
                     sel_name = tmpsel
         else:   # what structure do you want DSSP to work on?
             err_msg = 'No PyMOL selection/object specified!'
             print('ERROR: %s' % (err_msg,))
-            tkMessageBox.showinfo(title='ERROR', message=err_msg)
+            tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
             return False
 
         # each object in the selection is treated as an independent struc
@@ -681,7 +681,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
         print('Got SSE for %d residues.' % (len(self.stride_rlt_dict[one_obj_sel]),))
 
         # group residues according to their SSE, and chain name
-        for k in self.stride_rlt_dict[one_obj_sel].keys():
+        for k in list(self.stride_rlt_dict[one_obj_sel].keys()):
             sse = self.stride_rlt_dict[one_obj_sel][k]
             chn = k[0]  # this can be a space!
             res = k[2]
@@ -730,7 +730,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
                 if cmd.count_atoms(sel) == 0:
                     err_msg = 'ERROR: The selection %s is empty.' % (sel,)
                     print('ERROR: %s' % (err_msg,))
-                    tkMessageBox.showinfo(title='ERROR', message=err_msg)
+                    tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
                     return False
                 else:
                     sel_name = sel
@@ -746,7 +746,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
                     cmd.delete(tmpsel)
                     err_msg = 'ERROR: The selection %s is empty.' % (sel,)
                     print('ERROR: %s' % (err_msg,))
-                    tkMessageBox.showinfo(title='ERROR', message=err_msg)
+                    tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
                     return False
                 else:
                     sel_name = tmpsel
@@ -754,7 +754,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
         else:   # what structure do you want Stride to work on?
             err_msg = 'No PyMOL selection/object specified!'
             print('ERROR: %s' % (err_msg,))
-            tkMessageBox.showinfo(title='ERROR', message=err_msg)
+            tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
             return False
 
         # each object in the selection is treated as an independent struc
@@ -772,7 +772,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
         """ generate a random selection name.
         """
         sel_list = cmd.get_names('all')
-        sel_dict = dict(zip(sel_list, range(len(sel_list))))
+        sel_dict = dict(list(zip(sel_list, list(range(len(sel_list))))))
         sel_name = '%s%d%s' % (prefix, random.randint(1000, 9999), suffix)
         while(sel_name in sel_dict):
             sel_name = '%s%d%s' % (prefix, random.randint(1000, 9999), suffix)
@@ -847,7 +847,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
         if self.ss_asgn_prog is None:
             err_msg = 'Run DSSP or Stride to assign secondary structures first!'
             print('ERROR: %s' % (err_msg,))
-            tkMessageBox.showinfo(title='ERROR', message=err_msg)
+            tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
         else:
             print('Update color for %s' % (self.pymol_sel.get()), end=' ')
             print('using secondary structure assignment by %s' % (self.ss_asgn_prog,))
@@ -873,7 +873,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
         if self.ss_asgn_prog is None:
             err_msg = 'Run DSSP or Stride to assign secondary structures first!'
             print('ERROR: %s' % (err_msg,))
-            tkMessageBox.showinfo(title='ERROR', message=err_msg)
+            tkinter.messagebox.showinfo(title='ERROR', message=err_msg)
         else:
             print('Update secondary structures for %s' % (self.pymol_sel.get()), end=' ')
             print('using secondary structure assignment by %s' % (self.ss_asgn_prog,))
@@ -944,7 +944,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
             'C': self.C_col_but,
         }
         try:
-            color_tuple, color = tkColorChooser.askcolor(color=self.SSE_col[sse])
+            color_tuple, color = tkinter.colorchooser.askcolor(color=self.SSE_col[sse])
             if color_tuple is not None and color is not None:
                 self.SSE_col_RGB[sse] = color_tuple
                 self.SSE_col[sse] = color
@@ -952,7 +952,7 @@ Hongbo Zhu. DSSP and Stride plugin for PyMOL, 2011, BIOTEC, TU Dresden.
                 SSE_col_but[sse]['bg'] = self.SSE_col[sse]
                 SSE_col_but[sse]['activebackground'] = self.SSE_col[sse]
                 SSE_col_but[sse].update()
-        except Tkinter._tkinter.TclError:
+        except tkinter._tkinter.TclError:
             print('Old color (%s) will be used.' % (self.mesh_col))
 
     def execute(self, butcmd):
@@ -1008,7 +1008,7 @@ if __name__ == '__main__':
             pass
 
     app = App()
-    app.root = Tkinter.Tk()
+    app.root = tkinter.Tk()
     Pmw.initialise(app.root)
     app.root.title('It seems to work!')
 

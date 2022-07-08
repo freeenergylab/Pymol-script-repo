@@ -11,7 +11,7 @@ class HydrogenBondBuilderConstructorTests(unittest.TestCase):
         instantiate an HydrogenBuilder
         """
         hb_builder = HydrogenBondBuilder()
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
 
 
     def test_constructorOptions(self):
@@ -23,52 +23,52 @@ class HydrogenBondBuilderConstructorTests(unittest.TestCase):
         """
         val = 1.0
         hb_builder = HydrogenBondBuilder(distCutoff=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['distCutoff'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['distCutoff'],val) 
         hb_builder = HydrogenBondBuilder(distCutoff2=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['distCutoff2'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['distCutoff2'],val) 
 
         val = 85
         hb_builder = HydrogenBondBuilder(d2max=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['d2max'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['d2max'],val) 
         hb_builder = HydrogenBondBuilder(d2min=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['d2min'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['d2min'],val) 
         hb_builder = HydrogenBondBuilder(a2min=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['a2min'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['a2min'],val) 
         hb_builder = HydrogenBondBuilder(a2max=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['a2max'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['a2max'],val) 
 
         hb_builder = HydrogenBondBuilder(d3min=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['d3min'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['d3min'],val) 
         hb_builder = HydrogenBondBuilder(d3max=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['d3max'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['d3max'],val) 
         hb_builder = HydrogenBondBuilder(a3min=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['a3min'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['a3min'],val) 
         hb_builder = HydrogenBondBuilder(a3max=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['a3max'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['a3max'],val) 
 
         val = ['Nam','Ng+']
         hb_builder = HydrogenBondBuilder(donorTypes=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['donorTypes'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['donorTypes'],val) 
         val = ['S3','03']
         hb_builder = HydrogenBondBuilder(acceptorTypes=val)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['acceptorTypes'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['acceptorTypes'],val) 
 
         val = True
         hb_builder = HydrogenBondBuilder(distOnly=True)
-        self.assertEquals(hb_builder.__class__, HydrogenBondBuilder)
-        self.assertEquals(hb_builder.paramDict['distOnly'],val) 
+        self.assertEqual(hb_builder.__class__, HydrogenBondBuilder)
+        self.assertEqual(hb_builder.paramDict['distOnly'],val) 
 
 
 
@@ -96,7 +96,7 @@ class HydrogenBondBuilderTests(unittest.TestCase):
         d = {}
         for a in self.mol.allAtoms:
             d[a.babel_type] = 1
-        all_types= d.keys()
+        all_types= list(d.keys())
         all_types.sort()
         #print "all_types=", all_types
         #note: these are polar only hydrogens so no type 'HC'
@@ -183,13 +183,13 @@ class HydrogenBondBuilderTests(unittest.TestCase):
         hb_builder = HydrogenBondBuilder()
         hb_builder.build(self.mol)
         hbond_ats = self.mol.allAtoms.get(lambda x: hasattr(x, 'hbonds'))
-        self.assertEquals(len(hbond_ats), 82)
+        self.assertEqual(len(hbond_ats), 82)
         d = {}
         for a in self.mol.allAtoms:
             if hasattr(a, 'hbonds'):
                 for b in a.hbonds:
                     d[b] = 1
-        self.assertEquals(len(d.keys()), 28)
+        self.assertEqual(len(list(d.keys())), 28)
 
 
         

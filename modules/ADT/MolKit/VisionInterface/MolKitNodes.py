@@ -96,7 +96,7 @@ class writePDBFiles(NetworkNode):
     def __init__(self, constrkw = {},  name='writePDBFiles', **kw):
         kw['constrkw'] = constrkw
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw)
+        NetworkNode.__init__(*(self,), **kw)
         code = """from MolKit.pdbWriter import PdbWriter
 import numpy
 
@@ -148,7 +148,7 @@ def doit(self, mol, coordsList, filename):
             ed = net.getEditor()
         except:
             import traceback; traceback.print_exc()
-            print 'Warning! Could not import widgets'
+            print('Warning! Could not import widgets')
 
 
 class PDB_SYMTRY(NetworkNode):
@@ -157,7 +157,7 @@ class PDB_SYMTRY(NetworkNode):
 
     def __init__(self, name='PDB_SYMTRY', **kw):
         kw['name']=name
-        apply( NetworkNode.__init__, (self,), kw)
+        NetworkNode.__init__(*(self,), **kw)
 
 	code = """def doit(self, mol):
     if mol:
@@ -205,7 +205,7 @@ class PDB_MTRIX(NetworkNode):
 
     def __init__(self, name='PDB_MTRIX', **kw):
         kw['name']=name
-        apply( NetworkNode.__init__, (self,), kw)
+        NetworkNode.__init__(*(self,), **kw)
 
 	code = """def doit(self, mol):
     if mol:
@@ -250,7 +250,7 @@ class CenterAndRadius(NetworkNode):
 
     def __init__(self, name='centerAndRad', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw)
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='MoleculeSet', name='molecules')
@@ -287,7 +287,7 @@ Output: MoleculeSet"""
     
     def __init__(self, name='Read Molecule', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         fileTypes=[('pdb', '*.pdb'),('pdbq', '*.pdbq'),('pdbqs', '*.pdbqs'),
                    ('pdbqt', '*.pdbqt'),('pqr', '*.pqr'),('mol2', '*.mol2'),('all', '*')]
@@ -323,7 +323,7 @@ class WritePDB(NetworkNode):
     
     def __init__(self, name='Write PDB', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         fileTypes=[('pdb', '*.pdb'), ('all', '*')]
 
@@ -374,7 +374,7 @@ Input:  filename (string)"""
         self.required_attrs['pdbqt'] = ['charge', 'autodock_element']
 
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         fileTypes=[('pdb', '*.pdb'),('pdbq', '*.pdbq'),('pdbqs', '*.pdbqs'),
                    ('pdbqt', '*.pdbqt'),('pqr', '*.pqr')]
@@ -433,7 +433,7 @@ class AssignRadii(NetworkNode):
 
     def __init__(self, name='Assign Radii', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         self.widgetDescr['united'] = {
             'class':'NECheckButton', 'master':'node',
@@ -463,7 +463,7 @@ class CalculateGasteigerCharges(NetworkNode):
 
     def __init__(self, name='Calculate Gasteiger Charges', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='MoleculeSet', name='mols')
@@ -488,7 +488,7 @@ class AddKollmanCharges(NetworkNode):
 
     def __init__(self, name='Add Kollman Charges', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='MoleculeSet', name='mols')
@@ -513,7 +513,7 @@ class AddHydrogens(NetworkNode):
 
     def __init__(self, name='Add Hydrogens', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='MoleculeSet', name='molecules')
@@ -536,7 +536,7 @@ class AddPolarHydrogens(NetworkNode):
 
     def __init__(self, name='Add Polar Hydrogens', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='MoleculeSet', name='molecules')
@@ -559,7 +559,7 @@ class ParseCryst1(NetworkNode):
 
     def __init__(self, name='ParseCryst1', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='MoleculeSet', name='molecules')
@@ -606,7 +606,7 @@ class NodeSelector(NetworkNode):
         
     def __init__(self, name='Select Nodes', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         #self.readOnly = 1
         self.levels = {'Atom': (Atom, AtomSet),
@@ -625,7 +625,7 @@ class NodeSelector(NetworkNode):
 
         self.widgetDescr['nodeType'] = {
             'class':'NEComboBox', 'master':'node',
-            'choices':self.levels.keys(),
+            'choices':list(self.levels.keys()),
             'fixedChoices':True,
             'initialValue':'Atom',
             'entryfield_entry_width':8,
@@ -661,7 +661,7 @@ class RMSDFromTwoAtomSet(NetworkNode):
 
     def __init__(self, name='RMSD', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='AtomSet', name='atomSet1')
@@ -720,7 +720,7 @@ class AtomsAsCPK(GeometryNode):
 
     def __init__(self, name='CPK', **kw):
         kw['name'] = name
-        apply( GeometryNode.__init__, (self,'CPK'), kw )
+        GeometryNode.__init__(*(self,'CPK'), **kw)
 
         #self.readOnly = 1
 
@@ -799,7 +799,7 @@ class AtomsAsSticks(NetworkNode):
 
     def __init__(self, name='Sticks', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         self.indices     = None
 
@@ -880,7 +880,7 @@ OutputPort:
 """
     def __init__(self, name='gSESVertices', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         self.widgetDescr['selnum'] = {
             'class':'NEDial', 'size':50,
@@ -974,7 +974,7 @@ Output:
     
     def __init__(self, name='Read MSMS', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         fileTypes=[('msms', '*.vert')]
 
@@ -1032,7 +1032,7 @@ try:
     """
         def __init__(self, name='SurfaceAtoms', **kw):
             kw['name'] = name
-            apply( NetworkNode.__init__, (self,), kw )
+            NetworkNode.__init__(*(self,), **kw)
 
             self.widgetDescr['component'] = {
                 'class':'NEDial', 'size':50,
@@ -1129,7 +1129,7 @@ class AtomsAsMSMS(NetworkNode):
       """
     def __init__(self, name='MSMS', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         #self.readOnly = 1
 
@@ -1236,7 +1236,7 @@ class SpheresAsMSMS(NetworkNode):
       """
     def __init__(self, name='MSMS from spheres', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         #self.readOnly = 1
 
@@ -1318,7 +1318,7 @@ class SaveMSMS(NetworkNode):
     
     def __init__(self, constrkw = {},  name='save MSMS', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw)
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='MSMSobject', name='MSMS')
@@ -1343,7 +1343,7 @@ OutputPort:
     """
     def __init__(self, name='get MSMS areas', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         self.widgetDescr['component'] = {
             'class':'NEDial', 'size':50,
@@ -1392,7 +1392,7 @@ OutputPort:
 """
     def __init__(self, name='get MSMS triangles', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         self.widgetDescr['selnum'] = {
             'class':'NEDial', 'size':50,
@@ -1507,7 +1507,7 @@ OutputPort:
 
     def __init__(self, name='get burried MSMS triangles', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         self.widgetDescr['selnum'] = {
             'class':'NEDial', 'size':50,
@@ -1648,7 +1648,7 @@ class AtomsProperty(NetworkNode):
 
     def __init__(self, name='Atoms Properties', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         #self.readOnly = 1
 
@@ -1694,7 +1694,7 @@ class BondsGeometry(NetworkNode):
 
     def __init__(self, name='BondsGeometry', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw)
+        NetworkNode.__init__(*(self,), **kw)
 
         ip = self.inputPortsDescr
         ip.append(datatype='AtomSet', name='atoms')
@@ -1734,7 +1734,7 @@ class BondsByDist(NetworkNode):
 
     def __init__(self, name='buildBondsByDistance', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw)
+        NetworkNode.__init__(*(self,), **kw)
 
         self.widgetDescr['cut_off'] = {
             'class':'NEDial', 'master':'node', 'size':50,
@@ -1776,28 +1776,28 @@ class PublicHttpServer:
         return 1
     
     def run(self):
-        import urllib
+        import urllib.request, urllib.parse, urllib.error
         if self.argCheck() == 0:
             return
-        args = urllib.urlencode( self.arguments )
-        f = urllib.urlopen(self.url, args)
+        args = urllib.parse.urlencode( self.arguments )
+        f = urllib.request.urlopen(self.url, args)
         return f.read()
 
 
     def setArguments(self, **kw):
         from string import split
-        for k,v in kw.items():
-            if k not in self.arguments.keys():
+        for k,v in list(kw.items()):
+            if k not in list(self.arguments.keys()):
                 raise RuntimeError (k+' is not a valid argument')
             
-            if type(v) in (types.FloatType, types.IntType,
-                           types.LongType, types.StringType):
+            if type(v) in (float, int,
+                           int, bytes):
                 self.arguments[k] = v
             else:
                 pat = re.compile("[\[,\]\012]")
                 arrayStr = re.sub(pat, '', str(Numeric.array(v).ravel()) )
                 c = split(arrayStr)
-                c = map( float, c )
+                c = list(map( float, c ))
                 c = re.sub(pat, '', str(c) )
                 self.arguments[k] = c
                 
@@ -1843,9 +1843,9 @@ class MsmsServer(PublicHttpServer):
             elif w[0]=='coordIndex': state='triangles'
             else:
                 if state == 'coords':
-                    coords.append( map(float, w) )
+                    coords.append( list(map(float, w)) )
                 elif state == 'triangles':
-                    triangles.append( map(int, w[:3]) )
+                    triangles.append( list(map(int, w[:3])) )
         return coords, triangles
 
 
@@ -1853,7 +1853,7 @@ class RemoteMSMS(NetworkNode):
 
     def __init__(self, name='Remote MSMS', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
 
         from DejaVu.IndexedPolygons import IndexedPolygons
         self.srf = IndexedPolygons('MSMS', inheritMaterial=0)
@@ -1920,7 +1920,7 @@ class CrystalToCartesian(NetworkNode):
     
     def __init__(self, name='Crystal To Cartesian', **kw):
         kw['name'] = name
-        apply( NetworkNode.__init__, (self,), kw )
+        NetworkNode.__init__(*(self,), **kw)
         #self.readOnly = 1
 
         code = """def doit(self, coords, crystalCellCoords):
@@ -1954,7 +1954,7 @@ from NetworkEditor.macros import MacroNode
 class LinesMacro(MacroNode):
     def __init__(self, constrkw={}, name='lines macro', **kw):
         kw['name'] = name
-        apply( MacroNode.__init__, (self,), kw)
+        MacroNode.__init__(*(self,), **kw)
 
     def beforeAddingToNetwork(self, net):
         MacroNode.beforeAddingToNetwork(self, net)
@@ -2017,7 +2017,7 @@ from NetworkEditor.macros import MacroNode
 class CPKMacro(MacroNode):
     def __init__(self, constrkw={}, name='CPK macro', **kw):
         kw['name'] = name
-        apply( MacroNode.__init__, (self,), kw)
+        MacroNode.__init__(*(self,), **kw)
 
     def beforeAddingToNetwork(self, net):
         MacroNode.beforeAddingToNetwork(self, net)
@@ -2085,7 +2085,7 @@ class MSMSMacro(MacroNode):
 
     def __init__(self, constrkw={}, name='MSMS macro', **kw):
         kw['name'] = name
-        apply( MacroNode.__init__, (self,), kw)
+        MacroNode.__init__(*(self,), **kw)
 
     def beforeAddingToNetwork(self, net):
         MacroNode.beforeAddingToNetwork(self, net)

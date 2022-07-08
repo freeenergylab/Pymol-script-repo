@@ -2,8 +2,8 @@
 __all__ = ['CLine', 'Keyword', 'CTypeSpec', 'CDeclarator', 'CDeclaration',
            'CArgument', 'CCode', 'CFunction', 'CSource', 'CHeader', 'CStdHeader']
 
-from base import Component
-from utils import Line, Code, FileSource
+from .base import Component
+from .utils import Line, Code, FileSource
 
 class CLine(Line):
     pass
@@ -76,7 +76,7 @@ class CDeclarator(Component):
             else:
                 self.is_scalar = options.get('is_scalar', True)
 
-        map(self.add, initvalues)
+        list(map(self.add, initvalues))
         return self
 
     def update_containers(self):
@@ -128,7 +128,7 @@ class CDeclaration(Component):
         ctype = CTypeSpec(ctype)
         self.ctype = ctype
         self.add(ctype)
-        map(self.add, declarators)
+        list(map(self.add, declarators))
         return self
 
 class CArgument(CDeclaration):
@@ -202,7 +202,7 @@ class CFunction(Component):
         rctype = CTypeSpec(rctype)
         self.rctype = rctype
         self.add(rctype)
-        map(self.add, components)
+        list(map(self.add, components))
         if options: self.warning('%s unused options: %s\n' % (self.__class__.__name__, options))
         return self
 

@@ -9,13 +9,13 @@
 #
 #########################################################################
 
-import Tkinter, numpy as Numeric, string, math
+import tkinter, numpy as Numeric, string, math
 
 from mglutil.util.callback import CallbackManager
-from thumbwheel import ThumbWheel
+from .thumbwheel import ThumbWheel
 
 
-class xyzGUI(Tkinter.Frame):
+class xyzGUI(tkinter.Frame):
 
     """ 
     """
@@ -43,14 +43,14 @@ class xyzGUI(Tkinter.Frame):
         self.wheelPadZ=wheelPadZ
         self.labcfgZ=labcfgZ
 
-	Tkinter.Frame.__init__(self, master)
-        Tkinter.Pack.config(self)
+	tkinter.Frame.__init__(self, master)
+        tkinter.Pack.config(self)
 
         self.callbacks = CallbackManager() # object to manage callback
                                         # functions. They get called with the
                                         # current value as an argument
 
-        self.frame = Tkinter.Frame(self, relief = 'sunken', borderwidth=5)
+        self.frame = tkinter.Frame(self, relief = 'sunken', borderwidth=5)
         self.frame.pack(expand=1, fill='x')
         self.createEntries(self.frame)
 
@@ -59,7 +59,7 @@ class xyzGUI(Tkinter.Frame):
 
    
     def createEntries(self, master):
-        self.f = Tkinter.Frame(master)
+        self.f = tkinter.Frame(master)
 	self.f.grid(column=1, rowspan=3)
 
         self.thumbx = ThumbWheel(master=self.f, width=self.widthX,
@@ -107,7 +107,7 @@ class xyzGUI(Tkinter.Frame):
  #####################################################################
 
     def configure(self, **kw):
-        for key,value in kw.items():
+        for key,value in list(kw.items()):
             # the 'set parameter' callbacks
             if key=='labcfgX': self.setLabel(value,'x')
             elif key=='labcfgY': self.setLabel(value,'y')
@@ -397,6 +397,6 @@ class xyzGUI(Tkinter.Frame):
 if __name__ == '__main__':
     test = xyzGUI()
     def foo(val):
-        print val
+        print(val)
     test.callbacks.AddCallback(foo)
     test.configure(lockOneTurnX=1)

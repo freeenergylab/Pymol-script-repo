@@ -43,7 +43,7 @@ class config(old_config):
             self.compiler = self.fcompiler
         try:
             ret = mth(*((self,)+args))
-        except (DistutilsExecError,CompileError),msg:
+        except (DistutilsExecError,CompileError) as msg:
             self.compiler = save_compiler
             raise CompileError
         self.compiler = save_compiler

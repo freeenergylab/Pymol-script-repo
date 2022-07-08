@@ -6,7 +6,7 @@ from ZSI.schema import GED, TypeDefinition, ElementDeclaration
 from ZSI.parse import ParsedSoap
 from ZSI.wstools.c14n import Canonicalize
 from ZSI.wstools.Namespaces import WSA200403, SOAP
-from cStringIO import StringIO
+from io import StringIO
 
 
 # 
@@ -28,7 +28,7 @@ class ns3:
 
 
     class LocalPAssertionId_Def(ZSI.TC.Union, TypeDefinition):
-        memberTypes = [(u'http://www.w3.org/2001/XMLSchema', u'long'), (u'http://www.w3.org/2001/XMLSchema', u'string'), (u'http://www.w3.org/2001/XMLSchema', u'anyURI')]
+        memberTypes = [('http://www.w3.org/2001/XMLSchema', 'long'), ('http://www.w3.org/2001/XMLSchema', 'string'), ('http://www.w3.org/2001/XMLSchema', 'anyURI')]
         schema = "http://www.pasoa.org/schemas/version024/PStruct.xsd"
         type = (schema, "LocalPAssertionId")
         def __init__(self, pname, **kw):
@@ -59,7 +59,7 @@ class UnionTestCase(unittest.TestCase):
             # Union Limitation:  
             #     currently it tries to parse it sequentially via memberTypes,
             #     so string is going to parse the URI when we want anyURI
-            self.failUnless(value == pyobj, 'Expected equivalent')
+            self.assertTrue(value == pyobj, 'Expected equivalent')
 
 
 

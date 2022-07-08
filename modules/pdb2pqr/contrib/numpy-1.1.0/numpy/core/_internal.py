@@ -12,20 +12,20 @@ else:
 def _makenames_list(adict):
     from multiarray import dtype
     allfields = []
-    fnames = adict.keys()
+    fnames = list(adict.keys())
     for fname in fnames:
         obj = adict[fname]
         n = len(obj)
         if not isinstance(obj, tuple) or n not in [2,3]:
-            raise ValueError, "entry not a 2- or 3- tuple"
+            raise ValueError("entry not a 2- or 3- tuple")
         if (n > 2) and (obj[2] == fname):
             continue
         num = int(obj[1])
         if (num < 0):
-            raise ValueError, "invalid offset."
+            raise ValueError("invalid offset.")
         format = dtype(obj[0])
         if (format.itemsize == 0):
-            raise ValueError, "all itemsizes must be fixed."
+            raise ValueError("all itemsizes must be fixed.")
         if (n > 2):
             title = obj[2]
         else:
@@ -148,11 +148,11 @@ def _split(input):
 
         # too many close parenthesis is unacceptable
         else:
-            raise SyntaxError, item
+            raise SyntaxError(item)
 
     # if there is string left over in hold
     if hold != '':
-        raise SyntaxError, hold
+        raise SyntaxError(hold)
 
     return newlist
 
@@ -168,7 +168,7 @@ _convorder = {'=': _nbo,
 def _commastring(astr):
     res = _split(astr)
     if (len(res)) < 1:
-        raise ValueError, "unrecognized formant"
+        raise ValueError("unrecognized formant")
     result = []
     for k,item in enumerate(res):
         # convert item
@@ -289,6 +289,6 @@ def _newnames(datatype, order):
             try:
                 nameslist.remove(name)
             except ValueError:
-                raise ValueError, "unknown field name: %s" % (name,)
+                raise ValueError("unknown field name: %s" % (name,))
         return tuple(list(order) + nameslist)
-    raise ValueError, "unsupported order value: %s" % (order,)
+    raise ValueError("unsupported order value: %s" % (order,))

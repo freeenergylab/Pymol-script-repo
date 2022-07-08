@@ -10,7 +10,7 @@ g = np.array([1,2,3,4,5,6,7,8]).view(ff.floatint_type)
 
 # Now, the elements will be the scalar type associated
 #  with the ndarray.
-print g[0]
-print type(g[1])
+print(g[0])
+print(type(g[1]))
 
 # Now, you need to register ufuncs and more arrfuncs to do useful things...

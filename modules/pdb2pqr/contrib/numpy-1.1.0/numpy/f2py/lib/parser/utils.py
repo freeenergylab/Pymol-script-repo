@@ -77,7 +77,7 @@ def parse_bind(line, item = None):
         newitem = None
     newline = newline[4:].lstrip()
     i = newline.find(')')
-    assert i!=-1,`newline`
+    assert i!=-1,repr(newline)
     args = []
     for a in specs_split_comma(newline[1:i].strip(), newitem, upper=True):
         args.append(a)
@@ -91,9 +91,9 @@ def parse_result(line, item = None):
         return None, line
     line = line[6:].lstrip()
     i = line.find(')')
-    assert i != -1,`line`
+    assert i != -1,repr(line)
     name = line[1:i].strip()
-    assert is_name(name),`name`
+    assert is_name(name),repr(name)
     return name, line[i+1:].lstrip()
 
 def filter_stmts(content, classes):
@@ -122,7 +122,7 @@ def get_module_files(directory, _cache={}):
         for name in module_line.findall(f.read()):
             name = name[1]
             if name in d:
-                print d[name],'already defines',name
+                print(d[name],'already defines',name)
                 continue
             d[name] = fn
     _cache[directory] = d
@@ -152,8 +152,8 @@ def get_module_file(name, directory, _cache={}):
 def str2stmt(string, isfree=True, isstrict=False):
     """ Convert Fortran code to Statement tree.
     """
-    from readfortran import Line, FortranStringReader
-    from parsefortran import FortranParser
+    from .readfortran import Line, FortranStringReader
+    from .parsefortran import FortranParser
     reader = FortranStringReader(string, isfree, isstrict)
     parser = FortranParser(reader)
     parser.parse()

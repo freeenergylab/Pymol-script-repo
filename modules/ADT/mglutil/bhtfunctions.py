@@ -28,7 +28,7 @@ def findNearestAtoms(mol,vertices, **kw):
     
     coords = mol.allAtoms.coords
     if not hasattr(mol,'bhtree'):
-        print "Building bhtree for ",mol
+        print("Building bhtree for ",mol)
         ids = Numeric.arange(len(coords)).astype('i')
         bhtree = bhtreelib.TBHTree(coords,ids,10,10,9999.0)
         mol.bhtree = bhtree

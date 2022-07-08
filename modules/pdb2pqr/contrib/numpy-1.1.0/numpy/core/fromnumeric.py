@@ -14,8 +14,8 @@ __all__ = ['take', 'reshape', 'choose', 'repeat', 'put',
 
 import multiarray as mu
 import umath as um
-import numerictypes as nt
-from numeric import asarray, array, asanyarray, concatenate
+from . import numerictypes as nt
+from .numeric import asarray, array, asanyarray, concatenate
 _dt_ = nt.sctype2char
 
 import types
@@ -23,7 +23,7 @@ import types
 try:
     _gentype = types.GeneratorType
 except AttributeError:
-    _gentype = types.NoneType
+    _gentype = type(None)
 
 # save away Python sum
 _sum_ = sum

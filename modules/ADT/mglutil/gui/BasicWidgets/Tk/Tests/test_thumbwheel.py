@@ -11,7 +11,7 @@
 
 # $Id: test_thumbwheel.py,v 1.12 2007/12/04 21:28:04 vareille Exp $
 
-import sys,unittest,Tkinter
+import sys,unittest,tkinter
 from time import sleep
 tw = None
 wasCalled = False
@@ -32,7 +32,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
 
     def test_constructorOptions(self):
         # test all possible constructor options
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         tw = ThumbWheel(width=100, height=26,wheelPad=4,master = root,
                         labcfg={'fg':'black', 'side':'left', 'text':'Test:'},
                         wheelLabcfg1={'font':(ensureFontCase('times'),14,'bold')},
@@ -45,7 +45,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
 
     def test_setValue(self):
         # test setting of a value
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         tw = ThumbWheel(width=100, height=26, value=1.0,master = root)
         tw.set(10)
         tw.master.update()
@@ -66,7 +66,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
         def foo(val):
             global wasCalled
             wasCalled=True
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         tw = ThumbWheel(width=100, height=26,master = root)
         tw.callbacks.AddCallback(foo)
         # setValue(val) should NOT call callback
@@ -93,7 +93,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
         def foo(val):
             global wasCalled
             wasCalled=True
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         tw = ThumbWheel(width=100, height=26, master=root, callback=foo)
         self.assertEqual(tw.callbacks.callbacks, [foo,], "Expecting to have foo added to the callbackmanager callbacks list")
         #tw.callbacks.AddCallback(foo)
@@ -127,7 +127,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
             global wasCalled2
             wasCalled2=True
             
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         tw = ThumbWheel(width=100, height=26, master=root, callback=[foo1, foo2])
         self.assertEqual(tw.callbacks.callbacks, [foo1,foo2], "Expecting to have foo added to the callbackmanager callbacks list")
         # setValue(val) should NOT call callback
@@ -356,7 +356,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
         tw.callbacks.AddCallback(foo)
         tw.master.update()
         pause()
-        for i in xrange(10):
+        for i in range(10):
             tw.computeNewValue(1.) # emulate mouse rotation
         self.assertEqual(tw.value,10.0)
         #check that the get method returns deltaValue when setReportDelta is True
@@ -372,35 +372,35 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_thumbwheel_invalid_type(self):
         """tests thumbwheel invalid type
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,type ='hai',master = root)
         root.destroy()
         
     def test_thumbwheel_invalid_value(self):
         """tests thumbwheel invlaid value
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,value = 'hai',master = root)
         root.destroy()
         
     def test_thumbwheel_invalid_oneTurn(self):
         """tests thumbwheel invalid oneturn
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,oneTurn = 'hai',master = root)
         root.destroy()
         
     def test_thumbwheel_invalid_height(self):
         """tests thumbwheel invalid size
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,height = 'hai',master = root)
         root.destroy()
         
     def test_thumbwheel_invalid_width(self):
         """tests thumbwheel invalid size
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,
                           width = 'hai',master = root)
         root.destroy()
@@ -408,7 +408,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_thumbwheel_invalid_callbacks(self):
         """tests thumbwheel invalid callbacks
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel, callback='jlsd',
                           master = root)
         
@@ -419,28 +419,28 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_thumbwheel_invalid_master(self):
         """tests thumbwheel invalid master
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AttributeError,ThumbWheel,master = 'asgjf')
         root.destroy()
     
     def test_thumbwheel_invalid_labcfg(self):
         """tests invalid labcfg
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AttributeError,ThumbWheel,labCfg = 'abcd',master = root)
         root.destroy()
         
     def test_thumbwheel_invalid_min(self):
         """tests thumbwheel invalid min
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,min = 'hkdf',master = root)
         root.destroy()
         
     def test_thumbwheel_invalid_max(self):
         """tests thumbwheel invalid max
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,max = 'hkdf',master = root)
         root.destroy()
        
@@ -448,7 +448,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_thumbwheel_invalid_increment(self):
         """tests invalid increment
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,increment = 'hkdf',master = root)
         root.destroy()
     
@@ -456,14 +456,14 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_thumbwheel_invalid_continuous(self):
         """tests invalid continuous
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,continuous = 'hkdf')
         root.destroy()
        
     def test_thumbwheel_invalid_precision(self):
         """tests invalid precision
         """
-        root = Tkinter.Tk()
+        root = tkinter.Tk()
         self.assertRaises(AssertionError,ThumbWheel,precision = 'jhgdfj',master =
         root) 
         root.destroy()
@@ -484,7 +484,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setMin(self):
         """tests invalid input for setMin
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setMin,'hai')
         tw.master.destroy()
@@ -492,7 +492,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setMax(self):
         """tests invalid input for setMax
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setMax,'hai')
         tw.master.destroy()
@@ -500,7 +500,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setIncrement(self):
         """tests invalid input for setIncrement
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setIncrement,'hai')    
         tw.master.destroy()
@@ -508,7 +508,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setValue(self):
         """tests invalid input for setValue
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setValue,'hai')
         tw.master.destroy()
@@ -516,7 +516,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setType(self):
         """tests invalid input for setType
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setType,'hai')    
         tw.master.destroy()
@@ -524,7 +524,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setShowLabel(self):
         """tests invalid input for setShowLabel
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setShowLabel,"iurey")
         tw.master.destroy()
@@ -532,7 +532,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setLabel(self):
         """tests invalid input for setLabel
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AttributeError,tw.setLabel,'hai')    
         tw.master.destroy()
@@ -540,7 +540,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setPrecision(self):
         """tests invalid input for setPrecision
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setPrecision,'hai')    
         tw.master.destroy()
@@ -548,7 +548,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setContinuous(self):
         """tests invalid input for setContinuous
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setContinuous,"iurey")
         tw.master.destroy()
@@ -556,7 +556,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setOneTurn(self):
         """tests invalid input for setOneTurn
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setOneTurn,'hai')    
         tw.master.destroy()
@@ -564,7 +564,7 @@ class ThumbWheelBaseTest(unittest.TestCase,Dummyevent):
     def test_invalid_setOrient(self):
         """tests invalid input for setOrient
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         tw =ThumbWheel(master = root)
         self.assertRaises(AssertionError,tw.setOrient,'hai')    
         tw.master.destroy()

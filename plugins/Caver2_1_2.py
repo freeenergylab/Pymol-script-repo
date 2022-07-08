@@ -7,10 +7,10 @@ See more here: http://www.pymolwiki.org/index.php/caver2
 # ============================
 #
 '''
-from __future__ import division
-from __future__ import generators
-from __future__ import print_function
-from __future__ import absolute_import
+
+
+
+
 
 import os
 import math
@@ -27,8 +27,8 @@ from chempy import Bond, Atom
 import threading
 
 if sys.version_info[0] < 3:
-    import Tkinter
-    from Tkinter import *
+    import tkinter
+    from tkinter import *
 else:
     import tkinter as Tkinter
     from tkinter import *
@@ -129,14 +129,14 @@ class FileDialogButtonClassFactory:
         """This returns a FileDialogButton class that will
         call the specified function with the resulting file.
         """
-        class FileDialogButton(Tkinter.Button):
+        class FileDialogButton(tkinter.Button):
             # This is just an ordinary button with special colors.
 
             def __init__(self, master=None, cnf={}, **kw):
                 '''when we get a file, we call fn(filename)'''
                 self.fn = fn
                 self.__toggle = 0
-                Tkinter.Button.__init__(self, master, cnf, **kw)
+                tkinter.Button.__init__(self, master, cnf, **kw)
                 self.configure(command=self.set)
 
             def set(self):
@@ -188,7 +188,7 @@ class AnBeKoM:
         lbb = "Caver 2.1%s" % (VERSION,)
 
         #labelfont = ('-weight bold')
-        w = Tkinter.Label(self.dialog.interior(),
+        w = tkinter.Label(self.dialog.interior(),
                           text=lbb,
                           background='orange',
                           foreground='white',
@@ -197,7 +197,7 @@ class AnBeKoM:
         # w.config(font=labelfont)
         w.pack(expand=1, fill='both', padx=4, pady=4)
         #ww = Tkinter.Label(self.dialog.interior(), background = 'orange', foreground="white", text = 'WWW and Help: http://loschmidt.chemi.muni.cz/caver')
-        ww = Tkinter.Button(self.dialog.interior(), text='WWW and Help', command=self.launchHelp)
+        ww = tkinter.Button(self.dialog.interior(), text='WWW and Help', command=self.launchHelp)
         ww.pack()
 
         self.stdam_list = ['ALA', 'ARG', 'ASN', 'ASP', 'CYS', 'GLN', 'GLU', 'GLY', 'HIS', 'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL', 'ASX', 'CYX', 'GLX', 'HI0', 'HID', 'HIE', 'HIM', 'HIP', 'MSE', 'ACE', 'ASH', 'CYM', 'GLH', 'LYN', 'NME']
@@ -248,7 +248,7 @@ class AnBeKoM:
         #labframe0 = Tkinter.Frame(group.interior())
         # labframe0.pack(fill='x',padx=4,pady=2)
 
-        labframe0 = Tkinter.Frame(self.dialog.interior())
+        labframe0 = tkinter.Frame(self.dialog.interior())
         labframe0.pack(fill='x', padx=4, pady=2)
 
         self.varremovewater = IntVar()
@@ -258,13 +258,13 @@ class AnBeKoM:
         # self.removewaterbutton.pack(side='left',expand='yes',)
 
         self.inModelGroup = Pmw.Group(self.dialog.interior(), tag_text='Input model:')
-        self.listbox1 = Tkinter.Listbox(self.inModelGroup.interior(), width=25, height=6, exportselection=0)
+        self.listbox1 = tkinter.Listbox(self.inModelGroup.interior(), width=25, height=6, exportselection=0)
         self.listbox1.bind('<<ListboxSelect>>', self.inputAnalyseWrap)
-        yscroll1 = Tkinter.Scrollbar(self.inModelGroup.interior(), command=self.listbox1.yview, orient=Tkinter.VERTICAL)
+        yscroll1 = tkinter.Scrollbar(self.inModelGroup.interior(), command=self.listbox1.yview, orient=tkinter.VERTICAL)
         self.listbox1.pack(side=LEFT)
         yscroll1.pack(side=LEFT, fill='y')
         self.listbox1.configure(yscrollcommand=yscroll1.set)
-        self.reloadListButton = Tkinter.Button(self.inModelGroup.interior(), text='Reload', command=self.updateList)
+        self.reloadListButton = tkinter.Button(self.inModelGroup.interior(), text='Reload', command=self.updateList)
         self.reloadListButton.pack(side=LEFT)
         self.inModelGroup.pack()
 
@@ -299,10 +299,10 @@ class AnBeKoM:
 
 #-------------
 #        radiogroups = []
-        self.surroundingsvar = Tkinter.IntVar()
+        self.surroundingsvar = tkinter.IntVar()
 #        self.surroundingsvar.set(1)
 
-        radioframe = Tkinter.Frame(groupstart.interior())
+        radioframe = tkinter.Frame(groupstart.interior())
         group1 = Pmw.Group(radioframe,
                            tag_text='Convert surroundings to x,y,x coordinates of starting point')
 
@@ -322,7 +322,7 @@ class AnBeKoM:
                                             )
         self.selectionlist.pack(fill='x', expand='yes', padx=4, pady=1)  # vertical
 
-        self.convertButton = Tkinter.Button(group1.interior(), text='Convert to x,y,z', command=self.convert)
+        self.convertButton = tkinter.Button(group1.interior(), text='Convert to x,y,z', command=self.convert)
         self.convertButton.pack(fill='x', expand='yes', padx=4, pady=1)
 
         group2 = Pmw.Group(radioframe,
@@ -339,17 +339,17 @@ class AnBeKoM:
         self.zlocvar = DoubleVar()
         self.zlocvar.set(float(defaults["startingpoint"][2]))
 
-        self.xlocfr = Tkinter.Frame(group2.interior())
+        self.xlocfr = tkinter.Frame(group2.interior())
         labX = Label(self.xlocfr, text="x")
         self.xlocation = Entry(self.xlocfr, textvariable=self.xlocvar)
         self.scrX = Scrollbar(self.xlocfr, orient="horizontal", command=self.changeValueX)
 
-        self.ylocfr = Tkinter.Frame(group2.interior())
+        self.ylocfr = tkinter.Frame(group2.interior())
         labY = Label(self.ylocfr, text="y")
         self.ylocation = Entry(self.ylocfr, textvariable=self.ylocvar)
         self.scrY = Scrollbar(self.ylocfr, orient="horizontal", command=self.changeValueY)
 
-        self.zlocfr = Tkinter.Frame(group2.interior())
+        self.zlocfr = tkinter.Frame(group2.interior())
         labZ = Label(self.zlocfr, text="z")
         self.zlocation = Entry(self.zlocfr, textvariable=self.zlocvar)
         self.scrZ = Scrollbar(self.zlocfr, orient="horizontal", command=self.changeValueZ)
@@ -369,23 +369,23 @@ class AnBeKoM:
 
         self.OpGroup = Pmw.Group(radioframe, tag_text="Optimize starting point")
         self.OpGroup.pack(fill='x')
-        self.optimizeLabel = Tkinter.Label(self.OpGroup.interior(), text='Neighbourhood:')
+        self.optimizeLabel = tkinter.Label(self.OpGroup.interior(), text='Neighbourhood:')
         self.optimizeLabel.pack(side=LEFT)
 
-        self.optimizeNear = Tkinter.Entry(self.OpGroup.interior(), textvariable=self.optimizeNearValue, justify='right')
+        self.optimizeNear = tkinter.Entry(self.OpGroup.interior(), textvariable=self.optimizeNearValue, justify='right')
         self.optimizeNear.pack(side=LEFT, padx=4, pady=1)
-        self.angstrom = Tkinter.Label(self.OpGroup.interior(), text="(A)")
+        self.angstrom = tkinter.Label(self.OpGroup.interior(), text="(A)")
         self.angstrom.pack(side=LEFT, padx=0, pady=1)
-        self.optimizeButton = Tkinter.Button(self.OpGroup.interior(), text='Optimize', command=self.optimize)
+        self.optimizeButton = tkinter.Button(self.OpGroup.interior(), text='Optimize', command=self.optimize)
         self.optimizeButton.pack(side=LEFT, padx=5, pady=1)
-        self.UoptimizeButton = Tkinter.Button(self.OpGroup.interior(), text='Undo', command=self.uoptimize)
+        self.UoptimizeButton = tkinter.Button(self.OpGroup.interior(), text='Undo', command=self.uoptimize)
         self.UoptimizeButton.pack(side=LEFT, padx=1, pady=1)
 
 # blocking method =========================
 #	groupMethod = Pmw.Group(self.dialog.interior(),tag_text='Choose blocking method')
 
 # by default, set 4: branch blocking
-        self.methodvar = Tkinter.IntVar()
+        self.methodvar = tkinter.IntVar()
         self.methodvar.set(4)
 
 #        methodframe = Tkinter.Frame(groupMethod.interior())
@@ -442,7 +442,7 @@ class AnBeKoM:
         self.dialog.show()
 
     def updateList(self):
-        self.listbox1.delete(0, Tkinter.END)
+        self.listbox1.delete(0, tkinter.END)
         # fill with data
         self.listbox1.insert(0, "all")
         self.listbox1.selection_set(0, 0)  # Default sel
@@ -746,7 +746,7 @@ class AnBeKoM:
             #
             if cntr == 1:
                 cntr = cntr + 4
-            tmpButton = Tkinter.Checkbutton(self.filterGroup.interior(), text=key, variable=self.s[key])
+            tmpButton = tkinter.Checkbutton(self.filterGroup.interior(), text=key, variable=self.s[key])
             tmpButton.var = self.s[key]
             tmpButton.grid(sticky=W, row=int(cntr / 5), column=(cntr % 5))
             self.checklist.append(tmpButton)
@@ -758,7 +758,7 @@ class AnBeKoM:
 
             # kdyz poprve, je tam pridano STDAM, vlozit tam  tedy i napovedu
             if cntr == 0:
-                xButton = Tkinter.Button(self.filterGroup.interior(), text='?', command=self.stdamMessage, width=5)
+                xButton = tkinter.Button(self.filterGroup.interior(), text='?', command=self.stdamMessage, width=5)
                 xButton.grid(sticky=W, row=0, column=1)  # 0,1 = stdam, 0,2 = help
 
             cntr = cntr + 1
@@ -986,7 +986,7 @@ class PmwFileDialog(Pmw.Dialog):
         return self.createcomponent(
             'infobox',
             (), None,
-            Tkinter.Label, (self.interior(),),
+            tkinter.Label, (self.interior(),),
             width=51,
             relief='groove',
             foreground='darkblue',
@@ -1252,11 +1252,11 @@ if __name__ == '__main__':
         def my_show(self, *args, **kwargs):
             pass
     app = App()
-    app.root = Tkinter.Tk()
+    app.root = tkinter.Tk()
     Pmw.initialise(app.root)
     app.root.title('Some Title')
 
     widget = AnBeKoM(app)
-    exitButton = Tkinter.Button(app.root, text='Exit', command=app.root.destroy)
+    exitButton = tkinter.Button(app.root, text='Exit', command=app.root.destroy)
     exitButton.pack()
     app.root.mainloop()

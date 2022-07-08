@@ -6,7 +6,7 @@ import re
 from md5 import md5
 import random
 import time
-import httplib
+import http.client
 
 random.seed(int(time.time()*10))
 
@@ -26,7 +26,7 @@ def A2(method,uri):
   return '%s:%s' % (method,uri)
 
 def dict_fetch(d,k,defval=None):
-  if d.has_key(k):
+  if k in d:
     return d[k]
   return defval
 
@@ -85,7 +85,7 @@ def fetch_challenge(http_header):
   """
   m = fetch_challenge.wwwauth_header_re.match(http_header)
   if m is None:
-      raise RuntimeError, 'expecting "WWW-Authenticate header [Basic,Digest]"'
+      raise RuntimeError('expecting "WWW-Authenticate header [Basic,Digest]"')
 
   d = dict(challenge=m.groups()[0])
   m = fetch_challenge.auth_param_re.search(http_header)
@@ -105,8 +105,8 @@ def build_authorization_arg(authdict):
   Create an "Authorization" header value from an authdict (created by generate_response()).
   """
   vallist = []
-  for k in authdict.keys():
+  for k in list(authdict.keys()):
     vallist += ['%s=%s' % (k,authdict[k])]
   return 'Digest '+', '.join(vallist)
 
-if __name__ == '__main__': print _copyright
+if __name__ == '__main__': print(_copyright)

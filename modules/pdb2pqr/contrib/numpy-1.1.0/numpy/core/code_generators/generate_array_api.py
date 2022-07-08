@@ -1,5 +1,5 @@
 import os
-import genapi
+from . import genapi
 
 types = ['Generic','Number','Integer','SignedInteger','UnsignedInteger',
          'Inexact',

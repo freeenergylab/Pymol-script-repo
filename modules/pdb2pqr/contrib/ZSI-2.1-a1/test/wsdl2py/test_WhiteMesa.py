@@ -66,7 +66,7 @@ class WhiteMesaTest(ServiceTestCase):
         port = loc.getSoap11TestRpcLitPort(**self.getPortKWArgs())
         rsp = port.echoBoolean(msg)
         
-        self.failUnless(msg._inputBoolean == rsp._return,
+        self.assertTrue(msg._inputBoolean == rsp._return,
                         "EchoBoolean Failed")
         
     def test_dispatch_EchoBoolean(self):

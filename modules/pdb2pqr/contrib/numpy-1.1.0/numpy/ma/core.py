@@ -58,7 +58,7 @@ __all__ = ['MAError', 'MaskType', 'MaskedArray',
 
 import sys
 import types
-import cPickle
+import pickle
 import operator
 
 import numpy
@@ -72,6 +72,7 @@ from numpy import bool_, dtype, typecodes, amax, amin, ndarray, iscomplexobj
 from numpy import expand_dims as n_expand_dims
 from numpy import array as narray
 import warnings
+from functools import reduce
 
 
 MaskType = bool_
@@ -128,7 +129,7 @@ def default_fill_value(obj):
         defval = default_filler[obj.kind]
     elif isinstance(obj, float):
         defval = default_filler['f']
-    elif isinstance(obj, int) or isinstance(obj, long):
+    elif isinstance(obj, int) or isinstance(obj, int):
         defval = default_filler['i']
     elif isinstance(obj, str):
         defval = default_filler['S']
@@ -147,18 +148,18 @@ def minimum_fill_value(obj):
         objtype = obj.dtype
         filler = min_filler[objtype]
         if filler is None:
-            raise TypeError, 'Unsuitable type for calculating minimum.'
+            raise TypeError('Unsuitable type for calculating minimum.')
         return filler
     elif isinstance(obj, float):
         return min_filler[ntypes.typeDict['float_']]
     elif isinstance(obj, int):
         return min_filler[ntypes.typeDict['int_']]
-    elif isinstance(obj, long):
+    elif isinstance(obj, int):
         return min_filler[ntypes.typeDict['uint']]
     elif isinstance(obj, numeric.dtype):
         return min_filler[obj]
     else:
-        raise TypeError, 'Unsuitable type for calculating minimum.'
+        raise TypeError('Unsuitable type for calculating minimum.')
 
 def maximum_fill_value(obj):
     """Calculate the default fill value suitable for taking the maximum
@@ -169,18 +170,18 @@ def maximum_fill_value(obj):
         objtype = obj.dtype
         filler = max_filler[objtype]
         if filler is None:
-            raise TypeError, 'Unsuitable type for calculating minimum.'
+            raise TypeError('Unsuitable type for calculating minimum.')
         return filler
     elif isinstance(obj, float):
         return max_filler[ntypes.typeDict['float_']]
     elif isinstance(obj, int):
         return max_filler[ntypes.typeDict['int_']]
-    elif isinstance(obj, long):
+    elif isinstance(obj, int):
         return max_filler[ntypes.typeDict['uint']]
     elif isinstance(obj, numeric.dtype):
         return max_filler[obj]
     else:
-        raise TypeError, 'Unsuitable type for calculating minimum.'
+        raise TypeError('Unsuitable type for calculating minimum.')
 
 
 def _check_fill_value(fill_value, dtype):
@@ -1099,9 +1100,9 @@ class FlatIter(object):
         a = self.ma.ravel()
         a[index] = value
 
-    def next(self):
-        d = self.ma_iter.next()
-        if self.maskiter is not None and self.maskiter.next():
+    def __next__(self):
+        d = next(self.ma_iter)
+        if self.maskiter is not None and next(self.maskiter):
             d = masked
         return d
 
@@ -1202,7 +1203,7 @@ class MaskedArray(numeric.ndarray):
                 else:
                     msg = "Mask and data not compatible: data size is %i, "+\
                           "mask size is %i."
-                    raise MAError, msg % (nd, nm)
+                    raise MAError(msg % (nd, nm))
                 copy = True
             if _data._mask is nomask:
                 _data._mask = mask
@@ -1322,12 +1323,12 @@ class MaskedArray(numeric.ndarray):
             # Inherit attributes from self
             dout._update_from(self)
             # Check the fill_value ....
-            if isinstance(indx, basestring):
+            if isinstance(indx, str):
                 fvindx = list(self.dtype.names).index(indx)
                 dout._fill_value = self.fill_value[fvindx]
             # Update the mask if needed
             if m is not nomask:
-                if isinstance(indx, basestring):
+                if isinstance(indx, str):
                     dout._mask = m.reshape(dout.shape)
                 else:
                     dout._mask = ndarray.__getitem__(m, indx).reshape(dout.shape)
@@ -1347,12 +1348,12 @@ class MaskedArray(numeric.ndarray):
 
         """
         if self is masked:
-            raise MAError, 'Cannot alter the masked element.'
+            raise MAError('Cannot alter the masked element.')
         # This test is useful, but we should keep things light...
 #        if getmask(indx) is not nomask:
 #            msg = "Masked arrays must be filled before they can be used as indices!"
 #            raise IndexError, msg
-        if isinstance(indx, basestring):
+        if isinstance(indx, str):
             ndarray.__setitem__(self._data,indx, getdata(value))
             warnings.warn("MaskedArray.__setitem__ on fields: "\
                           "The mask is NOT affected!")
@@ -1761,8 +1762,7 @@ masked_%(name)s(data = %(data)s,
     def __float__(self):
         "Convert to float."
         if self.size > 1:
-            raise TypeError,\
-                   "Only length-1 arrays can be converted to Python scalars"
+            raise TypeError("Only length-1 arrays can be converted to Python scalars")
         elif self._mask:
             warnings.warn("Warning: converting a masked element to nan.")
             return numpy.nan
@@ -1771,10 +1771,9 @@ masked_%(name)s(data = %(data)s,
     def __int__(self):
         "Convert to int."
         if self.size > 1:
-            raise TypeError,\
-                   "Only length-1 arrays can be converted to Python scalars"
+            raise TypeError("Only length-1 arrays can be converted to Python scalars")
         elif self._mask:
-            raise MAError, 'Cannot convert masked element to a Python int.'
+            raise MAError('Cannot convert masked element to a Python int.')
         return int(self.item())
     #............................................
     def get_imag(self):
@@ -2861,7 +2860,7 @@ def power(a, b, third=None):
 
     """
     if third is not None:
-        raise MAError, "3-argument power not supported."
+        raise MAError("3-argument power not supported.")
     # Get the masks
     ma = getmask(a)
     mb = getmask(b)
@@ -3156,7 +3155,7 @@ def where (condition, x=None, y=None):
     if x is None and y is None:
         return filled(condition, 0).nonzero()
     elif x is None or y is None:
-        raise ValueError, "Either both or neither x and y should be given."
+        raise ValueError("Either both or neither x and y should be given.")
     # Get the condition ...............
     fc = filled(condition, 0).astype(bool_)
     notfc = numpy.logical_not(fc)
@@ -3367,14 +3366,14 @@ def dump(a,F):
     """
     if not hasattr(F,'readline'):
         F = open(F,'w')
-    return cPickle.dump(a,F)
+    return pickle.dump(a,F)
 
 def dumps(a):
     """Return a string corresponding to the pickling of the
     MaskedArray.
 
     """
-    return cPickle.dumps(a)
+    return pickle.dumps(a)
 
 def load(F):
     """Wrapper around ``cPickle.load`` which accepts either a
@@ -3383,11 +3382,11 @@ def load(F):
     """
     if not hasattr(F, 'readline'):
         F = open(F,'r')
-    return cPickle.load(F)
+    return pickle.load(F)
 
 def loads(strg):
     "Load a pickle from the current string."""
-    return cPickle.loads(strg)
+    return pickle.loads(strg)
 
 ################################################################################
 def fromfile(file, dtype=float, count=-1, sep=''):

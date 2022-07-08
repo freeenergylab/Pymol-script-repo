@@ -2,9 +2,9 @@
 import unittest, sys, tests_good, tests_bad, time
 from ZSI import *
 try:
-    import cStringIO as StringIO
+    import io as StringIO
 except ImportError:
-    import StringIO
+    import io
 
 
 """Bug [ 1520092 ] URI Bug: urllib.quote escaping reserved chars
@@ -45,15 +45,15 @@ class TestCase(unittest.TestCase):
         sw2.serialize(orig, typecode=tc2, typed=False)
         s2 = str(sw2)
 
-        print s1
-        print s2
-        self.failUnless(s1 == s2,
+        print(s1)
+        print(s2)
+        self.assertTrue(s1 == s2,
             'reserved characters used for reserved purpose should not be escaped.')
 
         ps = ParsedSoap(s2, envelope=False)
         pyobj = ps.Parse(tc2)
 
-        self.failUnless(pyobj == orig, 'parsed object should be equivalent to original')
+        self.assertTrue(pyobj == orig, 'parsed object should be equivalent to original')
 
 
 
@@ -61,11 +61,11 @@ class TestCase(unittest.TestCase):
 # Creates permutation of test options: "check", "check_any", etc
 #
 _SEP = '_'
-for t in [i[0].split(_SEP) for i in filter(lambda i: callable(i[1]), TestCase.__dict__.items())]:
+for t in [i[0].split(_SEP) for i in [i for i in list(TestCase.__dict__.items()) if callable(i[1])]]:
     test = ''
     for f in t:
         test += f
-        if globals().has_key(test): test += _SEP; continue
+        if test in globals(): test += _SEP; continue
         def _closure():
             name = test
             def _makeTestSuite():

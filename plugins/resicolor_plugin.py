@@ -6,7 +6,7 @@ from pymol import cmd
 
 import sys
 if sys.version_info[0] < 3:
-    import tkSimpleDialog
+    import tkinter.simpledialog
 else:
     from tkinter import simpledialog as tkSimpleDialog
 
@@ -45,7 +45,7 @@ def resicolor(selection):
 
 
 def getselection(app):
-    selection = tkSimpleDialog.askstring('resicolor',
+    selection = tkinter.simpledialog.askstring('resicolor',
                                        'Please enter a selection',
                                        parent=app.root)
     resicolor(selection)

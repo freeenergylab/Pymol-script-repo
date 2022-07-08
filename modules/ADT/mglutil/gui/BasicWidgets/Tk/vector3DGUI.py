@@ -10,15 +10,15 @@
 #
 #########################################################################
 
-import Tkinter, numpy as Numeric, string, math
+import tkinter, numpy as Numeric, string, math
     
 from mglutil.math.rotax import rotax
 from mglutil.gui.Misc.Tk.KeybdModMonitor import KeyboardModifierMonitor
 from mglutil.util.callback import CallbackManager
-from thumbwheel import ThumbWheel
-from optionsPanel import VectorOptionsPanel
+from .thumbwheel import ThumbWheel
+from .optionsPanel import VectorOptionsPanel
 
-class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
+class vectorGUI(tkinter.Frame, KeyboardModifierMonitor):
 
     """ This class implements a vector widget.
     The widget has a vector which can be moved within a sphere to generate
@@ -72,8 +72,8 @@ class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
         self.drawShadowZ = 0
 	self.fillShadowPlanes = 1
 
-	Tkinter.Frame.__init__(self, master)
-        Tkinter.Pack.config(self)
+	tkinter.Frame.__init__(self, master)
+        tkinter.Pack.config(self)
 
         self.callbacks = CallbackManager() # object to manage callback
                                         # functions. They get called with the
@@ -87,15 +87,15 @@ class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
         self.viewingMat = Numeric.transpose(self.viewingMatInv)
         self.createCanvas(master, size)
         self.createEntries(self.frame)
-	Tkinter.Widget.bind(self.canvas, "<ButtonPress-1>", self.mouseDown)
-	Tkinter.Widget.bind(self.canvas, "<ButtonRelease-1>", self.mouseUp)
-	Tkinter.Widget.bind(self.canvas, "<B1-Motion>", self.mouseMove)
+	tkinter.Widget.bind(self.canvas, "<ButtonPress-1>", self.mouseDown)
+	tkinter.Widget.bind(self.canvas, "<ButtonRelease-1>", self.mouseUp)
+	tkinter.Widget.bind(self.canvas, "<B1-Motion>", self.mouseMove)
 
         self.setEntries()
 
         self.opPanel = VectorOptionsPanel(master = self,
                                           title="Vector GUI Options")
-        Tkinter.Widget.bind(self.canvas, "<Button-3>", self.toggleOptPanel)
+        tkinter.Widget.bind(self.canvas, "<Button-3>", self.toggleOptPanel)
 
         if self.callback:
             self.callbacks.AddCallback(self.callback)
@@ -355,15 +355,15 @@ class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
         
 
     def createEntries(self, master):
-        self.f = Tkinter.Frame(master)
+        self.f = tkinter.Frame(master)
 	self.f.grid(column=3, rowspan=3)
 
         def fX(): self.vector = [1.,0.,0.]; self.setEntries(); self.callbacks.CallCallbacks(self.vector)
         def fY(): self.vector = [0.,1.,0.]; self.setEntries(); self.callbacks.CallCallbacks(self.vector)
         def fZ(): self.vector = [0.,0.,1.]; self.setEntries(); self.callbacks.CallCallbacks(self.vector)
-        lX = Tkinter.Button(master=self.f, text='x', command=fX)
-        lY = Tkinter.Button(master=self.f, text='y', command=fY)
-        lZ = Tkinter.Button(master=self.f, text='z', command=fZ)
+        lX = tkinter.Button(master=self.f, text='x', command=fX)
+        lY = tkinter.Button(master=self.f, text='y', command=fY)
+        lZ = tkinter.Button(master=self.f, text='z', command=fZ)
         lX.grid(row=0, column=0)
         lY.grid(row=1, column=0)
         lZ.grid(row=2, column=0)
@@ -395,26 +395,26 @@ class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
         self.thumbz.canvas.unbind("<Button-3>")
         self.thumbz.grid(row=2, column=1)
 
-        self.entryXTk = Tkinter.StringVar()
-        self.entryX = Tkinter.Entry(master=self.f, textvariable=self.entryXTk,
+        self.entryXTk = tkinter.StringVar()
+        self.entryX = tkinter.Entry(master=self.f, textvariable=self.entryXTk,
                                     width=8)
         self.entryX.bind('<Return>', self.entryX_cb)
         self.entryX.grid(row=0, column=2)
 
-        self.entryYTk = Tkinter.StringVar()
-        self.entryY = Tkinter.Entry(master=self.f, textvariable=self.entryYTk,
+        self.entryYTk = tkinter.StringVar()
+        self.entryY = tkinter.Entry(master=self.f, textvariable=self.entryYTk,
                                     width=8)
         self.entryY.bind('<Return>', self.entryY_cb)
         self.entryY.grid(row=1, column=2)
 
-        self.entryZTk = Tkinter.StringVar()
-        self.entryZ = Tkinter.Entry(master=self.f, textvariable=self.entryZTk,
+        self.entryZTk = tkinter.StringVar()
+        self.entryZ = tkinter.Entry(master=self.f, textvariable=self.entryZTk,
                                     width=8)
         self.entryZ.bind('<Return>', self.entryZ_cb)
         self.entryZ.grid(row=2, column=2)
 
-        self.entryVTk = Tkinter.StringVar()
-        self.entryV = Tkinter.Entry(master, textvariable=self.entryVTk,
+        self.entryVTk = tkinter.StringVar()
+        self.entryV = tkinter.Entry(master, textvariable=self.entryVTk,
                                     width=18)
         
         self.entryV.bind('<Return>', self.entryV_cb)
@@ -423,7 +423,7 @@ class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
 
         self.entryV.pack()
         
-	self.setButton=Tkinter.Button(master, text='normalize and set',
+	self.setButton=tkinter.Button(master, text='normalize and set',
                                       command = self.setButton_cb)
 	self.setButton.pack(side='bottom')
 
@@ -441,13 +441,13 @@ class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
 
     def createCanvas(self, master, size=200):
 
-        self.frame = Tkinter.Frame(self, relief = 'sunken', borderwidth=5)
+        self.frame = tkinter.Frame(self, relief = 'sunken', borderwidth=5)
 
         if self.name is not None:
-            self.title = Tkinter.Label(self.frame, text=self.name)
+            self.title = tkinter.Label(self.frame, text=self.name)
             self.title.pack(side=self.labelSide)
 
-	self.canvas = Tkinter.Canvas(self.frame, width=size, height=size)
+	self.canvas = tkinter.Canvas(self.frame, width=size, height=size)
 
         # set the focus so that we get keyboard events, and add callbacks
         self.canvas.bind('<KeyPress>', self.modifierDown)
@@ -518,7 +518,7 @@ class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
  #####################################################################
 
     def configure(self, **kw):
-        for key,value in kw.items():
+        for key,value in list(kw.items()):
             # the 'set parameter' callbacks
             if key=='continuous': self.setContinuous(value)
             elif key=='mode': self.setMode(value)
@@ -603,5 +603,5 @@ class vectorGUI(Tkinter.Frame, KeyboardModifierMonitor):
 if __name__ == '__main__':
     test = vectorGUI(size = 200)
     def foo(val):
-        print val
+        print(val)
     test.callbacks.AddCallback(foo)

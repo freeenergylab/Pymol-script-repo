@@ -1,6 +1,7 @@
 from numpy.testing import *
+import importlib
 set_package_path()
-import numpy.core;reload(numpy.core)
+import numpy.core;importlib.reload(numpy.core)
 from numpy.core import *
 import numpy as np
 restore_path()
@@ -119,13 +120,13 @@ class TestAlgebra(NumpyTestCase):
         mA = matrix(A)
 
         B = identity(2)
-        for i in xrange(6):
+        for i in range(6):
             assert allclose((mA ** i).A, B)
             B = dot(B, A)
 
         Ainv = linalg.inv(A)
         B = identity(2)
-        for i in xrange(6):
+        for i in range(6):
             assert allclose((mA ** -i).A, B)
             B = dot(B, Ainv)
 

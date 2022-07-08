@@ -11,7 +11,7 @@
 import sys,unittest
 from time import sleep
 from mglutil.gui.BasicWidgets.Tk.toolbarbutton import ToolBarButton
-import Tkinter,Pmw
+import tkinter,Pmw
 
 
 buttonFuncs = {}
@@ -38,7 +38,7 @@ class ToolBarButtonBaseTest(unittest.TestCase):
     def test_01_constructor(self):
         # test if we can display a button
         global widget
-        widget = Tkinter.Frame()
+        widget = tkinter.Frame()
         widget.balloons = Pmw.Balloon(widget)
     
         ToolBarButton(balloonmaster=widget, master=widget, name='smiley',
@@ -53,7 +53,7 @@ class ToolBarButtonBaseTest(unittest.TestCase):
         # test if we can have multiple buttons
         global widget
         global buttonFuncs
-        widget = Tkinter.Frame()
+        widget = tkinter.Frame()
         widget.balloons = Pmw.Balloon(widget)
         # add separator, 5 smilies, separator
         for key, func, balloon in [
@@ -80,7 +80,7 @@ class ToolBarButtonBaseTest(unittest.TestCase):
         global buttonFuncs
         global pushedButton
 
-        widget = Tkinter.Frame()
+        widget = tkinter.Frame()
         widget.balloons = Pmw.Balloon(widget)
 
 

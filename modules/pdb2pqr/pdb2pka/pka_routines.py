@@ -10,22 +10,22 @@ __author__="Jens Erik Nielsen, Todd Dolinsky, Yong Huang, Tommy Carstensen"
 debug=False
 import optparse
 import sys, os
-from pKa_base import *
+from .pKa_base import *
 
 if debug:
-    from Tkinter import *
-    from charge_mon import *
+    from tkinter import *
+    from .charge_mon import *
 
     CM=charge_mon()
 else:
     CM=None
 
-from pka_help import *
+from .pka_help import *
     
 #
 # find the path to the script, and to pdb2pqr
 #
-print __file__
+print(__file__)
 try:
     file_name=__file__
     if file_name[:2]=='./':
@@ -71,11 +71,11 @@ from src.forcefield import *
 from src.routines import *
 from src.protein import *
 from src.server import *
-from StringIO import *
+from io import *
 from src.hydrogens import *
 
-import ligandclean.ligff
-from apbs import *
+from . import ligandclean.ligff
+from .apbs import *
 
 
 #
@@ -131,7 +131,7 @@ class pKaRoutines:
     def insert_new_titratable_group(self,ligand_titratable_groups):
         """Insert the new titratable groups in to self.pkagroups"""
         group_type=ligand_titratable_groups['type']
-        if self.pKagroups.has_key(group_type):
+        if group_type in self.pKagroups:
             #
             # Now modify the group so that it will correspond to the group
             # we have in the ligand
@@ -161,7 +161,7 @@ class pKaRoutines:
                         #
                         # Change the name of the atom that the H is bound to
                         #
-                        if atom_map.has_key(conformation.boundatom):
+                        if conformation.boundatom in atom_map:
                             conformation.boundatom=atom_map[conformation.boundatom]
                         #
                         # Change the name of the hydrogen
@@ -172,7 +172,7 @@ class pKaRoutines:
                         # And then for the individual atom names
                         #
                         for atom in conformation.atoms:
-                            if atom_map.has_key(atom.name):
+                            if atom.name in atom_map:
                                 atom.name=atom_map[atom.name]
                             elif atom.name==oldhname:
                                 atom.name=conformation.hname
@@ -224,7 +224,7 @@ class pKaRoutines:
         pKaGroup = pKa.pKaGroup
         ambiguity = pKa.amb
 
-        print "-----> Generating initial coarse grid 3D dielectric and kappa maps"
+        print("-----> Generating initial coarse grid 3D dielectric and kappa maps")
         titration=pKaGroup.DefTitrations[0]
         possiblestates = titration.allstates
         state=possiblestates[0]
@@ -271,7 +271,7 @@ class pKaRoutines:
         """
         # calculate potential difference of backbone atoms when each titratable group is set to charged and neutral states
         """
-        import cPickle
+        import pickle
         potentialDifference={}
         for pKa in self.pKas:
             self.get_interaction_energies_setup(pKa,mode='pKD')
@@ -281,7 +281,7 @@ class pKaRoutines:
             ambiguity = pKa.amb
             
             titgroup='%s:%s:%s' %(residue.chainID, string.zfill(residue.resSeq,4),pKaGroup.name)
-            if not potentialDifference.has_key(titgroup):
+            if titgroup not in potentialDifference:
                 potentialDifference[titgroup]={}
                 for atom in self.protein.getAtoms():
                     if atom.name in ['N','H','C']:
@@ -329,7 +329,7 @@ class pKaRoutines:
         defaultprotonationstates = {}
         for residue in residues:
             for atom in residue.atoms:
-                print "%s" % (atom)
+                print("%s" % (atom))
             key = residue.name + '_' + residue.chainID + '_' + str(residue.resSeq)
             if residue.name in ["ASP", "GLU"]:
                 defaultprotonationstates[key] = "0"
@@ -370,12 +370,12 @@ class pKaRoutines:
         # Loop over each titration
         #
         self.all_potentials={}
-        if not self.matrix.has_key(pKa):
+        if pKa not in self.matrix:
             self.matrix[pKa]={}
             self.all_potentials[pKa]={}
         #
         for titration in pKaGroup.DefTitrations:
-            if not self.matrix[pKa].has_key(titration):
+            if titration not in self.matrix[pKa]:
                 self.matrix[pKa][titration]={}
                 self.all_potentials[pKa][titration]={}
             #
@@ -426,7 +426,7 @@ class pKaRoutines:
 
     def get_interaction_energies(self,pKa_center,titration_center,state_center,mode):
         """Get the potentials and charges at all titratable groups"""
-        print '------------>Charge - charge interactions for group: %s, state: %s' %(pKa_center.residue.resSeq,self.get_state_name(titration_center.name, state_center))
+        print('------------>Charge - charge interactions for group: %s, state: %s' %(pKa_center.residue.resSeq,self.get_state_name(titration_center.name, state_center)))
         intenename=self.pdbfile_name+'.intene_%s_%s_%s_%s' %(titration_center.name,
                                                              pKa_center.residue.chainID,
                                                              pKa_center.residue.resSeq,
@@ -441,8 +441,8 @@ class pKaRoutines:
         import os
         if os.path.isfile(intenename):
             fd=open(intenename)
-            import cPickle
-            savedict=cPickle.load(fd)
+            import pickle
+            savedict=pickle.load(fd)
             fd.close()
             #savedict_loaded=1
             #
@@ -453,19 +453,19 @@ class pKaRoutines:
                     import sys
                     sys.stdout.flush()
                     fd=open(allpotsname)
-                    allsavedict=cPickle.load(fd)
+                    allsavedict=pickle.load(fd)
                     fd.close()
                     read_allpots=1
                 except EOFError:
-                    print
-                    print 'File %s is corrupt.\nDeleting and continuing...' %allpotsname
+                    print()
+                    print('File %s is corrupt.\nDeleting and continuing...' %allpotsname)
                     import os
                     os.unlink(allpotsname)
                     allsavedict={}
             else:
                 allsavedict={}
         else:
-            print 'Not found',intenename
+            print('Not found',intenename)
             savedict={}
             allsavedict={}
         #
@@ -494,12 +494,12 @@ class pKaRoutines:
             #
             # Loop over each titration
             #
-            if not energies.has_key(pKa):
+            if pKa not in energies:
                 energies[pKa]={}
                 all_potentials[pKa]={}
             #
             for titration in pKaGroup.DefTitrations:
-                if not energies[pKa].has_key(titration):
+                if titration not in energies[pKa]:
                     energies[pKa][titration]={}
                     all_potentials[pKa][titration]={}
                 #
@@ -525,10 +525,10 @@ class pKaRoutines:
                     #
                     # Check if we have values for this calculation already
                     #
-                    if savedict.has_key(name):
+                    if name in savedict:
                         energies[pKa][titration][state]= savedict[name]
                         if mode=='pKD':
-                            if allsavedict.has_key(name):
+                            if name in allsavedict:
                                 all_potentials[pKa][titration][state]=allsavedict[name]
                         continue
                     #
@@ -557,8 +557,8 @@ class pKaRoutines:
                     # Switch to the particular state we want to measure for
                     #
                     self.hydrogenRoutines.switchstate('pKa', ambiguity, self.get_state_name(titration.name,state))
-                    print titration
-                    print titration.name
+                    print(titration)
+                    print(titration.name)
                     for other2_state in titration.allstates:
                         pKa.residue.stateboolean[self.get_state_name(titration.name,other2_state)]=False
                     pKa.residue.stateboolean[self.get_state_name(titration.name,other2_state)]=True
@@ -609,9 +609,9 @@ class pKaRoutines:
                     # Check if this is the charged state
                     #
                     if state==start_state[0]:
-                        print
-                        print 'ENERGY; %f' %energy
-                        print
+                        print()
+                        print('ENERGY; %f' %energy)
+                        print()
                         #raw_input('continue?')
                         if abs(energy)<self.options.pairene and mode!='pKD':
                             #
@@ -623,11 +623,11 @@ class pKaRoutines:
                                 energies[pKa][titration][stateset]=0.0
                                 name2='%s_%s_%s_%s' %(titration.name,pKa.residue.chainID,pKa.residue.resSeq,self.get_state_name(titration.name,stateset))
                                 savedict[name2]=energies[pKa][titration][stateset]
-                                print
-                                print
-                                print '=======SKIPPING NEUTRAL STATES=============='
-                                print
-                                print
+                                print()
+                                print()
+                                print('=======SKIPPING NEUTRAL STATES==============')
+                                print()
+                                print()
                     #
                     # Save in dict
                     #
@@ -657,13 +657,13 @@ class pKaRoutines:
         #
         if calculated_energy:
             fd=open(intenename,'w')
-            import cPickle
-            cPickle.dump(savedict,fd)
+            import pickle
+            pickle.dump(savedict,fd)
             fd.close()
             if mode=='pKD' and not read_allpots:
                 fd=open(allpotsname,'w')
-                import cPickle
-                cPickle.dump(allsavedict,fd)
+                import pickle
+                pickle.dump(allsavedict,fd)
                 fd.close()
         return energies,all_potentials
 
@@ -685,7 +685,7 @@ class pKaRoutines:
         #
         # Now calculate the titration curves
         #
-        import pMC_mult
+        from . import pMC_mult
         #
         # Matrix needs to be linear for transport to c++
         #
@@ -749,19 +749,19 @@ class pKaRoutines:
         #
         # Call our little C++ module
         #
-        print "acidbase: %s" % (acidbase)
+        print("acidbase: %s" % (acidbase))
         FAST=pMC_mult.MC(intpkas,linear,acidbase,state_counter,is_charged_state)
         FAST.set_MCsteps(int(mcsteps))
-        print 'Calculating titration curves'
+        print('Calculating titration curves')
         pKavals=FAST.calc_pKas(phstart,phend,phstep)
         count=0
         #
         # done
         #
-        print
-        print
-        print 'Final pKa values'
-        print
+        print()
+        print()
+        print('Final pKa values')
+        print()
         pkas={}
         for pKa in self.pKas:
             pKaGroup = pKa.pKaGroup
@@ -769,7 +769,7 @@ class pKaRoutines:
             for titration in pKaGroup.DefTitrations:
                 name=pKa.uniqueid
                 pkas[name]={'pKa':pKavals[count]}
-                print "name: %s, PKAS[name]: %s" % (name, pkas[name])
+                print("name: %s, PKAS[name]: %s" % (name, pkas[name]))
                 pkas[name]['modelpK']=titration.modelpKa
                 #
                 # Find an uncharged reference state
@@ -792,8 +792,8 @@ class pKaRoutines:
                 pkas[name]['desolv']=dpKa_desolv
                 pkas[name]['backgr']=dpKa_backgr
 
-                print 'Desolvation',pKa.desolvation
-                print 'Background',pKa.background
+                print('Desolvation',pKa.desolvation)
+                print('Background',pKa.background)
 
                 possiblestates = titration.allstates
                 #
@@ -808,14 +808,14 @@ class pKaRoutines:
                 pos_states.sort()
                 for state in pos_states:
                     pos_statenames.append(self.get_state_name(titration.name,state))
-                print 'States',pos_statenames
+                print('States',pos_statenames)
                 for state in pos_states:
                     crg=self.is_charged(pKa,titration,state)
                     if abs(crg)>0.1:
                         chg_intpkas.append(pKa.intrinsic_pKa[state])
                     else:
                         neut_intpkas.append(pKa.intrinsic_pKa[state])
-                    print 'State: %6s, charge: %5.2f, intpka: %5.3f' %(self.get_state_name(titration.name,state),crg,pKa.intrinsic_pKa[state])
+                    print('State: %6s, charge: %5.2f, intpka: %5.3f' %(self.get_state_name(titration.name,state),crg,pKa.intrinsic_pKa[state]))
               
                 pkas[name]['intpka']=pKa.simulated_intrinsic_pKa
                 pkas[name]['delec']=pKavals[count]-pkas[name]['intpka']
@@ -824,14 +824,14 @@ class pKaRoutines:
                 #
                 pKa.pKa=pKavals[count]
                 count=count+1
-                print 'Simulated intrinsic pKa: %5.3f, delec: %5.3f' %(pkas[name]['intpka'],pkas[name]['delec'])
-                print '%s final pKa: %5.2f' %(pKa.uniqueid,pKa.pKa)
-                print '============================================='
-                print
+                print('Simulated intrinsic pKa: %5.3f, delec: %5.3f' %(pkas[name]['intpka'],pkas[name]['delec']))
+                print('%s final pKa: %5.2f' %(pKa.uniqueid,pKa.pKa))
+                print('=============================================')
+                print()
         #raw_input('Continue?')
         #
         # Write a WHAT IF -style pKa file
-        import pKaIO_compat
+        from . import pKaIO_compat
         X=pKaIO_compat.pKaIO()
         X.write_pka('%s.PKA.DAT' %self.pdbfile_name,pkas,format='pdb2pka')
         #
@@ -839,7 +839,7 @@ class pKaRoutines:
         #
         X.desolv={}
         X.backgr={}
-        for name in pkas.keys():
+        for name in list(pkas.keys()):
             X.desolv[name]=pkas[name]['desolv']
             X.backgr[name]=pkas[name]['backgr']
         X.write_desolv('%s.DESOLV.DAT' %self.pdbfile_name,format='pdb2pka')
@@ -866,8 +866,8 @@ class pKaRoutines:
                 if pKavals[count+1]==999.0 and pKavals[count+2]==-999.0:
                     count=count+2
                 else:
-                    print 'Something is wrong'
-                    print pKavals[count:count+30]
+                    print('Something is wrong')
+                    print(pKavals[count:count+30])
                     import os
                     os._exit(0)
         #
@@ -949,7 +949,7 @@ class pKaRoutines:
                                 #
                                 # Insert this value in the corrected matrix
                                 #
-                                print pKa1.uniqueid,titration1.name,state1,pKa2.uniqueid,titration2.name,state2,value
+                                print(pKa1.uniqueid,titration1.name,state1,pKa2.uniqueid,titration2.name,state2,value)
                                 corrected_matrix[pKa1][titration1][state1][pKa2][titration2][state2]=value
         #
         # Make matrix symmetric
@@ -1040,20 +1040,20 @@ class pKaRoutines:
         # Print what we got
         #
         for pKa in self.pKas:
-            print "======== Residue: %s ========" % (pKa.residue)
-            print '     State\tModel pKa\tDesolvation\tBackground'
+            print("======== Residue: %s ========" % (pKa.residue))
+            print('     State\tModel pKa\tDesolvation\tBackground')
             for titration in pKa.pKaGroup.DefTitrations:
                 for state in titration.allstates:
-                    print state
-                    print self.get_state_name(titration.name,state)
-                    print pKa.desolvation[self.get_state_name(titration.name,state)]
-                    print pKa.background[self.get_state_name(titration.name,state)]
-                    print '%10s\t%5.3f\t\t%5.3f\t\t%5.3f' %(self.get_state_name(titration.name,state),
+                    print(state)
+                    print(self.get_state_name(titration.name,state))
+                    print(pKa.desolvation[self.get_state_name(titration.name,state)])
+                    print(pKa.background[self.get_state_name(titration.name,state)])
+                    print('%10s\t%5.3f\t\t%5.3f\t\t%5.3f' %(self.get_state_name(titration.name,state),
                                                             titration.modelpKa,
                                                             pKa.desolvation[self.get_state_name(titration.name,state)],
-                                                            pKa.background[self.get_state_name(titration.name,state)])
-        print
-        print
+                                                            pKa.background[self.get_state_name(titration.name,state)]))
+        print()
+        print()
         #
         # We calculate an intrinsic pKa for every possible <startstate> -> <endstate> transition
         #
@@ -1091,9 +1091,9 @@ class pKaRoutines:
                         # Now calculate intrinsic pKa
                         #
                         intpKa=titration.modelpKa+dpKa_desolv+dpKa_backgr   
-                        print 'Energy difference for %6s   -> %6s [reference state] is %5.2f pKa units' %(self.get_state_name(titration.name,state),
+                        print('Energy difference for %6s   -> %6s [reference state] is %5.2f pKa units' %(self.get_state_name(titration.name,state),
                                                                                                           self.get_state_name(titration.name,ref_state),
-                                                                                                          intpKa)
+                                                                                                          intpKa))
                         pKa.intrinsic_pKa[state]=intpKa
                     else:
                         #
@@ -1110,9 +1110,9 @@ class pKaRoutines:
                             dpKa_desolv=-dpKa_desolv
                             dpKa_backgr=-dpKa_backgr
                         dpKa=dpKa_desolv+dpKa_backgr
-                        print 'Energy difference for %6s   -> %6s [reference state] is %5.2f pKa units' %(self.get_state_name(titration.name,state),
+                        print('Energy difference for %6s   -> %6s [reference state] is %5.2f pKa units' %(self.get_state_name(titration.name,state),
                                                                                                           self.get_state_name(titration.name,ref_state),
-                                                                                                          dpKa)
+                                                                                                          dpKa))
                         pKa.intrinsic_pKa[state]=dpKa
             # -----------------------------------------------------------------
             # Get the intrinsic pKa with a small MC calculation
@@ -1204,7 +1204,7 @@ class pKaRoutines:
             pKaGroup = pKa.pKaGroup
             ambiguity = pKa.amb
 
-            print "-----> Finding Background Interaction Energy for %s %s" %(residue.name, residue.resSeq)
+            print("-----> Finding Background Interaction Energy for %s %s" %(residue.name, residue.resSeq))
             #
             # Loop over all titrations in this group
             #
@@ -1221,7 +1221,7 @@ class pKaRoutines:
                     # Set the name for this energy
                     #
                     name='%s_%s_%s_%s' %(titration.name,pKa.residue.chainID,pKa.residue.resSeq,self.get_state_name(titration.name,state))
-                    if savedict.has_key(name):
+                    if name in savedict:
                         pKa.background[self.get_state_name(titration.name,state)] = savedict[name]
                         continue
                     #
@@ -1267,7 +1267,7 @@ class pKaRoutines:
                     #
                     # Switch the state for the group in question
                     #
-                    print "----------> Calculating Background for state %s" % (self.get_state_name(titration.name,state))
+                    print("----------> Calculating Background for state %s" % (self.get_state_name(titration.name,state)))
                     self.hydrogenRoutines.switchstate('pKa', ambiguity, self.get_state_name(titration.name,state)) 
 
                     # Not allowing current protonation state to be explored during H-bond optimization
@@ -1336,9 +1336,9 @@ class pKaRoutines:
                     #
                     if self.routines.getbumpscore(pKa.residue) > 100:
                         energy=100000.0 # State will never be visited
-                        print 'Excluded state'
-                        print pKa.residue,titration,state
-                        print self.get_state_name(titration.name,state)
+                        print('Excluded state')
+                        print(pKa.residue,titration,state)
+                        print(self.get_state_name(titration.name,state))
                         
                     #energy=energy+self.routines.getbumpscore()
                     #
@@ -1346,13 +1346,13 @@ class pKaRoutines:
                     # His tautomers etc.
                     #
                     import math
-                    print self.get_state_name(titration.name,state)
+                    print(self.get_state_name(titration.name,state))
                     if self.get_state_name(titration.name,state) in ['ASH1t','ASH2t','GLH1t','GLH2t']:
                         energy=energy+math.log(10)*1.99
-                        print 'Modified energy of trans state'
-                        print titration.name
-                        print pKa.residue
-                        print self.get_state_name(titration.name,state)
+                        print('Modified energy of trans state')
+                        print(titration.name)
+                        print(pKa.residue)
+                        print(self.get_state_name(titration.name,state))
                     elif self.get_state_name(titration.name,state) in ['JUNKHIS']:
                         energy=energy+0.0
                     #
@@ -1362,7 +1362,7 @@ class pKaRoutines:
                     #
                     # Save it under a unique name
                     #
-                    print 'Saving energy as',name
+                    print('Saving energy as',name)
                     savedict[name]=energy
                     #
                     # Dump the pickle file
@@ -1402,7 +1402,7 @@ class pKaRoutines:
             pKaGroup = pKa.pKaGroup
             ambiguity = pKa.amb
 
-            print "-----> Calculating Desolvation Energy for %s %s" %(residue.name, residue.resSeq)
+            print("-----> Calculating Desolvation Energy for %s %s" %(residue.name, residue.resSeq))
             for titration in pKaGroup.DefTitrations:
                 #
                 # Get all possible states for this group
@@ -1449,10 +1449,10 @@ class pKaRoutines:
                     residue.stateboolean[self.get_state_name(titration.name, state)] = True
                     name='%s_%s_%s_%s' %(titration.name,pKa.residue.chainID,pKa.residue.resSeq,self.get_state_name(titration.name,state))
                     #
-                    if savedict.has_key(name):
+                    if name in savedict:
                         pKa.desolvation[self.get_state_name(titration.name,state)] = savedict[name]
                         continue
-                    print "---------> Calculating desolvation energy for residue %s state %s in solvent" %(residue.name,self.get_state_name(titration.name,state))
+                    print("---------> Calculating desolvation energy for residue %s state %s in solvent" %(residue.name,self.get_state_name(titration.name,state)))
                     #
                     # Center the map on our set of atoms
                     #
@@ -1491,7 +1491,7 @@ class pKaRoutines:
                     #
                     # Run APBS again, - this time for the state in the protein
                     #
-                    print '--------> Calculating self energy for residue %s %d state %s in the protein' %(residue.name,residue.resSeq,self.get_state_name(titration.name,state))
+                    print('--------> Calculating self energy for residue %s %d state %s in the protein' %(residue.name,residue.resSeq,self.get_state_name(titration.name,state)))
 
                     if debug:
                         CM.set_calc('Desolv prot %s %s' %(pKa.residue.resSeq,state))
@@ -1501,12 +1501,12 @@ class pKaRoutines:
                     # Calculate the difference in self energy for this state
                     #
                     desolvation = (proteinEnergy - solutionEnergy)/2.0 # Reaction field energy
-                    print 'Desolvation for %s %d in state %s is %5.3f '  \
-                          %(residue.name,residue.resSeq,self.get_state_name(titration.name,state),desolvation)
-                    print
-                    print '======================================='
+                    print('Desolvation for %s %d in state %s is %5.3f '  \
+                          %(residue.name,residue.resSeq,self.get_state_name(titration.name,state),desolvation))
+                    print()
+                    print('=======================================')
                     pKa.desolvation[self.get_state_name(titration.name,state)] = desolvation
-                    print 'Saving energy as',name
+                    print('Saving energy as',name)
                     savedict[name]=desolvation
 
                     #
@@ -1571,7 +1571,7 @@ class pKaRoutines:
                         #
                         # Calculate the self energy for each this residue in solution and in the protein
                         #        
-                        print "---------> Calculating desolvation energy for residue %s in solvent" %(residue.name)
+                        print("---------> Calculating desolvation energy for residue %s in solvent" %(residue.name))
                         #
                         # Center the map on our set of atoms
                         #
@@ -1588,15 +1588,15 @@ class pKaRoutines:
                         for other_pKa in self.pKas:
                             resname=other_pKa.residue.__str__()
                             #print resname
-                            if fix_states.has_key(resname):
+                            if resname in fix_states:
                                 for fix_record in fix_states[resname]:
                                     fix_titration=fix_record['titgroup']
                                     fix_state=fix_record['state']
                                     for other_titration in other_pKa.pKaGroup.DefTitrations:
                                         #print other_titration.name
                                         if other_titration.name==fix_titration:
-                                            print 'other_titration',other_titration
-                                            print 'Fixing protonation state of %s to %s' %(other_pKa.residue.__str__(),fix_state)
+                                            print('other_titration',other_titration)
+                                            print('Fixing protonation state of %s to %s' %(other_pKa.residue.__str__(),fix_state))
                                             self.hydrogenRoutines.switchstate('pKa', other_pKa.amb, fix_state)
                                             #
                                             # Disallow all other states during Hbond optimization
@@ -1620,7 +1620,7 @@ class pKaRoutines:
                                                 'NTR':'H3+H2',
                                                 'CTR':'CTR-'}
                                 for other_titration in other_pKa.pKaGroup.DefTitrations:
-                                    if default_states.has_key(other_titration.name):
+                                    if other_titration.name in default_states:
                                         self.hydrogenRoutines.switchstate('pKa',other_pKa.amb,default_states[other_titration.name])
                                         #
                                         # Disallow all other states
@@ -1656,14 +1656,14 @@ class pKaRoutines:
                         # Run APBS again, - this time for the state in the protein
                         #
                         
-                        print '--------> Calculating self energy for residue %d %s  in the protein' %(residue.resSeq,residue.name)
+                        print('--------> Calculating self energy for residue %d %s  in the protein' %(residue.resSeq,residue.name))
                         proteinEnergy = self.get_elec_energy(self.getAPBSPotentials(save_results=False),atomlist)
                         #
                         # Calculate the difference in self energy for this state
                         #
                         desolvation = (proteinEnergy - solutionEnergy)/2.0 # Reaction field energy
-                        print 'Desolvation for %s %d is %5.3f kT'  \
-                              %(residue.name,residue.resSeq,desolvation)
+                        print('Desolvation for %s %d is %5.3f kT'  \
+                              %(residue.name,residue.resSeq,desolvation))
                         #
                         # Calculate electrostatic interaction energy
                         #
@@ -1712,8 +1712,8 @@ class pKaRoutines:
                         #
                         interaction_energy=self.get_elec_energy(potentials,atomlist)
                         
-        print 'Desolvation energy: %5.3f kT' %desolvation
-        print 'Interaction energy: %5.3f kT' %interaction_energy
+        print('Desolvation energy: %5.3f kT' %desolvation)
+        print('Interaction energy: %5.3f kT' %interaction_energy)
         return desolvation, interaction_energy, proteinEnergy/2.0,solutionEnergy/2.0
 
 
@@ -1739,7 +1739,7 @@ class pKaRoutines:
         #
         center={}
         extent={}
-        for axis in minmax.keys():
+        for axis in list(minmax.keys()):
             extent[axis]=minmax[axis][1]-minmax[axis][0]
             center[axis]=extent[axis]/2.0+minmax[axis][0]
         return [center['x'],center['y'],center['z']]
@@ -1788,9 +1788,9 @@ class pKaRoutines:
             if found==len(atomlist):
                 break
         if abs(totphi)<0.01 or abs(totcrg)<0.01:
-            print 'total abs phi',totphi
-            print 'total abs crg',totcrg
-            print 'net charge   ',netcrg
+            print('total abs phi',totphi)
+            print('total abs crg',totcrg)
+            print('net charge   ',netcrg)
             raise 'Something is rotten'
         
         return energy
@@ -1811,7 +1811,7 @@ class pKaRoutines:
         #
         if save_results:
             result_file=os.path.join(phidir,'%s_%s_%s.potentials' %(self.apbs_setup.type,group.uniqueid,self.get_state_name(titration.name,state)))
-            import cPickle
+            import pickle
             loaded=None
             if os.path.isfile(result_file):
                 #
@@ -1819,7 +1819,7 @@ class pKaRoutines:
                 #
                 fd=open(result_file,'rb')
                 try:
-                    potentials=cPickle.load(fd)
+                    potentials=pickle.load(fd)
                     fd.close()
                     loaded=1
                 except:
@@ -1837,7 +1837,7 @@ class pKaRoutines:
                 self.APBS=None
             if save_results:
                 fd=open(result_file,'wb')
-                cPickle.dump(potentials,fd)
+                pickle.dump(potentials,fd)
                 fd.close()
         return potentials
 
@@ -1874,7 +1874,7 @@ class pKaRoutines:
                 text = "Could not find radius for atom %s" % atomname
                 text += " in residue %s %i" % (residue.name, residue.resSeq)
                 text += " while attempting to set radius!"
-                raise ValueError, text
+                raise ValueError(text)
     #
     # ------------------------------------
     #
@@ -1902,7 +1902,7 @@ class pKaRoutines:
                 text = "Could not find charge for atom %s" % atomname
                 text += " in residue %s %i" % (residue.name, residue.resSeq)
                 text += " while attempting to set charge!"
-                raise ValueError, text
+                raise ValueError(text)
         return
     #
     # ----------------------------
@@ -1931,7 +1931,7 @@ class pKaRoutines:
                             text = "Could not find radius for atom %s " % atomname
                             text +="in residue %s %i" % (residue.name, residue.resSeq)
                             text += " while attempting to set all radii!"
-                            raise ValueError, text
+                            raise ValueError(text)
     #
     # -------------------------------
     #
@@ -1981,8 +1981,8 @@ class pKaRoutines:
             charge, radius = self.forcefield.getParams1(residue, atomname)
             initialmap[atomname] = charge
             if charge is None:
-                print atomname,charge
-                print residue.isCterm
+                print(atomname,charge)
+                print(residue.isCterm)
                 raise 'Charge on atom is None'
             sum=sum+charge
         if abs(sum)<0.001:
@@ -2004,7 +2004,7 @@ class pKaRoutines:
 
                 charge, radius = self.forcefield.getParams1(residue, atomname)
                 sum=sum+charge
-                if initialmap.has_key(atomname):
+                if atomname in initialmap:
                     initcharge = initialmap[atomname]
                     if charge != initcharge:
                         if not atomname in atomnames:
@@ -2015,7 +2015,7 @@ class pKaRoutines:
             #
             # Check that no atoms were removed
             #
-            for atom in initialmap.keys():
+            for atom in list(initialmap.keys()):
                 if not atom in residue.get('map'):
                     atomnames.append(atom)
         #
@@ -2091,8 +2091,8 @@ class pKaRoutines:
             # Did we add anything?
             #
             if added is None and sum>0.001:
-                print sum
-                print atomnames
+                print(sum)
+                print(atomnames)
                 raise 'Could not find integer charge state'
         #
         # Did we just want a neutral state identification?
@@ -2105,7 +2105,7 @@ class pKaRoutines:
         # No, we wanted the atomnames
         #
         if atomnames==[]:
-            print 'Did not find any atoms for ',residue.resSeq
+            print('Did not find any atoms for ',residue.resSeq)
             raise 'Something wrong with charges'
 
         for atomname in atomnames:
@@ -2132,13 +2132,13 @@ class pKaRoutines:
         """
         pKalist = []
         
-        print "Finding Titratable groups....",
+        print("Finding Titratable groups....", end=' ')
         import sys
         sys.stdout.flush()
         if self.verbose:
-            print
+            print()
         #
-        pKagroupList=self.pKagroups.keys()
+        pKagroupList=list(self.pKagroups.keys())
         #
         for chain in self.protein.getChains():
             for residue in chain.get("residues"):
@@ -2149,7 +2149,7 @@ class pKaRoutines:
                         thispKa = pKa(residue, self.pKagroups[group], amb)
                         pKalist.append(thispKa)
                         if self.verbose:
-                            print "\t%s %s" % (resname, residue.resSeq)
+                            print("\t%s %s" % (resname, residue.resSeq))
                     elif group=='NTR':
                         if residue.isNterm:
                             #
@@ -2159,7 +2159,7 @@ class pKaRoutines:
                             thispKa=pKa(residue,self.pKagroups[group],amb)
                             pKalist.append(thispKa)
                             if self.verbose:
-                                print "\t%s %s" % (resname, residue.resSeq)
+                                print("\t%s %s" % (resname, residue.resSeq))
                     elif group=='CTR':
                         if residue.isCterm:
                             #
@@ -2169,7 +2169,7 @@ class pKaRoutines:
                             thispKa=pKa(residue,self.pKagroups[group],amb)
                             pKalist.append(thispKa)
                             if self.verbose:
-                                print "\t%s %s" % (resname, residue.resSeq)
+                                print("\t%s %s" % (resname, residue.resSeq))
         #
         # Find a neutral state for each group
         #
@@ -2212,7 +2212,7 @@ class pKaRoutines:
         if amb == None:
             text = "Could not find hydrogen ambiguity "
             text += "for titratable group %s!" % group
-            raise ValueError, text
+            raise ValueError(text)
         return amb
 
     #
@@ -2237,7 +2237,7 @@ class pKaRoutines:
                          'CTR01c': '1', 'CTR01t': '2', 'CTR02c': '3', 'CTR02t': '4', 'CTR-': '0'}
         filename = TITRATIONFILE
         if not os.path.isfile(TITRATIONFILE):
-            raise ValueError, "Could not find TITRATION.DAT!"
+            raise ValueError("Could not find TITRATION.DAT!")
         file = open(filename)
         
         while 1:
@@ -2254,18 +2254,18 @@ class pKaRoutines:
                 line = file.readline()
                 if line[:8] != 'Residue:':
                     text = "Wrong line found when looking for 'Residue'"
-                    raise ValueError, "%s: %s" % (text, line)
+                    raise ValueError("%s: %s" % (text, line))
                 
                 resname = string.strip(string.split(line)[1])
             
                 line = file.readline()
                 if line[:10] != 'Grouptype:':
                     text = "Wrong line found when looking for 'Grouptype'"
-                    raise ValueError, "%s: %s" % (text, line)
+                    raise ValueError("%s: %s" % (text, line))
                 
                 type = string.lower(string.strip(string.split(line)[1]))
                 if type != 'acid' and type != 'base':
-                    raise ValueError, 'Group type must be acid or base!'
+                    raise ValueError('Group type must be acid or base!')
 
                 line = file.readline()
                 while 1:  
@@ -2282,7 +2282,7 @@ class pKaRoutines:
 
                     if line[:11] != 'Transition:':
                         text = "Wrong line found when looking for 'Transition:'"
-                        raise ValueError, "%s: %s" % (text, line)
+                        raise ValueError("%s: %s" % (text, line))
                     
                     split=string.split(line[11:],'->')
                     for number in string.split(split[0], ','):
@@ -2301,7 +2301,7 @@ class pKaRoutines:
                     #
                     if line[:10]!='Model_pKa:':
                         text = "Wrong line found when looking for 'Model_pKa'"
-                        raise ValueError, "%s: %s" % (text, line)
+                        raise ValueError("%s: %s" % (text, line))
                        
                     modelpKa = float(string.split(line)[1])
 
@@ -2349,7 +2349,7 @@ class pKaRoutines:
 #
 
 def smooth(xdiel,ydiel,zdiel):
-    print '\nSmooting dielectric constant using Gaussian filter:\n'
+    print('\nSmooting dielectric constant using Gaussian filter:\n')
     
     diel=[xdiel,ydiel,zdiel]
     for d in diel:

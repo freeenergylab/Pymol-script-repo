@@ -43,7 +43,7 @@ n = 1.33  : 	Refractive index of the medium. water=1.33, protein=1.4, n2MGuHCl=1
 NA = 6.02214179e+023 # (units: Number*mol-1 )Avogadros number
 '''
 
-from __future__ import print_function
+
 
 try:
     from pymol import cmd

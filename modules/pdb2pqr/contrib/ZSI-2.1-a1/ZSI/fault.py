@@ -13,7 +13,7 @@ from ZSI.wstools.Namespaces import SOAP, ZSI_SCHEMA_URI
 from ZSI.wstools.c14n import Canonicalize
 from ZSI.TC import ElementDeclaration
 
-import traceback, cStringIO as StringIO
+import traceback, io as StringIO
 
 
 class Detail:
@@ -259,4 +259,4 @@ def FaultFromFaultMessage(ps):
                 pyobj.faultactor, detailany)
 
 
-if __name__ == '__main__': print _copyright
+if __name__ == '__main__': print(_copyright)

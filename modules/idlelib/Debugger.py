@@ -1,17 +1,17 @@
 import os
 import bdb
 import types
-from Tkinter import Frame, Button, Entry, Checkbutton, Label, Scrollbar, \
+from tkinter import Frame, Button, Entry, Checkbutton, Label, Scrollbar, \
                     Canvas, BooleanVar
-from Tkconstants import W, LEFT, DISABLED, X, Y, BOTH, NW, GROOVE, RIGHT
+from tkinter.constants import W, LEFT, DISABLED, X, Y, BOTH, NW, GROOVE, RIGHT
 
-import macosxSupport
-from WindowList import ListedToplevel
-from ScrolledList import ScrolledList
-from configHandler import idleConf
+from . import macosxSupport
+from .WindowList import ListedToplevel
+from .ScrolledList import ScrolledList
+from .configHandler import idleConf
 
 if idleConf.GetOption('main', 'General', 'use-ttk', type='int'):
-    from ttk import Frame, Button, Checkbutton, Scrollbar
+    from tkinter.ttk import Frame, Button, Checkbutton, Scrollbar
 
 class Idb(bdb.Bdb):
 
@@ -105,7 +105,7 @@ class Debugger:
         bl.append(b)
         self.bstep = b = Button(bframe, text="Step", command=self.step)
         bl.append(b)
-        self.bnext = b = Button(bframe, text="Over", command=self.next)
+        self.bnext = b = Button(bframe, text="Over", command=self.__next__)
         bl.append(b)
         self.bret = b = Button(bframe, text="Out", command=self.ret)
         bl.append(b)
@@ -229,7 +229,7 @@ class Debugger:
         self.idb.set_step()
         self.root.quit()
 
-    def next(self):
+    def __next__(self):
         self.idb.set_next(self.frame)
         self.root.quit()
 
@@ -260,7 +260,8 @@ class Debugger:
         if self.vsource.get():
             self.sync_source_line()
 
-    def show_frame(self, (frame, lineno)):
+    def show_frame(self, xxx_todo_changeme):
+        (frame, lineno) = xxx_todo_changeme
         self.frame = frame
         self.show_variables()
 
@@ -318,9 +319,9 @@ class Debugger:
 
     def load_breakpoints(self):
         "Load PyShellEditorWindow breakpoints into subprocess debugger"
-        pyshell_edit_windows = self.pyshell.flist.inversedict.keys()
+        pyshell_edit_windows = list(self.pyshell.flist.inversedict.keys())
         for editwin in pyshell_edit_windows:
-            for page in editwin.text_notebook.pages.itervalues():
+            for page in editwin.text_notebook.pages.values():
                 editpage = page.editpage
                 filename = editpage.io.filename
                 try:
@@ -422,8 +423,8 @@ class NamespaceViewer:
         self.master = master
         self.title = title
 
-        import repr
-        self.repr = repr.Repr()
+        import reprlib
+        self.repr = reprlib.Repr()
         self.repr.maxstring = 60
         self.repr.maxother = 60
         self.frame = frame = Frame(master)
@@ -449,14 +450,14 @@ class NamespaceViewer:
             return
         subframe = self.subframe
         frame = self.frame
-        for c in subframe.children.values():
+        for c in list(subframe.children.values()):
             c.destroy()
         self.dict = None
         if not dict:
             l = Label(subframe, text="None")
             l.grid(row=0, column=0)
         else:
-            names = dict.keys()
+            names = list(dict.keys())
             names.sort()
             row = 0
             for name in names:

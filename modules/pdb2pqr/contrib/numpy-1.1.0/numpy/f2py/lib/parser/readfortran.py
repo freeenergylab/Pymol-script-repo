@@ -27,11 +27,11 @@ import os
 import sys
 import tempfile
 import traceback
-from cStringIO import StringIO
+from io import StringIO
 from numpy.distutils.misc_util import yellow_text, red_text, blue_text
 
-from sourceinfo import get_source_info
-from splitline import String, string_replace_map, splitquote
+from .sourceinfo import get_source_info
+from .splitline import String, string_replace_map, splitquote
 
 _spacedigits=' 0123456789'
 _cf2py_re = re.compile(r'(?P<indent>\s*)!f2py(?P<rest>.*)',re.I)
@@ -46,7 +46,7 @@ _is_call_stmt = re.compile(r'call\b', re.I).match
 class FortranReaderError: # TODO: may be derive it from Exception
     def __init__(self, message):
         self.message = message
-        print >> sys.stderr,message
+        print(message, file=sys.stderr)
         sys.stderr.flush()
 
 class Line:
@@ -241,7 +241,7 @@ class FortranReaderBase:
         if self.isclosed:
             return None
         try:
-            line = self.source.next()
+            line = next(self.source)
         except StopIteration:
             self.isclosed = True
             self.close_source()
@@ -281,7 +281,7 @@ class FortranReaderBase:
         try:
             if self.reader is not None:
                 try:
-                    return self.reader.next()
+                    return next(self.reader)
                 except StopIteration:
                     self.reader = None
             item = self._next(ignore_comments)
@@ -460,7 +460,7 @@ class FortranReaderBase:
         if m:
             newline = m.group('indent')+5*' '+m.group('rest')
             self.f2py_comment_lines.append(self.linecount)
-            assert len(newline)==len(line),`newlinel,line`
+            assert len(newline)==len(line),repr((newlinel,line))
             return newline
         return line
 
@@ -677,7 +677,7 @@ class FortranReaderBase:
                     # first line, check for a f90 label
                     m = _f90label_re.match(line)
                     if m:
-                        assert not label,`label,m.group('label')`
+                        assert not label,repr((label,m.group('label')))
                         label = m.group('label').strip()
                         if label.endswith(':'): label = label[:-1].strip()
                         if not self.ispyf: label = label.lower()
@@ -764,7 +764,7 @@ cf2py call me ! hey
      '"""
     reader = FortranStringReader(string_f77,False,True)
     for item in reader:
-        print item
+        print(item)
 
     filename = tempfile.mktemp()+'.f'
     f = open(filename,'w')
@@ -773,7 +773,7 @@ cf2py call me ! hey
 
     reader = FortranFileReader(filename)
     for item in reader:
-        print item
+        print(item)
 
 def test_pyf():
     string_pyf = """\
@@ -805,7 +805,7 @@ end python module foo
 """
     reader = FortranStringReader(string_pyf,True, True)
     for item in reader:
-        print item
+        print(item)
 
 def test_fix90():
     string_fix90 = """\
@@ -829,14 +829,14 @@ cComment
 """
     reader = FortranStringReader(string_fix90,False, False)
     for item in reader:
-        print item
+        print(item)
 
 def simple_main():
     for filename in sys.argv[1:]:
-        print 'Processing',filename
+        print('Processing',filename)
         reader = FortranFileReader(filename)
         for item in reader:
-            print >> sys.stdout, item
+            print(item, file=sys.stdout)
             sys.stdout.flush()
             pass
 

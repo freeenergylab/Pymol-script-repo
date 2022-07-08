@@ -49,7 +49,7 @@ __date__ = "28 December 2006"
 __author__ = "Todd Dolinsky"
 
 import string
-from structures import *
+from .structures import *
 
 class Amino(Residue):
     """
@@ -398,7 +398,7 @@ class HIS(Amino):
         elif self.hasAtom("HD1"): self.ffname = "HID"
         elif self.hasAtom("HE2"): self.ffname = "HIE"
         else:
-            raise ValueError, "Invalid type for %s!" % str(self)
+            raise ValueError("Invalid type for %s!" % str(self))
         Amino.setState(self)
 
 class ILE(Amino):

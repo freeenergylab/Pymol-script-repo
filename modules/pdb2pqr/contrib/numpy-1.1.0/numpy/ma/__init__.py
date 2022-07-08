@@ -11,11 +11,11 @@ __version__ = '1.0'
 __revision__ = "$Revision: 3473 $"
 __date__     = '$Date: 2007-10-29 17:18:13 +0200 (Mon, 29 Oct 2007) $'
 
-import core
-from core import *
+from . import core
+from .core import *
 
-import extras
-from extras import *
+from . import extras
+from .extras import *
 
 __all__ = ['core', 'extras']
 __all__ += core.__all__

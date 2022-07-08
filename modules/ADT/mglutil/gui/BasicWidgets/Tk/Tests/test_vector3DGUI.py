@@ -77,7 +77,7 @@ class Vector3DGUIBaseTest(unittest.TestCase):
     
         def foo(val):
             global wasCalled
-            print "I should not be called"
+            print("I should not be called")
             wasCalled=1
     
         from mglutil.gui.BasicWidgets.Tk.vector3DGUI import vectorGUI

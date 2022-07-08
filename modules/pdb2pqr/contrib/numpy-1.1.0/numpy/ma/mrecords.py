@@ -56,7 +56,7 @@ def _getformats(data):
 #            raise ValueError, "item in the array list must be an ndarray."
         formats += _typestr[obj.dtype.type]
         if issubclass(obj.dtype.type, ntypes.flexible):
-            formats += `obj.itemsize`
+            formats += repr(obj.itemsize)
         formats += ','
     return formats[:-1]
 
@@ -75,7 +75,7 @@ If the argument `names` is not None, updates the field names to valid names.
         elif isinstance(names, str):
             new_names = names.split(',')
         else:
-            raise NameError, "illegal input names %s" % `names`
+            raise NameError("illegal input names %s" % repr(names))
         nnames = len(new_names)
         if nnames < ndescr:
             new_names += default_names[nnames:]
@@ -273,7 +273,7 @@ class MaskedRecords(MaskedArray, object):
             if not obj.ndim and obj._mask:
                 return masked
             return obj
-        raise AttributeError,"No attribute '%s' !" % attr
+        raise AttributeError("No attribute '%s' !" % attr)
 
     def __setattr__(self, attr, val):
         "Sets the attribute attr to the value val."
@@ -286,7 +286,7 @@ class MaskedRecords(MaskedArray, object):
             fielddict = self.dtype.names or {}
             if attr not in fielddict:
                 exctype, value = sys.exc_info()[:2]
-                raise exctype, value
+                raise exctype(value)
         else:
             if attr in ['_mask','fieldmask']:
                 self.__setmask__(val)
@@ -330,7 +330,7 @@ The fieldname base is either `_data` or `_mask`."""
         _fieldmask = _localdict['_fieldmask']
         _data = self._data
         # We want a field ........
-        if isinstance(indx, basestring):
+        if isinstance(indx, str):
             obj = _data[indx].view(MaskedArray)
             obj._set_mask(_fieldmask[indx])
             # Force to nomask if the mask is empty
@@ -349,7 +349,7 @@ The fieldname base is either `_data` or `_mask`."""
     def __setitem__(self, indx, value):
         "Sets the given record to value."
         MaskedArray.__setitem__(self, indx, value)
-        if isinstance(indx, basestring):
+        if isinstance(indx, str):
             self._fieldmask[indx] = ma.getmaskarray(value)
 
     #............................................
@@ -570,7 +570,7 @@ def fromarrays(arraylist, dtype=None, shape=None, formats=None,
                            dtype=dtype, shape=shape, formats=formats,
                            names=names, titles=titles, aligned=aligned,
                            byteorder=byteorder).view(mrecarray)
-    _array._fieldmask.flat = zip(*masklist)
+    _array._fieldmask.flat = list(zip(*masklist))
     if fill_value is not None:
         _array.fill_value = fill_value
     return _array
@@ -650,7 +650,7 @@ on the first line. An exception is raised if the file is 3D or more.
     if len(arr.shape) == 2 :
         arr = arr[0]
     elif len(arr.shape) > 2:
-        raise ValueError, "The array should be 2D at most!"
+        raise ValueError("The array should be 2D at most!")
     # Start the conversion loop .......
     for f in arr:
         try:
@@ -680,11 +680,11 @@ def openfile(fname):
     try:
         f = open(fname)
     except IOError:
-        raise IOError, "No such file: '%s'" % fname
+        raise IOError("No such file: '%s'" % fname)
     if f.readline()[:2] != "\\x":
         f.seek(0,0)
         return f
-    raise NotImplementedError, "Wow, binary file"
+    raise NotImplementedError("Wow, binary file")
 
 
 def fromtextfile(fname, delimitor=None, commentchar='#', missingchar='',
@@ -762,7 +762,7 @@ set to 'fi', where `i` is the number of existing fields.
     newdata = recarray(_data.shape, newdtype)
     # Add the exisintg field
     [newdata.setfield(_data.getfield(*f),*f)
-         for f in _data.dtype.fields.values()]
+         for f in list(_data.dtype.fields.values())]
     # Add the new field
     newdata.setfield(newfield._data, *newdata.dtype.fields[newfieldname])
     newdata = newdata.view(MaskedRecords)
@@ -772,7 +772,7 @@ set to 'fi', where `i` is the number of existing fields.
     newmask = recarray(_data.shape, newmdtype)
     # Add the old masks
     [newmask.setfield(_mask.getfield(*f),*f)
-         for f in _mask.dtype.fields.values()]
+         for f in list(_mask.dtype.fields.values())]
     # Add the mask of the new field
     newmask.setfield(getmaskarray(newfield),
                      *newmask.dtype.fields[newfieldname])

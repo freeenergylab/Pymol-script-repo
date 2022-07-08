@@ -5,4 +5,4 @@
 ###########################################################################
 
 __all__=['interfaces', 'client', 'WSresource', 'WSsecurity']
-import interfaces
+from . import interfaces

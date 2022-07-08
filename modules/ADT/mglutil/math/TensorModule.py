@@ -25,7 +25,7 @@
 _undocumented = 1
 
 import numpy as Numeric, types
-import VectorModule
+from . import VectorModule
 
 class Tensor:
 
@@ -60,7 +60,7 @@ class Tensor:
 	if nocheck is None:
 	    if not Numeric.logical_and.reduce(
 		Numeric.equal(Numeric.array(self.array.shape), 3)):
-		raise ValueError, 'Tensor must have length 3 along any axis'
+		raise ValueError('Tensor must have length 3 along any axis')
 	self.rank = len(self.array.shape)
 
     def __repr__(self):
@@ -97,12 +97,12 @@ class Tensor:
 
     def __div__(self, other):
 	if isTensor(other):
-	    raise TypeError, "Can't divide by a tensor"
+	    raise TypeError("Can't divide by a tensor")
 	else:
 	    return Tensor(self.array/(1.*other), 1)
 
     def __rdiv__(self, other):
-        raise TypeError, "Can't divide by a tensor"
+        raise TypeError("Can't divide by a tensor")
 
     def __cmp__(self, other):
 	if self.rank != other.rank:
@@ -126,13 +126,13 @@ class Tensor:
 	if self.rank == 1:
 	    return VectorModule.Vector(self.array)
 	else:
-	    raise ValueError, 'rank > 1'
+	    raise ValueError('rank > 1')
 
     def dot(self, other):
         "Returns the contraction with |other|."
 	if isTensor(other):
 	    a = self.array
-	    b =  Numeric.transpose(other.array, range(1, other.rank)+[0])
+	    b =  Numeric.transpose(other.array, list(range(1, other.rank))+[0])
 	    return Tensor(Numeric.innerproduct(a, b), 1)
 	else:
 	    return Tensor(self.array*other, 1)
@@ -142,14 +142,14 @@ class Tensor:
 	    return Tensor([self.array[0,0], self.array[1,1], self.array[2,2]])
 	else:
 	    if axis2 < axis1: axis1, axis2 = axis2, axis1
-	    raise ValueError, 'Not yet implemented'
+	    raise ValueError('Not yet implemented')
 
     def trace(self, axis1=0, axis2=1):
         "Returns the trace of a rank-2 tensor."
 	if self.rank == 2:
 	    return self.array[0,0]+self.array[1,1]+self.array[2,2]
 	else:
-	    raise ValueError, 'Not yet implemented'
+	    raise ValueError('Not yet implemented')
 
     def transpose(self):
         "Returns the transposed (index reversed) tensor."
@@ -163,7 +163,7 @@ class Tensor:
 						    Numeric.array([1,0]))),
 			  1)
 	else:
-	    raise ValueError, 'Not yet implemented'
+	    raise ValueError('Not yet implemented')
 
     def asymmetricalPart(self):
         "Returns the asymmetrical part of a rank-2 tensor."
@@ -173,7 +173,7 @@ class Tensor:
 						    Numeric.array([1,0]))),
 			  1)
 	else:
-	    raise ValueError, 'Not yet implemented'
+	    raise ValueError('Not yet implemented')
 
     def eigenvalues(self):
         "Returns the eigenvalues of a rank-2 tensor in an array."
@@ -181,7 +181,7 @@ class Tensor:
 	    from numpy.linalg import eigvals as eigenvalues
 	    return eigenvalues(self.array)
 	else:
-	    raise ValueError, 'Undefined operation'
+	    raise ValueError('Undefined operation')
 
     def diagonalization(self):
         """Returns the eigenvalues of a rank-2 tensor and a tensor
@@ -192,7 +192,7 @@ class Tensor:
 	    vectors = vectors.T
 	    return ev, Tensor(vectors)
 	else:
-	    raise ValueError, 'Undefined operation'
+	    raise ValueError('Undefined operation')
 
     def inverse(self):
         "Returns the inverse of a rank-2 tensor."
@@ -200,7 +200,7 @@ class Tensor:
 	    from numpy.linalg import inv as inverse
 	    return Tensor(inverse(self.array))
 	else:
-	    raise ValueError, 'Undefined operation'
+	    raise ValueError('Undefined operation')
 
 # Type check
 

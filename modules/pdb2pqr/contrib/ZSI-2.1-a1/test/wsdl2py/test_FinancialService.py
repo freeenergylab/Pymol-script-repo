@@ -66,7 +66,7 @@ class Test(ServiceTestCase):
         cfs.CF = [100.0,5.0,5.0,105.0]
 
         rsp = port.getPV(msg)
-        self.failUnless(rsp == 202.775091, "Received %d" %rsp)
+        self.assertTrue(rsp == 202.775091, "Received %d" %rsp)
         
 
 if __name__ == "__main__" :

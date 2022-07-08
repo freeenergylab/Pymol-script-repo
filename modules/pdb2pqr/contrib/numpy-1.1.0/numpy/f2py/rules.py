@@ -53,7 +53,7 @@ Pearu Peterson
 
 __version__ = "$Revision: 1.129 $"[10:-1]
 
-import __version__
+from . import __version__
 f2py_version = __version__.version
 
 import pprint
@@ -65,14 +65,14 @@ errmess=sys.stderr.write
 outmess=sys.stdout.write
 show=pprint.pprint
 
-from auxfuncs import *
-import capi_maps
-from capi_maps import *
-import cfuncs
-import common_rules
-import use_rules
-import f90mod_rules
-import func2subr
+from .auxfuncs import *
+from . import capi_maps
+from .capi_maps import *
+from . import cfuncs
+from . import common_rules
+from . import use_rules
+from . import f90mod_rules
+from . import func2subr
 options={}
 
 sepdict={}
@@ -1111,7 +1111,7 @@ def buildmodule(m,um):
             continue
         nb_list = [nb]
         if 'entry' in nb:
-            for k,a in nb['entry'].items():
+            for k,a in list(nb['entry'].items()):
                 nb1 = copy.deepcopy(nb)
                 del nb1['entry']
                 nb1['name'] = k
@@ -1147,7 +1147,7 @@ def buildmodule(m,um):
 
     needs=cfuncs.get_needs()
     code={}
-    for n in needs.keys():
+    for n in list(needs.keys()):
         code[n]=[]
         for k in needs[n]:
             c=''
@@ -1172,7 +1172,7 @@ def buildmodule(m,um):
             elif k in cfuncs.commonhooks:
                 c=cfuncs.commonhooks[k]
             else:
-                errmess('buildmodule: unknown need %s.\n'%(`k`));continue
+                errmess('buildmodule: unknown need %s.\n'%(repr(k)));continue
             code[n].append(c)
     mod_rules.append(code)
     for r in mod_rules:
@@ -1257,7 +1257,7 @@ def buildapi(rout):
     args,depargs=getargs2(rout)
     capi_maps.depargs=depargs
     var=rout['vars']
-    auxvars = [a for a in var.keys() if isintent_aux(var[a])]
+    auxvars = [a for a in list(var.keys()) if isintent_aux(var[a])]
 
     if ismoduleroutine(rout):
         outmess('\t\t\tConstructing wrapper function "%s.%s"...\n'%(rout['modulename'],rout['name']))
@@ -1283,10 +1283,10 @@ def buildapi(rout):
             if not isintent_hide(var[a]):
                 if not isoptional(var[a]):
                     nth=nth+1
-                    vrd['nth']=`nth`+stnd[nth%10]+' argument'
+                    vrd['nth']=repr(nth)+stnd[nth%10]+' argument'
                 else:
                     nthk=nthk+1
-                    vrd['nth']=`nthk`+stnd[nthk%10]+' keyword'
+                    vrd['nth']=repr(nthk)+stnd[nthk%10]+' keyword'
             else: vrd['nth']='hidden'
         savevrd[a]=vrd
         for r in _rules:
@@ -1316,9 +1316,9 @@ def buildapi(rout):
                 vrd['check']=c
                 ar=applyrules(check_rules,vrd,var[a])
                 rd=dictappend(rd,ar)
-    if type(rd['cleanupfrompyobj']) is types.ListType:
+    if type(rd['cleanupfrompyobj']) is list:
         rd['cleanupfrompyobj'].reverse()
-    if type(rd['closepyobjfrom']) is types.ListType:
+    if type(rd['closepyobjfrom']) is list:
         rd['closepyobjfrom'].reverse()
     rd['docsignature']=stripcomma(replace('#docsign##docsignopt##docsignxa#',
                                           {'docsign':rd['docsign'],
@@ -1343,15 +1343,15 @@ def buildapi(rout):
     else:
         rd['callcompaqfortran']=cfs
     rd['callfortran']=cfs
-    if type(rd['docreturn'])==types.ListType:
+    if type(rd['docreturn'])==list:
         rd['docreturn']=stripcomma(replace('#docreturn#',{'docreturn':rd['docreturn']}))+' = '
     rd['docstrsigns']=[]
     rd['latexdocstrsigns']=[]
     for k in ['docstrreq','docstropt','docstrout','docstrcbs']:
-        if k in rd and type(rd[k])==types.ListType:
+        if k in rd and type(rd[k])==list:
             rd['docstrsigns']=rd['docstrsigns']+rd[k]
         k='latex'+k
-        if k in rd and type(rd[k])==types.ListType:
+        if k in rd and type(rd[k])==list:
             rd['latexdocstrsigns']=rd['latexdocstrsigns']+rd[k][0:1]+\
                                     ['\\begin{description}']+rd[k][1:]+\
                                     ['\\end{description}']

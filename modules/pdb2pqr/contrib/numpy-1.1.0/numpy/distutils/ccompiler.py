@@ -35,13 +35,12 @@ def CCompiler_spawn(self, cmd, display=None):
     if s:
         if is_sequence(cmd):
             cmd = ' '.join(list(cmd))
-        print o
+        print(o)
         if re.search('Too many open files', o):
             msg = '\nTry rerunning setup command until build succeeds.'
         else:
             msg = ''
-        raise DistutilsExecError,\
-              'Command "%s" failed with exit status %d%s' % (cmd, s, msg)
+        raise DistutilsExecError('Command "%s" failed with exit status %d%s' % (cmd, s, msg))
 
 replace_method(CCompiler, 'spawn', CCompiler_spawn)
 
@@ -61,8 +60,7 @@ def CCompiler_object_filenames(self, source_filenames, strip_dir=0, output_dir='
             d = os.path.basename(os.path.abspath(d))
             base = d + base[i:]
         if ext not in self.src_extensions:
-            raise UnknownFileError, \
-                  "unknown file type '%s' (from '%s')" % (ext, src_name)
+            raise UnknownFileError("unknown file type '%s' (from '%s')" % (ext, src_name))
         if strip_dir:
             base = os.path.basename(base)
         obj_name = os.path.join(output_dir,base + self.obj_extension)
@@ -79,7 +77,7 @@ def CCompiler_compile(self, sources, output_dir=None, macros=None,
     # method to support pre Python 2.3 distutils.
     if not sources:
         return []
-    from fcompiler import FCompiler
+    from .fcompiler import FCompiler
     if isinstance(self, FCompiler):
         display = []
         for fc in ['f77','f90','fix']:
@@ -104,7 +102,7 @@ def CCompiler_compile(self, sources, output_dir=None, macros=None,
     # build any sources in same order as they were originally specified
     #   especially important for fortran .f90 files using modules
     if isinstance(self, FCompiler):
-        objects_to_build = build.keys()
+        objects_to_build = list(build.keys())
         for obj in objects:
             if obj in objects_to_build:
                 src, ext = build[obj]
@@ -113,7 +111,7 @@ def CCompiler_compile(self, sources, output_dir=None, macros=None,
                     src = cyg2win32(src)
                 self._compile(obj, src, ext, cc_args, extra_postargs, pp_opts)
     else:
-        for obj, (src, ext) in build.items():
+        for obj, (src, ext) in list(build.items()):
             self._compile(obj, src, ext, cc_args, extra_postargs, pp_opts)
 
     # Return *all* object filenames, not just the ones we just built.
@@ -151,7 +149,7 @@ replace_method(CCompiler, 'customize_cmd', CCompiler_customize_cmd)
 def _compiler_to_string(compiler):
     props = []
     mx = 0
-    keys = compiler.executables.keys()
+    keys = list(compiler.executables.keys())
     for key in ['version','libraries','library_dirs',
                 'object_switch','compile_switch',
                 'include_dirs','define','undef','rpath','link_objects']:
@@ -182,10 +180,10 @@ def CCompiler_show_customization(self):
     except:
         pass
     if log._global_log.threshold<2:
-        print '*'*80
-        print self.__class__
-        print _compiler_to_string(self)
-        print '*'*80
+        print('*'*80)
+        print(self.__class__)
+        print(_compiler_to_string(self))
+        print('*'*80)
 
 replace_method(CCompiler, 'show_customization', CCompiler_show_customization)
 
@@ -342,27 +340,25 @@ def new_compiler (plat=None,
         msg = "don't know how to compile C/C++ code on platform '%s'" % plat
         if compiler is not None:
             msg = msg + " with '%s' compiler" % compiler
-        raise DistutilsPlatformError, msg
+        raise DistutilsPlatformError(msg)
     module_name = "numpy.distutils." + module_name
     try:
         __import__ (module_name)
-    except ImportError, msg:
+    except ImportError as msg:
         log.info('%s in numpy.distutils; trying from distutils',
                  str(msg))
         module_name = module_name[6:]
         try:
             __import__(module_name)
-        except ImportError, msg:
-            raise DistutilsModuleError, \
-                  "can't compile C/C++ code: unable to load module '%s'" % \
-                  module_name
+        except ImportError as msg:
+            raise DistutilsModuleError("can't compile C/C++ code: unable to load module '%s'" % \
+                  module_name)
     try:
         module = sys.modules[module_name]
         klass = vars(module)[class_name]
     except KeyError:
-        raise DistutilsModuleError, \
-              ("can't compile C/C++ code: unable to find class '%s' " +
-               "in module '%s'") % (class_name, module_name)
+        raise DistutilsModuleError(("can't compile C/C++ code: unable to find class '%s' " +
+               "in module '%s'") % (class_name, module_name))
     compiler = klass(None, dry_run, force)
     log.debug('new_compiler returns %s' % (klass))
     return compiler
@@ -437,12 +433,10 @@ def split_quoted(s):
             elif s[end] == '"':         # slurp doubly-quoted string
                 m = _dquote_re.match(s, end)
             else:
-                raise RuntimeError, \
-                      "this can't happen (bad char '%c')" % s[end]
+                raise RuntimeError("this can't happen (bad char '%c')" % s[end])
 
             if m is None:
-                raise ValueError, \
-                      "bad string (mismatched %s quotes?)" % s[end]
+                raise ValueError("bad string (mismatched %s quotes?)" % s[end])
 
             (beg, end) = m.span()
             if _has_white_re.search(s[beg+1:end-1]):

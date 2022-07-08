@@ -129,7 +129,7 @@ def assert_equal(actual,desired,err_msg='',verbose=True):
     if isinstance(desired, dict):
         assert isinstance(actual, dict), repr(type(actual))
         assert_equal(len(actual),len(desired),err_msg,verbose)
-        for k,i in desired.items():
+        for k,i in list(desired.items()):
             assert k in actual, repr(k)
             assert_equal(actual[k], desired[k], 'key=%r\n%s' % (k,err_msg), verbose)
         return
@@ -165,7 +165,7 @@ def assert_approx_equal(actual,desired,significant=7,err_msg='',verbose=True):
         correct
     """
     import math
-    actual, desired = map(float, (actual, desired))
+    actual, desired = list(map(float, (actual, desired)))
     if desired==actual:
         return
     # Normalized the numbers to be in range (-10.0,10.0)
@@ -260,11 +260,11 @@ def assert_array_less(x, y, err_msg='', verbose=True):
                          header='Arrays are not less-ordered')
 
 def runstring(astr, dict):
-    exec astr in dict
+    exec(astr, dict)
 
 def assert_string_equal(actual, desired):
-    assert isinstance(actual, str),`type(actual)`
-    assert isinstance(desired, str),`type(desired)`
+    assert isinstance(actual, str),repr(type(actual))
+    assert isinstance(desired, str),repr(type(desired))
     if re.match(r'\A'+desired+r'\Z', actual, re.M): return
     diff = list(difflib.Differ().compare(actual.splitlines(1), desired.splitlines(1)))
     diff_list = []
@@ -278,7 +278,7 @@ def assert_string_equal(actual, desired):
             if d2.startswith('? '):
                 l.append(d2)
                 d2 = diff.pop(0)
-            assert d2.startswith('+ '),`d2`
+            assert d2.startswith('+ '),repr(d2)
             l.append(d2)
             d3 = diff.pop(0)
             if d3.startswith('? '):
@@ -289,7 +289,7 @@ def assert_string_equal(actual, desired):
                 continue
             diff_list.extend(l)
             continue
-        assert False, `d1`
+        assert False, repr(d1)
     if not diff_list: return
     msg = 'Differences in strings:\n%s' % (''.join(diff_list)).rstrip()
     assert actual==desired, msg

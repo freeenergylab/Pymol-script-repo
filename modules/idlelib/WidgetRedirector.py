@@ -1,4 +1,4 @@
-from Tkinter import TclError
+from tkinter import TclError
 
 class WidgetRedirector:
 
@@ -105,7 +105,7 @@ class OriginalCommand:
 
 
 def main():
-    from Tkinter import Tk, Text
+    from tkinter import Tk, Text
     root = Tk()
     root.wm_protocol("WM_DELETE_WINDOW", root.quit)
     text = Text()
@@ -114,7 +114,7 @@ def main():
     redir = WidgetRedirector(text)
     global previous_tcl_fcn
     def my_insert(*args):
-        print "insert", args
+        print("insert", args)
         previous_tcl_fcn(*args)
     previous_tcl_fcn = redir.register("insert", my_insert)
     root.mainloop()

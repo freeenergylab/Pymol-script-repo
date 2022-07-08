@@ -45,7 +45,7 @@ class StateToCoords(Kinematics):
                 coords.append((c[0]-o[0], c[1]-o[1], c[2]-o[2], 1.0))
             node.atomSet = atomSet
             node.coords = coords
-            node.atomRange = range(len(atomSet))
+            node.atomRange = list(range(len(atomSet)))
             if node.bond[0] != None: # skip the root node
                 node.a = allAtoms[node.bond[0]]
                 node.b = allAtoms[node.bond[1]]

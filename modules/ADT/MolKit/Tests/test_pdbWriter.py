@@ -48,7 +48,7 @@ class PDBWriterTests(unittest.TestCase):
 
         # 1- Make sure that the file has been created
         import os
-        self.failUnless(os.path.exists('Data/1crn_writer.pdb'))
+        self.assertTrue(os.path.exists('Data/1crn_writer.pdb'))
         # 2- Make sure that the file created the proper records
         # Get the default records from the new pdb files
         from MolKit.pdbParser import PdbParser
@@ -127,7 +127,7 @@ class PDBWriterTests(unittest.TestCase):
 
         nhoh = nmol.chains.residues.get(lambda x: x.type=="HOH")
         ohoh = self.mol.chains.residues.get(lambda x: x.type=="HOH")
-        self.failUnless(len(nhoh)==0)
+        self.assertTrue(len(nhoh)==0)
         os.system("rm Data/1bsr_writer.pdb")
         
 
@@ -201,7 +201,7 @@ class PDBWriterTests(unittest.TestCase):
 
         # 1- Make sure that the file has been created
         import os
-        self.failUnless(os.path.exists('Data/1crn_writer.pdb'))
+        self.assertTrue(os.path.exists('Data/1crn_writer.pdb'))
         # 2- Make sure that the file created the proper records
         # Get the default records from the new pdb files
         from MolKit.pdbParser import PdbParser
@@ -294,7 +294,7 @@ class PdbWriterTest(unittest.TestCase):
                 #return False, 'number of items'
             #if atomlines1[i][:75]!=atomlines2[i][:75]:
             if l1[:30]!=l2[:30]:
-                print l1[:30],' v. ',  l2[:30]
+                print((l1[:30],' v. ',  l2[:30]))
                 return False, 'start ' + str(i)
             if float(l1[30:38])!=float(l2[30:38]):
                 return False, 'xcoord ' + str(i)
@@ -314,7 +314,7 @@ class PdbWriterInitTest(PdbWriterTest):
         instantiate an PdbWriter
         """
         writer = PdbWriter()
-        self.assertEquals(writer.__class__, PdbWriter)
+        self.assertEqual(writer.__class__, PdbWriter)
 
 
 class PdbWriterAtomLinesTest(PdbWriterTest):
@@ -336,8 +336,8 @@ class PdbWriterAtomLinesTest(PdbWriterTest):
         writer = PdbWriter()
         writer.write('test_pdbWriter.pdb', self.mol, bondOrigin=('File',))
         ans, errors = self.compare('Data/1crn.pdb', 'test_pdbWriter.pdb') 
-        self.assertEquals(errors, None)
-        self.assertEquals(ans, True)
+        self.assertEqual(errors, None)
+        self.assertEqual(ans, True)
 
 
 
@@ -362,8 +362,8 @@ class PdbqWriterAtomLinesTest(PdbWriterTest):
         writer.write('test_pdbqWriter.pdbq', self.mol, bondOrigin=('File',))
         ans, errors = self.compare('Data/1crn_Hs.pdbq',
                                    'test_pdbqWriter.pdbq') 
-        self.assertEquals(errors, None)
-        self.assertEquals(ans, True)
+        self.assertEqual(errors, None)
+        self.assertEqual(ans, True)
 
 
 
@@ -386,8 +386,8 @@ class PdbqsWriterAtomLinesTest(PdbWriterTest):
         writer = PdbqsWriter()
         writer.write('test_pdbqsWriter.pdbqs', self.mol, bondOrigin=('File',))
         ans, errors = self.compare('Data/1crn.pdbqs', 'test_pdbqsWriter.pdbqs') 
-        self.assertEquals(errors, None)
-        self.assertEquals(ans, True)
+        self.assertEqual(errors, None)
+        self.assertEqual(ans, True)
 
 
 class PdbqtWriterAtomLinesTest(PdbWriterTest):
@@ -409,8 +409,8 @@ class PdbqtWriterAtomLinesTest(PdbWriterTest):
         writer = PdbqtWriter()
         writer.write('test_pdbqtWriter.pdbqt', self.mol, bondOrigin=('File',))
         ans, errors = self.compare('Data/hsg1.pdbqt', 'test_pdbqtWriter.pdbqt') 
-        self.assertEquals(errors, None)
-        self.assertEquals(ans, True)
+        self.assertEqual(errors, None)
+        self.assertEqual(ans, True)
 
 
 

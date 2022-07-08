@@ -184,7 +184,7 @@ def find_common(seq1, seq2):
     Note: do not handle duplicate items."""
     dict2 = dict([(i, None) for i in seq2])
 
-    return [i for i in range(len(seq1)) if dict2.has_key(seq1[i])]
+    return [i for i in range(len(seq1)) if seq1[i] in dict2]
 
 def select_packages(sconspkg, pkglist):
     """Given a list of packages in pkglist, return the list of packages which
@@ -262,7 +262,7 @@ class scons(old_build_ext):
                 distutils_compiler.initialize()
             self.scons_compiler = dist2sconscc(distutils_compiler)
             self.scons_compiler_path = protect_path(get_tool_path(distutils_compiler))
-        except DistutilsPlatformError, e:
+        except DistutilsPlatformError as e:
             if not self._bypass_distutils_cc:
                 raise e
             else:
@@ -296,7 +296,7 @@ class scons(old_build_ext):
         if len(self.sconscripts) > 0:
             try:
                 import numscons
-            except ImportError, e:
+            except ImportError as e:
                 raise RuntimeError("importing numscons failed (error was %s), using " \
                                    "scons within distutils is not possible without "
                                    "this package " % str(e))
@@ -371,7 +371,7 @@ class scons(old_build_ext):
                 log.info("======== Executing scons command for pkg %s =========", pkg_name)
             st = os.system(cmdstr)
             if st:
-                print "status is %d" % st
+                print("status is %d" % st)
                 raise DistutilsExecError("Error while executing scons command "\
                                          "%s (see above)" % cmdstr)
             if post_hook:

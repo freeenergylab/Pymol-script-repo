@@ -1,15 +1,16 @@
 """
 An auto-completion window for IDLE, used by the AutoComplete extension
 """
-from Tkinter import Toplevel, Listbox, Scrollbar, TclError
-from Tkconstants import END, LEFT, RIGHT, BOTH, VERTICAL, Y
+from tkinter import Toplevel, Listbox, Scrollbar, TclError
+from tkinter.constants import END, LEFT, RIGHT, BOTH, VERTICAL, Y
 
-import AutoComplete
-from MultiCall import MC_SHIFT
-from configHandler import idleConf
+from . import AutoComplete
+from .MultiCall import MC_SHIFT
+from .configHandler import idleConf
+from functools import reduce
 
 if idleConf.GetOption('main', 'General', 'use-ttk', type='int'):
-    from ttk import Scrollbar
+    from tkinter.ttk import Scrollbar
 
 HIDE_VIRTUAL_EVENT_NAME = "<<autocompletewindow-hide>>"
 HIDE_SEQUENCES = ("<FocusOut>", "<ButtonPress>")

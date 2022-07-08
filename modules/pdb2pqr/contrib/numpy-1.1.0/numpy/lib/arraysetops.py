@@ -310,28 +310,28 @@ def _test_unique1d_speed( plot_results = False ):
     for ii in exponents:
 
         nItem = 10 ** ii
-        print 'using %d items:' % nItem
+        print('using %d items:' % nItem)
         a = nm.fix( nItem / 10 * nm.random.random( nItem ) )
 
-        print 'unique:'
+        print('unique:')
         tt = time.clock()
         b = nm.unique( a )
         dt1 = time.clock() - tt
-        print dt1
+        print(dt1)
 
-        print 'unique1d:'
+        print('unique1d:')
         tt = time.clock()
         c = unique1d( a )
         dt2 = time.clock() - tt
-        print dt2
+        print(dt2)
 
 
         if dt1 < 1e-8:
             ratio = 'ND'
         else:
             ratio = dt2 / dt1
-        print 'ratio:', ratio
-        print 'nUnique: %d == %d\n' % (len( b ), len( c ))
+        print('ratio:', ratio)
+        print('nUnique: %d == %d\n' % (len( b ), len( c )))
 
         nItems.append( nItem )
         ratios.append( ratio )
@@ -340,10 +340,10 @@ def _test_unique1d_speed( plot_results = False ):
 
         assert nm.alltrue( b == c )
 
-    print nItems
-    print dt1s
-    print dt2s
-    print ratios
+    print(nItems)
+    print(dt1s)
+    print(dt2s)
+    print(ratios)
 
     if plot_results:
         import pylab

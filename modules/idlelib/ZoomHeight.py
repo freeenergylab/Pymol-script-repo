@@ -2,7 +2,7 @@
 
 import re
 import sys
-import macosxSupport
+from . import macosxSupport
 
 class ZoomHeight:
 
@@ -25,7 +25,7 @@ def zoom_height(top):
     if not m:
         top.bell()
         return
-    width, height, x, y = map(int, m.groups())
+    width, height, x, y = list(map(int, m.groups()))
     newheight = top.winfo_screenheight()
     if sys.platform == 'win32':
         newy = 0

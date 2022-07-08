@@ -9,10 +9,10 @@ http://www.ebi.ac.uk/~gareth/pymol/downloads/scripts/density_slider.py
 License: BSD-2-Clause
 '''
 
-from __future__ import print_function
+
 
 try:
-    import Tkinter
+    import tkinter
 except ImportError:
     import tkinter as Tkinter
 
@@ -43,14 +43,14 @@ def get_isoobjects(state=1, quiet=1):
     return r
 
 
-class LevelVar(Tkinter.Variable):
+class LevelVar(tkinter.Variable):
 
     '''
     Tk variable that is bound to an isocontour object
     '''
 
     def __init__(self, master, name, level):
-        Tkinter.Variable.__init__(self, master, value=level)
+        tkinter.Variable.__init__(self, master, value=level)
         self.name = name
         self.trace('w', self.callback)
 
@@ -75,41 +75,41 @@ DESCRIPTION
     Opens a dialog with isolevel sliders for all isomesh and isosurface
     objects in PyMOL.
     '''
-    top = Tkinter.Toplevel(plugins.get_tk_root())
-    master = Tkinter.Frame(top, padx=5, pady=5)
+    top = tkinter.Toplevel(plugins.get_tk_root())
+    master = tkinter.Frame(top, padx=5, pady=5)
     master.pack(fill="both", expand=1)
-    mmvar = Tkinter.DoubleVar(top, value=mm)
+    mmvar = tkinter.DoubleVar(top, value=mm)
 
     def fillmaster():
         ffmt = '%.' + str(DIGITS) + 'f'
         for child in list(master.children.values()):
             child.destroy()
         mm = mmvar.get()
-        mmf = Tkinter.Frame(master)
-        Tkinter.Label(mmf, text=ffmt % (-mm)).grid(row=0, column=0, sticky='w')
-        Tkinter.Label(mmf, text=ffmt % (0.)).grid(row=0, column=1)
-        Tkinter.Label(mmf, text=ffmt % (mm)).grid(row=0, column=2, sticky='e')
+        mmf = tkinter.Frame(master)
+        tkinter.Label(mmf, text=ffmt % (-mm)).grid(row=0, column=0, sticky='w')
+        tkinter.Label(mmf, text=ffmt % (0.)).grid(row=0, column=1)
+        tkinter.Label(mmf, text=ffmt % (mm)).grid(row=0, column=2, sticky='e')
         mmf.grid(row=0, column=1, sticky='ew')
         mmf.columnconfigure(1, weight=1)
         for i, (name, level) in enumerate(get_isoobjects(), 1):
             v = LevelVar(master, name, ffmt % level)
-            Tkinter.Label(master, text=name).grid(row=i, column=0, sticky="w")
-            e = Tkinter.Scale(master, orient=Tkinter.HORIZONTAL,
+            tkinter.Label(master, text=name).grid(row=i, column=0, sticky="w")
+            e = tkinter.Scale(master, orient=tkinter.HORIZONTAL,
                               from_=-mm, to=mm, resolution=DELTA,
                               showvalue=0, variable=v)
             e.grid(row=i, column=1, sticky="ew")
             v.bindscrollwheel(e)
-            e = Tkinter.Entry(master, textvariable=v, width=4)
+            e = tkinter.Entry(master, textvariable=v, width=4)
             e.grid(row=i, column=2, sticky="e")
             v.bindscrollwheel(e)
             master.columnconfigure(1, weight=1)
     fillmaster()
-    bottom = Tkinter.Frame(top, padx=5)
-    Tkinter.Label(bottom, text="+/-").pack(side=Tkinter.LEFT)
-    mmentry = Tkinter.Entry(bottom, textvariable=mmvar, width=4)
-    mmentry.pack(side=Tkinter.LEFT)
-    refresh = Tkinter.Button(bottom, text="Refresh", command=fillmaster)
-    refresh.pack(side=Tkinter.LEFT)
-    bottom.pack(side=Tkinter.BOTTOM, fill="x", expand=1)
+    bottom = tkinter.Frame(top, padx=5)
+    tkinter.Label(bottom, text="+/-").pack(side=tkinter.LEFT)
+    mmentry = tkinter.Entry(bottom, textvariable=mmvar, width=4)
+    mmentry.pack(side=tkinter.LEFT)
+    refresh = tkinter.Button(bottom, text="Refresh", command=fillmaster)
+    refresh.pack(side=tkinter.LEFT)
+    bottom.pack(side=tkinter.BOTTOM, fill="x", expand=1)
 
 cmd.extend('isoslider', isoslider)

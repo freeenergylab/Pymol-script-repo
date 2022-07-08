@@ -22,7 +22,7 @@ class Service(BasicServer):
         request,response = BasicServer.soap_BasicOneWay(self, ps)
         if request._BasicIn == 'fault':
             # return a soap:fault
-            raise RuntimeError, 'you wanted a fault?'
+            raise RuntimeError('you wanted a fault?')
 
         return request,response
 

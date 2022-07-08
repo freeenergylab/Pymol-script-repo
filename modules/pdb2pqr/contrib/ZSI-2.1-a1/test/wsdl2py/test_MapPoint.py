@@ -67,7 +67,7 @@ class MapPointTest(ServiceTestCase):
             pass
 
         port.binding.SetAuth(AUTH.httpdigest, user="USERNAME", password="PASSWORD")
-        print ">> DIGEST AUTH"
+        print(">> DIGEST AUTH")
         try:
             rsp = port.GetVersionInfo(msg)
         except RuntimeError:

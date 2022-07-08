@@ -34,7 +34,7 @@ class BaseTests(unittest.TestCase):
         instantiate a CloserThanVDWSelector
         """
         d_sel = CloserThanVDWSelector()
-        self.assertEquals(d_sel.__class__, CloserThanVDWSelector)
+        self.assertEqual(d_sel.__class__, CloserThanVDWSelector)
 
 
     def test_CloserThanVDWSelector_setupCutoff(self):
@@ -42,8 +42,8 @@ class BaseTests(unittest.TestCase):
          CloserThanVDWSelector cutoff is expected shape
         """
         cutoff = CloserThanVDWSelector().setupCutoff(self.rec.allAtoms, self.lig.allAtoms, 3.0)
-        self.assertEquals(cutoff.shape[0], len(self.lig.allAtoms))
-        self.assertEquals(cutoff.shape[1], len(self.rec.allAtoms))
+        self.assertEqual(cutoff.shape[0], len(self.lig.allAtoms))
+        self.assertEqual(cutoff.shape[1], len(self.rec.allAtoms))
 
 
     def test_CloserThanVDWSelector_select(self):
@@ -53,13 +53,13 @@ class BaseTests(unittest.TestCase):
         d_sel = CloserThanVDWSelector()
         resultD, distD = d_sel.select(self.lig.allAtoms, self.rec.allAtoms)
         #check that 14 atoms in the ligand are near 1 or more atoms in the receptor
-        self.assertEquals(len(resultD.keys()), 14)
+        self.assertEqual(len(list(resultD.keys())), 14)
         d = {}
-        for k in resultD.values():
+        for k in list(resultD.values()):
             for item in k:
                 d[item] = 0
         #check that 16 atoms in the receptor are near an atom in the ligand
-        self.assertEquals(len(d.keys()), 16)
+        self.assertEqual(len(list(d.keys())), 16)
                 
 
     def test_CloserThanVDWPlusConstantSelector(self):
@@ -67,7 +67,7 @@ class BaseTests(unittest.TestCase):
         instantiate a CloserThanVDWPlusConstantSelector
         """
         d_sel = CloserThanVDWPlusConstantSelector()
-        self.assertEquals(d_sel.__class__, CloserThanVDWPlusConstantSelector)
+        self.assertEqual(d_sel.__class__, CloserThanVDWPlusConstantSelector)
 
 
     def test_CloserThanVDWPlusConstantSelector_setupCutoff(self):
@@ -75,8 +75,8 @@ class BaseTests(unittest.TestCase):
          CloserThanVDWPlusConstantSelector cutoff is expected shape
         """
         cutoff = CloserThanVDWPlusConstantSelector().setupCutoff(self.rec.allAtoms, self.lig.allAtoms, 3.0)
-        self.assertEquals(cutoff.shape[0], len(self.lig.allAtoms))
-        self.assertEquals(cutoff.shape[1], len(self.rec.allAtoms))
+        self.assertEqual(cutoff.shape[0], len(self.lig.allAtoms))
+        self.assertEqual(cutoff.shape[1], len(self.rec.allAtoms))
 
 
     def test_CloserThanVDWPlusConstantSelector_select(self):
@@ -86,14 +86,14 @@ class BaseTests(unittest.TestCase):
         d_sel = CloserThanVDWPlusConstantSelector(constant=1)
         resultD, distD = d_sel.select(self.lig.allAtoms, self.rec.allAtoms)
         #check that 45 atoms in the ligand are near 1 or more atoms in the receptor
-        self.assertEquals(len(resultD.keys()), 45)
+        self.assertEqual(len(list(resultD.keys())), 45)
         d = {}
-        for k in resultD.values():
+        for k in list(resultD.values()):
             for item in k:
                 d[item] = 0
         #check that 16 atoms in the receptor are near an atom in the ligand
         # when using sum of vdw PLUS 1.0 angstrom
-        self.assertEquals(len(d.keys()), 93)
+        self.assertEqual(len(list(d.keys())), 93)
                 
 
 

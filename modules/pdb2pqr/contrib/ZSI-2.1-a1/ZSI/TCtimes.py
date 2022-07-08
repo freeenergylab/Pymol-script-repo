@@ -99,7 +99,7 @@ def _dict_to_tuple(d):
             
     v = d.get('tz')
     if v and v != 'Z':
-        h,m = map(int, v.split(':'))
+        h,m = list(map(int, v.split(':')))
         # check for time zone offset, if within the same timezone, 
         # ignore offset specific calculations
         offset=_localtimezone().utcoffset(_datetime.now())
@@ -131,7 +131,7 @@ def _dict_to_tuple(d):
             retval[5] = localdt.second
             
     if d.get('neg', 0):
-        retval[0:5] = map(operator.__neg__, retval[0:5])
+        retval[0:5] = list(map(operator.__neg__, retval[0:5]))
     return tuple(retval)
 
 
@@ -159,7 +159,7 @@ class Duration(SimpleType):
             raise EvaluateException('Duration has T without time')
         try:
             retval = _dict_to_tuple(d)
-        except ValueError, e:
+        except ValueError as e:
             raise EvaluateException(str(e))
     
         if self.pyclass is not None:
@@ -172,8 +172,8 @@ class Duration(SimpleType):
         
         d = {}
         pyobj = tuple(pyobj)
-        if 1 in map(lambda x: x < 0, pyobj[0:6]):
-            pyobj = map(abs, pyobj)
+        if 1 in [x < 0 for x in pyobj[0:6]]:
+            pyobj = list(map(abs, pyobj))
             neg = '-'
         else:
             neg = ''
@@ -200,7 +200,7 @@ class Gregorian(SimpleType):
             raise EvaluateException('Bad Gregorian: %s' %text, ps.Backtrace(elt))
         try:
             retval = _dict_to_tuple(m.groupdict())
-        except ValueError, e:
+        except ValueError as e:
             #raise EvaluateException(str(e))
             raise
         
@@ -214,8 +214,8 @@ class Gregorian(SimpleType):
         
         d = {}
         pyobj = tuple(pyobj)
-        if 1 in map(lambda x: x < 0, pyobj[0:6]):
-            pyobj = map(abs, pyobj)
+        if 1 in [x < 0 for x in pyobj[0:6]]:
+            pyobj = list(map(abs, pyobj))
             d['neg'] = '-'
         else:
             d['neg'] = ''
@@ -227,7 +227,7 @@ class Gregorian(SimpleType):
             return self.format % d
 
         if  ms > 999:
-            raise ValueError, 'milliseconds must be a integer between 0 and 999'
+            raise ValueError('milliseconds must be a integer between 0 and 999')
 
         d = { 'Y': pyobj[0], 'M': pyobj[1], 'D': pyobj[2],
             'h': pyobj[3], 'm': pyobj[4], 's': pyobj[5], 'ms':ms, }
@@ -318,4 +318,4 @@ class gTime(Gregorian):
     format_ms = format[:-1] + '.%(ms)03dZ'
     type = (SCHEMA.XSD3, 'time')
 
-if __name__ == '__main__': print _copyright
+if __name__ == '__main__': print(_copyright)

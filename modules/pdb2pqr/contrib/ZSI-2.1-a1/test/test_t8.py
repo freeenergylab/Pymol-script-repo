@@ -18,7 +18,7 @@ class AnyTestCase(unittest.TestCase):
         data = []
         s = str(SoapWriter().serialize(data,TC.Any(aslist=True)))
         p = ParsedSoap(s).Parse(TC.Any())
-        self.failUnless(data==p, 'expecting "%s", got "%s"' %(data,p))
+        self.assertTrue(data==p, 'expecting "%s", got "%s"' %(data,p))
 
     def check_empty_struct(self):
         """Empty Struct is None, maybe dict() makes more sense, but this
@@ -27,12 +27,12 @@ class AnyTestCase(unittest.TestCase):
         data = {}
         s = str(SoapWriter().serialize(data,TC.Any()))
         p = ParsedSoap(s).Parse(TC.Any())
-        self.failUnless(p==None, 'expecting "%s", got "%s"' %(None,p))
+        self.assertTrue(p==None, 'expecting "%s", got "%s"' %(None,p))
 
     def check_parse_empty_all(self):
         # None
         skip = [TC.FPEnumeration, TC.Enumeration, TC.IEnumeration, TC.List, TC.Integer]
-        for typeclass in filter(lambda c: type(c) in [types.ClassType,type] and not issubclass(c, TC.String) and issubclass(c, TC.SimpleType), TC.__dict__.values()):
+        for typeclass in [c for c in list(TC.__dict__.values()) if type(c) in [type,type] and not issubclass(c, TC.String) and issubclass(c, TC.SimpleType)]:
             if typeclass in skip: continue
             tc = typeclass()
             sw = SoapWriter()
@@ -44,8 +44,8 @@ class AnyTestCase(unittest.TestCase):
 
     def check_parse_empty_string(self):
         # Empty String
-        typecodes = TC.Any.parsemap.values()
-        for tc in filter(lambda c: isinstance(c, TC.String), TC.Any.parsemap.values()):
+        typecodes = list(TC.Any.parsemap.values())
+        for tc in [c for c in list(TC.Any.parsemap.values()) if isinstance(c, TC.String)]:
             sw = SoapWriter()
             sw.serialize("", typecode=tc, typed=True)
             soap = str(sw)
@@ -55,7 +55,7 @@ class AnyTestCase(unittest.TestCase):
 
     def check_builtins(self):
         myInt,myLong,myStr,myDate,myFloat = 123,2147483648,\
-            u"hello", time.gmtime(), 1.0001
+            "hello", time.gmtime(), 1.0001
         orig = [myInt,myLong,myStr,myDate,myFloat]
 
         sw = SoapWriter()
@@ -94,8 +94,8 @@ class AnyTestCase(unittest.TestCase):
 </tns:foo>""" %NSDICT
 
         ps = ParsedSoap(xml, envelope=False)
-        self.failUnless(ps.Parse(TC.Any()) == {'i': 12, 'name': 'Hello world'})
-        self.failUnless(ps.Parse(TC.Any(aslist=True)) == [12, 'Hello world'])
+        self.assertTrue(ps.Parse(TC.Any()) == {'i': 12, 'name': 'Hello world'})
+        self.assertTrue(ps.Parse(TC.Any(aslist=True)) == [12, 'Hello world'])
 
     def check_any_typed_soap_integer(self):
         # from zsi developer's guide
@@ -104,7 +104,7 @@ class AnyTestCase(unittest.TestCase):
         d.update(NSDICT)
         xml = """<tns:i xsi:type="SOAP-ENC:integer" %(xsi)s %(soap)s %(tns)s>%(value)d</tns:i>""" %d
         ps = ParsedSoap(xml, envelope=False)
-        self.failUnless(ps.Parse(TC.Any()) == value)
+        self.assertTrue(ps.Parse(TC.Any()) == value)
 
     def check_any_typed_xsd_int(self):
         # from zsi developer's guide
@@ -113,7 +113,7 @@ class AnyTestCase(unittest.TestCase):
         d.update(NSDICT)
         xml = """<tns:i xsi:type="xsd:int" %(xsi)s %(soap)s %(tns)s %(xsd)s>%(value)d</tns:i>""" %d
         ps = ParsedSoap(xml, envelope=False)
-        self.failUnless(ps.Parse(TC.Any()) == value)
+        self.assertTrue(ps.Parse(TC.Any()) == value)
 
     def check_any_typed_nonNegativeInteger(self):
         # from zsi developer's guide
@@ -122,7 +122,7 @@ class AnyTestCase(unittest.TestCase):
         d.update(NSDICT)
         xml = """<tns:i xsi:type="xsd:nonNegativeInteger" %(xsi)s %(soap)s %(tns)s %(xsd)s>%(value)d</tns:i>""" %d
         ps = ParsedSoap(xml, envelope=False)
-        self.failUnless(ps.Parse(TC.Any()) == value)
+        self.assertTrue(ps.Parse(TC.Any()) == value)
 
     def check_any_untyped_int(self):
         # from zsi developer's guide
@@ -130,7 +130,7 @@ class AnyTestCase(unittest.TestCase):
         d.update(NSDICT)
         xml = """<tns:i %(tns)s>12</tns:i>""" %NSDICT
         ps = ParsedSoap(xml, envelope=False)
-        self.failUnless(int(ps.Parse(TC.Any())) == 12)
+        self.assertTrue(int(ps.Parse(TC.Any())) == 12)
 
     def check_any_dict_list_rpcenc(self):
         sw = SoapWriter()
@@ -140,17 +140,17 @@ class AnyTestCase(unittest.TestCase):
         xml = str(sw)
         ps = ParsedSoap(xml)
         result = TC.Any().parse(ps.body_root, ps)
-        self.failUnless(result == testObj)
+        self.assertTrue(result == testObj)
 
 #
 # Creates permutation of test options: "check", "check_any", etc
 #
 _SEP = '_'
-for t in [i[0].split(_SEP) for i in filter(lambda i: callable(i[1]), AnyTestCase.__dict__.items())]:
+for t in [i[0].split(_SEP) for i in [i for i in list(AnyTestCase.__dict__.items()) if callable(i[1])]]:
     test = ''
     for f in t:
         test += f
-        if globals().has_key(test): test += _SEP; continue
+        if test in globals(): test += _SEP; continue
         def _closure():
             name = test
             def _makeTestSuite():

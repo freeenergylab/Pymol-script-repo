@@ -12,7 +12,7 @@
 #
 #
 
-import sys,unittest,Tkinter
+import sys,unittest,tkinter
 from time import sleep
 from mglutil.gui.BasicWidgets.Tk.colorWidgets import *
 from mglutil.util.colorUtil import *
@@ -27,8 +27,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_set_HSV(self):
         """tests setting color when mode is HSV"""
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()
@@ -43,8 +43,8 @@ class colorEditorTest(unittest.TestCase):
         
     def test_colorEditor_set_HEX(self):
         """tests setting color when mode is HEX"""
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()
@@ -59,8 +59,8 @@ class colorEditorTest(unittest.TestCase):
         
     def test_colorEditor_set_RGB(self):
         """tests setting color when mode is RGB"""
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()
@@ -79,8 +79,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_updateWidgetColor_HSV(self):
         """tests updateWidgetColor when mode is 'hsv' """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()
@@ -104,8 +104,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_updateWidgetColor_RGB(self):
         """tests updateWidgetColor when mode is 'rgb' """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()
@@ -125,8 +125,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_updateWidgetColor_HEX(self):
         """tests updateWidgetColor when mode is 'hex' """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()
@@ -143,8 +143,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_rVal(self):
         """tests colorEditor values by setting rVal and invoking """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()    
@@ -161,8 +161,8 @@ class colorEditorTest(unittest.TestCase):
         
     def test_colorEditor_gVal(self):
         """tests colorEditor values by setting gVal and invoking """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()    
@@ -179,8 +179,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_bVal(self):
         """tests colorEditor values by setting bVal and invoking """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()    
@@ -197,8 +197,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_hVal(self):
         """tests colorEditor values by setting hVal and invoking """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()    
@@ -218,8 +218,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_sVal(self):
         """tests colorEditor values by setting sVal and invoking """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()    
@@ -236,8 +236,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_vVal(self):
         """tests colorEditor values by setting vVal and invoking """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()    
@@ -252,8 +252,8 @@ class colorEditorTest(unittest.TestCase):
 
     def test_colorEditor_hexVal(self):
         """tests colorEditor values by setting hexVal and invoking """
-        self.master = Tkinter.Toplevel()       
-        editFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        editFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         ce = ColorEditor(editFrame)
         ce.pack()
         editFrame.pack()    
@@ -272,12 +272,12 @@ class ColorChooserTest(unittest.TestCase):
     
      def test_colorChooser_1(self):
         """tests colorchooser by invoking color radio select buttons """
-        self.master = Tkinter.Toplevel()       
-        self.masterFrame = Tkinter.Frame(self.master,borderwidth=2,relief='ridge')
+        self.master = tkinter.Toplevel()       
+        self.masterFrame = tkinter.Frame(self.master,borderwidth=2,relief='ridge')
         self.menuBar = Pmw.MenuBar(self.masterFrame,
                                    hull_relief = 'raised',
                                    hull_borderwidth = 1)
-        self.mainFrame = Tkinter.Frame(self.masterFrame,
+        self.mainFrame = tkinter.Frame(self.masterFrame,
                                        borderwidth=2, relief='ridge',
                                         width=150, height=200)
         cc = ColorChooser(self.mainFrame)

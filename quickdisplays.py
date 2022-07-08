@@ -17,7 +17,7 @@ VERSION NOTES:
 '''
 #-------------------------------------------------------------------------------
 # IMPORT
-from __future__ import print_function
+
 from pymol import cmd
 from pymol import stored
 #-------------------------------------------------------------------------------

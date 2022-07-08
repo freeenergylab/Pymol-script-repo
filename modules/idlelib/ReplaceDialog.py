@@ -1,7 +1,7 @@
-from Tkinter import StringVar, TclError
+from tkinter import StringVar, TclError
 
-import SearchEngine
-from SearchDialogBase import SearchDialogBase
+from . import SearchEngine
+from .SearchDialogBase import SearchDialogBase
 
 def replace(text):
     root = text._root()

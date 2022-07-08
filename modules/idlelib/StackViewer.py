@@ -2,12 +2,13 @@ import os
 import sys
 import linecache
 
-from TreeWidget import TreeNode, TreeItem, ScrolledCanvas
-from ObjectBrowser import ObjectTreeItem, make_objecttreeitem
+from .TreeWidget import TreeNode, TreeItem, ScrolledCanvas
+from .ObjectBrowser import ObjectTreeItem, make_objecttreeitem
+import importlib
 
 def StackBrowser(root, flist=None, tb=None, top=None):
     if top is None:
-        from Tkinter import Toplevel
+        from tkinter import Toplevel
         top = Toplevel(root)
     sc = ScrolledCanvas(top, bg="white", highlightthickness=0)
     sc.frame.pack(expand=1, fill="both")
@@ -106,11 +107,11 @@ class VariablesTreeItem(ObjectTreeItem):
         return len(self.object) > 0
 
     def keys(self):
-        return self.object.keys()
+        return list(self.object.keys())
 
     def GetSubList(self):
         sublist = []
-        for key in self.keys():
+        for key in list(self.keys()):
             try:
                 value = self.object[key]
             except KeyError:
@@ -124,11 +125,11 @@ class VariablesTreeItem(ObjectTreeItem):
 
 def _test():
     try:
-        import testcode
-        reload(testcode)
+        from . import testcode
+        importlib.reload(testcode)
     except:
         sys.last_type, sys.last_value, sys.last_traceback = sys.exc_info()
-    from Tkinter import Tk
+    from tkinter import Tk
     root = Tk()
     StackBrowser(None, top=root)
     root.mainloop()

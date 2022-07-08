@@ -53,7 +53,7 @@ if have_setuptools:
     numpy_cmdclass['egg_info'] = egg_info.egg_info
 
 def _dict_append(d, **kws):
-    for k,v in kws.items():
+    for k,v in list(kws.items()):
         if k not in d:
             d[k] = v
             continue
@@ -67,7 +67,7 @@ def _dict_append(d, **kws):
         elif is_string(dv):
             d[k] = dv + v
         else:
-            raise TypeError, repr(type(dv))
+            raise TypeError(repr(type(dv)))
 
 def _command_line_ok(_cache=[]):
     """ Return True if command line does not contain any
@@ -107,14 +107,14 @@ def _exit_interactive_session(_cache=[]):
     if _cache:
         return # been here
     _cache.append(1)
-    print '-'*72
-    raw_input('Press ENTER to close the interactive session..')
-    print '='*72
+    print('-'*72)
+    input('Press ENTER to close the interactive session..')
+    print('='*72)
 
 def setup(**attr):
 
     if len(sys.argv)<=1 and not attr.get('script_args',[]):
-        from interactive import interactive_sys_argv
+        from .interactive import interactive_sys_argv
         import atexit
         atexit.register(_exit_interactive_session)
         sys.argv[:] = interactive_sys_argv(sys.argv)
@@ -209,7 +209,8 @@ def _check_append_library(libraries, item):
                     return
     libraries.append(item)
 
-def _check_append_ext_library(libraries, (lib_name,build_info)):
+def _check_append_ext_library(libraries, xxx_todo_changeme):
+    (lib_name,build_info) = xxx_todo_changeme
     for item in libraries:
         if is_sequence(item):
             if item[0]==lib_name:

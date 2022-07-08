@@ -1,16 +1,16 @@
 "Dialog to specify or edit the parameters for a user configured help source."
 import os
 import sys
-from Tkinter import Toplevel, Frame, Entry, Button, Label, StringVar
-from Tkconstants import GROOVE, LEFT, RIGHT, W, ACTIVE, X, BOTH, TOP, BOTTOM
-import tkMessageBox
-import tkFileDialog
+from tkinter import Toplevel, Frame, Entry, Button, Label, StringVar
+from tkinter.constants import GROOVE, LEFT, RIGHT, W, ACTIVE, X, BOTH, TOP, BOTTOM
+import tkinter.messagebox
+import tkinter.filedialog
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import Frame, Entry, Button, Label
+    from tkinter.ttk import Frame, Entry, Button, Label
 
 class GetHelpSourceDialog(Toplevel):
     def __init__(self, parent, title, menuItem='', filePath=''):
@@ -100,7 +100,7 @@ class GetHelpSourceDialog(Toplevel):
                     dir = os.getcwd()
             else:
                 dir = os.getcwd()
-        opendialog = tkFileDialog.Open(parent=self, filetypes=filetypes)
+        opendialog = tkinter.filedialog.Open(parent=self, filetypes=filetypes)
         file = opendialog.show(initialdir=dir, initialfile=base)
         if file:
             self.path.set(file)
@@ -111,13 +111,13 @@ class GetHelpSourceDialog(Toplevel):
         menu = self.menu.get()
         menu.strip()
         if not menu:
-            tkMessageBox.showerror(title='Menu Item Error',
+            tkinter.messagebox.showerror(title='Menu Item Error',
                                    message='No menu item specified',
                                    parent=self)
             self.entryMenu.focus_set()
             menuOk = False
         elif len(menu) > 30:
-            tkMessageBox.showerror(title='Menu Item Error',
+            tkinter.messagebox.showerror(title='Menu Item Error',
                                    message='Menu item too long:'
                                            '\nLimit 30 characters.',
                                    parent=self)
@@ -131,7 +131,7 @@ class GetHelpSourceDialog(Toplevel):
         path = self.path.get()
         path.strip()
         if not path: #no path specified
-            tkMessageBox.showerror(title='File Path Error',
+            tkinter.messagebox.showerror(title='File Path Error',
                                    message='No help file path specified.',
                                    parent=self)
             self.entryPath.focus_set()
@@ -142,7 +142,7 @@ class GetHelpSourceDialog(Toplevel):
             if path[:5] == 'file:':
                 path = path[5:]
             if not os.path.exists(path):
-                tkMessageBox.showerror(title='File Path Error',
+                tkinter.messagebox.showerror(title='File Path Error',
                                        message='Help file path does not exist.',
                                        parent=self)
                 self.entryPath.focus_set()
@@ -168,12 +168,12 @@ class GetHelpSourceDialog(Toplevel):
         self.destroy()
 
 if __name__ == '__main__':
-    from Tkinter import Tk
+    from tkinter import Tk
     #test the dialog
     root = Tk()
     def run():
         keySeq = ''
         dlg = GetHelpSourceDialog(root, 'Get Help Source')
-        print dlg.result
+        print(dlg.result)
     Button(root,text='Dialog', command=run).pack()
     root.mainloop()

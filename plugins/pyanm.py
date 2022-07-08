@@ -41,11 +41,11 @@ import warnings
 import os 
 import sys
 if sys.version_info[0] < 3:
-    import Tkinter
-    import tkSimpleDialog
-    import tkMessageBox
-    import tkFileDialog
-    import tkColorChooser
+    import tkinter
+    import tkinter.simpledialog
+    import tkinter.messagebox
+    import tkinter.filedialog
+    import tkinter.colorchooser
 else:
     import tkinter as Tkinter
     import tkinter.simpledialog as tkSimpleDialog
@@ -110,14 +110,14 @@ class PyANMPlugin:
                                  command = self.execute)
         Pmw.setbusycursorattributes(self.dialog.component('hull'))
         
-        self.structure = Tkinter.StringVar()
-        self.cutoffValue = Tkinter.DoubleVar()
-        self.useCAonly = Tkinter.BooleanVar()
-        self.includeHETATM = Tkinter.BooleanVar()
-        self.saveDir = Tkinter.StringVar()
-        self.modesForMovies = Tkinter.StringVar()
-        self.modesForArrows = Tkinter.StringVar()
-        self.powerValue = Tkinter.DoubleVar()
+        self.structure = tkinter.StringVar()
+        self.cutoffValue = tkinter.DoubleVar()
+        self.useCAonly = tkinter.BooleanVar()
+        self.includeHETATM = tkinter.BooleanVar()
+        self.saveDir = tkinter.StringVar()
+        self.modesForMovies = tkinter.StringVar()
+        self.modesForArrows = tkinter.StringVar()
+        self.powerValue = tkinter.DoubleVar()
         self.anmMethod = None
         self.anmBuilt = False
         self.arrowRGB = [1, 1, 1]
@@ -125,14 +125,14 @@ class PyANMPlugin:
         self.movieLoaded = False
         self.arrowSize = 5
         self.movieScales = 5
-        self.exportE = Tkinter.BooleanVar()
-        self.exportV = Tkinter.BooleanVar()
-        self.exportMSF = Tkinter.BooleanVar()
-        self.exportCX = Tkinter.BooleanVar()
-        self.exportHess = Tkinter.BooleanVar()
-        self.exportAll = Tkinter.BooleanVar()
+        self.exportE = tkinter.BooleanVar()
+        self.exportV = tkinter.BooleanVar()
+        self.exportMSF = tkinter.BooleanVar()
+        self.exportCX = tkinter.BooleanVar()
+        self.exportHess = tkinter.BooleanVar()
+        self.exportAll = tkinter.BooleanVar()
         
-        w = Tkinter.Label(self.dialog.interior(),
+        w = tkinter.Label(self.dialog.interior(),
                           text = '\nPyANM \nYuan Wang \nIowa State University, 2014',
                           background = 'black', foreground = 'green')
         w.pack(expand = 1, fill = 'both', padx = 10, pady = 2)
@@ -147,7 +147,7 @@ class PyANMPlugin:
         
         page = self.notebook.add('ANM')
         self.notebook.tab('ANM').focus_set()
-        group_struc = Tkinter.LabelFrame(page, text = 'Structure Handling')
+        group_struc = tkinter.LabelFrame(page, text = 'Structure Handling')
         group_struc.pack(fill = 'both', expand = True, padx = 10, pady = 5)
         
        
@@ -157,16 +157,16 @@ class PyANMPlugin:
                                          labelpos = 'wn',
                                          entry_textvariable = self.structure)
                                          
-        structure_button = Tkinter.Button(group_struc, text = 'Browse...',
+        structure_button = tkinter.Button(group_struc, text = 'Browse...',
                                           command = self.getStructurePath)
        
         
                                       
-        useCAonly_checkbox = Tkinter.Checkbutton(group_struc,
+        useCAonly_checkbox = tkinter.Checkbutton(group_struc,
                                     text = "Use only Alpha Carbons?",
                                     variable = self.useCAonly)
                                     
-        includeHET_checkbox = Tkinter.Checkbutton(group_struc,
+        includeHET_checkbox = tkinter.Checkbutton(group_struc,
                                                   text = "Include HETATMs?",
                                                   variable = self.includeHETATM)
         useCAonly_checkbox.select()                                        
@@ -182,7 +182,7 @@ class PyANMPlugin:
                                  padx= 3, pady = 5)
        
         
-        self.group_struc2 = Tkinter.LabelFrame(page, text = 'ANM Parameters')
+        self.group_struc2 = tkinter.LabelFrame(page, text = 'ANM Parameters')
         self.group_struc2.pack(fill = 'both', expand = True, padx = 10, pady = 5)
         
         self.method_select = Pmw.ScrolledListBox(self.group_struc2,
@@ -201,33 +201,33 @@ class PyANMPlugin:
         
         page = self.notebook.add('Control Panel')
         
-        moviePanel = Tkinter.LabelFrame(page, text = 'Movie Controls')
+        moviePanel = tkinter.LabelFrame(page, text = 'Movie Controls')
         moviePanel.grid(sticky = 'we', row = 0, column = 0,
                         padx = 10, pady = 5)
-        movieScaleLabel = Tkinter.Label(moviePanel, text = 'Scale of movies:')
+        movieScaleLabel = tkinter.Label(moviePanel, text = 'Scale of movies:')
         movieScaleLabel.grid(sticky = 'e', row = 0, column = 0, padx = 5, pady = 3)
-        self.movieScale = Tkinter.Scale(moviePanel,
+        self.movieScale = tkinter.Scale(moviePanel,
                                    from_ = 0.0,
                                    to = 10.0,
                                    resolution = 0.5,
-                                   orient = Tkinter.HORIZONTAL,
+                                   orient = tkinter.HORIZONTAL,
                                    command = self.changeMoiveScale)
                                    
         self.movieScale.grid(stick = 'we', row = 0, column = 1, padx = 5, pady = 3)
         self.movieScale.set(5.0)
-        arrowPanel = Tkinter.LabelFrame(page, text = 'Arrow Controls')
+        arrowPanel = tkinter.LabelFrame(page, text = 'Arrow Controls')
         arrowPanel.grid(sticky = 'we', row = 1, column = 0,
                         padx= 10, pady = 5)
-        arrowColorLabel = Tkinter.Label(arrowPanel, text = 'Color of the arrows:')
-        self.arrowColorButton = Tkinter.Button(arrowPanel, 
+        arrowColorLabel = tkinter.Label(arrowPanel, text = 'Color of the arrows:')
+        self.arrowColorButton = tkinter.Button(arrowPanel, 
                                           bg = 'white',
                                           command = self.getColorRGB)
-        arrowSizeLabel = Tkinter.Label(arrowPanel, text = 'Size of the arrows:')
-        self.arrowSizeScale = Tkinter.Scale(arrowPanel,
+        arrowSizeLabel = tkinter.Label(arrowPanel, text = 'Size of the arrows:')
+        self.arrowSizeScale = tkinter.Scale(arrowPanel,
                                             from_ = 0.0,
                                             to = 10.0,
                                             resolution = 0.5,
-                                            orient = Tkinter.HORIZONTAL,
+                                            orient = tkinter.HORIZONTAL,
                                             command = self.changeArrowSize)
         self.arrowSizeScale.set(5.0)
         arrowColorLabel.grid(sticky = 'e', row = 0, column = 0, padx = 5, pady = 3)
@@ -235,38 +235,38 @@ class PyANMPlugin:
         arrowSizeLabel.grid(sticky = 'e', row = 1, column = 0, padx = 5, pady = 3)
         self.arrowSizeScale.grid(sticky = 'we', row = 1, column = 1, padx = 5, pady = 3)      
         
-        exportPanel = Tkinter.LabelFrame(page, text = 'Export Selections')
+        exportPanel = tkinter.LabelFrame(page, text = 'Export Selections')
         exportPanel.grid(sticky = 'e', row = 0, column = 1, rowspan = 2,
                          padx = 10, pady = 5)
                          
-        exportE_checkbox = Tkinter.Checkbutton(exportPanel,
+        exportE_checkbox = tkinter.Checkbutton(exportPanel,
                                                text = 'Export Eigenvalues',
                                                variable = self.exportE)
         exportE_checkbox.grid(sticky = 'w', row = 0, column = 0)
         exportE_checkbox.select()
         
-        exportV_checkbox = Tkinter.Checkbutton(exportPanel,
+        exportV_checkbox = tkinter.Checkbutton(exportPanel,
                                                text = 'Export Eigenvectors',
                                                variable = self.exportV)
         exportV_checkbox.grid(sticky = 'w', row = 1, column = 0)
         exportV_checkbox.select()
         
-        exportMSF_checkbox = Tkinter.Checkbutton(exportPanel,
+        exportMSF_checkbox = tkinter.Checkbutton(exportPanel,
                                                  text = 'Export MSF',
                                                  variable = self.exportMSF)
         exportMSF_checkbox.grid(sticky = 'w', row = 2, column = 0)
         
-        exportCX_checkbox = Tkinter.Checkbutton(exportPanel,
+        exportCX_checkbox = tkinter.Checkbutton(exportPanel,
                                                  text = 'Export Contact Matrix',
                                                  variable = self.exportCX)
         exportCX_checkbox.grid(sticky = 'w', row = 3, column = 0)
         
-        exportHess_checkbox = Tkinter.Checkbutton(exportPanel,
+        exportHess_checkbox = tkinter.Checkbutton(exportPanel,
                                                  text = 'Export Hessian Matrix',
                                                  variable = self.exportHess)
         exportHess_checkbox.grid(sticky = 'w', row = 4, column = 0)
         
-        exportAll_checkbox = Tkinter.Checkbutton(exportPanel,
+        exportAll_checkbox = tkinter.Checkbutton(exportPanel,
                                                  text = 'All of Above',
                                                  variable = self.exportAll,
                                                  command = self.selectAll)
@@ -276,7 +276,7 @@ class PyANMPlugin:
 ######################################
         
         page = self.notebook.add('About')
-        group_about = Tkinter.LabelFrame(page, text = 'About PyANM')
+        group_about = tkinter.LabelFrame(page, text = 'About PyANM')
         group_about.grid(sticky = 'we', row = 0, column = 0, 
                          padx = 5, pady = 3)
         about_plugin = """PyANM is a Pymol Plugin which allows you to build 
@@ -285,7 +285,7 @@ class PyANMPlugin:
                           Author: Yuan Wang
                           Iowa State University
                           Sept, 2014"""
-        label_about = Tkinter.Label(group_about, text = about_plugin)
+        label_about = tkinter.Label(group_about, text = about_plugin)
         label_about.grid(sticky = 'w', row = 0, column = 0,
                           padx = 5, pady = 10)
                           
@@ -322,7 +322,7 @@ class PyANMPlugin:
         get the path to pdb file if user chooses to use a local file
         '''
         
-        filePath = tkFileDialog.askopenfilename(title = 'File Location',
+        filePath = tkinter.filedialog.askopenfilename(title = 'File Location',
                                                 initialdir = '',
                                                 filetypes = [('all', '*')],
                                                 parent = self.parent)
@@ -337,13 +337,13 @@ class PyANMPlugin:
         '''
         
         try:
-            colorTuple, color = tkColorChooser.askcolor()
+            colorTuple, color = tkinter.colorchooser.askcolor()
             if colorTuple is not None and color is not None:            
                 self.arrowColorButton.config(bg = color)               
                 self.arrowRGB = list()
                 for i in range(3):
                     self.arrowRGB.append((float(colorTuple[i])/255))
-        except Tkinter._tkinter.TclError:
+        except tkinter._tkinter.TclError:
             self.arrowRGB = [1,1,1]
             
         if self.arrowLoaded:
@@ -402,7 +402,7 @@ class PyANMPlugin:
         global anm
         flag = False
         if self.anmMethod is None:
-            tkMessageBox.showerror('Unable to Build ANM','Please select your ANM Model First')
+            tkinter.messagebox.showerror('Unable to Build ANM','Please select your ANM Model First')
         
         if self.anmMethod == 'Cutoff Model':
             flag = True
@@ -419,12 +419,12 @@ class PyANMPlugin:
             if anm.freqChecker(): 
                 self.anmBuilt = True
                 print("ANM Built successfully")
-                tkMessageBox.showinfo("Built Successfully","ANM was built successfully",
+                tkinter.messagebox.showinfo("Built Successfully","ANM was built successfully",
                                       parent = self.parent)
             else:
                 self.anmBuilt = True
                 print("Not all of first 6 eigenvalues are zero")
-                tkMessageBox.showwarning("Warning","Not all of first 6 eigenvalues are zero, calculations can continue but might not be accurate")
+                tkinter.messagebox.showwarning("Warning","Not all of first 6 eigenvalues are zero, calculations can continue but might not be accurate")
         
         
             
@@ -472,7 +472,7 @@ class PyANMPlugin:
         '''
         
         if modes is None:    
-            self.modesForMovies = tkSimpleDialog.askstring('Input Mode Number',
+            self.modesForMovies = tkinter.simpledialog.askstring('Input Mode Number',
                                                            'Please enter the mode numbers:',
                                                            initialvalue = '1 2 3',
                                                            parent = self.parent)
@@ -499,7 +499,7 @@ class PyANMPlugin:
         '''
         
         if modes is None:
-            self.modesForArrows = tkSimpleDialog.askstring('Input Mode Number',
+            self.modesForArrows = tkinter.simpledialog.askstring('Input Mode Number',
                                                            'Please enter the mode numbers:',
                                                            initialvalue = '1 2 3',
                                                            parent = self.parent)
@@ -526,7 +526,7 @@ class PyANMPlugin:
         export data to local directories
         '''        
         
-        saveDirDialog = tkFileDialog.askdirectory(title = 'Save data in:',
+        saveDirDialog = tkinter.filedialog.askdirectory(title = 'Save data in:',
                                                   initialdir = '',
                                                   parent = self.parent)
         if saveDirDialog:
@@ -553,29 +553,29 @@ class PyANMPlugin:
         
             message = 'Data has been saved in the following directory: ' + self.saveDir.get()
         
-            tkMessageBox.showinfo("Data Saved", message, parent = self.parent)
+            tkinter.messagebox.showinfo("Data Saved", message, parent = self.parent)
     
     def execute(self, result):
         if result == 'Build ANM':
             self.ANMbuilder()
         elif result == 'Show Springs' and not self.anmBuilt:
-            tkMessageBox.showerror('ANM not found','Please Build your ANM First')
+            tkinter.messagebox.showerror('ANM not found','Please Build your ANM First')
         elif result == 'Show Springs' and self.anmBuilt:
             self.SpringsBuilder()
         elif result == 'Color by MSFs' and not self.anmBuilt:
-            tkMessageBox.showerror('ANM not found','Please Build your ANM First')       
+            tkinter.messagebox.showerror('ANM not found','Please Build your ANM First')       
         elif result == 'Color by MSFs' and self.anmBuilt:
             self.MSFcolorer()
         elif result == 'Make Movies' and not self.anmBuilt:
-            tkMessageBox.showerror('ANM not found','Please Build your ANM First')
+            tkinter.messagebox.showerror('ANM not found','Please Build your ANM First')
         elif result == 'Make Movies' and self.anmBuilt:
             self.movieMaker()
         elif result == 'Draw Arrows' and not self.anmBuilt:
-            tkMessageBox.showerror('ANM not found','Please Build your ANM First')        
+            tkinter.messagebox.showerror('ANM not found','Please Build your ANM First')        
         elif result == 'Draw Arrows' and self.anmBuilt:
             self.arrowDrawer()
         elif result == 'Export Data' and not self.anmBuilt:
-            tkMessageBox.showerror('ANM not found','Please Build your ANM First')        
+            tkinter.messagebox.showerror('ANM not found','Please Build your ANM First')        
         elif result == 'Export Data' and self.anmBuilt:
             self.dataExporter()
         elif result == 'Exit':
@@ -797,7 +797,7 @@ class ANM:
             
         if not self.freqChecker():
             warnings.warn("Not all eigenvalues converged, results might be inaccurate")
-            print(self.e[0:7])
+            print((self.e[0:7]))
             
     
     def freqChecker(self):
@@ -872,9 +872,9 @@ class ANM:
             
         self.MSF = np.zeros((1,struc.length), dtype = float)
         
-        cv1 = range(0,struc.length*3,3)
-        cv2 = range(1,struc.length*3,3)
-        cv3 = range(2,struc.length*3,3)
+        cv1 = list(range(0,struc.length*3,3))
+        cv2 = list(range(1,struc.length*3,3))
+        cv3 = list(range(2,struc.length*3,3))
         
         for i in range(6,struc.length*3):
             v_temp = self.v[:,i]**2

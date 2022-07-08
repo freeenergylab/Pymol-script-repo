@@ -14,7 +14,7 @@ Example input from pymol. with 2 objects.
 dispmap O5NT-1HP1-A, C5NT-1HPU-C, 30.0, 15.0, resi1=23-25, atom=CA, showsticks=yes
 '''
 
-from __future__ import print_function
+
 from pymol import cmd, stored, selector
 from math import *
 import os

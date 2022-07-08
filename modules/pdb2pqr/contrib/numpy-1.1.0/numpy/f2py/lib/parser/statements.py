@@ -27,11 +27,11 @@ __all__ = ['GeneralAssignment',
 import re
 import sys
 
-from base_classes import Statement, Variable
+from .base_classes import Statement, Variable
 
 # Auxiliary tools
 
-from utils import split_comma, specs_split_comma, AnalyzeError, ParseError,\
+from .utils import split_comma, specs_split_comma, AnalyzeError, ParseError,\
      get_module_file, parse_bind, parse_result, is_name
 
 class StatementWithNamelist(Statement):
@@ -186,7 +186,7 @@ class Call(Statement):
         if hasattr(a, 'external'):
             external = a.external
             if self.designator in external:
-                print >> sys.stderr, 'Need to analyze:',self
+                print('Need to analyze:',self, file=sys.stderr)
         return
 
 class Goto(Statement):
@@ -238,7 +238,7 @@ class AssignedGoto(Statement):
             self.items = []
             return
         self.varname = line[:i].rstrip()
-        assert line[-1]==')',`line`
+        assert line[-1]==')',repr(line)
         self
         self.items = split_comma(line[i+1:-1], self.item)
         return
@@ -395,7 +395,7 @@ class Write(Statement):
         item = self.item
         line = item.get_line()[5:].lstrip()
         i = line.find(')')
-        assert i != -1, `line`
+        assert i != -1, repr(line)
         self.specs = specs_split_comma(line[1:i], item)
         self.items = split_comma(line[i+1:], item)
         return
@@ -425,7 +425,7 @@ class Flush(Statement):
             self.isvalid = False
             return
         if line.startswith('('):
-            assert line[-1] == ')', `line`
+            assert line[-1] == ')', repr(line)
             self.specs = specs_split_comma(line[1:-1],self.item)
         else:
             self.specs = specs_split_comma(line,self.item)
@@ -482,7 +482,7 @@ class Allocate(Statement):
         i = line2.find('::')
         if i != -1:
             spec = item2.apply_map(line2[:i].rstrip())
-            from block_statements import type_spec
+            from .block_statements import type_spec
             stmt = None
             for cls in type_spec:
                 if cls.match(spec):
@@ -492,7 +492,7 @@ class Allocate(Statement):
             if stmt is not None and stmt.isvalid:
                 spec = stmt
             else:
-                self.warning('TODO: unparsed type-spec' + `spec`)
+                self.warning('TODO: unparsed type-spec' + repr(spec))
             line2 = line2[i+2:].lstrip()
         else:
             spec = None
@@ -534,7 +534,7 @@ class ModuleProcedure(Statement):
     def process_item(self):
         line = self.item.get_line()
         m = self.match(line)
-        assert m,`line`
+        assert m,repr(line)
         items = split_comma(line[m.end():].strip(), self.item)
         for n in items:
             if not is_name(n):
@@ -648,7 +648,7 @@ class FilePositioningStatement(Statement):
             return
         line = line[len(clsname):].lstrip()
         if line.startswith('('):
-            assert line[-1]==')',`line`
+            assert line[-1]==')',repr(line)
             spec = line[1:-1].strip()
         else:
             spec = line
@@ -714,7 +714,7 @@ class Format(Statement):
             self.warning('R1001: FORMAT statement must be labeled but got %r.' \
                          % (item.label))
         line = item.get_line()[6:].lstrip()
-        assert line[0]+line[-1]=='()',`line`
+        assert line[0]+line[-1]=='()',repr(line)
         self.specs = split_comma(line[1:-1], item)
         return
     def tofortran(self, isfix=None):
@@ -741,9 +741,9 @@ class Save(Statement):
             s = s.strip()
             if not s: continue
             if s.startswith('/'):
-                assert s.endswith('/'),`s`
+                assert s.endswith('/'),repr(s)
                 n = s[1:-1].strip()
-                assert is_name(n),`n`
+                assert is_name(n),repr(n)
                 items.append('/%s/' % (n))
             elif is_name(s):
                 items.append(s)
@@ -886,8 +886,8 @@ class Use(Statement):
                 if fn is not None:
                     break
             if fn is not None:
-                from readfortran import FortranFileReader
-                from parsefortran import FortranParser
+                from .readfortran import FortranFileReader
+                from .parsefortran import FortranParser
                 self.info('looking module information from %r' % (fn))
                 reader = FortranFileReader(fn)
                 parser = FortranParser(reader)
@@ -902,7 +902,7 @@ class Use(Statement):
 
         module = modules[self.name]
         use_provides = self.parent.a.use_provides
-        print use
+        print(use)
 
         return
 
@@ -935,7 +935,7 @@ class Parameter(Statement):
     def analyze(self):
         for item in self.items:
             i = item.find('=')
-            assert i!=-1,`item`
+            assert i!=-1,repr(item)
             name = item[:i].rstrip()
             value = item[i+1:].lstrip()
             var = self.get_variable(name)
@@ -954,7 +954,7 @@ class Equivalence(Statement):
         items = []
         for s in self.item.get_line()[11:].lstrip().split(','):
             s = s.strip()
-            assert s[0]+s[-1]=='()',`s,self.item.get_line()`
+            assert s[0]+s[-1]=='()',repr((s,self.item.get_line()))
             s = ', '.join(split_comma(s[1:-1], self.item))
             items.append('('+s+')')
         self.items = items
@@ -980,7 +980,7 @@ class Dimension(Statement):
     def analyze(self):
         for line in self.items:
             i = line.find('(')
-            assert i!=-1 and line.endswith(')'),`line`
+            assert i!=-1 and line.endswith(')'),repr(line)
             name = line[:i].rstrip()
             array_spec = split_comma(line[i+1:-1].strip(), self.item)
             var = self.get_variable(name)
@@ -1004,7 +1004,7 @@ class Target(Statement):
     def analyze(self):
         for line in self.items:
             i = line.find('(')
-            assert i!=-1 and line.endswith(')'),`line`
+            assert i!=-1 and line.endswith(')'),repr(line)
             name = line[:i].rstrip()
             array_spec = split_comma(line[i+1:-1].strip(), self.item)
             var = self.get_variable(name)
@@ -1036,7 +1036,7 @@ class Pointer(Statement):
                 name = line
                 array_spec = None
             else:
-                assert line.endswith(')'),`line`
+                assert line.endswith(')'),repr(line)
                 name = line[:i].rstrip()
                 array_spec = split_comma(line[i+1:-1].strip(), self.item)
             var = self.get_variable(name)
@@ -1167,9 +1167,9 @@ class Namelist(Statement):
         line = self.item.get_line()[8:].lstrip()
         items = []
         while line:
-            assert line.startswith('/'),`line`
+            assert line.startswith('/'),repr(line)
             i = line.find('/',1)
-            assert i!=-1,`line`
+            assert i!=-1,repr(line)
             name = line[:i+1]
             line = line[i+1:].lstrip()
             i = line.find('/')
@@ -1207,10 +1207,10 @@ class Common(Statement):
         while line:
             if not line.startswith('/'):
                 name = ''
-                assert not items,`line`
+                assert not items,repr(line)
             else:
                 i = line.find('/',1)
-                assert i!=-1,`line`
+                assert i!=-1,repr(line)
                 name = line[1:i].strip()
                 line = line[i+1:].lstrip()
             i = line.find('/')
@@ -1240,7 +1240,7 @@ class Common(Statement):
             for item in items:
                 i = item.find('(')
                 if i!=-1:
-                    assert item.endswith(')'),`item`
+                    assert item.endswith(')'),repr(item)
                     name = item[:i].rstrip()
                     shape = split_comma(item[i+1:-1].strip(), self.item)
                 else:
@@ -1314,7 +1314,7 @@ class Entry(Statement):
         line = line[m.end():].lstrip()
         if line.startswith('('):
             i = line.find(')')
-            assert i!=-1,`line`
+            assert i!=-1,repr(line)
             items = split_comma(line[1:i], self.item)
             line = line[i+1:].lstrip()
         else:
@@ -1322,9 +1322,9 @@ class Entry(Statement):
         self.bind, line = parse_bind(line, self.item)
         self.result, line = parse_result(line, self.item)
         if line:
-            assert self.bind is None,`self.bind`
+            assert self.bind is None,repr(self.bind)
             self.bind, line = parse_bind(line, self.item)
-        assert not line,`line`
+        assert not line,repr(line)
         self.name = name
         self.items = items
         return
@@ -1372,21 +1372,21 @@ class Forall(Statement):
         for l in split_comma(line0,self.item):
             j = l.find('=')
             if j==-1:
-                assert not mask,`mask,l`
+                assert not mask,repr((mask,l))
                 mask = l
                 continue
-            assert j!=-1,`l`
+            assert j!=-1,repr(l)
             index = l[:j].rstrip()
             it = self.item.copy(l[j+1:].lstrip())
             l = it.get_line()
             k = l.split(':')
             if len(k)==3:
-                s1, s2, s3 = map(it.apply_map,
-                                 [k[0].strip(),k[1].strip(),k[2].strip()])
+                s1, s2, s3 = list(map(it.apply_map,
+                                 [k[0].strip(),k[1].strip(),k[2].strip()]))
             else:
-                assert len(k)==2,`k`
-                s1, s2 = map(it.apply_map,
-                             [k[0].strip(),k[1].strip()])
+                assert len(k)==2,repr(k)
+                s1, s2 = list(map(it.apply_map,
+                             [k[0].strip(),k[1].strip()]))
                 s3 = '1'
             specs.append((index,s1,s2,s3))
 
@@ -1445,7 +1445,7 @@ class SpecificBinding(Statement):
                 attr = attr.upper()
             else:
                 i = attr.find('(')
-                assert i!=-1 and attr.endswith(')'),`attr`
+                assert i!=-1 and attr.endswith(')'),repr(attr)
                 attr = '%s (%s)' % (attr[:i].rstrip().upper(), attr[i+1:-1].strip())
             attrs1.append(attr)
         self.attrs = attrs1
@@ -1559,7 +1559,7 @@ class Bind(Statement):
         items = []
         for item in split_comma(line, self.item):
             if item.startswith('/'):
-                assert item.endswith('/'),`item`
+                assert item.endswith('/'),repr(item)
                 item = '/ ' + item[1:-1].strip() + ' /'
             items.append(item)
         self.items = items
@@ -1643,7 +1643,7 @@ class Case(Statement):
             items = split_comma(line[1:i].strip(), self.item)
             line = line[i+1:].lstrip()
         else:
-            assert line.lower().startswith('default'),`line`
+            assert line.lower().startswith('default'),repr(line)
             items = []
             line = line[7:].lstrip()
         for i in range(len(items)):
@@ -1716,7 +1716,7 @@ class ElseWhere(Statement):
         self.expr = None
         if line.startswith('('):
             i = line.index(')')
-            assert i != -1,`line`
+            assert i != -1,repr(line)
             self.expr = self.item.apply_map(line[1:i].strip())
             line = line[i+1:].lstrip()
         self.name = line
@@ -1806,7 +1806,7 @@ class Check(Statement):
     def process_item(self):
         line = self.item.get_line()[5:].lstrip()
         i = line.find(')')
-        assert i!=-1,`line`
+        assert i!=-1,repr(line)
         self.expr = self.item.apply_map(line[1:i].strip())
         line = line[i+1:].lstrip()
         if line.startswith('::'):

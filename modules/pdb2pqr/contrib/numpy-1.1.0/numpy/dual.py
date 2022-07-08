@@ -37,14 +37,14 @@ _restore_dict = {}
 
 def register_func(name, func):
     if name not in __all__:
-        raise ValueError, "%s not a dual function." % name
+        raise ValueError("%s not a dual function." % name)
     f = sys._getframe(0).f_globals
     _restore_dict[name] = f[name]
     f[name] = func
 
 def restore_func(name):
     if name not in __all__:
-        raise ValueError, "%s not a dual function." % name
+        raise ValueError("%s not a dual function." % name)
     try:
         val = _restore_dict[name]
     except KeyError:
@@ -53,5 +53,5 @@ def restore_func(name):
         sys._getframe(0).f_globals[name] = val
 
 def restore_all():
-    for name in _restore_dict.keys():
+    for name in list(_restore_dict.keys()):
         restore_func(name)

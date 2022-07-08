@@ -54,7 +54,7 @@ def test_ListSet_loopoveremptyset():
     from MolKit.listSet import ListSet
     testList = ListSet([])
     for l in testList:
-        print l.__str__()
+        print((l.__str__()))
     del testList
 
 harness = testplus.TestHarness( __name__,
@@ -63,5 +63,5 @@ harness = testplus.TestHarness( __name__,
 
 if __name__ == '__main__':
     testplus.chdir()
-    print harness
+    print(harness)
     sys.exit( len( harness))

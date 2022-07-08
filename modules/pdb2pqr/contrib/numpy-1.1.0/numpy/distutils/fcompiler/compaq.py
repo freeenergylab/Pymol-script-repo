@@ -78,11 +78,11 @@ class CompaqVisualFCompiler(FCompiler):
             m = MSVCCompiler()
             m.initialize()
             ar_exe = m.lib
-        except DistutilsPlatformError, msg:
-            print 'Ignoring "%s" (one should fix me in fcompiler/compaq.py)' % (msg)
-        except AttributeError, msg:
+        except DistutilsPlatformError as msg:
+            print('Ignoring "%s" (one should fix me in fcompiler/compaq.py)' % (msg))
+        except AttributeError as msg:
             if '_MSVCCompiler__root' in str(msg):
-                print 'Ignoring "%s" (I think it is msvccompiler.py bug)' % (msg)
+                print('Ignoring "%s" (I think it is msvccompiler.py bug)' % (msg))
             else:
                 raise
 
@@ -112,4 +112,4 @@ if __name__ == '__main__':
     from numpy.distutils.fcompiler import new_fcompiler
     compiler = new_fcompiler(compiler='compaq')
     compiler.customize()
-    print compiler.get_version()
+    print(compiler.get_version())

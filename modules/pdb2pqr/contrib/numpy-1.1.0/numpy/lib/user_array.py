@@ -149,12 +149,12 @@ class container(object):
         if len(self.shape) == 0:
             return func(self[0])
         else:
-            raise TypeError, "only rank-0 arrays can be converted to Python scalars."
+            raise TypeError("only rank-0 arrays can be converted to Python scalars.")
 
     def __complex__(self): return self._scalarfunc(complex)
     def __float__(self): return self._scalarfunc(float)
     def __int__(self): return self._scalarfunc(int)
-    def __long__(self): return self._scalarfunc(long)
+    def __long__(self): return self._scalarfunc(int)
     def __hex__(self): return self._scalarfunc(hex)
     def __oct__(self): return self._scalarfunc(oct)
 
@@ -203,15 +203,15 @@ if __name__ == '__main__':
 
     ua=container(temp)
     # new object created begin test
-    print dir(ua)
-    print shape(ua),ua.shape # I have changed Numeric.py
+    print(dir(ua))
+    print(shape(ua),ua.shape) # I have changed Numeric.py
 
     ua_small=ua[:3,:5]
-    print ua_small
+    print(ua_small)
     ua_small[0,0]=10  # this did not change ua[0,0], which is not normal behavior
-    print ua_small[0,0],ua[0,0]
-    print sin(ua_small)/3.*6.+sqrt(ua_small**2)
-    print less(ua_small,103),type(less(ua_small,103))
-    print type(ua_small*reshape(arange(15),shape(ua_small)))
-    print reshape(ua_small,(5,3))
-    print transpose(ua_small)
+    print(ua_small[0,0],ua[0,0])
+    print(sin(ua_small)/3.*6.+sqrt(ua_small**2))
+    print(less(ua_small,103),type(less(ua_small,103)))
+    print(type(ua_small*reshape(arange(15),shape(ua_small))))
+    print(reshape(ua_small,(5,3)))
+    print(transpose(ua_small))

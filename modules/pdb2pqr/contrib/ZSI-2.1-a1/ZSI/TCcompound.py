@@ -8,11 +8,11 @@ from ZSI import _copyright, _children, _child_elements, \
     _find_type, _find_xmlns_prefix, _get_idstr, EvaluateException, \
     ParseException
     
-from TC import _get_element_nsuri_name, \
+from .TC import _get_element_nsuri_name, \
      _get_xsitype, TypeCode, Any, AnyElement, AnyType, \
      Nilled, UNBOUNDED
     
-from schema import GED, ElementDeclaration, TypeDefinition, \
+from .schema import GED, ElementDeclaration, TypeDefinition, \
     _get_substitute_element, _get_type_definition, _is_substitute_element
 
 from ZSI.wstools.Namespaces import SCHEMA, SOAP
@@ -123,7 +123,7 @@ class ComplexType(TypeCode):
         if TypeCode.typechecks:
             # XXX Not sure how to determine if new-style class..
             if self.pyclass is not None and \
-                type(self.pyclass) is not types.ClassType and not isinstance(self.pyclass, object):
+                type(self.pyclass) is not type and not isinstance(self.pyclass, object):
                 raise TypeError('pyclass must be None or an old-style/new-style class, not ' +
                         str(type(self.pyclass)))
             _check_typecode_list(self.ofwhat, 'ComplexType')
@@ -169,7 +169,7 @@ class ComplexType(TypeCode):
             v[self.mixed_aname] = self.simple_value(elt,ps, mixed=True)
 
         # Clone list of kids (we null it out as we process)
-        c, crange = c[:], range(len(c))
+        c, crange = c[:], list(range(len(c)))
         # Loop over all items we're expecting
         
         if debug:
@@ -207,7 +207,7 @@ class ComplexType(TypeCode):
 
                 if match:
                     if what.maxOccurs > 1:
-                        if v.has_key(what.aname):
+                        if what.aname in v:
                             v[what.aname].append(value)
                         else:
                             v[what.aname] = [value]
@@ -231,7 +231,7 @@ class ComplexType(TypeCode):
                     any = what
                 elif hasattr(what, 'default'):
                     v[what.aname] = what.default
-                elif what.minOccurs > 0 and not v.has_key(what.aname):
+                elif what.minOccurs > 0 and what.aname not in v:
                     raise EvaluateException('Element "' + what.aname + \
                         '" missing from complexType', ps.Backtrace(elt))
 
@@ -263,10 +263,10 @@ class ComplexType(TypeCode):
         # element declaration is initialized with a tag.
         try:
             pyobj = self.pyclass()
-        except Exception, e:
+        except Exception as e:
             raise TypeError("Constructing element (%s,%s) with pyclass(%s), %s" \
                 %(self.nspname, self.pname, self.pyclass.__name__, str(e)))
-        for key in v.keys():
+        for key in list(v.keys()):
             setattr(pyobj, key, v[key])
         return pyobj
 
@@ -292,8 +292,8 @@ class ComplexType(TypeCode):
                 elem = elt.createAppendElement(ns, n)
                 self.serialize_as_nil(elem)
                 return
-            raise EvaluateException, 'element(%s,%s) is not nillable(%s)' %(
-                self.nspname,self.pname,self.nillable)
+            raise EvaluateException('element(%s,%s) is not nillable(%s)' %(
+                self.nspname,self.pname,self.nillable))
 
         if self.mutable is False and sw.Known(pyobj): 
             return
@@ -346,7 +346,7 @@ class ComplexType(TypeCode):
         else:
             d = pyobj
             f = lambda attr: pyobj.get(attr)
-            if TypeCode.typechecks and type(d) != types.DictType:
+            if TypeCode.typechecks and type(d) != dict:
                 raise TypeError("Classless complexType didn't get dictionary")
 
         indx, lenofwhat = 0, len(self.ofwhat)
@@ -489,16 +489,14 @@ class Struct(ComplexType):
             )
         
         # Check Constraints
-        whats = map(lambda what: (what.nspname,what.pname), self.ofwhat)
+        whats = [(what.nspname,what.pname) for what in self.ofwhat]
         for idx in range(len(self.ofwhat)):
             what = self.ofwhat[idx]
             key = (what.nspname,what.pname)
             if not isinstance(what, AnyElement) and what.maxOccurs > 1:
-                raise TypeError,\
-                    'Constraint: no element can have a maxOccurs>1'
+                raise TypeError('Constraint: no element can have a maxOccurs>1')
             if key in whats[idx+1:]:
-                raise TypeError,\
-                    'Constraint: No element may have the same name as any other'
+                raise TypeError('Constraint: No element may have the same name as any other')
 
 
 class Array(TypeCode):
@@ -676,4 +674,4 @@ class Array(TypeCode):
                 position += 1
 
 
-if __name__ == '__main__': print _copyright
+if __name__ == '__main__': print(_copyright)

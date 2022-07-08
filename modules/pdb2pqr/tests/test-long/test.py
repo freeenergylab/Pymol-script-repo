@@ -62,14 +62,14 @@ def runtest(argv):
     options={"testnum": defaultnum}
  
     try: opts, args = getopt.getopt(sys.argv[1:], 'n', ['testnum='])
-    except getopt.GetoptError, details:
+    except getopt.GetoptError as details:
         sys.stderr.write("GetoptError:  %s\n" % details)
 
     for o,a in opts:
         if o in ("-n", "--testnum"):
             options["testnum"] = int(a)
         if options["testnum"] >= defaultnum or options["testnum"] <= 0:
-            raise ValueError, "TESTNUM must be an integer between 1 and %s!\n" % (defaultnum - 1)
+            raise ValueError("TESTNUM must be an integer between 1 and %s!\n" % (defaultnum - 1))
 
     for element in line:
         
@@ -81,12 +81,12 @@ def runtest(argv):
         
         count += 1
         
-        print "Finished testing for PDB: %s, number of PDBs tested: %s." % (inname, count)
+        print("Finished testing for PDB: %s, number of PDBs tested: %s." % (inname, count))
 
         if 0 < options["testnum"] < defaultnum and count == options["testnum"]:
             break
 
-    print "\nLong test finished, please check tests/test-long/out/ directory for output files.\n"
+    print("\nLong test finished, please check tests/test-long/out/ directory for output files.\n")
 
 if __name__ == "__main__":
     import os

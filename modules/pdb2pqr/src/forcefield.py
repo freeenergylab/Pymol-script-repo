@@ -57,7 +57,7 @@ import os
 import re
 
 from xml import sax
-from utilities import *
+from .utilities import *
 
 class ForcefieldHandler(sax.ContentHandler):
    
@@ -232,7 +232,7 @@ class Forcefield:
         if userff == None:
             defpath = getFFfile(ff)
             if defpath == "":
-                raise ValueError, "Unable to find forcefield parameter file %s!" % path
+                raise ValueError("Unable to find forcefield parameter file %s!" % path)
           
             file = open(defpath, 'rU')
 
@@ -254,7 +254,7 @@ class Forcefield:
                     if defpath != "": txt += " %s!" % defpath
                     else: txt += "!"
                     txt += " Please use a valid parameter file."
-                    raise ValueError, txt
+                    raise ValueError(txt)
             
                 try:
                     group = fields[4]
@@ -295,7 +295,7 @@ class Forcefield:
                 namesfile = usernames            
                 sax.parseString(namesfile.read(), handler)
             else:
-                raise ValueError, "Please provide a valid .names file!"
+                raise ValueError("Please provide a valid .names file!")
             namesfile.close()
 
 
@@ -904,7 +904,7 @@ class ForcefieldAtom:
             return item
         except AttributeError:
             message = "Unable to access object \"%s\" in class ForcefieldAtom" % name
-            raise ValueError, message
+            raise ValueError(message)
 
     def __str__(self):
         """

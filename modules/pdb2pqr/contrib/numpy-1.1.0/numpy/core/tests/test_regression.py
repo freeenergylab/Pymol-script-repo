@@ -1,6 +1,6 @@
 from numpy.testing import *
 
-from StringIO import StringIO
+from io import StringIO
 import pickle
 import sys
 from os import path
@@ -104,7 +104,7 @@ class TestRegression(NumpyTestCase):
         b = a[:,:2,]
         def rs():
             b.shape = (10,)
-        self.failUnlessRaises(AttributeError,rs)
+        self.assertRaises(AttributeError,rs)
 
     def check_bool(self,level=rlevel):
         """Ticket #60"""
@@ -150,16 +150,16 @@ class TestRegression(NumpyTestCase):
         """Ticket #72"""
         a = np.array(['test', 'auto'])
         assert_array_equal(a == 'auto', np.array([False,True]))
-        self.assert_(a[1] == 'auto')
-        self.assert_(a[0] != 'auto')
+        self.assertTrue(a[1] == 'auto')
+        self.assertTrue(a[0] != 'auto')
         b = np.linspace(0, 10, 11)
-        self.assert_(b != 'auto')
-        self.assert_(b[0] != 'auto')
+        self.assertTrue(b != 'auto')
+        self.assertTrue(b[0] != 'auto')
 
     def check_unicode_swapping(self,level=rlevel):
         """Ticket #79"""
         ulen = 1
-        ucs_value = u'\U0010FFFF'
+        ucs_value = '\U0010FFFF'
         ua = np.array([[[ucs_value*ulen]*2]*3]*4, dtype='U%s' % ulen)
         ua2 = ua.newbyteorder()
 
@@ -184,7 +184,7 @@ class TestRegression(NumpyTestCase):
 
     def check_mem_dtype_align(self,level=rlevel):
         """Ticket #93"""
-        self.failUnlessRaises(TypeError,np.dtype,
+        self.assertRaises(TypeError,np.dtype,
                               {'names':['a'],'formats':['foo']},align=1)
 
     def check_mem_digitize(self,level=rlevel):
@@ -196,7 +196,7 @@ class TestRegression(NumpyTestCase):
     def check_intp(self,level=rlevel):
         """Ticket #99"""
         i_width = np.int_(0).nbytes*2 - 1
-        long('0x' + 'f'*i_width,16)
+        int('0x' + 'f'*i_width,16)
         #self.failUnlessRaises(OverflowError,np.intp,'0x' + 'f'*(i_width+1),16)
         #self.failUnlessRaises(ValueError,np.intp,'0x1',32)
         assert_equal(255,np.long('0xFF',16))
@@ -240,7 +240,7 @@ class TestRegression(NumpyTestCase):
     def check_argmax(self,level=rlevel):
         """Ticket #119"""
         a = np.random.normal(0,1,(4,5,6,7,8))
-        for i in xrange(a.ndim):
+        for i in range(a.ndim):
             aargmax = a.argmax(i)
 
     def check_matrix_properties(self,level=rlevel):
@@ -262,7 +262,7 @@ class TestRegression(NumpyTestCase):
         """Ticket #128"""
         x = np.arange(9).reshape((3,3))
         y = np.array([0,0,0])
-        self.failUnlessRaises(ValueError,np.hstack,(x,y))
+        self.assertRaises(ValueError,np.hstack,(x,y))
 
     def check_squeeze_type(self,level=rlevel):
         """Ticket #133"""
@@ -312,8 +312,8 @@ class TestRegression(NumpyTestCase):
         x = np.empty((3,1))
         def bfa(): x[:] = np.arange(3)
         def bfb(): x[:] = np.arange(3,dtype=float)
-        self.failUnlessRaises(ValueError, bfa)
-        self.failUnlessRaises(ValueError, bfb)
+        self.assertRaises(ValueError, bfa)
+        self.assertRaises(ValueError, bfb)
 
     def check_unpickle_dtype_with_object(self,level=rlevel):
         """Implemented in r2840"""
@@ -329,7 +329,7 @@ class TestRegression(NumpyTestCase):
         """Ticket #196"""
         dt = np.dtype([('x',int),('y',np.object_)])
         # Wrong way
-        self.failUnlessRaises(ValueError, np.array, [1,'object'], dt)
+        self.assertRaises(ValueError, np.array, [1,'object'], dt)
         # Correct way
         np.array([(1,'object')],dt)
 
@@ -345,7 +345,7 @@ class TestRegression(NumpyTestCase):
         """Ticket #205"""
         tmp = np.array([])
         def index_tmp(): tmp[np.array(10)]
-        self.failUnlessRaises(IndexError, index_tmp)
+        self.assertRaises(IndexError, index_tmp)
 
     def check_unique_zero_sized(self,level=rlevel):
         """Ticket #205"""
@@ -540,7 +540,7 @@ class TestRegression(NumpyTestCase):
 
     def check_string_array_size(self, level=rlevel):
         """Ticket #342"""
-        self.failUnlessRaises(ValueError,
+        self.assertRaises(ValueError,
                               np.array,[['X'],['X','X','X']],'|S1')
 
     def check_dtype_repr(self, level=rlevel):
@@ -599,7 +599,7 @@ class TestRegression(NumpyTestCase):
     def check_poly1d_nan_roots(self, level=rlevel):
         """Ticket #396"""
         p = np.poly1d([np.nan,np.nan,1], r=0)
-        self.failUnlessRaises(np.linalg.LinAlgError,getattr,p,"r")
+        self.assertRaises(np.linalg.LinAlgError,getattr,p,"r")
 
     def check_refcount_vdot(self, level=rlevel):
         """Changeset #3443"""
@@ -626,8 +626,8 @@ class TestRegression(NumpyTestCase):
 
     def check_convolve_empty(self, level=rlevel):
         """Convolve should raise an error for empty input array."""
-        self.failUnlessRaises(AssertionError,np.convolve,[],[1])
-        self.failUnlessRaises(AssertionError,np.convolve,[1],[])
+        self.assertRaises(AssertionError,np.convolve,[],[1])
+        self.assertRaises(AssertionError,np.convolve,[1],[])
 
     def check_multidim_byteswap(self, level=rlevel):
         """Ticket #449"""
@@ -650,7 +650,7 @@ class TestRegression(NumpyTestCase):
         def mul() :
             np.mat(np.eye(2))*np.ones(2)
 
-        self.failUnlessRaises(ValueError,mul)
+        self.assertRaises(ValueError,mul)
 
     def check_junk_in_string_fields_of_recarray(self, level=rlevel):
         """Ticket #483"""
@@ -692,7 +692,7 @@ class TestRegression(NumpyTestCase):
     def check_arr_transpose(self, level=rlevel):
         """Ticket #516"""
         x = np.random.rand(*(2,)*16)
-        y = x.transpose(range(16))
+        y = x.transpose(list(range(16)))
 
     def check_string_mergesort(self, level=rlevel):
         """Ticket #540"""
@@ -740,7 +740,7 @@ class TestRegression(NumpyTestCase):
 
     def check_mem_on_invalid_dtype(self):
         "Ticket #583"
-        self.failUnlessRaises(ValueError, np.fromiter, [['12',''],['13','']], str)
+        self.assertRaises(ValueError, np.fromiter, [['12',''],['13','']], str)
 
     def check_dot_negative_stride(self, level=rlevel):
         """Ticket #588"""
@@ -755,14 +755,14 @@ class TestRegression(NumpyTestCase):
             x = np.ones([484,286])
             y = np.zeros([484,286])
             x |= y
-        self.failUnlessRaises(TypeError,rs)
+        self.assertRaises(TypeError,rs)
 
     def check_unicode_scalar(self, level=rlevel):
         """Ticket #600"""
-        import cPickle
+        import pickle
         x = np.array(["DROND", "DROND1"], dtype="U6")
         el = x[1]
-        new = cPickle.loads(cPickle.dumps(el))
+        new = pickle.loads(pickle.dumps(el))
         assert_equal(new, el)
 
     def check_arange_non_native_dtype(self, level=rlevel):
@@ -777,7 +777,7 @@ class TestRegression(NumpyTestCase):
         s = np.ones(10,dtype=float)
         x = np.array((15,),dtype=float)
         def ia(x,s): x[(s>0)]=1.0
-        self.failUnlessRaises(ValueError,ia,x,s)
+        self.assertRaises(ValueError,ia,x,s)
 
     def check_mem_scalar_indexing(self, level=rlevel):
         """Ticket #603"""
@@ -968,7 +968,7 @@ class TestRegression(NumpyTestCase):
 
     def check_mem_fromiter_invalid_dtype_string(self, level=rlevel):
         x = [1,2,3]
-        self.failUnlessRaises(ValueError,
+        self.assertRaises(ValueError,
                               np.fromiter, [xi for xi in x], dtype='S')
 
     def check_reduce_big_object_array(self, level=rlevel):
@@ -1076,8 +1076,8 @@ class TestRegression(NumpyTestCase):
             a = np.ones((n,)*5)
             i = np.random.randint(0,n,size=thesize)
             g = a[np.ix_(i,i,i,i,i)]
-        self.failUnlessRaises(ValueError, dp)
-        self.failUnlessRaises(ValueError, dp2)
+        self.assertRaises(ValueError, dp)
+        self.assertRaises(ValueError, dp2)
 
 if __name__ == "__main__":
     NumpyTest().run()

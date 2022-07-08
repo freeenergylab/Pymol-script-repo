@@ -55,7 +55,7 @@ by multiplying the number of elements given by the shape (noting that shape=()
 means there is 1 element) by dtype.itemsize.
 """
 
-import cPickle
+import pickle
 import pprint
 import struct
 
@@ -105,7 +105,7 @@ def read_magic(fp):
         raise ValueError("could not read %d characters for the magic string; got %r" % (MAGIC_LEN, magic_str))
     if magic_str[:-2] != MAGIC_PREFIX:
         raise ValueError("the magic string is not correct; expected %r, got %r" % (MAGIC_PREFIX, magic_str[:-2]))
-    major, minor = map(ord, magic_str[-2:])
+    major, minor = list(map(ord, magic_str[-2:]))
     return major, minor
 
 def dtype_to_descr(dtype):
@@ -220,11 +220,11 @@ def read_array_header_1_0(fp):
     #   "descr" : dtype.descr
     try:
         d = safe_eval(header)
-    except SyntaxError, e:
+    except SyntaxError as e:
         raise ValueError("Cannot parse header: %r\nException: %r" % (header, e))
     if not isinstance(d, dict):
         raise ValueError("Header is not a dictionary: %r" % d)
-    keys = d.keys()
+    keys = list(d.keys())
     keys.sort()
     if keys != ['descr', 'fortran_order', 'shape']:
         raise ValueError("Header does not contain the correct keys: %r" % (keys,))
@@ -237,7 +237,7 @@ def read_array_header_1_0(fp):
         raise ValueError("fortran_order is not a valid bool: %r" % (d['fortran_order'],))
     try:
         dtype = numpy.dtype(d['descr'])
-    except TypeError, e:
+    except TypeError as e:
         raise ValueError("descr is not a valid dtype descriptor: %r" % (d['descr'],))
 
     return d['shape'], d['fortran_order'], dtype
@@ -269,7 +269,7 @@ def write_array(fp, array, version=(1,0)):
     if array.dtype.hasobject:
         # We contain Python objects so we cannot write out the data directly.
         # Instead, we will pickle it out with version 2 of the pickle protocol.
-        cPickle.dump(array, fp, protocol=2)
+        pickle.dump(array, fp, protocol=2)
     elif array.flags.f_contiguous and not array.flags.c_contiguous:
         # Use a suboptimal, possibly memory-intensive, but correct way to handle
         # Fortran-contiguous arrays.
@@ -311,7 +311,7 @@ def read_array(fp):
     # Now read the actual data.
     if dtype.hasobject:
         # The array contained Python objects. We need to unpickle the data.
-        array = cPickle.load(fp)
+        array = pickle.load(fp)
     else:
         if isinstance(fp, file):
             # We can use the fast fromfile() function.

@@ -37,22 +37,22 @@ __all__ += ['vdot', 'dot', 'matrixmultiply', 'ravel', 'indices',
             ]
 
 import copy
-import copy_reg
+import copyreg
 import types
 import os
 import sys
 import math
 import operator
 
-from numpy import dot as matrixmultiply, dot, vdot, ravel, concatenate, all,\
+from .numpy import dot as matrixmultiply, dot, vdot, ravel, concatenate, all,\
      allclose, any, around, argsort, array_equal, array_equiv,\
      array_str, array_repr, CLIP, RAISE, WRAP, clip, concatenate, \
      diagonal, e, pi, indices, inner as innerproduct, nonzero, \
      outer as outerproduct, kron as kroneckerproduct, lexsort, putmask, rank, \
      resize, searchsorted, shape, size, sort, swapaxes, trace, transpose
-import numpy as np
+from . import numpy as np
 
-from numerictypes import typefrom
+from .numerictypes import typefrom
 
 isBigEndian = sys.byteorder != 'little'
 value = tcode = 'f'
@@ -164,14 +164,14 @@ class FileSeekWarning(Warning):
     pass
 
 
-STRICT, SLOPPY, WARN = range(3)
+STRICT, SLOPPY, WARN = list(range(3))
 
 _BLOCKSIZE=1024
 
 # taken and adapted directly from numarray
 def fromfile(infile, type=None, shape=None, sizing=STRICT,
              typecode=None, dtype=None):
-    if isinstance(infile, (str, unicode)):
+    if isinstance(infile, str):
         infile = open(infile, 'rb')
     dtype = type2dtype(typecode, type, dtype, True)
     if shape is None:
@@ -357,47 +357,47 @@ def info(obj, output=sys.stdout, numpy=0):
         nm = getattr(cls, '__name__', cls)
     else:
         nm = cls
-    print >> output, "class: ", nm
-    print >> output, "shape: ", obj.shape
+    print("class: ", nm, file=output)
+    print("shape: ", obj.shape, file=output)
     strides = obj.strides
-    print >> output, "strides: ", strides
+    print("strides: ", strides, file=output)
     if not numpy:
-        print >> output, "byteoffset: 0"
+        print("byteoffset: 0", file=output)
         if len(strides) > 0:
             bs = obj.strides[0]
         else:
             bs = obj.itemsize
-        print >> output, "bytestride: ", bs
-    print >> output, "itemsize: ", obj.itemsize
-    print >> output, "aligned: ", bp(obj.flags.aligned)
-    print >> output, "contiguous: ", bp(obj.flags.contiguous)
+        print("bytestride: ", bs, file=output)
+    print("itemsize: ", obj.itemsize, file=output)
+    print("aligned: ", bp(obj.flags.aligned), file=output)
+    print("contiguous: ", bp(obj.flags.contiguous), file=output)
     if numpy:
-        print >> output, "fortran: ", obj.flags.fortran
+        print("fortran: ", obj.flags.fortran, file=output)
     if not numpy:
-        print >> output, "buffer: ", repr(obj.data)
+        print("buffer: ", repr(obj.data), file=output)
     if not numpy:
         extra = " (DEBUG ONLY)"
         tic = "'"
     else:
         extra = ""
         tic = ""
-    print >> output, "data pointer: %s%s" % (hex(obj.ctypes._as_parameter_.value), extra)
-    print >> output, "byteorder: ",
+    print("data pointer: %s%s" % (hex(obj.ctypes._as_parameter_.value), extra), file=output)
+    print("byteorder: ", end=' ', file=output)
     endian = obj.dtype.byteorder
     if endian in ['|','=']:
-        print >> output, "%s%s%s" % (tic, sys.byteorder, tic)
+        print("%s%s%s" % (tic, sys.byteorder, tic), file=output)
         byteswap = False
     elif endian == '>':
-        print >> output, "%sbig%s" % (tic, tic)
+        print("%sbig%s" % (tic, tic), file=output)
         byteswap = sys.byteorder != "big"
     else:
-        print >> output, "%slittle%s" % (tic, tic)
+        print("%slittle%s" % (tic, tic), file=output)
         byteswap = sys.byteorder != "little"
-    print >> output, "byteswap: ", bp(byteswap)
+    print("byteswap: ", bp(byteswap), file=output)
     if not numpy:
-        print >> output, "type: ", typefrom(obj).name
+        print("type: ", typefrom(obj).name, file=output)
     else:
-        print >> output, "type: %s" % obj.dtype
+        print("type: %s" % obj.dtype, file=output)
 
 #clipmode is ignored if axis is not 0 and array is not 1d
 def put(array, indices, values, axis=0, clipmode=RAISE):
@@ -409,12 +409,12 @@ def put(array, indices, values, axis=0, clipmode=RAISE):
             work.put(indices, values, clipmode)
         else:
             work[indices] = values
-    elif isinstance(axis, (int, long, np.integer)):
+    elif isinstance(axis, (int, np.integer)):
         work = work.swapaxes(0, axis)
         work[indices] = values
         work = work.swapaxes(0, axis)
     else:
-        def_axes = range(work.ndim)
+        def_axes = list(range(work.ndim))
         for x in axis:
             def_axes.remove(x)
         axis = list(axis)+def_axes
@@ -444,13 +444,13 @@ def sometrue(array, axis=0):
 #clipmode is ignored if axis is not an integer
 def take(array, indices, axis=0, outarr=None, clipmode=RAISE):
     array = np.asarray(array)
-    if isinstance(axis, (int, long, np.integer)):
+    if isinstance(axis, (int, np.integer)):
         res = array.take(indices, axis, outarr, clipmode)
         if outarr is None:
             return res
         return
     else:
-        def_axes = range(array.ndim)
+        def_axes = list(range(array.ndim))
         for x in axis:
             def_axes.remove(x)
         axis = list(axis) + def_axes

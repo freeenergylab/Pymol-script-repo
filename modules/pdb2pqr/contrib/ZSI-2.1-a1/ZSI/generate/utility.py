@@ -41,14 +41,14 @@ class NamespaceAliasDict:
     alias_list = []
 
     def add(cls, ns):
-        if cls.alias_dict.has_key(ns):
+        if ns in cls.alias_dict:
             return
         cls.alias_dict[ns] = (Namespace2ModuleName(ns), '%s' % namespace_name(cls,ns))
         cls.alias_list.append(ns)
     add = classmethod(add)
             
     def getModuleName(cls, ns):
-        if cls.alias_dict.has_key(ns):
+        if ns in cls.alias_dict:
             return cls.alias_dict[ns][0]
                                  
         msg = 'failed to find import for schema "%s"'%ns +\
@@ -56,12 +56,12 @@ class NamespaceAliasDict:
         if ns in SCHEMA.XSD_LIST:
             msg = 'missing built-in typecode for schema "%s"' %ns
             
-        raise WsdlGeneratorError, msg
+        raise WsdlGeneratorError(msg)
                                  
     getModuleName = classmethod(getModuleName)
         
     def getAlias(cls, ns):
-        if cls.alias_dict.has_key(ns):
+        if ns in cls.alias_dict:
             return cls.alias_dict[ns][1]
                                  
         msg = 'failed to find import for schema "%s"'%ns +\
@@ -69,7 +69,7 @@ class NamespaceAliasDict:
         if ns in SCHEMA.XSD_LIST:
             msg = 'missing built-in typecode for schema "%s"' %ns
             
-        raise WsdlGeneratorError, msg
+        raise WsdlGeneratorError(msg)
     
     getAlias = classmethod(getAlias)
 
@@ -121,13 +121,13 @@ class MessageContainer:
 # Args is a list of Message Parts.  i.e.: op.getInputMessage().parts.values()
 def GetPartsSubNames(args, wsdl):
     do_extended = True
-    from wsdl2python import WriteServiceModule, SchemaDescription
+    from .wsdl2python import WriteServiceModule, SchemaDescription
     wsm = WriteServiceModule(wsdl, do_extended=do_extended)
     wsm.gatherNamespaces()
     toReturn = []
     for arg in args:
         argSubnames = []
-        for l in wsm.usedNamespaces.values():
+        for l in list(wsm.usedNamespaces.values()):
             for schema in l:
                 sd = SchemaDescription(do_extended=do_extended)
                 sd.fromSchema(schema)
@@ -149,9 +149,9 @@ def GetPartsSubNames(args, wsdl):
                                     nValue = "None"
                                     if c.isWildCard():
                                         nValue="any"
-                                    elif c.attributes.has_key("name"):
+                                    elif "name" in c.attributes:
                                         nValue = c.attributes["name"]
-                                    elif c.attributes.has_key("ref"):
+                                    elif "ref" in c.attributes:
                                         nValue = c.attributes["ref"][1]
                                     argSubnames.append(nValue)
 

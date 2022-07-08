@@ -14,20 +14,20 @@ from AutoDockTools.GridParameters import GridParameterFileMaker
 
 
 def usage():
-    print "Usage: prepare_gpf.py -l pdbq_file -r pdbqs_file "
-    print "     -l ligand_filename"
-    print "     -r receptor_filename"
-    print
-    print "Optional parameters:"
-    print "    [-i reference_gpf_filename]"
-    print "    [-o output_gpf_filename]"
-    print "    [-p parameter=newvalue]"
-    print "    [-v]"
-    print
-    print "Prepare a grid parameter file (GPF) for AutoDock."
-    print
-    print "   The GPF will by default be <receptor>.gpf. This"
-    print "may be overridden using the -o flag."
+    print("Usage: prepare_gpf.py -l pdbq_file -r pdbqs_file ")
+    print("     -l ligand_filename")
+    print("     -r receptor_filename")
+    print()
+    print("Optional parameters:")
+    print("    [-i reference_gpf_filename]")
+    print("    [-o output_gpf_filename]")
+    print("    [-p parameter=newvalue]")
+    print("    [-v]")
+    print()
+    print("Prepare a grid parameter file (GPF) for AutoDock.")
+    print()
+    print("   The GPF will by default be <receptor>.gpf. This")
+    print("may be overridden using the -o flag.")
 
     
 if __name__ == '__main__':
@@ -36,8 +36,8 @@ if __name__ == '__main__':
 
     try:
         opt_list, args = getopt.getopt(sys.argv[1:], 'vl:r:i:o:p:')
-    except getopt.GetoptError, msg:
-        print 'prepare_gpf.py: %s' % msg
+    except getopt.GetoptError as msg:
+        print(('prepare_gpf.py: %s' % msg))
         usage()
         sys.exit(2)
 
@@ -51,27 +51,27 @@ if __name__ == '__main__':
             verbose = 1
         if o in ('-l', '--l'):
             ligand_filename = a
-            if verbose: print 'ligand_filename=', ligand_filename
+            if verbose: print(('ligand_filename=', ligand_filename))
         if o in ('-r', '--r'):
             receptor_filename = a
-            if verbose: print 'receptor_filename=', receptor_filename
+            if verbose: print(('receptor_filename=', receptor_filename))
         if o in ('-i', '--i'):
             gpf_filename = a
-            if verbose: print 'reference_gpf_filename=', gpf_filename
+            if verbose: print(('reference_gpf_filename=', gpf_filename))
         if o in ('-o', '--o'):
             output_gpf_filename = a
-            if verbose: print 'output_gpf_filename=', output_gpf_filename
+            if verbose: print(('output_gpf_filename=', output_gpf_filename))
         if o in ('-p', '--p'):
             parameters.append(a)
-            if verbose: print 'parameters=', parameters
+            if verbose: print(('parameters=', parameters))
         if o in ('-h', '--'):
             usage()
             sys.exit()
 
 
     if (not receptor_filename) or (not ligand_filename):
-        print "prepare_gpf.py: ligand and receptor filenames"
-        print "                    must be specified."
+        print("prepare_gpf.py: ligand and receptor filenames")
+        print("                    must be specified.")
         usage()
         sys.exit()
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     for p in parameters:
         key,newvalue = string.split(p, '=')
         kw = {key:newvalue}
-        apply(gpfm.set_grid_parameters, (), kw)
+        gpfm.set_grid_parameters(*(), **kw)
     #gpfm.set_grid_parameters(spacing=1.0)
     gpfm.write_gpf(output_gpf_filename)
 

@@ -12,8 +12,8 @@ Version 0.8
 import sys
 
 if sys.version_info[0] < 3:
-    import Tkinter
-    from Tkinter import *
+    import tkinter
+    from tkinter import *
 else:
     import tkinter as Tkinter
     from tkinter import *
@@ -24,12 +24,12 @@ from pymol import cmd
 try:
     import openbabel as ob
 except:
-    print('<' * 80 + '''
+    print(('<' * 80 + '''
 
 Optimize plug-in needs openbabel to be installed in your system, please follow the instructions at
 http://openbabel.org/wiki/Get_Open_Babel
 
-''' + '>' * 80)
+''' + '>' * 80))
 
 
 def __init__(self):
@@ -70,7 +70,7 @@ def mainDialog(root=None):
 
     master = Toplevel(root)
     master.title(' Optimize ')
-    w = Tkinter.Label(master, text="\nOptimize: Let's find that minimum!\n",
+    w = tkinter.Label(master, text="\nOptimize: Let's find that minimum!\n",
                                 background = 'black',
                                 foreground = 'white')
     w.pack(expand=1, fill = 'both', padx=4, pady=4)
@@ -271,7 +271,7 @@ def minimize(selection='all', forcefield='MMFF94s', method='Conjugate Gradients'
         name = 'all_'
     cmd.read_molstr(mol_string, name,state=0,finish=1,discrete=1)
     print('#########################################')
-    print('The Energy of %s is %8.2f %s       '  % (name, nrg, ff.GetUnit()))
+    print(('The Energy of %s is %8.2f %s       '  % (name, nrg, ff.GetUnit())))
     print('#########################################')
 
 
@@ -319,7 +319,7 @@ def conf_search(selection='all', forcefield='MMFF94s', method='Weighted', nsteps
             cmd.read_molstr(mol_string, name_n,state=0,finish=1,discrete=1)
             if i != 0:
                 rmsd = cmd.fit(name_n, '%s00' % name, quiet=1)
-            print('%15s | %10.2f%9s |%6.1f'    % (name_n, nrg, nrg_unit, rmsd))
+            print(('%15s | %10.2f%9s |%6.1f'    % (name_n, nrg, nrg_unit, rmsd)))
         print('##############################################')
     else:
         ff.GetCoordinates(mol)
@@ -328,7 +328,7 @@ def conf_search(selection='all', forcefield='MMFF94s', method='Weighted', nsteps
         cmd.delete(name)
         cmd.read_molstr(mol_string, name,state=0,finish=1,discrete=1)
         print('#########################################')
-        print('The Energy of %s is %8.2f %s       '  % (name, nrg, ff.GetUnit()))
+        print(('The Energy of %s is %8.2f %s       '  % (name, nrg, ff.GetUnit())))
         print('#########################################')
 
 cmd.extend('minimize', minimize)

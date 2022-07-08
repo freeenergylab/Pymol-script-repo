@@ -6,7 +6,7 @@
 #       If you update these docstrings, please keep also the ones in
 #       core/fromnumeric.py, core/defmatrix.py up-to-date.
 
-from lib import add_newdoc
+from .lib import add_newdoc
 
 add_newdoc('numpy.core', 'dtype',
 """Create a data type.

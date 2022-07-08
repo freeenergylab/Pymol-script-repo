@@ -34,61 +34,61 @@ class DockingParameter41FileMaker:
         dict = {}
         for a in molecule.allAtoms:
             dict[a.autodock_element] = 1
-        d_types = dict.keys()
+        d_types = list(dict.keys())
         d_types.sort()
         mol_types = d_types[0]
         for t in d_types[1:]:
             mol_types = mol_types + " " + t
-        if self.verbose: print "end of getTypes: types=", mol_types, ' class=', mol_types.__class__
+        if self.verbose: print(("end of getTypes: types=", mol_types, ' class=', mol_types.__class__))
         return mol_types
 
 
     def set_write_all(self, value):
         verbose = self.verbose
         self.dpo['write_all_flag']['value'] = True
-        if verbose: print "set write_all_flag to", self.dpo['write_all_flag']['value']
+        if verbose: print(("set write_all_flag to", self.dpo['write_all_flag']['value']))
 
 
     def set_ligand(self, ligand_filename): 
         verbose = self.verbose
         self.ligand_filename = os.path.basename(ligand_filename)
-        if verbose: print "set ligand_filename to", self.ligand_filename
+        if verbose: print(("set ligand_filename to", self.ligand_filename))
         self.dpo.set_ligand(ligand_filename)
         #expect a filename like ind.out.pdbq: get 'ind' from it
         self.ligand_stem = string.split(self.ligand_filename,'.')[0]
-        if verbose: print "set ligand_stem to", self.ligand_stem
+        if verbose: print(("set ligand_stem to", self.ligand_stem))
         self.ligand = Read(ligand_filename)[0]
         if self.ligand==None:
-            print 'ERROR reading: ', ligand_filename
+            print(('ERROR reading: ', ligand_filename))
             return 
-        if verbose: print "read ", self.ligand.name
+        if verbose: print(("read ", self.ligand.name))
         #set dpo:
         #move
         self.dpo['move']['value'] = self.ligand_filename
-        if verbose: print "set move to ", self.dpo['move']['value']
+        if verbose: print(("set move to ", self.dpo['move']['value']))
         #ndihe
         #assumes ligand has torTree
         self.dpo['ndihe']['value'] = self.ligand.parser.keys.count("BRANCH")
         #self.dpo['ndihe']['value'] = len(self.ligand.torTree.torsionMap)
-        if verbose: print "set ndihe to ", self.dpo['ndihe']['value']
+        if verbose: print(("set ndihe to ", self.dpo['ndihe']['value']))
         #torsdof
         #caution dpo['torsdof4']['value'] is a list [ndihe, 0.274]
         try:
             self.dpo['torsdof4']['value'][0] = self.ligand.TORSDOF
         except:
-            print 'setting torsdof to ligand.ndihe=', self.ligand.ndihe
+            print(('setting torsdof to ligand.ndihe=', self.ligand.ndihe))
             self.dpo['torsdof4']['value'][0] = self.ligand.ndihe
-        if verbose: print "set torsdof4 to ", self.dpo['torsdof4']['value']
+        if verbose: print(("set torsdof4 to ", self.dpo['torsdof4']['value']))
         #types
         self.ligand.types = self.getTypes(self.ligand)
         self.dpo['ligand_types']['value'] = self.ligand.types
-        if verbose: print "set types to ", self.dpo['ligand_types']['value']
+        if verbose: print(("set types to ", self.dpo['ligand_types']['value']))
         #about
         self.ligand.getCenter()
         cen = self.ligand.center
         self.dpo['about']['value'] =  [round(cen[0],4), round(cen[1],4),\
                                         round(cen[2],4)]
-        if verbose: print "set about to ", self.dpo['about']['value']
+        if verbose: print(("set about to ", self.dpo['about']['value']))
         
 
     def set_receptor(self, receptor_filename):
@@ -109,7 +109,7 @@ class DockingParameter41FileMaker:
             d[t] = 1
         for a in flexmol.allAtoms:
             d[a.autodock_element] = 1
-        self.dpo['ligand_types']['value'] = string.join(d.keys())
+        self.dpo['ligand_types']['value'] = string.join(list(d.keys()))
 
 
     def set_docking_parameters(self, **kw):
@@ -119,7 +119,7 @@ class DockingParameter41FileMaker:
         # newdict = {'ga_num_evals':1750000, 'ga_pop_size':150,
         #            'ga_run':20, 'rmstol':2.0}
         # self.mv.dpo['<parameter>']['value'] = <new value>
-        for parm, newvalue in kw.items():
+        for parm, newvalue in list(kw.items()):
             self.dpo[parm]['value'] = newvalue
             if parm=='set_sw1':
                 self.dpo['set_psw1']['value'] = not newvalue
@@ -148,31 +148,31 @@ class DockingParameter41FileMaker:
             dihe0.rstrip()
             self.dpo['dihe0']['value'] = dihe0 
         if self.verbose:
-            print "writing ", dpf_filename
+            print(("writing ", dpf_filename))
         self.dpo.write41(dpf_filename, parm_list)
 
  
 
 def usage():
-    print "Usage: prepare_dpf41.py -l pdbqt_file -r pdbqt_file"
-    print "    -l ligand_filename"
-    print "    -r receptor_filename"
-    print
-    print "Optional parameters:"
-    print "    [-o output dpf_filename]"
-    print "    [-i template dpf_filename]"
-    print "    [-x flexres_filename]"
-    print "    [-p parameter_name=new_value]"
-    print "    [-k list of parameters to write]"
-    print "    [-v] verbose output"
-    print "    [-L] use local search parameters"
-    print "    [-S] use simulated annealing search parameters"
-    print "    [-s] seed population using ligand's present conformation"
-    print
-    print "Prepare a docking parameter file (DPF) for AutoDock41."
-    print
-    print "   The DPF will by default be <ligand>_<receptor>.dpf. This"
-    print "may be overridden using the -o flag."
+    print("Usage: prepare_dpf41.py -l pdbqt_file -r pdbqt_file")
+    print("    -l ligand_filename")
+    print("    -r receptor_filename")
+    print()
+    print("Optional parameters:")
+    print("    [-o output dpf_filename]")
+    print("    [-i template dpf_filename]")
+    print("    [-x flexres_filename]")
+    print("    [-p parameter_name=new_value]")
+    print("    [-k list of parameters to write]")
+    print("    [-v] verbose output")
+    print("    [-L] use local search parameters")
+    print("    [-S] use simulated annealing search parameters")
+    print("    [-s] seed population using ligand's present conformation")
+    print()
+    print("Prepare a docking parameter file (DPF) for AutoDock41.")
+    print()
+    print("   The DPF will by default be <ligand>_<receptor>.dpf. This")
+    print("may be overridden using the -o flag.")
 
     
 if __name__ == '__main__':
@@ -181,8 +181,8 @@ if __name__ == '__main__':
 
     try:
         opt_list, args = getopt.getopt(sys.argv[1:], 'sLShvl:r:i:o:x:p:k:')
-    except getopt.GetoptError, msg:
-        print 'prepare_dpf41.py: %s' % msg
+    except getopt.GetoptError as msg:
+        print(('prepare_dpf41.py: %s' % msg))
         usage()
         sys.exit(2)
 
@@ -195,37 +195,37 @@ if __name__ == '__main__':
     pop_seed = False
     verbose = None
     for o, a in opt_list:
-        if verbose: print "o=", o, ' a=', a
+        if verbose: print(("o=", o, ' a=', a))
         if o in ('-v', '--v'):
             verbose = 1
-            if verbose: print 'verbose output'
+            if verbose: print('verbose output')
         if o in ('-l', '--l'):   #ligand filename
             ligand_filename = a
-            if verbose: print 'ligand_filename =', ligand_filename
+            if verbose: print(('ligand_filename =', ligand_filename))
         if o in ('-r', '--r'):   #receptor filename
             receptor_filename = a
-            if verbose: print 'receptor_filename =', receptor_filename
+            if verbose: print(('receptor_filename =', receptor_filename))
         if o in ('-x', '--x'):   #flexres_filename 
             flexres_filename = a
-            if verbose: print 'flexres_filename =', flexres_filename
+            if verbose: print(('flexres_filename =', flexres_filename))
         if o in ('-i', '--i'):   #input reference
             template_filename = a
-            if verbose: print 'template_filename =', template_filename
+            if verbose: print(('template_filename =', template_filename))
         if o in ('-o', '--o'):   #output filename
             dpf_filename = a
-            if verbose: print 'output dpf_filename =', dpf_filename
+            if verbose: print(('output dpf_filename =', dpf_filename))
         if o in ('-p', '--p'):   #parameter
             parameters.append(a)
-            if verbose: print 'parameters =', parameters
+            if verbose: print(('parameters =', parameters))
         if o in ('-k', '--k'):   #parameter_list_to_write
             parameter_list = a
-            if verbose: print 'parameter_list =', parameter_list
+            if verbose: print(('parameter_list =', parameter_list))
         if o in ('-L', '--L'):   #parameter_list_to_write
             parameter_list = local_search_list4_1
-            if verbose: print 'parameter_list =', parameter_list
+            if verbose: print(('parameter_list =', parameter_list))
         if o in ('-S', '--S'):   #parameter_list_to_write
             parameter_list = simulated_annealing_list4_1
-            if verbose: print 'parameter_list =', parameter_list
+            if verbose: print(('parameter_list =', parameter_list))
         if o in ('-h', '--'):
             usage()
             sys.exit()
@@ -234,8 +234,8 @@ if __name__ == '__main__':
 
 
     if (not receptor_filename) or (not ligand_filename):
-        print "prepare_dpf41.py: ligand and receptor filenames"
-        print "                    must be specified."
+        print("prepare_dpf41.py: ligand and receptor filenames")
+        print("                    must be specified.")
         usage()
         sys.exit()
 
@@ -257,7 +257,7 @@ if __name__ == '__main__':
         if len(all_types)>1:
             for t in all_types[1:]:
                 all_types_string = all_types_string + " " + t
-                if verbose: print "adding ", t, " to all_types->", all_types_string
+                if verbose: print(("adding ", t, " to all_types->", all_types_string))
         dm.dpo['ligand_types']['value'] = all_types_string 
         dm.dpo['flexres']['value'] = flexres_filename
         dm.dpo['flexres_flag']['value'] = True
@@ -279,7 +279,7 @@ if __name__ == '__main__':
             if newvalue =='True':
                 newvalue = True
         kw = {key:newvalue}
-        apply(dm.set_docking_parameters, (), kw)
+        dm.set_docking_parameters(*(), **kw)
         if key not in parameter_list:
             #special hack for output_pop_file
             if key=='output_pop_file':

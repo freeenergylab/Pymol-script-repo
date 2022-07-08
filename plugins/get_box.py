@@ -36,5 +36,5 @@ EXAMPLE:
         round(float(center_y), 2),
         round(float(center_z), 2),
     )
-    print("Size:", size_x, size_y, size_z)
-    print("Center:", center_x, center_y, center_z)
+    print(("Size:", size_x, size_y, size_z))
+    print(("Center:", center_x, center_y, center_z))

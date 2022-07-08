@@ -59,7 +59,7 @@ class EchoTestCase(ServiceTestCase):
         msg = self.client_module.EchoRequest()
         msg.EchoIn = 'bla bla bla'
         rsp = port.Echo(msg)
-        self.failUnless(rsp.EchoResult == msg.EchoIn, "Bad Echo")
+        self.assertTrue(rsp.EchoResult == msg.EchoIn, "Bad Echo")
 
 
 if __name__ == "__main__" :

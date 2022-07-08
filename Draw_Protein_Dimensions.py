@@ -17,7 +17,7 @@ License: MIT
 
 '''
 
-from __future__ import print_function
+
 
 __author__  = 'Pablo Guardado Calvo'
 __version__ = '0.2'

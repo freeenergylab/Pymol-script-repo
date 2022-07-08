@@ -64,7 +64,7 @@ def test_findType():
     try:
         nodes = atms.findType(Helix)
     except RuntimeError:
-        print "passed"
+        print("passed")
 
     
 
@@ -73,6 +73,6 @@ harness = testplus.TestHarness( __name__,
                                 )
 
 if __name__ == '__main__':
-    print harness
+    print(harness)
     sys.exit( len( harness))
 

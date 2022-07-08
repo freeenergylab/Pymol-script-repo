@@ -79,8 +79,8 @@ class RigidfitBodyAligner:
         # 2. Wolfgang Kabsch's method for rotation matrix rot:
         rot = Numeric.identity(3).astype('f')
         # LOOK how to modify that code.
-        for i in xrange(3):
-            for j in xrange(3):
+        for i in range(3):
+            for j in range(3):
                 rot[j][i] = Numeric.sum((refCoords[:,i]-refCentroid[i])*
                                         (mobileCoords[:,j]-mobileCentroid[j]))
 

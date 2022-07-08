@@ -33,7 +33,7 @@ class BaseTests(unittest.TestCase):
         instantiate an GasteigerChargeCalculator
         """
         g_calc = GasteigerChargeCalculator()
-        self.assertEquals(g_calc.__class__, GasteigerChargeCalculator)
+        self.assertEqual(g_calc.__class__, GasteigerChargeCalculator)
 
 
     def test_gasteiger_calc_addCharges(self):
@@ -44,9 +44,9 @@ class BaseTests(unittest.TestCase):
         g_calc = GasteigerChargeCalculator()
         g_calc.addCharges(self.mol.allAtoms)
         g_ats = self.mol.allAtoms.get(lambda x: x.chargeSet=='gasteiger') 
-        self.assertEquals(atlen, len(g_ats))
+        self.assertEqual(atlen, len(g_ats))
         total_charge = Numeric.add.reduce(self.mol.allAtoms.charge)
-        self.assertAlmostEquals(total_charge, 1.221245e-15, 6)
+        self.assertAlmostEqual(total_charge, 1.221245e-15, 6)
 
 
     def test_kollman_calc_constructor(self):
@@ -54,7 +54,7 @@ class BaseTests(unittest.TestCase):
         instantiate an KollmanChargeCalculator
         """
         k_calc = KollmanChargeCalculator()
-        self.assertEquals(k_calc.__class__, KollmanChargeCalculator)
+        self.assertEqual(k_calc.__class__, KollmanChargeCalculator)
 
 
     def test_Kollman_calc_addCharges(self):
@@ -65,9 +65,9 @@ class BaseTests(unittest.TestCase):
         k_calc = KollmanChargeCalculator()
         k_calc.addCharges(self.mol.allAtoms)
         k_ats = self.mol.allAtoms.get(lambda x: x.chargeSet=='Kollman') 
-        self.assertEquals(atlen, len(k_ats))
+        self.assertEqual(atlen, len(k_ats))
         total_charge = Numeric.add.reduce(self.mol.allAtoms.charge)
-        self.assertAlmostEquals(total_charge, -19.554, 4)
+        self.assertAlmostEqual(total_charge, -19.554, 4)
 
 
     def test_Kollman_calc_from_bug(self):
@@ -79,9 +79,9 @@ class BaseTests(unittest.TestCase):
         k_calc = KollmanChargeCalculator()
         k_calc.addCharges(mol.allAtoms)
         k_ats = mol.allAtoms.get(lambda x: x.chargeSet=='Kollman') 
-        self.assertEquals(atlen, len(k_ats))
+        self.assertEqual(atlen, len(k_ats))
         total_charge = Numeric.add.reduce(mol.allAtoms.charge)
-        self.assertAlmostEquals(total_charge, 5.7060, 4)
+        self.assertAlmostEqual(total_charge, 5.7060, 4)
 
 if __name__ == '__main__':
     unittest.main()

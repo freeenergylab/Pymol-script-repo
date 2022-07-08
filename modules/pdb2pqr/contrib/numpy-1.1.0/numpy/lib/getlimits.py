@@ -3,7 +3,7 @@
 
 __all__ = ['finfo','iinfo']
 
-from machar import MachAr
+from .machar import MachAr
 import numpy.core.numeric as numeric
 import numpy.core.numerictypes as ntypes
 from numpy.core.numeric import array
@@ -43,7 +43,7 @@ class finfo(object):
             dtypes.append(newdtype)
             dtype = newdtype
         if not issubclass(dtype, numeric.inexact):
-            raise ValueError, "data type %r not inexact" % (dtype)
+            raise ValueError("data type %r not inexact" % (dtype))
         obj = cls._finfo_cache.get(dtype,None)
         if obj is not None:
             return obj
@@ -75,7 +75,7 @@ class finfo(object):
             fmt = '%s'
             precname = 'long double'
         else:
-            raise ValueError, repr(dtype)
+            raise ValueError(repr(dtype))
 
         machar = MachAr(lambda v:array([v], dtype),
                         lambda v:_frz(v.astype(itype))[0],
@@ -143,7 +143,7 @@ class iinfo:
             try:
                 val = iinfo._min_vals[self.key]
             except KeyError:
-                val = int(-(1L << (self.bits-1)))
+                val = int(-(1 << (self.bits-1)))
                 iinfo._min_vals[self.key] = val
             return val
 
@@ -155,9 +155,9 @@ class iinfo:
             val = iinfo._max_vals[self.key]
         except KeyError:
             if self.kind == 'u':
-                val = int((1L << self.bits) - 1)
+                val = int((1 << self.bits) - 1)
             else:
-                val = int((1L << (self.bits-1)) - 1)
+                val = int((1 << (self.bits-1)) - 1)
             iinfo._max_vals[self.key] = val
         return val
 
@@ -165,11 +165,11 @@ class iinfo:
 
 if __name__ == '__main__':
     f = finfo(ntypes.single)
-    print 'single epsilon:',f.eps
-    print 'single tiny:',f.tiny
+    print('single epsilon:',f.eps)
+    print('single tiny:',f.tiny)
     f = finfo(ntypes.float)
-    print 'float epsilon:',f.eps
-    print 'float tiny:',f.tiny
+    print('float epsilon:',f.eps)
+    print('float tiny:',f.tiny)
     f = finfo(ntypes.longfloat)
-    print 'longfloat epsilon:',f.eps
-    print 'longfloat tiny:',f.tiny
+    print('longfloat epsilon:',f.eps)
+    print('longfloat tiny:',f.tiny)

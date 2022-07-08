@@ -18,8 +18,8 @@ Hagelueken G, Ward R, Naismith JH, Schiemann O. MtsslWizard: In silico Spin-Labe
  
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 
 import pymol
 import string
@@ -36,7 +36,7 @@ from operator import itemgetter
 import sys
 
 if sys.version_info[0] < 3:
-    from Tkinter import Tk
+    from tkinter import Tk
 else:
     from tkinter import Tk
 

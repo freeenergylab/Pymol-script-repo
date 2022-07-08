@@ -76,9 +76,9 @@ class SubstitutionGroupTestCase(ServiceTestCase):
         b2 = p2.BaseElt[0]
         c2 = p2.BaseElt[1]
  
-        self.failUnlessEqual(b1.Base, b2.Base)
-        self.failUnlessEqual(c1.Base, c2.Base)
-        self.failUnlessEqual(c1.Child, c2.Child)
+        self.assertEqual(b1.Base, b2.Base)
+        self.assertEqual(c1.Base, c2.Base)
+        self.assertEqual(c1.Child, c2.Child)
 
 
 

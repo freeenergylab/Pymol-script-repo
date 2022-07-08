@@ -11,7 +11,7 @@ class phimap_class:
         #print
         self.maps={}
         for name,emap in [['x',xmap],['y',ymap],['z',zmap]]:
-            print 'Reading',emap
+            print('Reading',emap)
             data=[]
             value=0.0
             

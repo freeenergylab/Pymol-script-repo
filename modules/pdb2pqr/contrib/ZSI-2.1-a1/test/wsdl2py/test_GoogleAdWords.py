@@ -61,9 +61,9 @@ applicationtoken =
         self.wsdl2py_args.append('-b')
 
     def _get_soap_headers(self):
-        from ConfigParser import ConfigParser
+        from configparser import ConfigParser
         cp = ConfigParser(); cp.read(self.header_info)
-        p,e,a,u = map(lambda var: cp.get(self.__class__.name, var), 'password email applicationtoken useragent'.split())
+        p,e,a,u = [cp.get(self.__class__.name, var) for var in 'password email applicationtoken useragent'.split()]
         tns,GED = "https://adwords.google.com/api/adwords/v10", self.client_module.GED
 
         password = GED(tns, "password").pyclass(p)
@@ -84,7 +84,7 @@ applicationtoken =
 
         kwd =  msg.new_keywordRequests()
         kwd.Text = "flowers"
-        kwd.MaxCpc = 50000L
+        kwd.MaxCpc = 50000
         kwd.Type = "Broad"
         msg.KeywordRequests = [ kwd ]
 

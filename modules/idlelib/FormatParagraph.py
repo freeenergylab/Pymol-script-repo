@@ -15,7 +15,7 @@
 # * Fancy comments, like this bulleted list, arent handled :-)
 
 import re
-from configHandler import idleConf
+from .configHandler import idleConf
 
 class FormatParagraph:
 
@@ -45,7 +45,7 @@ class FormatParagraph:
         if comment_header:
             # Reformat the comment lines - convert to text sans header.
             lines = data.split("\n")
-            lines = map(lambda st, l=len(comment_header): st[l:], lines)
+            lines = list(map(lambda st, l=len(comment_header): st[l:], lines))
             data = "\n".join(lines)
             # Reformat to maxformatwidth chars or a 20 char width, whichever is
             # greater.
@@ -80,7 +80,7 @@ class FormatParagraph:
         return "break"
 
 def find_paragraph(text, mark):
-    lineno, col = map(int, mark.split("."))
+    lineno, col = list(map(int, mark.split(".")))
     line = text.get("%d.0" % lineno, "%d.0 lineend" % lineno)
     while text.compare("%d.0" % lineno, "<", "end") and is_all_white(line):
         lineno = lineno + 1

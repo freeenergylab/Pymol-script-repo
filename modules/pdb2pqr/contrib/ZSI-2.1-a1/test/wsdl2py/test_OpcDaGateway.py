@@ -87,11 +87,11 @@ class OPCServiceTest(ServiceTestCase):
         msg._PropertyNames=['Static']
         msg._attrs = {'ItemPath':'Static'}
         
-        self.failUnless(\
+        self.assertTrue(\
             getattr(msg.typecode, 'attribute_typecode_dict', None) is not None,
              )
 
-        self.failUnlessRaises(FaultException, port.Browse, msg)
+        self.assertRaises(FaultException, port.Browse, msg)
 
 
 #    def hangs_test_net_Read(self):

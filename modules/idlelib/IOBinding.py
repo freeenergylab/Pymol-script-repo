@@ -11,15 +11,15 @@ import sys
 import types
 import codecs
 import tempfile
-import tkFileDialog
-import tkMessageBox
-from Tkinter import Toplevel, Entry, Frame, Button, Label
-from Tkconstants import W, X, TOP, LEFT, BOTH
-from SimpleDialog import SimpleDialog
+import tkinter.filedialog
+import tkinter.messagebox
+from tkinter import Toplevel, Entry, Frame, Button, Label
+from tkinter.constants import W, X, TOP, LEFT, BOTH
+from tkinter.simpledialog import SimpleDialog
 
-from configHandler import idleConf
+from .configHandler import idleConf
 if idleConf.GetOption('main', 'General', 'use-ttk', type='int'):
-    from ttk import Entry, Frame, Button, Label
+    from tkinter.ttk import Entry, Frame, Button, Label
 
 try:
     from codecs import BOM_UTF8
@@ -140,7 +140,7 @@ def coding_spec(str):
         codecs.lookup(name)
     except LookupError:
         # The standard encoding error does not indicate the encoding
-        raise LookupError, "Unknown encoding "+name
+        raise LookupError("Unknown encoding "+name)
     return name
 
 
@@ -253,8 +253,8 @@ class IOBinding:
             f = open(filename, 'rb')
             chars = f.read()
             f.close()
-        except IOError, msg:
-            tkMessageBox.showerror("I/O Error", str(msg), master=self.text)
+        except IOError as msg:
+            tkinter.messagebox.showerror("I/O Error", str(msg), master=self.text)
             return False
 
         chars = self.decode(chars)
@@ -262,7 +262,7 @@ class IOBinding:
         firsteol = self.eol_re.search(chars)
         if firsteol:
             self.eol_convention = firsteol.group(0)
-            if isinstance(self.eol_convention, unicode):
+            if isinstance(self.eol_convention, str):
                 # Make sure it is an ASCII string
                 self.eol_convention = self.eol_convention.encode("ascii")
             chars = self.eol_re.sub(r"\n", chars)
@@ -296,8 +296,8 @@ class IOBinding:
         # Next look for coding specification
         try:
             enc = coding_spec(chars)
-        except LookupError, name:
-            tkMessageBox.showerror(
+        except LookupError as name:
+            tkinter.messagebox.showerror(
                 title="Error loading the file",
                 message="The encoding '%s' is not known to this Python "\
                 "installation. The file may not display correctly" % name,
@@ -305,18 +305,18 @@ class IOBinding:
             enc = None
         if enc:
             try:
-                return unicode(chars, enc)
+                return str(chars, enc)
             except UnicodeError:
                 pass
         # If it is ASCII, we need not to record anything
         try:
-            return unicode(chars, 'ascii')
+            return str(chars, 'ascii')
         except UnicodeError:
             pass
         # Finally, try the locale's encoding. This is deprecated;
         # the user should declare a non-ASCII encoding
         try:
-            chars = unicode(chars, encoding)
+            chars = str(chars, encoding)
             self.fileencoding = encoding
         except UnicodeError:
             pass
@@ -327,11 +327,11 @@ class IOBinding:
             return "yes"
         message = "Do you want to save %s before closing?" % (
             self.filename or "this untitled document")
-        m = tkMessageBox.Message(
+        m = tkinter.messagebox.Message(
             title="Save On Close",
             message=message,
-            icon=tkMessageBox.QUESTION,
-            type=tkMessageBox.YESNOCANCEL,
+            icon=tkinter.messagebox.QUESTION,
+            type=tkinter.messagebox.YESNOCANCEL,
             master=self.text)
         reply = m.show()
         if reply == "yes":
@@ -387,12 +387,12 @@ class IOBinding:
             f.flush()
             f.close()
             return True
-        except IOError, msg:
-            tkMessageBox.showerror("I/O Error", str(msg), master=self.text)
+        except IOError as msg:
+            tkinter.messagebox.showerror("I/O Error", str(msg), master=self.text)
             return False
 
     def encode(self, chars):
-        if isinstance(chars, types.StringType):
+        if isinstance(chars, bytes):
             # This is either plain ASCII, or Tk was returning mixed-encoding
             # text to us. Don't try to guess further.
             return chars
@@ -406,7 +406,7 @@ class IOBinding:
         try:
             enc = coding_spec(chars)
             failed = None
-        except LookupError, msg:
+        except LookupError as msg:
             failed = msg
             enc = None
         if enc:
@@ -415,7 +415,7 @@ class IOBinding:
             except UnicodeError:
                 failed = "Invalid encoding '%s'" % enc
         if failed:
-            tkMessageBox.showerror(
+            tkinter.messagebox.showerror(
                 "I/O Error",
                 "%s. Saving as UTF-8" % failed,
                 master = self.text)
@@ -427,7 +427,7 @@ class IOBinding:
             try:
                 return chars.encode(self.fileencoding)
             except UnicodeError:
-                tkMessageBox.showerror(
+                tkinter.messagebox.showerror(
                     "I/O Error",
                     "Cannot save this as '%s' anymore. Saving as UTF-8" \
                     % self.fileencoding,
@@ -470,15 +470,15 @@ class IOBinding:
             self.text.insert("end-1c", "\n")
 
     def print_window(self, event):
-        m = tkMessageBox.Message(
+        m = tkinter.messagebox.Message(
             title="Print",
             message="Print to Default Printer",
-            icon=tkMessageBox.QUESTION,
-            type=tkMessageBox.OKCANCEL,
-            default=tkMessageBox.OK,
+            icon=tkinter.messagebox.QUESTION,
+            type=tkinter.messagebox.OKCANCEL,
+            default=tkinter.messagebox.OK,
             master=self.text)
         reply = m.show()
-        if reply != tkMessageBox.OK:
+        if reply != tkinter.messagebox.OK:
             self.text.focus_set()
             return "break"
         tempfilename = None
@@ -514,10 +514,10 @@ class IOBinding:
                          status + output
             if output:
                 output = "Printing command: %s\n" % repr(command) + output
-                tkMessageBox.showerror("Print status", output, master=self.text)
+                tkinter.messagebox.showerror("Print status", output, master=self.text)
         else:  #no printing for this platform
             message="Printing is not enabled for this platform: %s" % platform
-            tkMessageBox.showinfo("Print status", message, master=self.text)
+            tkinter.messagebox.showinfo("Print status", message, master=self.text)
         if tempfilename:
             os.unlink(tempfilename)
         return "break"
@@ -534,10 +534,10 @@ class IOBinding:
     def askopenfile(self):
         dir, base = self.defaultfilename("open")
         if not self.opendialog:
-            self.opendialog = tkFileDialog.Open(master=self.text,
+            self.opendialog = tkinter.filedialog.Open(master=self.text,
                                                 filetypes=self.filetypes)
         filename = self.opendialog.show(initialdir=dir, initialfile=base)
-        if isinstance(filename, unicode):
+        if isinstance(filename, str):
             filename = filename.encode(filesystemencoding)
         return filename
 
@@ -556,10 +556,10 @@ class IOBinding:
     def asksavefile(self):
         dir, base = self.defaultfilename("save")
         if not self.savedialog:
-            self.savedialog = tkFileDialog.SaveAs(master=self.text,
+            self.savedialog = tkinter.filedialog.SaveAs(master=self.text,
                                                   filetypes=self.filetypes)
         filename = self.savedialog.show(initialdir=dir, initialfile=base)
-        if isinstance(filename, unicode):
+        if isinstance(filename, str):
             filename = filename.encode(filesystemencoding)
         return filename
 
@@ -568,7 +568,7 @@ class IOBinding:
         self.editwin.update_recent_files_list(filename)
 
 def test():
-    from Tkinter import Tk, Text
+    from tkinter import Tk, Text
     root = Tk()
     class MyEditWin:
         def __init__(self, text):

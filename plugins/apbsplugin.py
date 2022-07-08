@@ -129,9 +129,9 @@ Known hacks:
 
 """
 '''
-from __future__ import division
-from __future__ import generators
-from __future__ import print_function
+
+
+
 
 INCLUDEWEBAPBS = False
 
@@ -146,8 +146,8 @@ import re
 import sys
 
 if sys.version_info[0] < 3:
-    import Tkinter
-    from Tkinter import *
+    import tkinter
+    from tkinter import *
 else:
     import tkinter as Tkinter
     from tkinter import *
@@ -645,7 +645,7 @@ class APBSTools2:
 
         Pmw.setbusycursorattributes(self.dialog.component('hull'))
 
-        w = Tkinter.Label(self.dialog.interior(),
+        w = tkinter.Label(self.dialog.interior(),
                           text='PyMOL APBS Tools\nMichael G. Lerner, Heather A. Carlson, 2009 - http://pymolwiki.org/index.php/APBS\n(incorporates modifications by Warren L. DeLano)',
                           background='black',
                           foreground='white',
@@ -972,7 +972,7 @@ class APBSTools2:
                                        )
         self.pdb2pqr.pack(fill='x', padx=20, pady=10)
 
-        label = Tkinter.Label(group.interior(),
+        label = tkinter.Label(group.interior(),
                               pady=10,
                               justify=LEFT,
                               text="""
@@ -1028,7 +1028,7 @@ protein residues and AMBER charges.  If wish that behavior, simply delete the "p
                                                            value=os.path.join(get_default_location('temp'), 'pymol-generated.in'),
                                                            label_text='APBS input file:')
         self.pymol_generated_in_filename.pack(fill='x', padx=20, pady=10)
-        label = Tkinter.Label(group.interior(),
+        label = tkinter.Label(group.interior(),
                               pady=10,
                               justify=LEFT,
                               text="""You can automatically set the default location of temporary files
@@ -1999,7 +1999,7 @@ class PmwFileDialog(Pmw.Dialog):
         return self.createcomponent(
             'infobox',
             (), None,
-            Tkinter.Label, (self.interior(),),
+            tkinter.Label, (self.interior(),),
             width=51,
             relief='groove',
             foreground='darkblue',
@@ -2265,14 +2265,14 @@ class FileDialogButtonClassFactory:
         """This returns a FileDialogButton class that will
         call the specified function with the resulting file.
         """
-        class FileDialogButton(Tkinter.Button):
+        class FileDialogButton(tkinter.Button):
             # This is just an ordinary button with special colors.
 
             def __init__(self, master=None, cnf={}, **kw):
                 '''when we get a file, we call fn(filename)'''
                 self.fn = fn
                 self.__toggle = 0
-                Tkinter.Button.__init__(self, master, cnf, **kw)
+                tkinter.Button.__init__(self, master, cnf, **kw)
                 self.configure(command=self.set)
 
             def set(self):
@@ -2403,7 +2403,7 @@ class VisualizationGroup(Pmw.Group):
             self.fl_buttonbox.add('Hide', command=self.hideFieldLines)
             self.fl_buttonbox.add('Update', command=self.updateFieldLines)
             self.fl_buttonbox.alignbuttons()
-            label = Tkinter.Label(self.fl_group.interior(),
+            label = tkinter.Label(self.fl_group.interior(),
                                   pady=10,
                                   justify=LEFT,
                                   text="""Follows same coloring as surface.""",
@@ -2450,7 +2450,7 @@ class VisualizationGroup(Pmw.Group):
             self.ni_group.pack(fill='both', expand=1, padx=4, pady=5, side=LEFT)
 
         else:
-            self.error_label = Tkinter.Label(self.interior(),
+            self.error_label = tkinter.Label(self.interior(),
                                              pady=10,
                                              justify=LEFT,
                                              text='''You must have at least a molecule and a map loaded.

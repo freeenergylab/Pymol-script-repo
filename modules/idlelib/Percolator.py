@@ -1,5 +1,5 @@
-from Delegator import Delegator
-from WidgetRedirector import WidgetRedirector
+from .Delegator import Delegator
+from .WidgetRedirector import WidgetRedirector
 
 class Percolator:
 
@@ -58,10 +58,10 @@ def main():
             self.name = name
             Delegator.__init__(self, None)
         def insert(self, *args):
-            print self.name, ": insert", args
+            print(self.name, ": insert", args)
             self.delegate.insert(*args)
         def delete(self, *args):
-            print self.name, ": delete", args
+            print(self.name, ": delete", args)
             self.delegate.delete(*args)
     root = Tk()
     root.wm_protocol("WM_DELETE_WINDOW", root.quit)
@@ -81,5 +81,5 @@ def main():
     root.mainloop()
 
 if __name__ == "__main__":
-    from Tkinter import Tk, Text
+    from tkinter import Tk, Text
     main()

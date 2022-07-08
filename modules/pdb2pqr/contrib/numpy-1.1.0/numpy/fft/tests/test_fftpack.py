@@ -12,7 +12,7 @@ def fft1(x):
 
 class TestFFTShift(NumpyTestCase):
     def check_fft_n(self):
-        self.failUnlessRaises(ValueError,np.fft.fft,[1,2,3],0)
+        self.assertRaises(ValueError,np.fft.fft,[1,2,3],0)
 
 class TestFFT1D(NumpyTestCase):
     def check_basic(self):

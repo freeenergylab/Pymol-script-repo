@@ -19,12 +19,12 @@ except:
     #
     # We need apbslib.so, apbslib.so and apbslib.py
     #
-    print
-    print 'Missing libraries for interfacing with APBS'
-    print
-    print 'You need to find _apbslib.so and apbslib.py and symlink into the pdb2pqr/pdb2pka source code directory'
-    print 'The files can be found in the share/tools/python dir of your apbs installation'
-    print
+    print()
+    print('Missing libraries for interfacing with APBS')
+    print()
+    print('You need to find _apbslib.so and apbslib.py and symlink into the pdb2pqr/pdb2pka source code directory')
+    print('The files can be found in the share/tools/python dir of your apbs installation')
+    print()
     sys.exit(0)
 
 Python_kb = 1.3806581e-23
@@ -53,7 +53,7 @@ class APBSError(Exception):
         """
             Return the error message
         """
-        return `self.value`
+        return repr(self.value)
 
 class runAPBS:
 
@@ -122,7 +122,7 @@ class runAPBS:
         sys.stdout.write("Parsing input file %s...\n" % inputpath)
         if NOsh_parseInputFile(self.nosh, inputpath) != 1:
             sys.stderr.write("main:  Error while parsing input file.\n")
-            raise APBSError, "Error while parsing input file!"
+            raise APBSError("Error while parsing input file!")
 
         # Load the molecules using Valist_load routine
 
@@ -134,11 +134,11 @@ class runAPBS:
 
         if NOsh_setupElecCalc(self.nosh, self.alist) != 1:
             sys.stderr.write("Error setting up ELEC calculations\n")
-            raise APBSError, "Error while setting up calculations!"
+            raise APBSError("Error while setting up calculations!")
 
         if NOsh_setupApolCalc(self.nosh, self.alist) == ACD_ERROR:
             sys.stderr.write("Error setting up APOL calculations\n")
-            raise APBSError, "Error while setting up calculations!"
+            raise APBSError("Error while setting up calculations!")
 
         #
         # DEBUGGING
@@ -195,38 +195,38 @@ class runAPBS:
 
         if loadDielMaps(self.nosh, self.dielXMap, self.dielYMap, self.dielZMap) != 1:
             sys.stderr.write("Error reading dielectric maps!\n")
-            raise APBSError, "Error reading dielectric maps!"
+            raise APBSError("Error reading dielectric maps!")
 
         # Load the kappa maps
         self.kappaMap = new_gridlist(NOSH_MAXMOL)
         if loadKappaMaps(self.nosh, self.kappaMap) != 1:
             sys.stderr.write("Error reading kappa maps!\n")
-            raise APBSError, "Error reading kappa maps!"
+            raise APBSError("Error reading kappa maps!")
 
         # Load the potential maps
         self.potMap = new_gridlist(NOSH_MAXMOL)
         if loadPotMaps(self.nosh, self.potMap) != 1:
             sys.stderr.write("Error reading potential maps!\n")
-            raise APBSError, "Error reading potential maps!"
+            raise APBSError("Error reading potential maps!")
 
         # Load the charge maps
         self.chargeMap = new_gridlist(NOSH_MAXMOL)
         if loadChargeMaps(self.nosh, self.chargeMap) != 1:
             sys.stderr.write("Error reading charge maps!\n")
-            raise APBSError, "Error reading charge maps!"
+            raise APBSError("Error reading charge maps!")
 
         # Do the calculations
 
         sys.stdout.write("Preparing to run %d PBE calculations. \n" % self.nosh.ncalc)
 
-        for icalc in xrange(self.nosh.ncalc):
+        for icalc in range(self.nosh.ncalc):
             sys.stdout.write("---------------------------------------------\n")
             self.calc = NOsh_getCalc(self.nosh, icalc)
             self.mgparm = self.calc.mgparm
             self.pbeparm = self.calc.pbeparm
             if self.calc.calctype != 0:
                 sys.stderr.write("main:  Only multigrid calculations supported!\n")
-                raise APBSError, "Only multigrid calculations supported!"
+                raise APBSError("Only multigrid calculations supported!")
 
             for k in range(0, self.nosh.nelec):
                 if NOsh_elec2calc(self.nosh,k) >= icalc:
@@ -245,7 +245,7 @@ class runAPBS:
                   self.alist, self.dielXMap, self.dielYMap, self.dielZMap, self.kappaMap, self.chargeMap, 
                   self.pmgp, self.pmg, self.potMap) != 1:
                 sys.stderr.write("Error setting up MG calculation!\n")
-                raise APBSError, "Error setting up MG calculation!"
+                raise APBSError("Error setting up MG calculation!")
 
             # Print problem parameters 
 
@@ -258,13 +258,13 @@ class runAPBS:
 
             if solveMG(self.nosh, self.thispmg, self.mgparm.type) != 1:
                 stderr.write("Error solving PDE! \n")
-                raise APBSError, "Error Solving PDE!"
+                raise APBSError("Error Solving PDE!")
 
             # Set partition information : Routine setPartMG
 
             if setPartMG(self.nosh, self.mgparm, self.thispmg) != 1:
                 sys.stderr.write("Error setting partition info!\n")
-                raise APBSError, "Error setting partition info!"
+                raise APBSError("Error setting partition info!")
 
             ret, self.totEnergy[icalc] = energyMG(self.nosh, icalc, self.thispmg, 0,
                                                   self.totEnergy[icalc], 0.0, 0.0, 0.0)

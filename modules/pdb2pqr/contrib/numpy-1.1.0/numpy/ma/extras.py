@@ -29,8 +29,8 @@ __all__ = ['apply_along_axis', 'atleast_1d', 'atleast_2d', 'atleast_3d',
 
 from itertools import groupby
 
-import core
-from core import MaskedArray, MAError, add, array, asarray, concatenate, count,\
+from . import core
+from .core import MaskedArray, MAError, add, array, asarray, concatenate, count,\
     filled, getmask, getmaskarray, masked, masked_array, mask_or, nomask, ones,\
     sort, zeros
 #from core import *
@@ -174,7 +174,7 @@ def apply_along_axis(func1d, axis, arr, *args, **kwargs):
             % (axis,nd))
     ind = [0]*(nd-1)
     i = np.zeros(nd,'O')
-    indlist = range(nd)
+    indlist = list(range(nd))
     indlist.remove(axis)
     i[axis] = slice(None,None)
     outshape = np.asarray(arr.shape).take(indlist)
@@ -313,7 +313,7 @@ def average(a, axis=None, weights=None, returned=False):
                     d = add.reduce(w, axis, dtype=float)
                     del w, r
                 else:
-                    raise ValueError, 'average: weights wrong shape.'
+                    raise ValueError('average: weights wrong shape.')
         else:
             if weights is None:
                 n = add.reduce(a, axis, dtype=float)
@@ -336,7 +336,7 @@ def average(a, axis=None, weights=None, returned=False):
                     n = add.reduce(a*w, axis, dtype=float)
                     d = add.reduce(w, axis, dtype=float)
                 else:
-                    raise ValueError, 'average: weights wrong shape.'
+                    raise ValueError('average: weights wrong shape.')
                 del w
     if n is masked or d is masked:
         return masked
@@ -458,7 +458,7 @@ def compress_rowcols(x, axis=None):
     """
     x = asarray(x)
     if x.ndim != 2:
-        raise NotImplementedError, "compress2d works for 2D arrays only."
+        raise NotImplementedError("compress2d works for 2D arrays only.")
     m = getmask(x)
     # Nothing is masked: return x
     if m is nomask or not m.any():
@@ -467,7 +467,7 @@ def compress_rowcols(x, axis=None):
     if m.all():
         return nxarray([])
     # Builds a list of rows/columns indices
-    (idxr, idxc) = (range(len(x)), range(x.shape[1]))
+    (idxr, idxc) = (list(range(len(x))), list(range(x.shape[1])))
     masked = m.nonzero()
     if not axis:
         for i in np.unique(masked[0]):
@@ -511,7 +511,7 @@ def mask_rowcols(a, axis=None):
     """
     a = asarray(a)
     if a.ndim != 2:
-        raise NotImplementedError, "compress2d works for 2D arrays only."
+        raise NotImplementedError("compress2d works for 2D arrays only.")
     m = getmask(a)
     # Nothing is masked: return a
     if m is nomask or not m.any():
@@ -663,7 +663,7 @@ class MAxisConcatenator(AxisConcatenator):
 
     def __getitem__(self,key):
         if isinstance(key, str):
-            raise MAError, "Unavailable for masked array."
+            raise MAError("Unavailable for masked array.")
         if type(key) is not tuple:
             key = (key,)
         objs = []
@@ -693,7 +693,7 @@ class MAxisConcatenator(AxisConcatenator):
                     self.axis = int(key[k])
                     continue
                 except (ValueError, TypeError):
-                    raise ValueError, "Unknown special directive"
+                    raise ValueError("Unknown special directive")
             elif type(key[k]) in np.ScalarType:
                 newobj = asarray([key[k]])
                 scalars.append(k)
@@ -778,7 +778,7 @@ def flatnotmasked_contiguous(a):
     if len(unmasked) == 0:
         return None
     result = []
-    for k, group in groupby(enumerate(unmasked), lambda (i,x):i-x):
+    for k, group in groupby(enumerate(unmasked), lambda i_x:i_x[0]-i_x[1]):
         tmp = np.array([g[1] for g in group], int)
 #        result.append((tmp.size, tuple(tmp[[0,-1]])))
         result.append( slice(tmp[0], tmp[-1]) )
@@ -807,7 +807,7 @@ def notmasked_contiguous(a, axis=None):
     a = asarray(a)
     nd = a.ndim
     if nd > 2:
-        raise NotImplementedError,"Currently limited to atmost 2D array."
+        raise NotImplementedError("Currently limited to atmost 2D array.")
     if axis is None or nd == 1:
         return flatnotmasked_contiguous(a)
     #
@@ -861,7 +861,7 @@ def polyfit(x, y, deg, rcond=None, full=False):
         else:
             m = mx
     else:
-        raise TypeError,"Expected a 1D or 2D array for y!"
+        raise TypeError("Expected a 1D or 2D array for y!")
     if m is not nomask:
         x[m] = y[m] = masked
     # Set rcond
@@ -893,7 +893,7 @@ def polyfit(x, y, deg, rcond=None, full=False):
 
 _g = globals()
 for nfunc in ('vander', 'polyfit'):
-    _g[nfunc].func_doc = _g[nfunc].func_doc % getattr(np,nfunc).__doc__
+    _g[nfunc].__doc__ = _g[nfunc].__doc__ % getattr(np,nfunc).__doc__
 
 
 

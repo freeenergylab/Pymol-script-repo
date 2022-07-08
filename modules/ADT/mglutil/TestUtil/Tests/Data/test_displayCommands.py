@@ -124,7 +124,7 @@ class ShowMoleculeTest(DisplayBaseTest):
         if self.mv.showMolecules.flag & 1:
             self.mv.showMolecules(self.mv.getSelection())
         else:
-            print "Cannot be called with empty selection"
+            print("Cannot be called with empty selection")
     def test_showmolecules_defaultargs(self):
         """
         Testing __call__ with default argument on the 7ins.
@@ -226,10 +226,10 @@ class DisplayCPKTest(DisplayBaseTest):
         self.mv.readMolecule('1crn.pdb')
         # no radius assigned
         nodes = self.mv.getSelection()
-        wrad = filter(lambda x: hasattr(x, 'radius'), self.mv.allAtoms)
+        wrad = [x for x in self.mv.allAtoms if hasattr(x, 'radius')]
         self.assertEqual(len(wrad), 0)
         self.mv.displayCPK(nodes)
-        wrad = filter(lambda x: hasattr(x, 'radius'), self.mv.allAtoms)
+        wrad = [x for x in self.mv.allAtoms if hasattr(x, 'radius')]
         self.assertEqual(len(wrad),len(self.mv.allAtoms))
         self.assertEqual(self.mv.Mols[0].unitedRadii,1)
         self.mv.displayCPK(nodes, negate=1)

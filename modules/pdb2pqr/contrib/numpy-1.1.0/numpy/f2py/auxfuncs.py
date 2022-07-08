@@ -15,7 +15,8 @@ Pearu Peterson
 """
 __version__ = "$Revision: 1.65 $"[10:-1]
 
-import __version__
+from . import __version__
+from functools import reduce
 f2py_version = __version__.version
 
 import pprint
@@ -23,7 +24,7 @@ import sys
 import time
 import types
 import os
-import cfuncs
+from . import cfuncs
 
 
 errmess=sys.stderr.write
@@ -421,7 +422,7 @@ class throw_error:
         self.mess = mess
     def __call__(self,var):
         mess = '\n\n  var = %s\n  Message: %s\n' % (var,self.mess)
-        raise F2PYError,mess
+        raise F2PYError(mess)
 
 def l_and(*f):
     l,l2='lambda v',[]
@@ -471,12 +472,12 @@ def getmultilineblock(rout,blockname,comment=1,counter=0):
         r = r[counter]
     if r[:3]=="'''":
         if comment:
-            r = '\t/* start ' + blockname + ' multiline ('+`counter`+') */\n' + r[3:]
+            r = '\t/* start ' + blockname + ' multiline ('+repr(counter)+') */\n' + r[3:]
         else:
             r = r[3:]
         if r[-3:]=="'''":
             if comment:
-                r = r[:-3] + '\n\t/* end multiline ('+`counter`+')*/'
+                r = r[:-3] + '\n\t/* end multiline ('+repr(counter)+')*/'
             else:
                 r = r[:-3]
         else:
@@ -493,7 +494,7 @@ def getcallprotoargument(rout,cb_map={}):
     if hascallstatement(rout):
         outmess('warning: callstatement is defined without callprotoargument\n')
         return
-    from capi_maps import getctype
+    from .capi_maps import getctype
     arg_types,arg_types2 = [],[]
     if l_and(isstringfunction,l_not(isfunction_wrap))(rout):
         arg_types.extend(['char*','size_t'])
@@ -546,7 +547,7 @@ def getargs(rout):
 
 def getargs2(rout):
     sortargs,args=[],rout.get('args',[])
-    auxvars = [a for a in rout['vars'].keys() if isintent_aux(rout['vars'][a])\
+    auxvars = [a for a in list(rout['vars'].keys()) if isintent_aux(rout['vars'][a])\
                and a not in args]
     args = auxvars + args
     if 'sortvars' in rout:
@@ -571,7 +572,7 @@ def gentitle(name):
     return '/*%s %s %s*/'%(l*'*',name,l*'*')
 
 def flatlist(l):
-    if type(l)==types.ListType:
+    if type(l)==list:
         return reduce(lambda x,y,f=flatlist:x+f(y),l,[])
     return [l]
 
@@ -580,43 +581,43 @@ def stripcomma(s):
     return s
 
 def replace(str,dict,defaultsep=''):
-    if type(dict)==types.ListType:
-        return map(lambda d,f=replace,sep=defaultsep,s=str:f(s,d,sep),dict)
-    if type(str)==types.ListType:
-        return map(lambda s,f=replace,sep=defaultsep,d=dict:f(s,d,sep),str)
-    for k in 2*dict.keys():
+    if type(dict)==list:
+        return list(map(lambda d,f=replace,sep=defaultsep,s=str:f(s,d,sep),dict))
+    if type(str)==list:
+        return list(map(lambda s,f=replace,sep=defaultsep,d=dict:f(s,d,sep),str))
+    for k in 2*list(dict.keys()):
         if k=='separatorsfor':
             continue
         if 'separatorsfor' in dict and k in dict['separatorsfor']:
             sep=dict['separatorsfor'][k]
         else:
             sep=defaultsep
-        if type(dict[k])==types.ListType:
+        if type(dict[k])==list:
             str=str.replace('#%s#'%(k),sep.join(flatlist(dict[k])))
         else:
             str=str.replace('#%s#'%(k),dict[k])
     return str
 
 def dictappend(rd,ar):
-    if type(ar)==types.ListType:
+    if type(ar)==list:
         for a in ar:
             rd=dictappend(rd,a)
         return rd
-    for k in ar.keys():
+    for k in list(ar.keys()):
         if k[0]=='_':
             continue
         if k in rd:
-            if type(rd[k])==types.StringType:
+            if type(rd[k])==bytes:
                 rd[k]=[rd[k]]
-            if type(rd[k])==types.ListType:
-                if type(ar[k])==types.ListType:
+            if type(rd[k])==list:
+                if type(ar[k])==list:
                     rd[k]=rd[k]+ar[k]
                 else:
                     rd[k].append(ar[k])
-            elif type(rd[k])==types.DictType:
-                if type(ar[k])==types.DictType:
+            elif type(rd[k])==dict:
+                if type(ar[k])==dict:
                     if k=='separatorsfor':
-                        for k1 in ar[k].keys():
+                        for k1 in list(ar[k].keys()):
                             if k1 not in rd[k]:
                                 rd[k][k1]=ar[k][k1]
                     else:
@@ -627,7 +628,7 @@ def dictappend(rd,ar):
 
 def applyrules(rules,dict,var={}):
     ret={}
-    if type(rules)==types.ListType:
+    if type(rules)==list:
         for r in rules:
             rr=applyrules(r,dict,var)
             ret=dictappend(ret,rr)
@@ -641,12 +642,12 @@ def applyrules(rules,dict,var={}):
         if 'needs' in res:
             cfuncs.append_needs(res['needs'])
 
-    for k in rules.keys():
+    for k in list(rules.keys()):
         if k=='separatorsfor':
             ret[k]=rules[k]; continue
-        if type(rules[k])==types.StringType:
+        if type(rules[k])==bytes:
             ret[k]=replace(rules[k],dict)
-        elif type(rules[k])==types.ListType:
+        elif type(rules[k])==list:
             ret[k]=[]
             for i in rules[k]:
                 ar=applyrules({k:i},dict,var)
@@ -654,13 +655,13 @@ def applyrules(rules,dict,var={}):
                     ret[k].append(ar[k])
         elif k[0]=='_':
             continue
-        elif type(rules[k])==types.DictType:
+        elif type(rules[k])==dict:
             ret[k]=[]
-            for k1 in rules[k].keys():
+            for k1 in list(rules[k].keys()):
                 if type(k1)==types.FunctionType and k1(var):
-                    if type(rules[k][k1])==types.ListType:
+                    if type(rules[k][k1])==list:
                         for i in rules[k][k1]:
-                            if type(i)==types.DictType:
+                            if type(i)==dict:
                                 res=applyrules({'supertext':i},dict,var)
                                 if 'supertext' in res:
                                     i=res['supertext']
@@ -668,15 +669,15 @@ def applyrules(rules,dict,var={}):
                             ret[k].append(replace(i,dict))
                     else:
                         i=rules[k][k1]
-                        if type(i)==types.DictType:
+                        if type(i)==dict:
                             res=applyrules({'supertext':i},dict)
                             if 'supertext' in res:
                                 i=res['supertext']
                             else: i=''
                         ret[k].append(replace(i,dict))
         else:
-            errmess('applyrules: ignoring rule %s.\n'%`rules[k]`)
-        if type(ret[k])==types.ListType:
+            errmess('applyrules: ignoring rule %s.\n'%repr(rules[k]))
+        if type(ret[k])==list:
             if len(ret[k])==1:
                 ret[k]=ret[k][0]
             if ret[k]==[]:

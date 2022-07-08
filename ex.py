@@ -12,7 +12,7 @@ import ex
 ex rotkit_1.pml
 '''
 
-from __future__ import print_function
+
 from pymol import cmd
 import os
 if 'PYMOL_GIT_MOD' in os.environ:

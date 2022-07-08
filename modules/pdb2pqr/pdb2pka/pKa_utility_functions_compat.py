@@ -163,7 +163,7 @@ def is_titratable(uniqueid):
 def istitratable(uniqueid):
     import string
     type=string.split(uniqueid,':')[-1]
-    if acidbase.has_key(type):
+    if type in acidbase:
         return 1
     else:
         return None

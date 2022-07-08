@@ -14,18 +14,18 @@ class DATestCase(unittest.TestCase):
 
     def check_challenge_single_www_authenticate_header(self):
         challenge='Basic realm="WallyWorld"'
-        print "=="*30
-        print challenge
-        print "=="*30
+        print("=="*30)
+        print(challenge)
+        print("=="*30)
         cd = digest_auth.fetch_challenge(challenge)
         expect = {'challenge': 'Basic', 'realm': 'WallyWorld'}
-        self.failUnless(cd == expect, 'Expected equivalent')
+        self.assertTrue(cd == expect, 'Expected equivalent')
 
     def check_challenge_single_www_authenticate_header2(self):
         challenge='Basic realm="Wally World"'
         cd = digest_auth.fetch_challenge(challenge)
         expect = {'challenge': 'Basic', 'realm': 'Wally World'}
-        self.failUnless(cd == expect, 'Expected equivalent')
+        self.assertTrue(cd == expect, 'Expected equivalent')
 
     def check_challenge_single_www_authenticate_header3(self):
         challenge = '''Digest
@@ -35,7 +35,7 @@ class DATestCase(unittest.TestCase):
                  opaque="5ccc069c403ebaf9f0171e9517f40e41"'''
         cd = digest_auth.fetch_challenge(challenge)
         expect = {'nonce': 'dcd98b7102dd2f0e8b11d0f600bfb0c093', 'challenge': 'Digest', 'opaque': '5ccc069c403ebaf9f0171e9517f40e41', 'realm': 'testrealm@host.com', 'qop': 'auth,auth-int'}
-        self.failUnless(cd == expect, 'Expected equivalent')
+        self.assertTrue(cd == expect, 'Expected equivalent')
 
 
 

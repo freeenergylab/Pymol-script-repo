@@ -1,8 +1,9 @@
 
 from numpy.testing import *
+import importlib
 set_package_path()
 from os import path
-import numpy.core;reload(numpy.core)
+import numpy.core;importlib.reload(numpy.core)
 from numpy.core import *
 restore_path()
 
@@ -45,12 +46,12 @@ class TestFromrecords(NumpyTestCase):
         b = zeros(count, dtype='f8')
         c = zeros(count, dtype='f8')
         for i in range(len(a)):
-            a[i] = range(1,10)
+            a[i] = list(range(1,10))
 
         mine = numpy.rec.fromarrays([a,b,c],
                                     names='date,data1,data2')
         for i in range(len(a)):
-            assert(mine.date[i]==range(1,10))
+            assert(mine.date[i]==list(range(1,10)))
             assert(mine.data1[i]==0.0)
             assert(mine.data2[i]==0.0)
 
@@ -67,7 +68,7 @@ class TestFromrecords(NumpyTestCase):
                        names='c1, c2, c3, c4')
         assert ra.dtype == pa.dtype
         assert ra.shape == pa.shape
-        for k in xrange(len(ra)):
+        for k in range(len(ra)):
             assert ra[k].item() == pa[k].item()
 
     def check_recarray_conflict_fields(self):
@@ -108,7 +109,7 @@ class TestRecord(NumpyTestCase):
         a = self.data
         def assign_invalid_column(x):
             x[0].col5 = 1
-        self.failUnlessRaises(AttributeError,assign_invalid_column,a)
+        self.assertRaises(AttributeError,assign_invalid_column,a)
 
 if __name__ == "__main__":
     NumpyTest().run()

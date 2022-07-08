@@ -1,8 +1,9 @@
 import sys
 
 from numpy.testing import *
+import importlib
 set_package_path()
-import numpy.lib;reload(numpy.lib)
+import numpy.lib;importlib.reload(numpy.lib)
 from numpy.lib import *
 from numpy.core import *
 
@@ -234,9 +235,9 @@ class TestProd(NumpyTestCase):
             a = array(ba,ctype)
             a2 = array(ba2,ctype)
             if ctype in ['1', 'b']:
-                self.failUnlessRaises(ArithmeticError, prod, a)
-                self.failUnlessRaises(ArithmeticError, prod, a2, 1)
-                self.failUnlessRaises(ArithmeticError, prod, a)
+                self.assertRaises(ArithmeticError, prod, a)
+                self.assertRaises(ArithmeticError, prod, a2, 1)
+                self.assertRaises(ArithmeticError, prod, a)
             else:
                 assert_equal(prod(a,axis=0),26400)
                 assert_array_equal(prod(a2,axis=0),
@@ -252,9 +253,9 @@ class TestCumprod(NumpyTestCase):
             a = array(ba,ctype)
             a2 = array(ba2,ctype)
             if ctype in ['1', 'b']:
-                self.failUnlessRaises(ArithmeticError, cumprod, a)
-                self.failUnlessRaises(ArithmeticError, cumprod, a2, 1)
-                self.failUnlessRaises(ArithmeticError, cumprod, a)
+                self.assertRaises(ArithmeticError, cumprod, a)
+                self.assertRaises(ArithmeticError, cumprod, a2, 1)
+                self.assertRaises(ArithmeticError, cumprod, a)
             else:
                 assert_array_equal(cumprod(a,axis=-1),
                                    array([1, 2, 20, 220,
@@ -560,7 +561,7 @@ class TestHistogramdd(NumpyTestCase):
         assert_array_equal(H, answer)
 
         Z = zeros((5,5,5))
-        Z[range(5), range(5), range(5)] = 1.
+        Z[list(range(5)), list(range(5)), list(range(5))] = 1.
         H,edges = histogramdd([arange(5), arange(5), arange(5)], 5)
         assert_array_equal(H, Z)
 

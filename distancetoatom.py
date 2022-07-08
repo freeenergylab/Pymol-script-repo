@@ -20,7 +20,7 @@ VERSION NOTES:
     1.0    2014    First release
 '''
 
-from __future__ import print_function
+
 import sys
 from pymol import cmd
 from pymol import stored

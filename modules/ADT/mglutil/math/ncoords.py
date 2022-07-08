@@ -25,7 +25,7 @@ class Ncoords:
             self.refCoords = Numeric.array(Numeric.concatenate(
                 (refCoords, Numeric.ones( (len(refCoords), 1), 'f')), 1))
         except TypeError:
-            raise ValueError, "invalid input array"
+            raise ValueError("invalid input array")
 
         self.resultCoords = self.refCoords
         self.tolist = tolist

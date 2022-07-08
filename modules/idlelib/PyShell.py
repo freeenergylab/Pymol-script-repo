@@ -12,39 +12,39 @@ import threading
 from code import InteractiveInterpreter
 
 try:
-    from Tkinter import Tk, Toplevel, TclError
-    from Tkconstants import END
+    from tkinter import Tk, Toplevel, TclError
+    from tkinter.constants import END
 except ImportError:
-    print>>sys.__stderr__, "** IDLE can't import Tkinter.  " \
-                           "Your Python may not be configured for Tk. **"
+    print("** IDLE can't import Tkinter.  " \
+                           "Your Python may not be configured for Tk. **", file=sys.__stderr__)
     sys.exit(1)
 try:
-    from ttk import Style
+    from tkinter.ttk import Style
     TTK = 1
 except ImportError:
-    print >> sys.stderr, "** IDLE can't import ttk."
+    print("** IDLE can't import ttk.", file=sys.stderr)
     TTK = 0
 
-import tkMessageBox
+import tkinter.messagebox
 
-import macosxSupport
-from configHandler import idleConf
+from . import macosxSupport
+from .configHandler import idleConf
 
 # store ttk availability
 idleConf.SetOption('main', 'General', 'use-ttk', str(TTK))
 idleConf.SaveUserCfgFiles()
 
-import rpc
-import utils
-import idlever
-import Debugger
-import IOBinding
-import RemoteDebugger
-from FileList import FileList
-from OutputWindow import OutputWindow
-from EditorWindow import EditorWindow, fixwordbreaks
-from UndoDelegator import UndoDelegator
-from ColorDelegator import ColorDelegator
+from . import rpc
+from . import utils
+from . import idlever
+from . import Debugger
+from . import IOBinding
+from . import RemoteDebugger
+from .FileList import FileList
+from .OutputWindow import OutputWindow
+from .EditorWindow import EditorWindow, fixwordbreaks
+from .UndoDelegator import UndoDelegator
+from .ColorDelegator import ColorDelegator
 
 IDENTCHARS = string.ascii_letters + string.digits + "_"
 LOCALHOST = '127.0.0.1'
@@ -99,7 +99,7 @@ def extended_linecache_checkcache(filename=None,
     """
     cache = linecache.cache
     save = {}
-    for filename in cache.keys():
+    for filename in list(cache.keys()):
         if filename[:1] + filename[-1:] == '<>':
             save[filename] = cache[filename]
     orig_checkcache()
@@ -181,7 +181,7 @@ class PyShellEditorWindow(EditorWindow):
             pass
 
     def clear_file_breaks(self):
-        for page in self.text_notebook.pages.itervalues():
+        for page in self.text_notebook.pages.values():
             page = page.editpage
             text = page.text
             filename = page.io.filename
@@ -394,7 +394,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
             try:
                 self.rpcclt = MyRPCClient(addr)
                 break
-            except socket.error, err:
+            except socket.error as err:
                 pass
         else:
             self.display_port_binding_error()
@@ -403,7 +403,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
         self.rpcclt.listening_sock.settimeout(10)
         try:
             self.rpcclt.accept()
-        except socket.timeout, err:
+        except socket.timeout as err:
             self.display_no_subprocess_error()
             return None
         self.rpcclt.register("stdin", self.tkconsole)
@@ -437,7 +437,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
         self.spawn_subprocess()
         try:
             self.rpcclt.accept()
-        except socket.timeout, err:
+        except socket.timeout as err:
             self.display_no_subprocess_error()
             return None
         self.transfer_path()
@@ -518,14 +518,14 @@ class ModifiedInterpreter(InteractiveInterpreter):
             console = self.tkconsole.console
             if how == "OK":
                 if what is not None:
-                    print >>console, repr(what)
+                    print(repr(what), file=console)
             elif how == "EXCEPTION":
                 if self.tkconsole.getvar("<<toggle-jit-stack-viewer>>"):
                     self.remote_stack_viewer()
             elif how == "ERROR":
                 errmsg = "PyShell.ModifiedInterpreter: Subprocess ERROR:\n"
-                print >>sys.__stderr__, errmsg, what
-                print >>console, errmsg, what
+                print(errmsg, what, file=sys.__stderr__)
+                print(errmsg, what, file=console)
             # we received a response to the currently active seq number:
             try:
                 self.tkconsole.endexecuting()
@@ -558,13 +558,13 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return
 
     def remote_stack_viewer(self):
-        import RemoteObjectBrowser
+        from . import RemoteObjectBrowser
         oid = self.rpcclt.remotequeue("exec", "stackviewer", ("flist",), {})
         if oid is None:
             self.tkconsole.root.bell()
             return
         item = RemoteObjectBrowser.StubObjectTreeItem(self.rpcclt, oid)
-        from TreeWidget import ScrolledCanvas, TreeNode
+        from .TreeWidget import ScrolledCanvas, TreeNode
         top = Toplevel(self.tkconsole.root)
         theme = idleConf.GetOption('main','Theme','name')
         background = idleConf.GetHighlight(theme, 'normal')['background']
@@ -590,8 +590,8 @@ class ModifiedInterpreter(InteractiveInterpreter):
         except (OverflowError, SyntaxError):
             self.tkconsole.resetoutput()
             tkerr = self.tkconsole.stderr
-            print>>tkerr, '*** Error in script or command!\n'
-            print>>tkerr, 'Traceback (most recent call last):'
+            print('*** Error in script or command!\n', file=tkerr)
+            print('Traceback (most recent call last):', file=tkerr)
             InteractiveInterpreter.showsyntaxerror(self, filename)
             self.tkconsole.showprompt()
         else:
@@ -603,7 +603,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
         self.more = 0
         self.save_warnings_filters = warnings.filters[:]
         warnings.filterwarnings(action="error", category=SyntaxWarning)
-        if isinstance(source, types.UnicodeType):
+        if isinstance(source, str):
             try:
                 source = source.encode(IOBinding.encoding)
             except UnicodeError:
@@ -692,7 +692,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
 
     def checklinecache(self):
         c = linecache.cache
-        for key in c.keys():
+        for key in list(c.keys()):
             if key[:1] + key[-1:] != "<>":
                 del c[key]
 
@@ -705,7 +705,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
         if self.rpcclt:
             self.rpcclt.remotequeue("exec", "runcode", (code,), {})
         else:
-            exec code in self.locals
+            exec(code, self.locals)
         return 1
 
     def runcode(self, code):
@@ -725,10 +725,10 @@ class ModifiedInterpreter(InteractiveInterpreter):
             elif debugger:
                 debugger.run(code, self.locals)
             else:
-                exec code in self.locals
+                exec(code, self.locals)
         except SystemExit:
             if not self.tkconsole.closing:
-                if tkMessageBox.askyesno(
+                if tkinter.messagebox.askyesno(
                     "Exit?",
                     "Do you want to exit altogether?",
                     default="yes",
@@ -740,14 +740,13 @@ class ModifiedInterpreter(InteractiveInterpreter):
                 raise
         except:
             if use_subprocess:
-                print >>self.tkconsole.stderr, \
-                         "IDLE internal error in runcode()"
+                print("IDLE internal error in runcode()", file=self.tkconsole.stderr)
                 self.showtraceback()
                 self.tkconsole.endexecuting()
             else:
                 if self.tkconsole.canceled:
                     self.tkconsole.canceled = False
-                    print >>self.tkconsole.stderr, "KeyboardInterrupt"
+                    print("KeyboardInterrupt", file=self.tkconsole.stderr)
                 else:
                     self.showtraceback()
         finally:
@@ -762,7 +761,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
         self.tkconsole.stderr.write(s)
 
     def display_port_binding_error(self):
-        tkMessageBox.showerror(
+        tkinter.messagebox.showerror(
             "Port Binding Error",
             "IDLE can't bind TCP/IP port 8833, which is necessary to "
             "communicate with its Python execution server.  Either "
@@ -774,7 +773,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
             master=self.tkconsole.text)
 
     def display_no_subprocess_error(self):
-        tkMessageBox.showerror(
+        tkinter.messagebox.showerror(
             "Subprocess Startup Error",
             "IDLE's subprocess didn't make connection.  Either IDLE can't "
             "start a subprocess or personal firewall software is blocking "
@@ -782,7 +781,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
             master=self.tkconsole.text)
 
     def display_executing_dialog(self):
-        tkMessageBox.showerror(
+        tkinter.messagebox.showerror(
             "Already executing",
             "The Python Shell window is already executing a command; "
             "please wait until it is finished.",
@@ -813,7 +812,7 @@ class PyShell(OutputWindow):
 
 
     # New classes
-    from IdleHistory import History
+    from .IdleHistory import History
 
     def __init__(self, flist=None):
         if use_subprocess:
@@ -901,7 +900,7 @@ class PyShell(OutputWindow):
 
     def _toggle_debugger(self, event=None):
         if self.executing:
-            tkMessageBox.showerror("Don't debug now",
+            tkinter.messagebox.showerror("Don't debug now",
                 "You can only toggle the debugger when idle",
                 master=self.text_notebook)
             self.set_debugger_indicator()
@@ -959,7 +958,7 @@ class PyShell(OutputWindow):
     def close(self):
         "Extend EditorWindow.close()"
         if self.executing:
-            response = tkMessageBox.askokcancel(
+            response = tkinter.messagebox.askokcancel(
                 "Kill?",
                 "The program is still running!\n Do you want to kill it?",
                 default="ok",
@@ -989,7 +988,7 @@ class PyShell(OutputWindow):
         self.interp = None
         self.console = None
         self.flist.pyshell = None
-        for page in self.text_notebook.pages.itervalues():
+        for page in self.text_notebook.pages.values():
             page.editpage.history = None
 
         EditorWindow._close(self)
@@ -1027,8 +1026,8 @@ class PyShell(OutputWindow):
                    (sys.version, sys.platform, self.COPYRIGHT,
                     self.firewallmessage, idlever.IDLE_VERSION, nosub))
         self.showprompt()
-        import Tkinter
-        Tkinter._default_root = None # 03Jan04 KBK What's this?
+        import tkinter
+        tkinter._default_root = None # 03Jan04 KBK What's this?
         return True
 
     def isatty(self):
@@ -1190,12 +1189,12 @@ class PyShell(OutputWindow):
         try:
             sys.last_traceback
         except AttributeError:
-            tkMessageBox.showerror("No stack trace",
+            tkinter.messagebox.showerror("No stack trace",
                 "There is no stack trace yet.\n"
                 "(sys.last_traceback is not defined)",
                 master=self.text_notebook)
             return
-        from StackViewer import StackBrowser
+        from .StackViewer import StackBrowser
         sv = StackBrowser(self.root, self.flist)
 
     def _view_restart_mark(self, event=None, text=None):
@@ -1255,7 +1254,7 @@ class PseudoFile(object):
         self.shell.write(s, self.tags)
 
     def writelines(self, l):
-        map(self.write, l)
+        list(map(self.write, l))
 
     def flush(self):
         pass
@@ -1329,7 +1328,7 @@ def main():
     startup = False
     try:
         opts, args = getopt.getopt(sys.argv[1:], "c:deihnr:st:")
-    except getopt.error, msg:
+    except getopt.error as msg:
         sys.stderr.write("Error: %s\n" % str(msg))
         sys.stderr.write(usage_msg)
         sys.exit(2)
@@ -1354,7 +1353,7 @@ def main():
             if os.path.isfile(script):
                 pass
             else:
-                print "No script file: ", script
+                print("No script file: ", script)
                 sys.exit()
             enable_shell = True
         if o == '-s':

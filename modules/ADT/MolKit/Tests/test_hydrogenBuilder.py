@@ -29,7 +29,7 @@ class BaseTests(unittest.TestCase):
         instantiate an HydrogenBuilder
         """
         h_builder = HydrogenBuilder()
-        self.assertEquals(h_builder.__class__, HydrogenBuilder)
+        self.assertEqual(h_builder.__class__, HydrogenBuilder)
 
 
     def test_constructorOptions(self):
@@ -39,11 +39,11 @@ class BaseTests(unittest.TestCase):
         """
     
         h_builder = HydrogenBuilder(htype='polarOnly')
-        self.assertEquals(h_builder.__class__, HydrogenBuilder)
+        self.assertEqual(h_builder.__class__, HydrogenBuilder)
         h_builder = HydrogenBuilder(renumber=0)
-        self.assertEquals(h_builder.__class__, HydrogenBuilder)
+        self.assertEqual(h_builder.__class__, HydrogenBuilder)
         h_builder = HydrogenBuilder(method='withBondOrder')
-        self.assertEquals(h_builder.__class__, HydrogenBuilder)
+        self.assertEqual(h_builder.__class__, HydrogenBuilder)
 
 
     def test_addHydrogens(self):
@@ -55,7 +55,7 @@ class BaseTests(unittest.TestCase):
         h_builder.addHydrogens(self.mol)
         afterLen = len(self.mol.allAtoms)
         #print "beforeLen=", beforeLen, ' afterLen=', afterLen
-        self.assertEquals(beforeLen<afterLen, True)
+        self.assertEqual(beforeLen<afterLen, True)
 
 
 

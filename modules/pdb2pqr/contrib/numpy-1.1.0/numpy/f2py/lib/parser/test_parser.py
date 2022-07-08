@@ -12,8 +12,8 @@ Created: May 2006
 """
 
 from numpy.testing import *
-from block_statements import *
-from readfortran import Line, FortranStringReader
+from .block_statements import *
+from .readfortran import Line, FortranStringReader
 
 
 def parse(cls, line, label='',
@@ -21,18 +21,18 @@ def parse(cls, line, label='',
     if label:
         line = label + ' : ' + line
     reader = FortranStringReader(line, isfree, isstrict)
-    item = reader.next()
+    item = next(reader)
     if not cls.match(item.get_line()):
-        raise ValueError, '%r does not match %s pattern' % (line, cls.__name__)
+        raise ValueError('%r does not match %s pattern' % (line, cls.__name__))
     stmt = cls(item, item)
     if stmt.isvalid:
         r = str(stmt)
         if not isstrict:
             r1 = parse(cls, r, isstrict=True)
             if r != r1:
-                raise ValueError, 'Failed to parse %r with %s pattern in pyf mode, got %r' % (r, cls.__name__, r1)
+                raise ValueError('Failed to parse %r with %s pattern in pyf mode, got %r' % (r, cls.__name__, r1))
         return r
-    raise ValueError, 'parsing %r with %s pattern failed' % (line, cls.__name__)
+    raise ValueError('parsing %r with %s pattern failed' % (line, cls.__name__))
 
 class TestStatements(NumpyTestCase):
 

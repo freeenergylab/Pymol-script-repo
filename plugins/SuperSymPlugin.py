@@ -1,11 +1,11 @@
-from __future__ import print_function
+
 
 import sys
 if sys.version_info[0] < 3:
-    from Tkinter import *
-    import tkSimpleDialog
-    import tkMessageBox
-    import tkColorChooser
+    from tkinter import *
+    import tkinter.simpledialog
+    import tkinter.messagebox
+    import tkinter.colorchooser
 else:
     from tkinter import *
     from tkinter import simpledialog as tkSimpleDialog
@@ -129,14 +129,14 @@ selected. It creates dialog windows and receives user input for symmetry generat
 @mode -- determines specific treatment of symmetry building command
 '''
 def symDialog(app, mode):
-    prefix = tkSimpleDialog.askstring('Prefix',
+    prefix = tkinter.simpledialog.askstring('Prefix',
     'Enter desired prefix for these partners:', parent=app.root)
-    object = tkSimpleDialog.askstring('Object',
+    object = tkinter.simpledialog.askstring('Object',
     'Enter object to generate partners from:', parent=app.root)
     if mode == 0: #make default symmetry set in cell [0,0,0]
         symset(prefix, object)
     if mode == 1: #make symmetry set in custom cell
-        cell = tkSimpleDialog.askstring('Cell',
+        cell = tkinter.simpledialog.askstring('Cell',
         'Enter lattice cell coordinates separated by commas (ex:x,y,z):', parent = app.root)
         x,y,z = cell.split(',')
         x,y,z = int(x),int(y),int(z)
@@ -156,13 +156,13 @@ def symDialog(app, mode):
         opString = ""
         for i,x in enumerate(ops):
             opString += str(i) + " : " + x + "\n"
-        opIndeces = tkSimpleDialog.askstring("Symmetry Operations", opString +
+        opIndeces = tkinter.simpledialog.askstring("Symmetry Operations", opString +
         "Enter numbers of desired operations separated by commas (ex:0,2,9)", parent = app.root)
         opListStrings = opIndeces.split(",")
         opList = []
         for op in opListStrings:
             opList.append(int(op))
-        cell = tkSimpleDialog.askstring('Cell',
+        cell = tkinter.simpledialog.askstring('Cell',
         'Enter lattice cell coordinates separated by commas (ex:x,y,z):', parent = app.root)
         x,y,z = cell.split(',')
         x,y,z = int(x),int(y),int(z)
@@ -178,7 +178,7 @@ dialog which it generates.
 @mode -- determines coloring scheme to execute
 '''
 def colorDialog(app, mode):
-    prefix = tkSimpleDialog.askstring('Prefix',
+    prefix = tkinter.simpledialog.askstring('Prefix',
     'Enter the prefix of symmetry partners to color', parent = app.root)
     if mode == 0: #standard rainbow by symmetry operation
         colors = ["red", "orange", "yellow", "green", "blue", "purple",
@@ -197,7 +197,7 @@ def colorDialog(app, mode):
         opString = ""
         for i,x in enumerate(ops):
             opString += str(i) + " : " + x + "\n"
-        opIndeces = tkSimpleDialog.askstring("Symmetry Operations", opString +
+        opIndeces = tkinter.simpledialog.askstring("Symmetry Operations", opString +
         "Enter numbers of desired operations separated by commas (ex:0,2,9) or all", parent = app.root)
         if opIndeces == "all":
             opList = []
@@ -213,7 +213,7 @@ def colorDialog(app, mode):
 
             except:
                 pass
-            tempColor = tkColorChooser.askcolor(title = "Color for " + opStringList[int(i)] + " (currently white)",
+            tempColor = tkinter.colorchooser.askcolor(title = "Color for " + opStringList[int(i)] + " (currently white)",
                                                 parent = app.root)[0]
             rgb = []
             for value in tempColor:
@@ -231,7 +231,7 @@ def colorDialog(app, mode):
         opString = ""
         for i,x in enumerate(ops):
             opString += str(i) + " : " + x + "\n"
-        opIndeces = tkSimpleDialog.askstring("Symmetry Operations", opString +
+        opIndeces = tkinter.simpledialog.askstring("Symmetry Operations", opString +
         "Enter numbers of desired operations separated by commas (ex:0,2,9) or all", parent = app.root)
         if opIndeces == 'all':
             opList = []
@@ -240,7 +240,7 @@ def colorDialog(app, mode):
         else:
             opList = opIndeces.split(",")
         opStringList = opString.split("\n")
-        tempColor = tkColorChooser.askcolor(parent = app.root)[0]
+        tempColor = tkinter.colorchooser.askcolor(parent = app.root)[0]
         rgb = []
         for value in tempColor:
             value = float(value)
@@ -261,7 +261,7 @@ This function sets visual representations for sets of symmetry partners.
 @mode -- determines type of representation to show
 '''
 def graphicsDialog(app, mode):
-    prefix = tkSimpleDialog.askstring('Prefix',
+    prefix = tkinter.simpledialog.askstring('Prefix',
     'Enter prefix of symmetry partners to display', parent = app.root)
     cmd.hide("everything", prefix + "*")
     if mode == 0: # show lines
@@ -287,9 +287,9 @@ FUTURE IMPLEMENTATIONS: select which lattice coordinates to generate unit cell f
 @app -- identifies root menu
 '''
 def cellDialog(app):
-    object = tkSimpleDialog.askstring('Object',
+    object = tkinter.simpledialog.askstring('Object',
     'Enter object to generate cell for:', parent = app.root)
-    if tkMessageBox.askyesno('3D Printing', 'Going to print this model?', parent = app.root):
+    if tkinter.messagebox.askyesno('3D Printing', 'Going to print this model?', parent = app.root):
         draw_cell(object, 3.0)
     else:
         draw_cell(object)
@@ -304,9 +304,9 @@ FUTURE IMPLEMENTATIONS: select individual axes to generate, attach to model for 
 @app -- identifies root menu
 '''
 def axesDialog(app):
-    object = tkSimpleDialog.askstring('Object',
+    object = tkinter.simpledialog.askstring('Object',
     'Enter object to generate symmetry axes for:', parent = app.root)
-    if tkMessageBox.askyesno('3D Printing', 'Going to print this model?', parent = app.root):
+    if tkinter.messagebox.askyesno('3D Printing', 'Going to print this model?', parent = app.root):
         draw_symops(object, 2.0)
     else:
         draw_symops(object)
@@ -317,22 +317,22 @@ cellShiftInfo: displays info for using cell_shift hotkeys
 @app -- identifies root menu
 '''
 def cellShiftInfo(app):
-    tkMessageBox.showinfo('Cell Shifting',
+    tkinter.messagebox.showinfo('Cell Shifting',
     "To shift a symmetry partner, simply click to select any part of it (select only one partner at a time). \n\n" +
     "Next, hold ALT and press the numpad key corresponding to the axis direction you\'d like to move. \n\n" +
     "Key assignments:\n" +
     "A (x) axis: down--4, up--6 \n" +
     "B (y) axis: down--2, up--8 \n" +
     "C (z) axis: down--1, up--5", parent = app.root)
-    tkMessageBox.showwarning('Caution', 'Only attempt to shift symmetry partners created by SuperSym.'+
+    tkinter.messagebox.showwarning('Caution', 'Only attempt to shift symmetry partners created by SuperSym.'+
                              'Attempting to shift any other object will result in errors.')
 
 def aboutInfo(app):
-    tkMessageBox.showinfo('About',
+    tkinter.messagebox.showinfo('About',
                           'SuperSym \nDeveloped by Stuart Ballard (srballard@wisc.edu)\nDepartment of Biochemistry\n'+
                           'University of Wisconsin-Madison', parent = app.root)
 def helpInfo(app):
-    tkMessageBox.showinfo('Help',
+    tkinter.messagebox.showinfo('Help',
                           'For documentation see http://pymolwiki.org/index.php/SuperSym', parent = app.root)
 
 '''
@@ -917,7 +917,7 @@ def draw_symops_param(cell_param_list,sg,radius=0.2,extension=0):
   else:
     print("\nNo symmetry axes found for this space group: %s\n" % sg)
 
-  for key,val in ax_obj.items():
+  for key,val in list(ax_obj.items()):
     name=sg + "_" + key
     cmd.load_cgo(val,name)
     #debug_out.write("\n\n" + key + "\n" + str(val))
@@ -983,7 +983,7 @@ def rlc_RTMxAnalysis(M):
   elif r_info.type() == 3:
     if r_info.sense() >= 0 :
       # ignore opposite sense of rotation axes since they superimpose
-      trans = N.sqrt(sum((map(lambda x,y:(y-x)*(y-x),(0,0,0),t_intrinsic))))
+      trans = N.sqrt(sum((list(map(lambda x,y:(y-x)*(y-x),(0,0,0),t_intrinsic)))))
 #      trans = N.sqrt(t_intrinsic[0]**2 + t_intrinsic[1]**2 + t_intrinsic[2]**2)
       if trans == 0:
         maxr = max([abs(x) for x in r_info.ev()])
@@ -997,7 +997,7 @@ def rlc_RTMxAnalysis(M):
         r = [float(x)/maxr for x in r_info.ev()]
         #(rt, start, end) = (str(r_info.type())+ "^" + subscript ,t_shift,tuple(list_plus(t_shift,r)))
         (start, end) = (t_shift,tuple(list_plus(t_shift,r)))
-        length = N.sqrt(sum((map(lambda x,y:(y-x)*(y-x),start, end))))
+        length = N.sqrt(sum((list(map(lambda x,y:(y-x)*(y-x),start, end)))))
 
 #  r_info.sense() for 3^1 and 3^2 seems always to be "1" ???
 #        if r_info.sense() < 0:

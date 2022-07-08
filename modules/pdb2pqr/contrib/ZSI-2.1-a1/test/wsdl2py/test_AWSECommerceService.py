@@ -60,7 +60,7 @@ class AmazonTestCase(ServiceTestCase):
     def test_local_bug_1525567(self):
         element = GED(TargetNamespace, 'Items')
         # Make sure this is a GED
-        self.failUnless(isinstance(element, ElementDeclaration), '"%s" not a GED' %element)
+        self.assertTrue(isinstance(element, ElementDeclaration), '"%s" not a GED' %element)
     
     def test_local_parse_ItemSearch(self):
         msg = self.client_module.ItemSearchResponseMsg()
@@ -78,8 +78,8 @@ class AmazonTestCase(ServiceTestCase):
         response.OperationRequest.RequestId
         response.OperationRequest.RequestProcessingTime
         for its in response.Items:
-            self.failUnless(its.TotalResults == 61, '')
-            self.failUnless(its.TotalPages == 7, '')
+            self.assertTrue(its.TotalResults == 61, '')
+            self.assertTrue(its.TotalPages == 7, '')
             for it in its.Item:
                 it.ASIN; 
                 it.Accessories; 
@@ -113,7 +113,7 @@ class AmazonTestCase(ServiceTestCase):
         response = port.ItemSearch(msg)
 
         response.OperationRequest
-        self.failUnless(response.OperationRequest.Errors is None, 'ecommerce site reported errors')
+        self.assertTrue(response.OperationRequest.Errors is None, 'ecommerce site reported errors')
 
         response.OperationRequest.Arguments
         for i in response.OperationRequest.Arguments.Argument: 

@@ -42,7 +42,7 @@ See more here: http://www.pymolwiki.org/index.php/perp_maker
 #
 '''
 
-from __future__ import print_function
+
 
 import pymol
 import random

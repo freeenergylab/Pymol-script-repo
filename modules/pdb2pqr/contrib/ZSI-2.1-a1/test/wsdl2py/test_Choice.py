@@ -58,7 +58,7 @@ class ChoiceTestCase(ServiceTestCase):
         pyobj.Rank = 1
         sw = SoapWriter()
         sw.serialize(pyobj)
-        print str(sw)
+        print(str(sw))
 
     def test_local_choice_maxOccurs_unbounded(self):
         """<choice minOccurs=1 maxOccurs=unbounded>
@@ -69,7 +69,7 @@ class ChoiceTestCase(ServiceTestCase):
         pyobj.Rank = [2,3,4]
         sw = SoapWriter()
         sw.serialize(pyobj)
-        print str(sw)
+        print(str(sw))
 
 
 if __name__ == "__main__" :

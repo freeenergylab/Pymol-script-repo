@@ -94,12 +94,12 @@ NOTES
         # if the data are incomplete for any residues, ignore
         if None in pos:
             if not quiet:
-                print(' bbPlane: peptide bond %s -> %s incomplete' % (curIdx, nextIdx))
+                print((' bbPlane: peptide bond %s -> %s incomplete' % (curIdx, nextIdx)))
             continue
 
         if cpv.distance(pos[0], pos[3]) > 4.0:
             if not quiet:
-                print(' bbPlane: %s and %s not adjacent' % (curIdx, nextIdx))
+                print((' bbPlane: %s and %s not adjacent' % (curIdx, nextIdx)))
             continue
 
         normal = cpv.normalize(cpv.cross_product(

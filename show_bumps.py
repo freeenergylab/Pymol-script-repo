@@ -29,7 +29,7 @@ ARGUMENTS
         cmd.sculpt_activate(name, state)
         strain = cmd.sculpt_iterate(name, state, cycles=0)
         if not int(quiet):
-            print('VDW Strain in state %d: %f' % (state, strain))
+            print(('VDW Strain in state %d: %f' % (state, strain)))
     cmd.show_as('cgo', name)
 
 cmd.extend('show_bumps', show_bumps)

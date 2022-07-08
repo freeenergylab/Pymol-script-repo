@@ -18,14 +18,14 @@ normal: return normalized vector
 def norm (A):
     """     Return normalized vector A.
 """
-    if type(A) == types.ListType:
+    if type(A) == list:
         A=Numeric.array(A,'f')
         res= A/Numeric.sqrt(Numeric.dot(A,A))
         return res.tolist()    
     elif isinstance(A, numpy.ndarray):
         return A/Numeric.sqrt(Numeric.dot(A,A))    
     else:
-        print "Need a list or Numeric array"
+        print("Need a list or Numeric array")
         return None
 
 def getCenter(coords):

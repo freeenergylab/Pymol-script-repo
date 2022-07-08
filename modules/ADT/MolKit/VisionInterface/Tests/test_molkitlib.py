@@ -58,18 +58,18 @@ def test_02_allMolKitNodes():
 
     #ed.ModulePages.selectpage(lib)
     ed.root.update_idletasks()
-    for cat in libs[lib].libraryDescr.keys():
+    for cat in list(libs[lib].libraryDescr.keys()):
         for node in libs[lib].libraryDescr[cat]['nodes']:
             klass = node.nodeClass
             kw = node.kw
             args = node.args
-            netNode = apply( klass, args, kw )
-            print 'testing: '+node.name # begin node test
+            netNode = klass(*args, **kw)
+            print(('testing: '+node.name)) # begin node test
             #add node to canvas
             ed.currentNetwork.addNode(netNode,posx,posy)
             # show widget in node if available:
             widgetsInNode = netNode.getWidgetsForMaster('Node')
-            if len( widgetsInNode.items() ):
+            if len( list(widgetsInNode.items()) ):
                 if not netNode.isExpanded():
                     netNode.toggleNodeExpand_cb()
                     ed.root.update_idletasks()
@@ -79,7 +79,7 @@ def test_02_allMolKitNodes():
 
             # show widgets in param panel if available:
             widgetsInPanel = netNode.getWidgetsForMaster('ParamPanel')
-            if len(widgetsInPanel.items()):
+            if len(list(widgetsInPanel.items())):
                 netNode.paramPanel.show()
                 ed.root.update_idletasks()
                 #and then hide it
@@ -89,7 +89,7 @@ def test_02_allMolKitNodes():
             # and now delete the node
             ed.currentNetwork.deleteNodes([netNode])
             ed.root.update_idletasks()
-            print 'passed: '+node.name # end node test
+            print(('passed: '+node.name)) # end node test
 
 
 def test_03_cpkNet():

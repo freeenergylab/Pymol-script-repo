@@ -1,6 +1,6 @@
 # To get sub-modules
-from info import __doc__, __all__
-from mtrand import *
+from .info import __doc__, __all__
+from .mtrand import *
 
 # Some aliases:
 ranf = random = sample = random_sample

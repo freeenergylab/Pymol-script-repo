@@ -16,7 +16,7 @@ See more here: http://www.pymolwiki.org/index.php/color_by_conservation
                  as cartoon putty, colored by the 'color' field
 '''
 
-from __future__ import print_function
+
 from pymol import cmd
 
 

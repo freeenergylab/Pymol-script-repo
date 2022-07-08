@@ -19,7 +19,7 @@ try:
     widget = node0.inputPorts[0].widget
     widget.set("cv.pdb",0)
 except:
-    print "WARNING: failed to restore node ReadMolecule called Read Molecule in network masterNet"
+    print("WARNING: failed to restore node ReadMolecule called Read Molecule in network masterNet")
     print_exc()
     node0=None
 try:
@@ -31,7 +31,7 @@ try:
     widget = node1.inputPorts[1].widget
     widget.set(0,0)
 except:
-    print "WARNING: failed to restore node AssignRadii called Assign Radii in network masterNet"
+    print("WARNING: failed to restore node AssignRadii called Assign Radii in network masterNet")
     print_exc()
     node1=None
 try:
@@ -45,7 +45,7 @@ try:
     widget = node2.inputPorts[2].widget
     widget.set("",0)
 except:
-    print "WARNING: failed to restore node NodeSelector called Select Nodes in network masterNet"
+    print("WARNING: failed to restore node NodeSelector called Select Nodes in network masterNet")
     print_exc()
     node2=None
 try:
@@ -57,7 +57,7 @@ try:
     widget = node3.inputPorts[4].widget
     widget.set(8,0)
 except:
-    print "WARNING: failed to restore node AtomsAsCPK called CPK in network masterNet"
+    print("WARNING: failed to restore node AtomsAsCPK called CPK in network masterNet")
     print_exc()
     node3=None
 try:
@@ -67,7 +67,7 @@ try:
     node4 = Viewer(constrkw = {}, name='Viewer', library=vizlib)
     masterNet.addNode(node4,451,226)
 except:
-    print "WARNING: failed to restore node Viewer called Viewer in network masterNet"
+    print("WARNING: failed to restore node Viewer called Viewer in network masterNet")
     print_exc()
     node4=None
 try:
@@ -79,7 +79,7 @@ try:
     widget = node5.inputPorts[1].widget
     widget.set("number",0)
 except:
-    print "WARNING: failed to restore node AtomsProperty called Extract Atom Property in network masterNet"
+    print("WARNING: failed to restore node AtomsProperty called Extract Atom Property in network masterNet")
     print_exc()
     node5=None
 try:
@@ -89,7 +89,7 @@ try:
     node6 = ColorByRamp(constrkw = {}, name='Color', library=vizlib)
     masterNet.addNode(node6,289,133)
 except:
-    print "WARNING: failed to restore node ColorByRamp called Color in network masterNet"
+    print("WARNING: failed to restore node ColorByRamp called Color in network masterNet")
     print_exc()
     node6=None
 

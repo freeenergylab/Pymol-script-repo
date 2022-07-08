@@ -11,13 +11,13 @@
 
 # $Id: test_dial.py,v 1.8 2009/05/28 22:07:20 vareille Exp $
 
-import sys,unittest,Tkinter
+import sys,unittest,tkinter
 from time import sleep
 from mglutil.gui.BasicWidgets.Tk.Dial import Dial
 wasCalled = False
 def MyCallback(val):
     global wasCalled
-    print val
+    print(val)
     wasCalled = True
 def pause():
     import time
@@ -310,7 +310,7 @@ class DialBaseTest(unittest.TestCase):
     def test_set_arguements(self):
         """tests set arguements
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial = Dial(master=root,type='int',labCfg={'fg':'blue','side':'left', 'text':'hai'},min = 2,max = 100, increment = 2,precision =4,showlabel =0,value =10,continuous =0,oneTurn =180,size = 100,callback = None)
         
         dial.opPanel.displayPanel(1)
@@ -350,63 +350,63 @@ class DialBaseTest(unittest.TestCase):
     def test_dial_invalid_type(self):
         """tests dial invalid type
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AssertionError,Dial,type ='hai',master =root)
         root.destroy()
         
     def test_dial_invalid_value(self):
         """tests dial invlaid value
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(ValueError,Dial,value = 'hai',master =root)
         root.destroy()
         
     def test_dial_invalid_oneTurn(self):
         """tests dial invalid oneturn
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AssertionError,Dial,oneTurn = 'hai',master =root)
         root.destroy()
         
     def test_dial_invalid_size(self):
         """tests dial invalid size
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AssertionError,Dial,size = 'hai',master =root)
         root.destroy()
     
     def test_dial_invalid_callback(self):
         """tests dial invalid callback
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AssertionError,Dial,callback ='jlsd',master =root)
         root.destroy()
         
     def test_dial_invalid_master(self):
         """tests dial invalid master
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AttributeError,Dial,master = 'asgjf')
         root.destroy()
         
     def test_dial_invalid_labcfg(self):
         """tests invalid labcfg
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AttributeError,Dial,labCfg = 'abcd',master =root)
         root.destroy()
         
     def test_dial_invalid_min(self):
         """tests dial invalid min
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AssertionError,Dial,min = 'hkdf',master =root)
         root.destroy()
         
     def test_dial_invalid_max(self):
         """tests dial invalid max
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         
         self.assertRaises(AssertionError,Dial,max = 'hkdf',master =root)
         
@@ -415,21 +415,21 @@ class DialBaseTest(unittest.TestCase):
     def test_dial_invalid_increment(self):
         """tests invalid increment
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AssertionError,Dial,increment = 'hkdf',master =root)
         root.destroy()
         
     def test_dial_invalid_continuous(self):
         """tests invalid continuous:failed
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AssertionError,Dial,continuous = 'hkdf',master =root)
         root.destroy()
         
     def test_dial_invalid_precision(self):
         """tests invalid precision
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         self.assertRaises(AssertionError,Dial,precision = 'jhgdfj',master =root) 
         root.destroy()
 
@@ -519,7 +519,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setMin(self):
         """tests invalid input for setMin
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AssertionError,dial.setMin,'hai')
         dial.master.destroy()
@@ -527,7 +527,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setMax(self):
         """tests invalid input for setMax
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AssertionError,dial.setMax,'hai')
         dial.master.destroy()
@@ -535,7 +535,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setIncrement(self):
         """tests invalid input for setIncrement
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AssertionError,dial.setIncrement,'hai')    
         dial.master.destroy()
@@ -543,7 +543,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setValue(self):
         """tests invalid input for setValue
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(ValueError,dial.setValue,'hai')
         dial.master.destroy()
@@ -551,7 +551,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setType(self):
         """tests invalid input for setType
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AssertionError,dial.setType,'hai')    
         dial.master.destroy()
@@ -559,7 +559,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setShowLabel(self):
         """tests invalid input for setShowLabel
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AssertionError,dial.setShowLabel,"iurey")
         dial.master.destroy()
@@ -567,7 +567,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setLabel(self):
         """tests invalid input for setLabel
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AttributeError,dial.setLabel,'hai')    
         dial.master.destroy()
@@ -575,7 +575,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setPrecision(self):
         """tests invalid input for setPrecision
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AssertionError,dial.setPrecision,'hai')    
         dial.master.destroy()
@@ -583,7 +583,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setContinuous(self):
         """tests invalid input for setContinuous
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AssertionError,dial.setContinuous,"iurey")
         dial.master.destroy()
@@ -591,7 +591,7 @@ class DialBaseTest(unittest.TestCase):
     def test_invalid_setOneTurn(self):
         """tests invalid input for setOneTurn
         """
-        root =Tkinter.Tk()
+        root =tkinter.Tk()
         dial =Dial(master = root)
         self.assertRaises(AssertionError,dial.setOneTurn,'hai')    
         dial.master.destroy()

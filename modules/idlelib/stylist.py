@@ -1,4 +1,4 @@
-from configHandler import idleConf
+from .configHandler import idleConf
 
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 

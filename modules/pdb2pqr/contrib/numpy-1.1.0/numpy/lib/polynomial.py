@@ -66,7 +66,7 @@ def poly(seq_of_zeros):
     elif len(sh) ==1:
         pass
     else:
-        raise ValueError, "input must be 1d or square 2d array."
+        raise ValueError("input must be 1d or square 2d array.")
 
     if len(seq_of_zeros) == 0:
         return 1.0
@@ -97,7 +97,7 @@ def roots(p):
     # If input is scalar, this makes it an array
     p = atleast_1d(p)
     if len(p.shape) != 1:
-        raise ValueError,"Input must be a rank-1 array."
+        raise ValueError("Input must be a rank-1 array.")
 
     # find non-zero array entries
     non_zero = NX.nonzero(NX.ravel(p))[0]
@@ -139,15 +139,14 @@ def polyint(p, m=1, k=None):
     """
     m = int(m)
     if m < 0:
-        raise ValueError, "Order of integral must be positive (see polyder)"
+        raise ValueError("Order of integral must be positive (see polyder)")
     if k is None:
         k = NX.zeros(m, float)
     k = atleast_1d(k)
     if len(k) == 1 and m > 1:
         k = k[0]*NX.ones(m, float)
     if len(k) < m:
-        raise ValueError, \
-              "k must be a scalar or a rank-1 array of length 1 or >m."
+        raise ValueError("k must be a scalar or a rank-1 array of length 1 or >m.")
     if m == 0:
         return p
     else:
@@ -170,7 +169,7 @@ def polyder(p, m=1):
     n = len(p)-1
     y = p[:-1] * NX.arange(n, 0, -1)
     if m < 0:
-        raise ValueError, "Order of derivative must be positive (see polyint)"
+        raise ValueError("Order of derivative must be positive (see polyint)")
     if m == 0:
         return p
     else:
@@ -290,15 +289,15 @@ def polyfit(x, y, deg, rcond=None, full=False):
 
     # check arguments.
     if deg < 0 :
-        raise ValueError, "expected deg >= 0"
+        raise ValueError("expected deg >= 0")
     if x.ndim != 1:
-        raise TypeError, "expected 1D vector for x"
+        raise TypeError("expected 1D vector for x")
     if x.size == 0:
-        raise TypeError, "expected non-empty vector for x"
+        raise TypeError("expected non-empty vector for x")
     if y.ndim < 1 or y.ndim > 2 :
-        raise TypeError, "expected 1D or 2D array for y"
+        raise TypeError("expected 1D or 2D array for y")
     if x.shape[0] != y.shape[0] :
-        raise TypeError, "expected x and y to have same length"
+        raise TypeError("expected x and y to have same length")
 
     # set rcond
     if rcond is None :
@@ -504,7 +503,7 @@ class poly1d(object):
     variable = None
     def __init__(self, c_or_r, r=0, variable=None):
         if isinstance(c_or_r, poly1d):
-            for key in c_or_r.__dict__.keys():
+            for key in list(c_or_r.__dict__.keys()):
                 self.__dict__[key] = c_or_r.__dict__[key]
             if variable is not None:
                 self.__dict__['variable'] = variable
@@ -513,7 +512,7 @@ class poly1d(object):
             c_or_r = poly(c_or_r)
         c_or_r = atleast_1d(c_or_r)
         if len(c_or_r.shape) > 1:
-            raise ValueError, "Polynomial must be 1d only."
+            raise ValueError("Polynomial must be 1d only.")
         c_or_r = trim_zeros(c_or_r, trim='f')
         if len(c_or_r) == 0:
             c_or_r = NX.array([0.])
@@ -619,7 +618,7 @@ class poly1d(object):
 
     def __pow__(self, val):
         if not isscalar(val) or int(val) != val or val < 0:
-            raise ValueError, "Power to non-negative integers only."
+            raise ValueError("Power to non-negative integers only.")
         res = [1]
         for _ in range(val):
             res = polymul(self.coeffs, res)
@@ -654,7 +653,7 @@ class poly1d(object):
         return NX.any(self.coeffs != other.coeffs)
 
     def __setattr__(self, key, val):
-        raise ValueError, "Attributes cannot be changed this way."
+        raise ValueError("Attributes cannot be changed this way.")
 
     def __getattr__(self, key):
         if key in ['r', 'roots']:
@@ -680,7 +679,7 @@ class poly1d(object):
     def __setitem__(self, key, val):
         ind = self.order - key
         if key < 0:
-            raise ValueError, "Does not support negative powers."
+            raise ValueError("Does not support negative powers.")
         if key > self.order:
             zr = NX.zeros(key-self.order, self.coeffs.dtype)
             self.__dict__['coeffs'] = NX.concatenate((zr, self.coeffs))

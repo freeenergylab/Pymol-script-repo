@@ -5,20 +5,20 @@ from pprint import pformat
 __all__ = ['interactive_sys_argv']
 
 def show_information(*args):
-    print 'Python',sys.version
+    print('Python',sys.version)
     for a in ['platform','prefix','byteorder','path']:
-        print 'sys.%s = %s' % (a,pformat(getattr(sys,a)))
+        print('sys.%s = %s' % (a,pformat(getattr(sys,a))))
     for a in ['name']:
-        print 'os.%s = %s' % (a,pformat(getattr(os,a)))
+        print('os.%s = %s' % (a,pformat(getattr(os,a))))
     if hasattr(os,'uname'):
-        print 'system,node,release,version,machine = ',os.uname()
+        print('system,node,release,version,machine = ',os.uname())
 
 def show_environ(*args):
-    for k,i in os.environ.items():
-        print '  %s = %s' % (k, i)
+    for k,i in list(os.environ.items()):
+        print('  %s = %s' % (k, i))
 
 def show_fortran_compilers(*args):
-    from fcompiler import show_fcompilers
+    from .fcompiler import show_fcompilers
     show_fcompilers()
 
 def show_compilers(*args):
@@ -26,7 +26,7 @@ def show_compilers(*args):
     show_compilers()
 
 def show_tasks(argv,ccompiler,fcompiler):
-    print """\
+    print("""\
 
 Tasks:
   i       - Show python/platform/machine information
@@ -47,7 +47,7 @@ Task aliases:
   5         - Binary distribution
 
 Proposed sys.argv = %s
-    """ % (ccompiler, fcompiler, argv)
+    """ % (ccompiler, fcompiler, argv))
 
 
 import shlex
@@ -58,7 +58,7 @@ def edit_argv(*args):
     if readline is not None:
         readline.add_history(' '.join(argv[1:]))
     try:
-        s = raw_input('Edit argv [UpArrow to retrive %r]: ' % (' '.join(argv[1:])))
+        s = input('Edit argv [UpArrow to retrive %r]: ' % (' '.join(argv[1:])))
     except EOFError:
         return
     if s:
@@ -66,9 +66,9 @@ def edit_argv(*args):
     return
 
 def interactive_sys_argv(argv):
-    print '='*72
-    print 'Starting interactive session'
-    print '-'*72
+    print('='*72)
+    print('Starting interactive session')
+    print('-'*72)
 
     readline = None
     try:
@@ -87,8 +87,8 @@ def interactive_sys_argv(argv):
                 import atexit
                 atexit.register(readline.write_history_file, histfile)
             except AttributeError: pass
-    except Exception, msg:
-        print msg
+    except Exception as msg:
+        print(msg)
 
     task_dict = {'i':show_information,
                  'ie':show_environ,
@@ -102,9 +102,9 @@ def interactive_sys_argv(argv):
     while 1:
         show_tasks(argv,c_compiler_name, f_compiler_name)
         try:
-            task = raw_input('Choose a task (^D to quit, Enter to continue with setup): ')
+            task = input('Choose a task (^D to quit, Enter to continue with setup): ')
         except EOFError:
-            print
+            print()
             task = 'quit'
         ltask = task.lower()
         if task=='': break
@@ -173,16 +173,16 @@ def interactive_sys_argv(argv):
                     else:
                         argv[1:] = conf+['bdist']
             else:
-                print 'Skipping unknown task:',`task`
+                print('Skipping unknown task:',repr(task))
         else:
-            print '-'*68
+            print('-'*68)
             try:
                 task_func(argv,readline)
-            except Exception,msg:
-                print 'Failed running task %s: %s' % (task,msg)
+            except Exception as msg:
+                print('Failed running task %s: %s' % (task,msg))
                 break
-            print '-'*68
-        print
+            print('-'*68)
+        print()
 
-    print '-'*72
+    print('-'*72)
     return argv

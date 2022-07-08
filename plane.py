@@ -111,11 +111,11 @@ def planeFromPoints(p1, p2, p3, vm1=None, vm2=None, center=True, settings={}):
 
 
 def print_info(name, coor1, coor2, coor3):
-    cs1 = (map(float, [ '%.2f' % elem for elem in coor1 ]) )
-    cs2 = (map(float, [ '%.2f' % elem for elem in coor2 ]) )
-    cs3 = (map(float, [ '%.2f' % elem for elem in coor3 ]) )
+    cs1 = (list(map(float, [ '%.2f' % elem for elem in coor1 ])) )
+    cs2 = (list(map(float, [ '%.2f' % elem for elem in coor2 ])) )
+    cs3 = (list(map(float, [ '%.2f' % elem for elem in coor3 ])) )
     print("You can also use the function calls with these coordinates")
-    print("plane.make_plane_points(name='%s', l1=%s, l2=%s, l3=%s)"%(name, cs1, cs2, cs3))
+    print(("plane.make_plane_points(name='%s', l1=%s, l2=%s, l3=%s)"%(name, cs1, cs2, cs3)))
 
 
 def make_plane(name,a1='(pk1)',a2='(pk2)',a3='(pk3)', vm1=None, vm2=None, center=True, makepseudo=True, settings={}):
@@ -163,7 +163,7 @@ def make_plane_points(name,l1=None,l2=None,l3=None, vm1=None, vm2=None, center=T
         print("Please provide a list of xyz floats for each 3 positions")
         return
     if type(l1) is not list or type(l2) is not list or type(l3) is not list:
-        print(type(l1),type(l2),type(l3))
+        print((type(l1),type(l2),type(l3)))
         print("Please provide 3 list of xyz floats for each 3 positions")
         return
 
@@ -247,7 +247,7 @@ class PlaneWizard(Wizard):
         # this shouldn't actually happen if going through the "do_select"
         if picked_bond:
             self.error = "Error: please select bonds, not atoms"
-            print(self.error)
+            print((self.error))
             return
 
         atom_name = self.object_prefix + str(self.pick_count)

@@ -1,17 +1,17 @@
 """
 Dialog for building Tkinter accelerator key bindings
 """
-from Tkinter import Toplevel, Frame, Entry, Button, Checkbutton, Label, \
+from tkinter import Toplevel, Frame, Entry, Button, Checkbutton, Label, \
                     Listbox, Scrollbar, StringVar
-from Tkconstants import TOP, BOTH, BOTTOM, X, NSEW, SUNKEN, LEFT, GROOVE, W, \
+from tkinter.constants import TOP, BOTH, BOTTOM, X, NSEW, SUNKEN, LEFT, GROOVE, W, \
                         END, EW, NS, SINGLE, VERTICAL, ANCHOR, MOVETO
-import tkMessageBox
+import tkinter.messagebox
 import string
 
 from idlelib.configHandler import idleConf
 TTK = idleConf.GetOption('main', 'General', 'use-ttk', type='int')
 if TTK:
-    from ttk import Frame, Entry, Button, Checkbutton, Label, Scrollbar
+    from tkinter.ttk import Frame, Entry, Button, Checkbutton, Label, Scrollbar
 
 class GetKeysDialog(Toplevel):
     def __init__(self,parent,title,action,currentKeySequences):
@@ -178,7 +178,7 @@ class GetKeysDialog(Toplevel):
 
     def GetModifiers(self):
         modList = [variable.get() for variable in self.modifier_vars]
-        return filter(None, modList)
+        return [_f for _f in modList if _f]
 
     def ClearKeySeq(self):
         self.listKeysFinal.select_clear(0,END)
@@ -214,7 +214,7 @@ class GetKeysDialog(Toplevel):
                 '/':'slash','?':'question','Page Up':'Prior','Page Down':'Next',
                 'Left Arrow':'Left','Right Arrow':'Right','Up Arrow':'Up',
                 'Down Arrow': 'Down', 'Tab':'Tab'}
-        if key in translateDict.keys():
+        if key in list(translateDict.keys()):
             key = translateDict[key]
         if 'Shift' in modifiers and key in string.ascii_lowercase:
             key = key.upper()
@@ -246,35 +246,35 @@ class GetKeysDialog(Toplevel):
         keysOK = False
         title = 'Key Sequence Error'
         if not keys:
-            tkMessageBox.showerror(title=title, parent=self,
+            tkinter.messagebox.showerror(title=title, parent=self,
                                    message='No keys specified.')
         elif not keys.endswith('>'):
-            tkMessageBox.showerror(title=title, parent=self,
+            tkinter.messagebox.showerror(title=title, parent=self,
                                    message='Missing the final Key')
         elif (not modifiers
               and finalKey not in self.functionKeys + self.moveKeys):
-            tkMessageBox.showerror(title=title, parent=self,
+            tkinter.messagebox.showerror(title=title, parent=self,
                                    message='No modifier key(s) specified.')
         elif (modifiers == ['Shift']) \
                  and (finalKey not in
                       self.functionKeys + self.moveKeys + ('Tab', 'Space')):
             msg = 'The shift modifier by itself may not be used with'\
                   ' this key symbol.'
-            tkMessageBox.showerror(title=title, parent=self, message=msg)
+            tkinter.messagebox.showerror(title=title, parent=self, message=msg)
         elif keySequence in self.currentKeySequences:
             msg = 'This key combination is already in use.'
-            tkMessageBox.showerror(title=title, parent=self, message=msg)
+            tkinter.messagebox.showerror(title=title, parent=self, message=msg)
         else:
             keysOK = True
         return keysOK
 
 if __name__ == '__main__':
-    from Tkinter import Tk
+    from tkinter import Tk
     #test the dialog
     root=Tk()
     def run():
         keySeq=''
         dlg=GetKeysDialog(root,'Get Keys','find-again',[])
-        print dlg.result
+        print(dlg.result)
     Button(root,text='Dialog',command=run).pack()
     root.mainloop()

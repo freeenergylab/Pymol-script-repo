@@ -11,7 +11,7 @@
 
 
 
-import sys,unittest,Tkinter
+import sys,unittest,tkinter
 from time import sleep
 from mglutil.util.colorUtil import *
 

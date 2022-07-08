@@ -202,8 +202,8 @@ if __name__ == '__main__':
 
         def setUp(self):
             self.counter += 1
-            print 'setUp count: %2s for: %s' % (self.counter,
-                                                self.testMethodDoc)
+            print('setUp count: %2s for: %s' % (self.counter,
+                                                self.testMethodDoc))
 
         #-------------------------------------------------------------------
         # A standard test method, just like in the unittest docs.
@@ -218,28 +218,28 @@ if __name__ == '__main__':
         # load them via the factories below.
         def tstX(self,i):
             "Test feature X with parameters."
-            print 'tstX, i=',i
+            print('tstX, i=',i)
             if i==1 or i==3:
                 # Test fails
                 self.fail('i is bad, bad: %s' % i)
 
         def tstY(self,i):
             "Test feature Y with parameters."
-            print 'tstY, i=',i
+            print('tstY, i=',i)
             if i==1:
                 # Force an error
                 1/0
 
         def tstXX(self,i,j):
             "Test feature XX with parameters."
-            print 'tstXX, i=',i,'j=',j
+            print('tstXX, i=',i,'j=',j)
             if i==1:
                 # Test fails
                 self.fail('i is bad, bad: %s' % i)
 
         def tstYY(self,i):
             "Test feature YY with parameters."
-            print 'tstYY, i=',i
+            print('tstYY, i=',i)
             if i==2:
                 # Force an error
                 1/0

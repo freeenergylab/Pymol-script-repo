@@ -1,6 +1,6 @@
 
-from numpy.oldnumeric.mlab import *
-import numpy.oldnumeric.mlab as nom
+from .numpy.oldnumeric.mlab import *
+from . import numpy.oldnumeric.mlab as nom
 
 __all__ = nom.__all__
 

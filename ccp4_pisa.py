@@ -27,7 +27,7 @@ See more here: http://www.pymolwiki.org/index.php/ccp4_pisa
     AUTHOR
         Gerhard Reitmayr and Dalia Daujotyte, 2011.
 '''
-from __future__ import print_function
+
 from pymol import cmd
 from xml.etree import ElementTree
 

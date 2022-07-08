@@ -38,6 +38,6 @@ if __name__ == '__main__':
         var = sys.argv[1] 
         try:
             getattr(sys.modules[__name__], 'main_%s' %var)(*sys.argv[2:])
-        except Exception, ex:
-            print>>sys.stderr, ex
+        except Exception as ex:
+            print(ex, file=sys.stderr)
             sys.exit(1)

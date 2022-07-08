@@ -21,6 +21,7 @@ from numpy.ma.testutils import *
 
 import numpy.ma.core as coremodule
 from numpy.ma.core import *
+from functools import reduce
 
 pi = numpy.pi
 
@@ -127,8 +128,8 @@ class TestMA(NumpyTestCase):
         "Tests mixed arithmetics."
         na = narray([1])
         ma = array([1])
-        self.failUnless(isinstance(na + ma, MaskedArray))
-        self.failUnless(isinstance(ma + na, MaskedArray))
+        self.assertTrue(isinstance(na + ma, MaskedArray))
+        self.assertTrue(isinstance(ma + na, MaskedArray))
     #........................
     def test_inplace_arithmetic(self):
         """Test of inplace operations and rich comparisons"""
@@ -297,7 +298,7 @@ class TestMA(NumpyTestCase):
         assert_equal(0, array(1,mask=[1]))
         ott = ott.reshape((2,2))
         assert isinstance(count(ott,0), ndarray)
-        assert isinstance(count(ott), types.IntType)
+        assert isinstance(count(ott), int)
         assert_equal(3, count(ott))
         assert getmask(count(ott,0)) is nomask
         assert_equal([1,2],count(ott,0))
@@ -637,11 +638,11 @@ class TestMA(NumpyTestCase):
         assert_equal(masked_where(not_equal(x, 2), x), masked_not_equal(x,2))
         assert_equal(masked_where(equal(x, 2), x), masked_equal(x,2))
         assert_equal(masked_where(not_equal(x,2), x), masked_not_equal(x,2))
-        assert_equal(masked_inside(range(5), 1, 3), [0, 199, 199, 199, 4])
-        assert_equal(masked_outside(range(5), 1, 3),[199,1,2,3,199])
-        assert_equal(masked_inside(array(range(5), mask=[1,0,0,0,0]), 1, 3).mask, [1,1,1,1,0])
-        assert_equal(masked_outside(array(range(5), mask=[0,1,0,0,0]), 1, 3).mask, [1,1,0,0,1])
-        assert_equal(masked_equal(array(range(5), mask=[1,0,0,0,0]), 2).mask, [1,0,1,0,0])
+        assert_equal(masked_inside(list(range(5)), 1, 3), [0, 199, 199, 199, 4])
+        assert_equal(masked_outside(list(range(5)), 1, 3),[199,1,2,3,199])
+        assert_equal(masked_inside(array(list(range(5)), mask=[1,0,0,0,0]), 1, 3).mask, [1,1,1,1,0])
+        assert_equal(masked_outside(array(list(range(5)), mask=[0,1,0,0,0]), 1, 3).mask, [1,1,0,0,1])
+        assert_equal(masked_equal(array(list(range(5)), mask=[1,0,0,0,0]), 2).mask, [1,0,1,0,0])
         assert_equal(masked_not_equal(array([2,2,1,2,1], mask=[1,0,0,0,0]), 2).mask, [1,0,1,0,1])
         assert_equal(masked_where([1,1,0,0,0], [1,2,3,4,5]), [99,99,3,4,5])
     #........................
@@ -771,17 +772,17 @@ class TestMA(NumpyTestCase):
 
     def test_pickling(self):
         "Tests pickling"
-        import cPickle
+        import pickle
         a = arange(10)
         a[::3] = masked
         a.fill_value = 999
-        a_pickled = cPickle.loads(a.dumps())
+        a_pickled = pickle.loads(a.dumps())
         assert_equal(a_pickled._mask, a._mask)
         assert_equal(a_pickled._data, a._data)
         assert_equal(a_pickled.fill_value, 999)
         #
-        a = array(numpy.matrix(range(10)), mask=[1,0,1,0,0]*2)
-        a_pickled = cPickle.loads(a.dumps())
+        a = array(numpy.matrix(list(range(10))), mask=[1,0,1,0,0]*2)
+        a_pickled = pickle.loads(a.dumps())
         assert_equal(a_pickled._mask, a._mask)
         assert_equal(a_pickled, a)
         assert(isinstance(a_pickled._data,numpy.matrix))
@@ -1393,9 +1394,9 @@ class TestArrayMethods(NumpyTestCase):
         assert_equal(xlist[1],[4,5,6,7])
         assert_equal(xlist[2],[8,9,None,11])
         # Make sure a masked record is output as a tuple of None
-        x = array(zip([1,2,3],
+        x = array(list(zip([1,2,3],
                       [1.1,2.2,3.3],
-                      ['one','two','thr']),
+                      ['one','two','thr'])),
                   dtype=[('a',int_),('b',float_),('c','|S8')])
         x[-1] = masked
         assert_equal(x.tolist(), [(1,1.1,'one'),(2,2.2,'two'),(None,None,None)])

@@ -21,7 +21,7 @@
 
 
 
-import sys, Tkinter,unittest
+import sys, tkinter,unittest
 from mglutil.regression import testplus
 from mglutil.gui.BasicWidgets.Tk.player import Player
 from time import sleep
@@ -39,7 +39,7 @@ class PlayerBaseTest(unittest.TestCase):
     def test_constructor(self):
         # test if we can display a very basic Player
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player( master=root,gui=1)
         widget.master.update()
         pause()
@@ -49,7 +49,7 @@ class PlayerBaseTest(unittest.TestCase):
     def test_constructorOptionsForm1(self):
         # test all possible constructor options
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -79,7 +79,7 @@ class PlayerBaseTest(unittest.TestCase):
     def test_constructorOptionsForm2(self):
         # test all possible constructor options
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -109,7 +109,7 @@ class PlayerBaseTest(unittest.TestCase):
     def test_nextFrame(self):
         #THIS SHOULD BE OVERWRITTEN for other players
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -124,7 +124,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_getnextFrame(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -171,7 +171,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_Play_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -186,7 +186,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_PlayRev_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -202,7 +202,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_FastForward_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -217,7 +217,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_FastReverse_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -233,7 +233,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_Stop_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -248,7 +248,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_GoToStart_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -263,7 +263,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_GoToEnd_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -278,7 +278,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_SetState_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -296,7 +296,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_SetMode_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -312,7 +312,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_SetPlayMode_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -341,7 +341,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_cancelPlayMode_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,
@@ -361,7 +361,7 @@ class PlayerBaseTest(unittest.TestCase):
 
     def test_Close_cb(self):
         global widget
-        root = Tkinter.Toplevel()
+        root = tkinter.Toplevel()
         widget = Player(    master=root,
                         width=100, height=26,
                         currentFrameIndex=1,

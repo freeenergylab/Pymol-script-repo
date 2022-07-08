@@ -12,7 +12,7 @@ except ImportError:
 
 if ctypes is None:
     def _dummy(*args, **kwds):
-        raise ImportError, "ctypes is not available."
+        raise ImportError("ctypes is not available.")
     ctypes_load_library = _dummy
     load_library = _dummy
     as_ctypes = _dummy
@@ -49,7 +49,7 @@ else:
             try:
                 libpath = os.path.join(libdir, ln)
                 return ctypes.cdll[libpath]
-            except OSError, e:
+            except OSError as e:
                 pass
 
         raise e
@@ -77,20 +77,20 @@ def _flags_fromnum(num):
 class _ndptr(object):
     def from_param(cls, obj):
         if not isinstance(obj, ndarray):
-            raise TypeError, "argument must be an ndarray"
+            raise TypeError("argument must be an ndarray")
         if cls._dtype_ is not None \
                and obj.dtype != cls._dtype_:
-            raise TypeError, "array must have data type %s" % cls._dtype_
+            raise TypeError("array must have data type %s" % cls._dtype_)
         if cls._ndim_ is not None \
                and obj.ndim != cls._ndim_:
-            raise TypeError, "array must have %d dimension(s)" % cls._ndim_
+            raise TypeError("array must have %d dimension(s)" % cls._ndim_)
         if cls._shape_ is not None \
                and obj.shape != cls._shape_:
-            raise TypeError, "array must have shape %s" % str(cls._shape_)
+            raise TypeError("array must have shape %s" % str(cls._shape_))
         if cls._flags_ is not None \
                and ((obj.flags.num & cls._flags_) != cls._flags_):
-            raise TypeError, "array must have flags %s" % \
-                  _flags_fromnum(cls._flags_)
+            raise TypeError("array must have flags %s" % \
+                  _flags_fromnum(cls._flags_))
         return obj.ctypes
     from_param = classmethod(from_param)
 
@@ -138,7 +138,7 @@ def ndpointer(dtype=None, ndim=None, shape=None, flags=None):
             try:
                 flags = [x.strip().upper() for x in flags]
             except:
-                raise TypeError, "invalid flags specification"
+                raise TypeError("invalid flags specification")
             num = _num_fromflags(flags)
     try:
         return _pointer_type_cache[(dtype, ndim, shape, num)]

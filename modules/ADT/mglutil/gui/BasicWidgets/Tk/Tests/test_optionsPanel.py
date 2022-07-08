@@ -11,7 +11,7 @@
 
 # $Id: test_optionsPanel.py,v 1.4 2005/06/20 17:32:03 sowjanya Exp $
 
-import sys,unittest,Tkinter
+import sys,unittest,tkinter
 from time import sleep
 from mglutil.gui.BasicWidgets.Tk.optionsPanel import OptionsPanel,VectorOptionsPanel
 

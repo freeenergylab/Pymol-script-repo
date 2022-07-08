@@ -86,7 +86,7 @@ class TestDiag(NumpyTestCase):
 
 class TestFliplr(NumpyTestCase):
     def check_basic(self):
-        self.failUnlessRaises(ValueError, fliplr, ones(4))
+        self.assertRaises(ValueError, fliplr, ones(4))
         a = get_mat(4)
         b = a[:,::-1]
         assert_equal(fliplr(a),b)
@@ -109,7 +109,7 @@ class TestFlipud(NumpyTestCase):
 
 class TestRot90(NumpyTestCase):
     def check_basic(self):
-        self.failUnlessRaises(ValueError, rot90, ones(4))
+        self.assertRaises(ValueError, rot90, ones(4))
 
         a = [[0,1,2],
              [3,4,5]]
@@ -156,7 +156,7 @@ class TestHistogram2d(NumpyTestCase):
         assert_array_equal(H.T, answer)
         H = histogram2d(x, y, xedges)[0]
         assert_array_equal(H.T, answer)
-        H,xedges,yedges = histogram2d(range(10),range(10))
+        H,xedges,yedges = histogram2d(list(range(10)),list(range(10)))
         assert_array_equal(H, eye(10,10))
         assert_array_equal(xedges, np.linspace(0,9,11))
         assert_array_equal(yedges, np.linspace(0,9,11))

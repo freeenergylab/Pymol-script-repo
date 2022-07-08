@@ -49,7 +49,7 @@ def _is_substitute_element(head, sub):
 
     # TODO: better way of representing element references.  Wrap them with
     # facets, and dereference when needed and delegate to..
-    print (head.nspname == ged.nspname and head.pname == ged.pname)
+    print((head.nspname == ged.nspname and head.pname == ged.pname))
     if head is ged or not (head.nspname == ged.nspname and head.pname == ged.pname):
         return False
 
@@ -112,11 +112,11 @@ class SchemaInstanceType(type):
             return type.__new__(cls,classname,bases,classdict)
 
         if ElementDeclaration in bases:
-            if classdict.has_key('schema') is False  or classdict.has_key('literal') is False: 
-                raise AttributeError, 'ElementDeclaration must define schema and literal attributes'
+            if ('schema' in classdict) is False  or ('literal' in classdict) is False: 
+                raise AttributeError('ElementDeclaration must define schema and literal attributes')
 
             key = (classdict['schema'],classdict['literal'])
-            if SchemaInstanceType.elements.has_key(key):
+            if key in SchemaInstanceType.elements:
                 return SchemaInstanceType.elements[key]
 
             # create global element declaration
@@ -134,18 +134,18 @@ class SchemaInstanceType(type):
             return ged
 
         if TypeDefinition in bases:
-            if classdict.has_key('type') is None:
-                raise AttributeError, 'TypeDefinition must define type attribute'
+            if ('type' in classdict) is None:
+                raise AttributeError('TypeDefinition must define type attribute')
 
             key = classdict['type']
-            if SchemaInstanceType.types.has_key(key) is False:
+            if (key in SchemaInstanceType.types) is False:
                 SchemaInstanceType.types[key] = type.__new__(cls,classname,bases,classdict)
             return SchemaInstanceType.types[key]
 
         if LocalElementDeclaration in bases:
                 return type.__new__(cls,classname,bases,classdict)
 
-        raise TypeError, 'SchemaInstanceType must be an ElementDeclaration or TypeDefinition '
+        raise TypeError('SchemaInstanceType must be an ElementDeclaration or TypeDefinition ')
 
     def getTypeDefinition(cls, namespaceURI, name, lazy=False):
         '''Grab a type definition, returns a typecode class definition
@@ -190,7 +190,7 @@ class SchemaInstanceType(type):
     getElementDeclaration = classmethod(getElementDeclaration)
 
 
-class ElementDeclaration:
+class ElementDeclaration(metaclass=SchemaInstanceType):
     '''Typecodes subclass to represent a Global Element Declaration by
     setting class variables schema and literal.
 
@@ -198,7 +198,6 @@ class ElementDeclaration:
     literal = NCName
     substitutionGroup -- GED reference of form, (namespaceURI,NCName)
     '''
-    __metaclass__ = SchemaInstanceType
 
     def checkSubstitute(self, typecode):
         '''If this is True, allow typecode to be substituted
@@ -250,19 +249,17 @@ class ElementDeclaration:
         return 
  
  
-class LocalElementDeclaration:
+class LocalElementDeclaration(metaclass=SchemaInstanceType):
     '''Typecodes subclass to represent a Local Element Declaration.
     '''
-    __metaclass__ = SchemaInstanceType
     
 
-class TypeDefinition:
+class TypeDefinition(metaclass=SchemaInstanceType):
     '''Typecodes subclass to represent a Global Type Definition by
     setting class variable type.
 
     type = (namespaceURI, NCName)
     '''
-    __metaclass__ = SchemaInstanceType
     
     def getSubstituteType(self, elt, ps):
         '''if xsi:type does not match the instance type attr,
@@ -377,7 +374,7 @@ class _GetPyobjWrapper:
         '''register a builtin, create a new wrapper.
         '''
         if arg in cls.types_dict:
-            raise RuntimeError, '%s already registered' %arg
+            raise RuntimeError('%s already registered' %arg)
         class _Wrapper(arg):
             'Wrapper for builtin %s\n%s' %(arg, cls.__doc__)
         _Wrapper.__name__ = '_%sWrapper' %arg.__name__
@@ -389,7 +386,7 @@ class _GetPyobjWrapper:
         to TypeCode class serialmap and Re-RegisterType.  Provides
         Any serialzation of any instances of the Wrapper.
         '''
-        for k,v in cls.types_dict.items():
+        for k,v in list(cls.types_dict.items()):
             what = Any.serialmap.get(k)
             if what is None: continue
             if v in what.__class__.seriallist: continue
@@ -406,12 +403,11 @@ class _GetPyobjWrapper:
         d = cls.types_dict
         if type(pyobj) is bool:  
             pyclass = d[int]
-        elif d.has_key(type(pyobj)) is True:
+        elif (type(pyobj) in d) is True:
             pyclass = d[type(pyobj)]
         else:
-            raise TypeError,\
-               'Expecting a built-in type in %s (got %s).' %(
-                d.keys(),type(pyobj))
+            raise TypeError('Expecting a built-in type in %s (got %s).' %(
+                list(d.keys()),type(pyobj)))
 
         newobj = pyclass(pyobj)
         newobj.typecode = what
@@ -419,7 +415,7 @@ class _GetPyobjWrapper:
     WrapImmutable = classmethod(WrapImmutable)
     
 
-from TC import Any, RegisterType
+from .TC import Any, RegisterType
 
-if __name__ == '__main__': print _copyright
+if __name__ == '__main__': print(_copyright)
 

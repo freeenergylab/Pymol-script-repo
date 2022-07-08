@@ -1,10 +1,10 @@
-from Tkinter import Tk, Frame, Label
-from Tkconstants import LEFT, SUNKEN, W
+from tkinter import Tk, Frame, Label
+from tkinter.constants import LEFT, SUNKEN, W
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
 if idleConf.GetOption('main', 'General', 'use-ttk', type='int'):
-    from ttk import Frame, Label
+    from tkinter.ttk import Frame, Label
 
 class MultiStatusBar(Frame):
 
@@ -15,7 +15,7 @@ class MultiStatusBar(Frame):
         self.labels = {}
 
     def set_label(self, name, text='', side=LEFT):
-        if not self.labels.has_key(name):
+        if name not in self.labels:
             label = Label(self, relief=SUNKEN, anchor=W)
             label.pack(side=side)
             self.labels[name] = label
@@ -24,8 +24,8 @@ class MultiStatusBar(Frame):
         label.config(text=text)
 
 def _test():
-    from Tkinter import Text
-    from Tkconstants import TOP, BOTTOM, X
+    from tkinter import Text
+    from tkinter.constants import TOP, BOTTOM, X
     b = Frame()
     c = Text(b)
     c.pack(side=TOP)

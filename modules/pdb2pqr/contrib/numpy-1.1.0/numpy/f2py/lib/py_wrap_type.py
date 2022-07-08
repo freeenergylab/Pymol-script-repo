@@ -1,7 +1,7 @@
 __all__ = ['PythonCAPIType', 'PyTypeInterface']
 
-from wrapper_base import *
-from parser.api import CHAR_BIT, Module, declaration_type_spec, \
+from .wrapper_base import *
+from .parser.api import CHAR_BIT, Module, declaration_type_spec, \
      TypeDecl, TypeStmt, Subroutine, Function, Integer, Real,\
      DoublePrecision, Complex, DoubleComplex, Logical, Character, \
      Byte
@@ -27,7 +27,7 @@ class PyTypeInterface:
             elif isinstance(typedecl,Character):
                 tname = 'f2py_string'
             else:
-                raise NotImplementedError,`typedecl.__class__`
+                raise NotImplementedError(repr(typedecl.__class__))
         bitsize = typedecl.get_bit_size()
         self.ctype = ctype = '%s%s' % (tname,bitsize)
         self.bits = bitsize
@@ -40,7 +40,7 @@ class PyTypeInterface:
     def __repr__(self): return '%s(%r)' % (self.__class__.__name__, self._typedecl)
     def __str__(self):
         s = []
-        for k,v in self.__dict__.items():
+        for k,v in list(self.__dict__.items()):
             if k.startswith('_'): continue
             s.append('%s=%s' % (k,v))
         return 'PyTypeInterface(%s)' % (', '.join(s))
@@ -61,7 +61,7 @@ class PythonCAPIType(WrapperBase):
         elif isinstance(typedecl, TypeDecl):
             PythonCAPIDerivedType(parent, typedecl)
         else:
-            raise NotImplementedError,`self.__class__,typedecl.__class__`
+            raise NotImplementedError(repr((self.__class__,typedecl.__class__)))
         return
 
 class PythonCAPIIntrinsicType(WrapperBase):
@@ -373,7 +373,7 @@ typedef struct { char* data; size_t len; } %(ctype)s;
 '''
                 self.capi_code_template = self.capi_code_template_string0_scalar
         else:
-            raise NotImplementedError,`name,ctype`
+            raise NotImplementedError(repr((name,ctype)))
         parent.apply_templates(self)
         return
 
@@ -748,6 +748,6 @@ static int %(otype)s_set_%(n)s(%(otype)s *self,
         elif isinstance(typedecl.parent, (Subroutine, Function)):
             self.type_decl_list.append(typedecl.asfix())
         else:
-            raise NotImplementedError,'types declared in '+typedecl.parent.__class__.__name__
+            raise NotImplementedError('types declared in '+typedecl.parent.__class__.__name__)
         parent.apply_templates(self)
         return

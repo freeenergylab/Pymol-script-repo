@@ -37,7 +37,7 @@ SEE ALSO
 # REV   : 1
 
 '''
-from __future__ import print_function
+
 from pymol import cmd
 from pymol import stored
 from chempy import cpv

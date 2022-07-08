@@ -1,12 +1,12 @@
 import sys
-from numerictypes import string_, unicode_, integer, object_
-from numeric import ndarray, broadcast, empty, compare_chararrays
-from numeric import array as narray
+from .numerictypes import string_, unicode_, integer, object_
+from .numeric import ndarray, broadcast, empty, compare_chararrays
+from .numeric import array as narray
 
 __all__ = ['chararray']
 
 _globalvar = 0
-_unicode = unicode
+_unicode = str
 
 # special sub-class for character arrays (string_ and unicode_)
 # This adds + and * operations and methods of str and unicode types
@@ -16,11 +16,11 @@ _unicode = unicode
 #   comparisons
 
 class chararray(ndarray):
-    def __new__(subtype, shape, itemsize=1, unicode=False, buffer=None,
+    def __new__(subtype, shape, itemsize=1, str=False, buffer=None,
                 offset=0, strides=None, order='C'):
         global _globalvar
 
-        if unicode:
+        if str:
             dtype = unicode_
         else:
             dtype = string_
@@ -40,7 +40,7 @@ class chararray(ndarray):
     def __array_finalize__(self, obj):
         # The b is a special case because it is used for reconstructing.
         if not _globalvar and self.dtype.char not in 'SUb':
-            raise ValueError, "Can only create a chararray from string data."
+            raise ValueError("Can only create a chararray from string data.")
 
     def __getitem__(self, obj):
         val = ndarray.__getitem__(self, obj)
@@ -94,7 +94,7 @@ class chararray(ndarray):
         b = broadcast(self, other)
         arr = b.iters[1].base
         if not issubclass(arr.dtype.type, integer):
-            raise ValueError, "Can only multiply by integers"
+            raise ValueError("Can only multiply by integers")
         outitem = b.iters[0].base.itemsize * arr.max()
         result = chararray(b.shape, outitem, self.dtype is unicode_)
         res = result.flat
@@ -106,7 +106,7 @@ class chararray(ndarray):
         b = broadcast(self, other)
         arr = b.iters[1].base
         if not issubclass(arr.dtype.type, integer):
-            raise ValueError, "Can only multiply by integers"
+            raise ValueError("Can only multiply by integers")
         outitem = b.iters[0].base.itemsize * arr.max()
         result = chararray(b.shape, outitem, self.dtype is unicode_)
         res = result.flat
@@ -295,21 +295,21 @@ class chararray(ndarray):
         return self._generalmethod('zfill', broadcast(self, width))
 
 
-def array(obj, itemsize=None, copy=True, unicode=False, order=None):
+def array(obj, itemsize=None, copy=True, str=False, order=None):
 
     if isinstance(obj, chararray):
         if itemsize is None:
             itemsize = obj.itemsize
         if copy or (itemsize != obj.itemsize) \
-           or (not unicode and obj.dtype == unicode_) \
-           or (unicode and obj.dtype == string_):
+           or (not str and obj.dtype == unicode_) \
+           or (str and obj.dtype == string_):
             return obj.astype("%s%d" % (obj.dtype.char, itemsize))
         else:
             return obj
 
     if isinstance(obj, ndarray) and (obj.dtype in [unicode_, string_]):
         new = obj.view(chararray)
-        if unicode and obj.dtype == string_:
+        if str and obj.dtype == string_:
             return new.astype((unicode_, obj.itemsize))
         elif obj.dtype == unicode_:
             return new.astype((string_, obj.itemsize))
@@ -317,7 +317,7 @@ def array(obj, itemsize=None, copy=True, unicode=False, order=None):
         if copy: return new.copy()
         else: return new
 
-    if unicode: dtype = "U"
+    if str: dtype = "U"
     else: dtype = "S"
 
     if itemsize is not None:
@@ -327,7 +327,7 @@ def array(obj, itemsize=None, copy=True, unicode=False, order=None):
         if itemsize is None:
             itemsize = len(obj)
         shape = len(obj) / itemsize
-        return chararray(shape, itemsize=itemsize, unicode=unicode,
+        return chararray(shape, itemsize=itemsize, str=str,
                          buffer=obj)
 
     # default
@@ -335,6 +335,6 @@ def array(obj, itemsize=None, copy=True, unicode=False, order=None):
 
     return val.view(chararray)
 
-def asarray(obj, itemsize=None, unicode=False, order=None):
+def asarray(obj, itemsize=None, str=False, order=None):
     return array(obj, itemsize, copy=False,
-                 unicode=unicode, order=order)
+                 str=str, order=order)

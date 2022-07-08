@@ -17,7 +17,7 @@ See more here: http://www.pymolwiki.org/index.php/nmr_cnstr
 ##############################################################################################################
 '''
 
-from __future__ import print_function
+
 
 def upl(fname):
 

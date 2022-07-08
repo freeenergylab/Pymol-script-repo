@@ -15,7 +15,7 @@ Pearu Peterson
 
 __version__ = "$Revision: 1.53 $"[10:-1]
 
-import __version__
+from . import __version__
 f2py_version = __version__.version
 
 
@@ -28,10 +28,10 @@ errmess=sys.stderr.write
 outmess=sys.stdout.write
 show=pprint.pprint
 
-from auxfuncs import *
-import capi_maps
+from .auxfuncs import *
+from . import capi_maps
 #from capi_maps import *
-import cfuncs
+from . import cfuncs
 
 ################## Rules for callback function ##############
 
@@ -484,7 +484,7 @@ def buildcallback(rout,um):
 ,
 #endif
 """]
-    if type(rd['docreturn'])==types.ListType:
+    if type(rd['docreturn'])==list:
         rd['docreturn']=stripcomma(replace('#docreturn#',{'docreturn':rd['docreturn']}))
     optargs=stripcomma(replace('#docsignopt#',
                                 {'docsignopt':rd['docsignopt']}
@@ -501,10 +501,10 @@ def buildcallback(rout,um):
     rd['docstrsigns']=[]
     rd['latexdocstrsigns']=[]
     for k in ['docstrreq','docstropt','docstrout','docstrcbs']:
-        if k in rd and type(rd[k])==types.ListType:
+        if k in rd and type(rd[k])==list:
             rd['docstrsigns']=rd['docstrsigns']+rd[k]
         k='latex'+k
-        if k in rd and type(rd[k])==types.ListType:
+        if k in rd and type(rd[k])==list:
             rd['latexdocstrsigns']=rd['latexdocstrsigns']+rd[k][0:1]+\
                                     ['\\begin{description}']+rd[k][1:]+\
                                     ['\\end{description}']
@@ -517,11 +517,11 @@ def buildcallback(rout,um):
 
     ar=applyrules(cb_routine_rules,rd)
     cfuncs.callbacks[rd['name']]=ar['body']
-    if type(ar['need'])==types.StringType:
+    if type(ar['need'])==bytes:
         ar['need']=[ar['need']]
 
     if 'need' in rd:
-        for t in cfuncs.typedefs.keys():
+        for t in list(cfuncs.typedefs.keys()):
             if t in rd['need']:
                 ar['need'].append(t)
 

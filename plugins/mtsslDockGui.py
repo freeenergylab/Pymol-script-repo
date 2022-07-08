@@ -23,10 +23,10 @@ from operator import attrgetter
 import sys
 
 if sys.version_info[0] < 3:
-    import Tkinter
-    import tkFileDialog
-    import Queue
-    import ttk
+    import tkinter
+    import tkinter.filedialog
+    import queue
+    import tkinter.ttk
 else:
     import tkinter as Tkinter
     import tkinter.filedialog as tkFileDialog
@@ -137,10 +137,10 @@ class SettingsDialog(Pmw.Dialog):
 #-----------------------------------------------------------------------------------------
 
 
-class ABselect(Tkinter.Frame):
+class ABselect(tkinter.Frame):
 
     def __init__(self, parent, **options):
-        Tkinter.Frame.__init__(self, parent, **options)
+        tkinter.Frame.__init__(self, parent, **options)
         self.checkbuttons = Pmw.RadioSelect(self,
                                             buttontype='radiobutton',
                                             orient='horizontal',
@@ -149,19 +149,19 @@ class ABselect(Tkinter.Frame):
 
         for text in ('A', 'B'):
             self.checkbuttons.add(text)
-        self.labelText = Tkinter.StringVar()
+        self.labelText = tkinter.StringVar()
         self.labelText.set("ObjectName")
-        self.objectLabel = Tkinter.Label(self, textvariable=self.labelText)
-        self.checkbuttons.pack(side=Tkinter.LEFT)
-        self.objectLabel.pack(side=Tkinter.LEFT)
+        self.objectLabel = tkinter.Label(self, textvariable=self.labelText)
+        self.checkbuttons.pack(side=tkinter.LEFT)
+        self.objectLabel.pack(side=tkinter.LEFT)
 
 #-----------------------------------------------------------------------------------------
 
 
-class DockingFrame(Tkinter.Frame):
+class DockingFrame(tkinter.Frame):
 
     def __init__(self, parent, result, **options):
-        Tkinter.Frame.__init__(self, parent, **options)
+        tkinter.Frame.__init__(self, parent, **options)
 
         # protein selection group
         proteinSelectionGroup = Pmw.Group(self, tag_text='Select proteins to be docked')
@@ -188,16 +188,16 @@ class DockingFrame(Tkinter.Frame):
 #-----------------------------------------------------------------------------------------
 
 
-class ResultsFrame(Tkinter.Frame):
+class ResultsFrame(tkinter.Frame):
 
     def __init__(self, parent, result, **options):
-        Tkinter.Frame.__init__(self, parent, **options)
+        tkinter.Frame.__init__(self, parent, **options)
         self.result = result
 
-        self.Frame1 = Tkinter.Frame(self)
+        self.Frame1 = tkinter.Frame(self)
         self.Frame1.pack(fill='both', side='right', expand=1, anchor='nw', padx=10, pady=5)
 
-        self.Frame2 = Tkinter.Frame(self)
+        self.Frame2 = tkinter.Frame(self)
         self.Frame2.pack(fill='both', side='left', anchor='ne', padx=10, pady=5)
 
         #########
@@ -213,7 +213,7 @@ class ResultsFrame(Tkinter.Frame):
                                        )
         self.box.pack(fill='both', expand=1, anchor='nw', padx=10, pady=5)
         for population in result['environment'].populations:
-            print(population.chromosomes[0].name)
+            print((population.chromosomes[0].name))
             self.box.insert('end', population.chromosomes[0].name)
 
         #########
@@ -248,22 +248,22 @@ class ResultsFrame(Tkinter.Frame):
         scoreClashes = "Score Clashes: %r" % self.result['settings']['scoreClashes']
         symmetry = "Symmetry: %s" % self.result['settings']['symmetry']
 
-        populationsLabel = Tkinter.Label(self.settingsGroup.interior(), text=populations)
+        populationsLabel = tkinter.Label(self.settingsGroup.interior(), text=populations)
         populationsLabel.pack(anchor='w')
 
-        generationsLabel = Tkinter.Label(self.settingsGroup.interior(), text=generations)
+        generationsLabel = tkinter.Label(self.settingsGroup.interior(), text=generations)
         generationsLabel.pack(anchor='w')
 
-        chromosomesLabel = Tkinter.Label(self.settingsGroup.interior(), text=chromosomes)
+        chromosomesLabel = tkinter.Label(self.settingsGroup.interior(), text=chromosomes)
         chromosomesLabel.pack(anchor='w')
 
-        rigidBodyCyclesLabel = Tkinter.Label(self.settingsGroup.interior(), text=rigidBodyCycles)
+        rigidBodyCyclesLabel = tkinter.Label(self.settingsGroup.interior(), text=rigidBodyCycles)
         rigidBodyCyclesLabel.pack(anchor='w')
 
-        scoreClashesLabel = Tkinter.Label(self.settingsGroup.interior(), text=scoreClashes)
+        scoreClashesLabel = tkinter.Label(self.settingsGroup.interior(), text=scoreClashes)
         scoreClashesLabel.pack(anchor='w')
 
-        symmetryLabel = Tkinter.Label(self.settingsGroup.interior(), text=symmetry)
+        symmetryLabel = tkinter.Label(self.settingsGroup.interior(), text=symmetry)
         symmetryLabel.pack(anchor='w')
 
 #-----------------------------------------------------------------------------------------
@@ -425,10 +425,10 @@ class ResultsFrame(Tkinter.Frame):
 #-----------------------------------------------------------------------------------------
 
 
-class StatusBar(Tkinter.Frame):
+class StatusBar(tkinter.Frame):
 
     def __init__(self, parent, **options):
-        Tkinter.Frame.__init__(self, parent, **options)
+        tkinter.Frame.__init__(self, parent, **options)
         #########
         # Setup messagebar
         #########
@@ -438,8 +438,8 @@ class StatusBar(Tkinter.Frame):
         #########
         # Setup progressbar
         #########
-        self.progressbarLabel = Tkinter.Label(self, text="Progress: ")
-        self.progressbar = ttk.Progressbar(self, orient="horizontal", length=200, mode="determinate")
+        self.progressbarLabel = tkinter.Label(self, text="Progress: ")
+        self.progressbar = tkinter.ttk.Progressbar(self, orient="horizontal", length=200, mode="determinate")
         self.progressbar.pack(side='right', fill='x')
         self.progressbarLabel.pack(side='right', fill='x')
 
@@ -497,7 +497,7 @@ class mtsslDockPlugin:
         #########
         self.interior = self.dialog.interior()
         self.balloon = Pmw.Balloon(self.interior)
-        menuBar = Pmw.MenuBar(self.interior, hull_relief=Tkinter.RAISED, hull_borderwidth=1, balloon=self.balloon)
+        menuBar = Pmw.MenuBar(self.interior, hull_relief=tkinter.RAISED, hull_borderwidth=1, balloon=self.balloon)
         menuBar.pack(fill='x')
         menuBar.addmenu('File', 'Load and save data.')
         menuBar.addmenu('PyMOL', 'Interact with PyMOL')
@@ -535,10 +535,10 @@ class mtsslDockPlugin:
         # Table
         #########
         tableGroup = Pmw.Group(self.notebookpages['Docking'], tag_text='Constraints')
-        tableGroup.pack(fill='both', side=Tkinter.RIGHT, anchor='nw', expand=2, padx=10, pady=5)
+        tableGroup.pack(fill='both', side=tkinter.RIGHT, anchor='nw', expand=2, padx=10, pady=5)
 
         # Setup table frame and table
-        self.tframe = Tkinter.Frame(tableGroup.interior())
+        self.tframe = tkinter.Frame(tableGroup.interior())
         self.tframe.pack(fill='both', anchor='n', expand=1, padx=10, pady=5)
         self.statusbar.messagebar.message('state', 'Waiting for input...')
 
@@ -547,7 +547,7 @@ class mtsslDockPlugin:
     def loadResult(self):
         # get filename
         file_opt = options = {}
-        filename = tkFileDialog.askopenfilename(**file_opt)
+        filename = tkinter.filedialog.askopenfilename(**file_opt)
         if filename:
             file = open(filename, 'rb')
             results = pickle.load(file)
@@ -563,7 +563,7 @@ class mtsslDockPlugin:
 
     def saveResult(self):
         file_opt = options = {}
-        filename = tkFileDialog.asksaveasfilename(**file_opt)
+        filename = tkinter.filedialog.asksaveasfilename(**file_opt)
         if filename:
             file = open(filename, 'wb')
             selectedPage = self.notebook.getcurselection()
@@ -572,7 +572,7 @@ class mtsslDockPlugin:
                 # print self.notebookpages[selectedPage].children
                 children = self.notebookpages[selectedPage].children
                 # print children
-                for v in children.values():
+                for v in list(children.values()):
                     # print v.result
                     pickle.dump(v.result, file)
                     file.close()
@@ -607,7 +607,7 @@ class mtsslDockPlugin:
         self.dockingRuns = {}
         self.objectPrefix = "mD"
         self.dockingRunNumber = 0
-        self.myQueue = Queue.Queue()
+        self.myQueue = queue.Queue()
         self.dockingProgress = 0
         self.symmetry = "None"
         #self.c2 = True
@@ -659,7 +659,7 @@ class mtsslDockPlugin:
         while True:
             try:
                 x = self.myQueue.get_nowait()
-            except Queue.Empty:
+            except queue.Empty:
                 self.parent.after(25, self.check_myQueue)
                 break
             else:  # continue from the try suite
@@ -687,8 +687,8 @@ class mtsslDockPlugin:
         self.scoreClashes = self.settingsDialog.scoreClashes
         #self.c2 = self.settingsDialog.c2
         self.symmetry = self.settingsDialog.symmetry
-        print(self.symmetry)
-        print(self.scoreClashes)
+        print((self.symmetry))
+        print((self.scoreClashes))
         self.settingsDialog.withdraw()
 
     #-------------------------------------------------------------------------------------
@@ -805,7 +805,7 @@ class mtsslDockPlugin:
         # print constraintNames
         trialDistances = quickDist2(numpy.array(self.labelPositionsProteinA), self.labelPositionsProteinB)
         print(trialDistances)
-        print(numpy.reshape(trialDistances, (self.numberOfLabelsForA, self.numberOfLabelsForB)))
+        print((numpy.reshape(trialDistances, (self.numberOfLabelsForA, self.numberOfLabelsForB))))
         expDistances = numpy.reshape(expDistances, (-1, 1))
         expErrors = numpy.reshape(expErrors, (-1, 1))
 
@@ -1008,7 +1008,7 @@ class mtsslDockPlugin:
                 # for testing
                 rms_cur = cmd.rms_cur(nameOfSolution, "target")
                 # print rms_cur
-                print("%s, %1.2f" % (nameOfSolution, rms_cur))
+                print(("%s, %1.2f" % (nameOfSolution, rms_cur)))
                 ###
             elif solution.clashes > 5:
                 nameOfSolution = "%s-%i_clash-%i" % (self.objectPrefix, self.dockingRunNumber, clashingSolution)
@@ -1691,7 +1691,7 @@ class Chromosome:
         return string
 
 
-class ConsoleText(Tkinter.Text):
+class ConsoleText(tkinter.Text):
 
     '''A Tkinter Text widget that provides a scrolling display of console
     stderr and stdout.'''

@@ -33,9 +33,7 @@ class ComponentMetaClass(type):
         raise AttributeError("'%s' object has no attribute '%s'"%
                              (cls.__name__, name))
 
-class Component(object):
-
-    __metaclass__ = ComponentMetaClass
+class Component(object, metaclass=ComponentMetaClass):
 
     container_options = dict()
     component_container_map = dict()
@@ -96,11 +94,11 @@ class Component(object):
 
     def warning(message):
         #raise RuntimeError('extgen:' + message)
-        print >> sys.stderr, 'extgen:',message
+        print('extgen:',message, file=sys.stderr)
     warning = staticmethod(warning)
 
     def info(message):
-        print >> sys.stderr, message
+        print(message, file=sys.stderr)
     info = staticmethod(info)
 
     def __getattr__(self, attr):
@@ -129,7 +127,7 @@ class Component(object):
         Append component and its target container label to components list.
         """
         if isinstance(component, tuple) and len(component)==2 and isinstance(component[0], Component):
-            assert container_label is None, `container_label`
+            assert container_label is None, repr(container_label)
             component, container_label = component
         if not isinstance(component, Component) and self.default_component_class_name!=component.__class__.__name__:
             clsname = self.default_component_class_name
@@ -213,7 +211,7 @@ class Component(object):
                 delattr(self, n)
 
         # create containers
-        for k,kwargs in self.container_options.items():
+        for k,kwargs in list(self.container_options.items()):
             self.containers[k] = Container(**kwargs)
 
         # initialize code idioms
@@ -238,11 +236,11 @@ class Component(object):
                 pass
             elif container_key is not None:
                 if isinstance(container_key, tuple):
-                    assert len(result)==len(container_key),`len(result),container_key`
+                    assert len(result)==len(container_key),repr((len(result),container_key))
                     results = result
                     keys = container_key
                 else:
-                    assert isinstance(result, str) and isinstance(container_key, str), `result, container_key`
+                    assert isinstance(result, str) and isinstance(container_key, str), repr((result, container_key))
                     results = result,
                     keys = container_key,
                 for r,k in zip(results, keys):
@@ -262,7 +260,7 @@ class Component(object):
         if isinstance(templates, str):
             result = self.evaluate(templates)
         else:
-            assert isinstance(templates, (tuple, list)),`type(templates)`
+            assert isinstance(templates, (tuple, list)),repr(type(templates))
             result = tuple(map(self.evaluate, templates))
         return result
 
@@ -331,7 +329,7 @@ class Component(object):
             if isinstance(v, str):
                 d[n] = v
         d.update(attrs)
-        for label, container in self.containers.items():
+        for label, container in list(self.containers.items()):
             if not container.use_indent:
                 continue
             replace_list = set(re.findall(r'[ ]*%\('+label+r'\)s', template))
@@ -343,7 +341,7 @@ class Component(object):
                 container.indent_offset = old_indent
         try:
             template = template % d
-        except KeyError, msg:
+        except KeyError as msg:
             raise KeyError('%s.container_options needs %s item' % (self.__class__.__name__, msg))
         return re.sub(r'.*[<]KILLLINE[>].*(\n|$)','', template)
 
@@ -381,7 +379,7 @@ class Component(object):
         return numpy.__version__
     numpy_version = property(numpy_version)
 
-class Container(object):
+class Container(object, metaclass=ComponentMetaClass):
     """
     Container of a list of named strings.
 
@@ -403,7 +401,6 @@ class Container(object):
     "hey, hoo, bar"
 
     """
-    __metaclass__ = ComponentMetaClass
 
     def __init__(self,
                  separator='\n', prefix='', suffix='',
@@ -436,7 +433,7 @@ class Container(object):
         self.ignore_empty_content = ignore_empty_content
         self.skip_prefix_suffix_when_single = skip_prefix_suffix_when_single
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self.list)
 
     def has(self, label):
@@ -447,7 +444,7 @@ class Container(object):
 
     def __add__(self, other):
         if isinstance(other, Container):
-            lst = [(i,l) for (l,i) in other.label_map.items()]
+            lst = [(i,l) for (l,i) in list(other.label_map.items())]
             lst.sort()
             for i,l in lst:
                 self.add(other.list[i], l)
@@ -464,7 +461,7 @@ class Container(object):
             return
         if content=='' and self.ignore_empty_content:
             return
-        assert isinstance(content, str),`type(content)`
+        assert isinstance(content, str),repr(type(content))
         if label is None:
             label = time.time()
         if self.has(label):
@@ -472,7 +469,7 @@ class Container(object):
             if d!=content:
                 raise ValueError("Container item %r exists with different value" % (label))
             return
-        for old, new in self.replace_map.items():
+        for old, new in list(self.replace_map.items()):
             content = content.replace(old, new)
         self.list.append(content)
         self.label_map[label] = len(self.list)-1
@@ -529,7 +526,7 @@ class Container(object):
         if mapping is None:
             cpy += self
         else:
-            lst = [(i,l) for (l,i) in self.label_map.items()]
+            lst = [(i,l) for (l,i) in list(self.label_map.items())]
             lst.sort()
             for i,l in lst:
                 cpy.add(mapping(other.list[i]), l)

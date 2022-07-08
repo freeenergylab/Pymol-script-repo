@@ -3,7 +3,7 @@
 __all__ = ['UserArray', 'squeeze', 'Matrix', 'asarray', 'dot', 'k', 'Numeric', 'LinearAlgebra', 'identity', 'multiply', 'types', 'string']
 
 import types
-from user_array import UserArray, asarray
+from .user_array import UserArray, asarray
 import numpy.oldnumeric as Numeric
 from numpy.oldnumeric import dot, identity, multiply
 import numpy.oldnumeric.linear_algebra as LinearAlgebra
@@ -37,11 +37,11 @@ def _convert_from_string(data):
         newrow = []
         for col in trow:
             temp = col.split()
-            newrow.extend(map(_eval,temp))
+            newrow.extend(list(map(_eval,temp)))
         if count == 0:
             Ncols = len(newrow)
         elif len(newrow) != Ncols:
-            raise ValueError, "Rows not the same size."
+            raise ValueError("Rows not the same size.")
         count += 1
         newdata.append(newrow)
     return newdata

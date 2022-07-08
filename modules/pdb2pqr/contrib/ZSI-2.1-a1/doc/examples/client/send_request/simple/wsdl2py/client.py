@@ -12,11 +12,11 @@ def main():
     request._Message = MESSAGE
     
     try:
-        print ' Sending: %s' % MESSAGE
+        print(' Sending: %s' % MESSAGE)
         response = port.echo(request)
-        print 'Response: %s' % response._Message
-    except Exception, e:
-        print e
+        print('Response: %s' % response._Message)
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':

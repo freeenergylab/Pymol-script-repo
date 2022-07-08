@@ -11,19 +11,19 @@ Created: Oct 2006
 -----
 """
 
-import Fortran2003
+from . import Fortran2003
 # import all Statement classes:
-from base_classes import EndStatement
-from block_statements import *
+from .base_classes import EndStatement
+from .block_statements import *
 
 # CHAR_BIT is used to convert object bit sizes to byte sizes
-from utils import CHAR_BIT
+from .utils import CHAR_BIT
 
 def get_reader(input, isfree=None, isstrict=None, include_dirs = None):
     import os
     import re
-    from readfortran import FortranFileReader, FortranStringReader
-    from parsefortran import FortranParser
+    from .readfortran import FortranFileReader, FortranStringReader
+    from .parsefortran import FortranParser
     if os.path.isfile(input):
         name,ext = os.path.splitext(input)
         if ext.lower() in ['.c']:
@@ -51,7 +51,7 @@ def get_reader(input, isfree=None, isstrict=None, include_dirs = None):
                                      isfree, isstrict,
                                      include_dirs = include_dirs)
     else:
-        raise TypeError,'Expected string or filename input but got %s' % (type(input))
+        raise TypeError('Expected string or filename input but got %s' % (type(input)))
     return reader
 
 def parse(input, isfree=None, isstrict=None, include_dirs = None):
@@ -65,7 +65,7 @@ def parse(input, isfree=None, isstrict=None, include_dirs = None):
                          Default contains current working directory
                          and the directory of file name.
     """
-    from parsefortran import FortranParser
+    from .parsefortran import FortranParser
     reader = get_reader(input, isfree, isstrict, include_dirs)
     parser = FortranParser(reader)
     parser.parse()

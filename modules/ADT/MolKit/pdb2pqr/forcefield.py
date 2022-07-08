@@ -56,7 +56,7 @@ class Forcefield:
         elif ff == "parse":
             defpath = PARSE_FILE
         else:
-            raise ValueError, "Invalid forcefield %s!" % ff
+            raise ValueError("Invalid forcefield %s!" % ff)
 
         if not os.path.isfile(defpath):
             for path in sys.path:
@@ -65,7 +65,7 @@ class Forcefield:
                     defpath = testpath
                     break
         if not os.path.isfile(defpath):
-            raise ValueError, "Unable to find forcefield %s!" % defpath
+            raise ValueError("Unable to find forcefield %s!" % defpath)
 
         file = open(defpath)
 
@@ -529,4 +529,4 @@ class ForcefieldAtom:
             return item
         except AttributeError:
             message = "Unable to access object \"%s\" in class ForcefieldAtom" % name
-            raise ValueError, message
+            raise ValueError(message)

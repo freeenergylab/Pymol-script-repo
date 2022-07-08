@@ -1,8 +1,9 @@
 import sys
 
 from numpy.testing import *
+import importlib
 set_package_path()
-import numpy.lib;reload(numpy.lib);reload(numpy.lib.type_check)
+import numpy.lib;importlib.reload(numpy.lib);importlib.reload(numpy.lib.type_check)
 from numpy.lib import *
 from numpy.core import *
 restore_path()
@@ -65,7 +66,7 @@ class TestIsscalar(NumpyTestCase):
         assert(not isscalar([3]))
         assert(not isscalar((3,)))
         assert(isscalar(3j))
-        assert(isscalar(10L))
+        assert(isscalar(10))
         assert(isscalar(4.0))
 
 class TestReal(NumpyTestCase):

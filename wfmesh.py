@@ -10,7 +10,7 @@ See more here: http://www.pymolwiki.org/index.php/wfmesh
 ###############################################
 '''
 
-from __future__ import print_function
+
 
 import os
 import re
@@ -111,7 +111,7 @@ class WFMesh(Callback):
 
         # Average out each vnorm..
         index = 0
-        for v in self.vnorms.values():
+        for v in list(self.vnorms.values()):
             self.vavenorms.append([v[0] / 4, v[1] / 4, v[2] / 4])
             index += 1
 

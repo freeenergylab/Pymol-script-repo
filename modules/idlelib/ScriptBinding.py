@@ -22,10 +22,10 @@ import re
 import string
 import tabnanny
 import tokenize
-import tkMessageBox
-import PyShell
+import tkinter.messagebox
+from . import PyShell
 
-from configHandler import idleConf
+from .configHandler import idleConf
 
 IDENTCHARS = string.ascii_letters + string.digits + "_"
 
@@ -67,13 +67,13 @@ class ScriptBinding:
         f = open(filename, 'r')
         try:
             tabnanny.process_tokens(tokenize.generate_tokens(f.readline))
-        except tokenize.TokenError, msg:
+        except tokenize.TokenError as msg:
             msgtxt, (lineno, start) = msg
             self.editwin.gotoline(lineno)
             self.errorbox("Tabnanny Tokenizing Error",
                 "Token Error: %s" % msgtxt)
             return False
-        except tabnanny.NannyNag, nag:
+        except tabnanny.NannyNag as nag:
             # The error messages from tabnanny are too confusing...
             self.editwin.gotoline(nag.get_lineno())
             self.errorbox("Tab/space error", indent_message)
@@ -98,7 +98,7 @@ class ScriptBinding:
             try:
                 # If successful, return the compiled code
                 return compile(source, filename, "exec")
-            except (SyntaxError, OverflowError), err:
+            except (SyntaxError, OverflowError) as err:
                 try:
                     msg, (errorfilename, lineno, offset, line) = err
                     if not errorfilename:
@@ -196,13 +196,13 @@ class ScriptBinding:
 
     def ask_save_dialog(self):
         msg = "Source Must Be Saved\n" + 5*' ' + "OK to Save?"
-        mb = tkMessageBox.Message(title="Save Before Run or Check",
-            message=msg, icon=tkMessageBox.QUESTION,
-            type=tkMessageBox.OKCANCEL, default=tkMessageBox.OK,
+        mb = tkinter.messagebox.Message(title="Save Before Run or Check",
+            message=msg, icon=tkinter.messagebox.QUESTION,
+            type=tkinter.messagebox.OKCANCEL, default=tkinter.messagebox.OK,
             master=self.editpage.text)
         return mb.show()
 
     def errorbox(self, title, message):
         # XXX This should really be a function of EditorWindow...
-        tkMessageBox.showerror(title, message, master=self.editpage.text)
+        tkinter.messagebox.showerror(title, message, master=self.editpage.text)
         self.editpage.text.focus_set()

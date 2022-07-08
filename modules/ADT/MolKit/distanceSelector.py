@@ -22,8 +22,8 @@ corresponding to key-value pairs in pairDict.
 """
 
 import numpy as Numeric, types, string, math
-from molecule import AtomSet
-from protein import ResidueSet
+from .molecule import AtomSet
+from .protein import ResidueSet
 
 
 
@@ -42,7 +42,7 @@ class DistanceSelector:
         llen = len(bAts)
         slen = len(sAts)
         #test whether cutoff is 1 value or an array
-        if not hasattr(cutoff, 'shape') and type(cutoff)==types.FloatType:
+        if not hasattr(cutoff, 'shape') and type(cutoff)==float:
             #build array with shape (llen, slen)  of value cutoff
             return Numeric.array(Numeric.ones((llen, slen))*cutoff).astype('f')
         else:
@@ -177,15 +177,15 @@ class DistanceSelector:
             return ResidueSet(), ResidueSet()
         from MolKit.molecule import AtomSet
         #parents of keys
-        key_parents = AtomSet(pairDict.keys()).parent.uniq()
+        key_parents = AtomSet(list(pairDict.keys())).parent.uniq()
         key_parents.sort()
         #parents of values
         #build unique list of close atoms
         ats = {}
-        for k in pairDict.keys():
+        for k in list(pairDict.keys()):
             for rec_at in pairDict[k]:
                 ats[rec_at] = 1
-        close_ats = AtomSet(ats.keys())
+        close_ats = AtomSet(list(ats.keys()))
         close_parents = close_ats.parent.uniq()
         close_parents.sort()
         return key_parents, close_parents

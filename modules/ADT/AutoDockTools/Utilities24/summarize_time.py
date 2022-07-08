@@ -15,21 +15,21 @@ if __name__ == '__main__':
 
     def usage():
         "Print helpful, accurate usage statement to stdout."
-        print "Usage: summarize_time.py -d directory"
-        print
-        print "    Description of command..."
-        print "         -d     directory"
-        print "    Optional parameters:"
-        print "        [-o]    output filename"
-        print "                      (default is 'summary_of_time')"
-        print "        [-v]    verbose output"
+        print("Usage: summarize_time.py -d directory")
+        print()
+        print("    Description of command...")
+        print("         -d     directory")
+        print("    Optional parameters:")
+        print("        [-o]    output filename")
+        print("                      (default is 'summary_of_time')")
+        print("        [-v]    verbose output")
 
 
     # process command arguments
     try:
         opt_list, args = getopt.getopt(sys.argv[1:], 'd:o:vh')
-    except getopt.GetoptError, msg:
-        print 'summarize_time.py: %s' %msg
+    except getopt.GetoptError as msg:
+        print(('summarize_time.py: %s' %msg))
         usage()
         sys.exit(2)
 
@@ -51,19 +51,19 @@ if __name__ == '__main__':
         #print "o=", o, " a=", a
         if o in ('-d', '--d'):
             directory = a
-            if verbose: print 'set directory to ', a
+            if verbose: print(('set directory to ', a))
         if o in ('-o', '--o'):
             outputfilename = a
-            if verbose: print 'set outputfilename to ', a
+            if verbose: print(('set outputfilename to ', a))
         if o in ('-v', '--v'):
             verbose = True
-            if verbose: print 'set verbose to ', True
+            if verbose: print(('set verbose to ', True))
         if o in ('-h', '--'):
             usage()
             sys.exit()
 
     if not  directory:
-        print 'summarize_time: directory must be specified.'
+        print('summarize_time: directory must be specified.')
         usage()
         sys.exit()
 

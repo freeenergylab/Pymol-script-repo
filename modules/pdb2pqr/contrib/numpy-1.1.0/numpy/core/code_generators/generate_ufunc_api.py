@@ -1,5 +1,5 @@
 import os
-import genapi
+from . import genapi
 
 h_template = r"""
 #ifdef _UMATHMODULE

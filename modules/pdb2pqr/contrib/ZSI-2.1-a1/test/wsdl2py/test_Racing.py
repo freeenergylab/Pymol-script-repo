@@ -55,23 +55,23 @@ class TestCase(ServiceTestCase):
         ps = ParsedSoap(MSG)
         pyobj = ps.Parse(self.client_module.EventApproximatesSoapOut.typecode)
 
-        any = {'PoolTotals': {'Pool': {'Total': u'4117.66', 'ENumbers': None, 'JackpotNet': None}}, 'Approximates': {'Pool': {'Win': u'3.90,0.00,10.40,11.80,4.70,29.50,29.90,2.40,19.80,0.00', 'Place': u'1.04,0.00,2.80,5.90,2.00,5.20,7.40,1.04,4.00,0.00'}}}
+        any = {'PoolTotals': {'Pool': {'Total': '4117.66', 'ENumbers': None, 'JackpotNet': None}}, 'Approximates': {'Pool': {'Win': '3.90,0.00,10.40,11.80,4.70,29.50,29.90,2.40,19.80,0.00', 'Place': '1.04,0.00,2.80,5.90,2.00,5.20,7.40,1.04,4.00,0.00'}}}
 
-        self.failUnless(pyobj.EventApproximatesResult.Any == any, 'Failed match:\n %s\n\n%s' %(
+        self.assertTrue(pyobj.EventApproximatesResult.Any == any, 'Failed match:\n %s\n\n%s' %(
             pyobj.EventApproximatesResult.Any, any))
 
 
         pyobj.EventApproximatesResult.Any = dict(pyobj.EventApproximatesResult.Any)
         sw = SoapWriter()
         sw.serialize(pyobj)
-        print str(sw)
+        print(str(sw))
         ps2 = ParsedSoap(str(sw))
         pyobj2 = ps.Parse(self.client_module.EventApproximatesSoapOut.typecode)
-        print "EAR: ", pyobj2.EventApproximatesResult
-        print "Any: ", pyobj2.EventApproximatesResult.Any
+        print("EAR: ", pyobj2.EventApproximatesResult)
+        print("Any: ", pyobj2.EventApproximatesResult.Any)
         
         
-        self.failUnless(pyobj.EventApproximatesResult.Any == pyobj2.EventApproximatesResult.Any,
+        self.assertTrue(pyobj.EventApproximatesResult.Any == pyobj2.EventApproximatesResult.Any,
             'Failed match:\n %s\n\n%s' %(pyobj.EventApproximatesResult.Any, pyobj2.EventApproximatesResult.Any))
 
 

@@ -10,9 +10,9 @@ class WrapperBase:
         self.srcdir = os.path.join(os.path.dirname(__file__),'src')
         return
     def warning(self, message):
-        print >> sys.stderr, message
+        print(message, file=sys.stderr)
     def info(self, message):
-        print >> sys.stderr, message
+        print(message, file=sys.stderr)
 
     def get_resource_content(self, name, ext):
         if name.startswith('pyobj_to_'):
@@ -153,9 +153,9 @@ class WrapperCCode(WrapperBase):
             self.warning('Failed to get C code %r content.' % (name))
             return
         if isinstance(body, dict):
-            for k,v in body.items():
+            for k,v in list(body.items()):
                 self.resolve_dependencies(parent, v)
-            for k,v in body.items():
+            for k,v in list(body.items()):
                 l = getattr(parent,k+'_list')
                 l.append(v)
         else:
@@ -169,10 +169,10 @@ class WrapperCCode(WrapperBase):
             return pyobj_to_npy_scalar(ctype)
         elif ctype.startswith('f2py_string'):
             return pyobj_to_f2py_string(ctype)
-        raise NotImplementedError,`ctype`
+        raise NotImplementedError(repr(ctype))
 
     def generate_pyobj_from_ctype_c(self, ctype):
         from generate_pyobj_tofrom_funcs import pyobj_from_npy_scalar
         if ctype.startswith('npy_'):
             return pyobj_from_npy_scalar(ctype)
-        raise NotImplementedError,`ctype`
+        raise NotImplementedError(repr(ctype))

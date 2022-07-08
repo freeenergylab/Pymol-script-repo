@@ -7,7 +7,7 @@ http://pymolwiki.org/index.php/uniprot_features
 License: BSD-2-Clause
 '''
 
-from __future__ import print_function
+
 
 from pymol import cmd, CmdException
 
@@ -38,7 +38,7 @@ class resid_mapper(dict):
 
     def __call__(self, k):
         if isinstance(k, tuple):
-            a, b = map(int, k)
+            a, b = list(map(int, k))
             return self.search(a), self.search(b, -1)
         return self[int(k)]
 
@@ -70,7 +70,7 @@ ARGUMENTS
     '''
     import xml.etree.ElementTree as etree
     try:
-        from urllib import urlopen
+        from urllib.request import urlopen
     except ImportError:
         from urllib.request import urlopen
 
@@ -162,7 +162,7 @@ ARGUMENTS
     withss = 0/1: update secondary structure {default: 0}
     '''
     try:
-        from urllib import urlopen
+        from urllib.request import urlopen
     except ImportError:
         from urllib.request import urlopen
 
@@ -205,7 +205,7 @@ ARGUMENTS
     except Exception as e:
         raise CmdException(str(e))
 
-    for chain, (acc, sm) in mappings.items():
+    for chain, (acc, sm) in list(mappings.items()):
         uniprot_features(acc, '(%s) and chain %s' % (selection, chain),
                          withss, 'feature_' + chain + '_', sm, quiet)
 
